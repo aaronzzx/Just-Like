@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         mImageList = imageList;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -89,8 +91,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                 .onlyScaleDown() // 设置 resize() 方法仅在图片分辨率超过参数值才起作用
                 // 将某些方向不正的图片旋转回来
                 .rotate(getRotateDegree(image, MainActivity.isClick()))
-                // 指定占位图
-                .placeholder(R.drawable.place_holder)
                 /* 由于 ImageView 已经指定 centerCrop,
                    所以这里指定成 centerInside 后图片便不会因为拉伸而变形。*/
                 .centerInside()
