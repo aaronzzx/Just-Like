@@ -12,9 +12,6 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 
-import com.github.chrisbanes.photoview.PhotoView;
-import com.squareup.picasso.Picasso;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +31,7 @@ class FileUtils {
     private static Activity mActivity;
     private static List<Image> mImageList;
     private static ImageAdapter mImageAdapter;
-    private static List<PhotoView> mPhotoViewList = new ArrayList<>(); // ViewPager 需要用到的集合
+    private static List<Uri> mUriList = new ArrayList<>(); // ViewPager 需要用到的集合
 
     /**
      * 获取图片的旋转角度
@@ -242,22 +239,14 @@ class FileUtils {
                 uri = Uri.fromFile(new File(path));
             }
 
-            PhotoView photoView = new PhotoView(mActivity);
-            Picasso.get()
-                    .load(uri)
-                    .resize(3000, 3000)
-                    .onlyScaleDown()
-                    .rotate(FileUtils.getBitmapDegree(FileUtils.getAbsolutePath(path)))
-                    .centerInside()
-                    .into(photoView);
-            mPhotoViewList.add(photoView);
+            mUriList.add(uri);
             /*
              * 之所以不能放在循环体外面，是因为除了 jpg 格式要加载，
              * 还有其他格式图片，在如果放在循环体外，因为加载其他格式
              * 图片与 jpg 格式不符合，所以会清空集合，导致 ViewPager
              * 无法显示。
              */
-            MainActivity.setPhotoViewList(mPhotoViewList);
+            MainActivity.setPhotoViewList(mUriList);
 
             mImageList.add(new Image(uri));
             mImageAdapter.notifyDataSetChanged();

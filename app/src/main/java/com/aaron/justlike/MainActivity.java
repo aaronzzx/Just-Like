@@ -36,15 +36,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
     private ImageAdapter mAdapter; // 声明一个 Image 适配器
     private DrawerLayout mDrawerLayout;
-    private static List<PhotoView> mPhotoViewList = new ArrayList<>();
+    private static List<Uri> mUriList = new ArrayList<>();
 
-    public static List<PhotoView> getPhotoViewList() {
-        return mPhotoViewList;
+    public static List<Uri> getUriList() {
+        return mUriList;
     }
 
-    public static void setPhotoViewList(List<PhotoView> photoViewList) {
-        mPhotoViewList.clear(); // 防止程序通过返回键退出，再次打开时重复添加元素
-        mPhotoViewList.addAll(photoViewList);
+    public static void setPhotoViewList(List<Uri> photoViewList) {
+        mUriList.clear(); // 防止程序通过返回键退出，再次打开时重复添加元素
+        mUriList.addAll(photoViewList);
     }
 
     /**
@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             .rotate(FileUtils.getBitmapDegree(FileUtils.getAbsolutePath(path)))
                             .centerInside()
                             .into(photoView);
-                    mPhotoViewList.add(photoView);
+                    mUriList.add(uri);
 
                     // 通知适配器更新并将文件添加至缓存
                     mImageList.add(new Image(uri));

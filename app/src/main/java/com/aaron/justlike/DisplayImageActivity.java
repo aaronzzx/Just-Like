@@ -20,7 +20,6 @@ public class DisplayImageActivity extends AppCompatActivity {
 
     private int mPosition;
     private String mFileName;
-    private View mDecorView;
     private ActionBar mActionBar;
 
     @Override
@@ -64,8 +63,8 @@ public class DisplayImageActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
-            mDecorView = getWindow().getDecorView();
-            mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
@@ -129,7 +128,7 @@ public class DisplayImageActivity extends AppCompatActivity {
         ViewPager viewPager = findViewById(R.id.activity_display_image_vp);
         viewPager.setOffscreenPageLimit(2);
         viewPager.setPageMargin(50);
-        viewPager.setAdapter(new MyPagerAdapter(MainActivity.getPhotoViewList(), this));
+        viewPager.setAdapter(new MyPagerAdapter(MainActivity.getUriList(), this, absolutePath));
         viewPager.setCurrentItem(mPosition);
         /*
          * 获取图片拍摄时间并将信息设置为标题栏标题
