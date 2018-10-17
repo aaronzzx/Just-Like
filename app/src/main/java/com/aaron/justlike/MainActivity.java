@@ -20,7 +20,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.github.chrisbanes.photoview.PhotoView;
 import com.jaeger.library.StatusBarUtil;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
     private ImageAdapter mAdapter; // 声明一个 Image 适配器
     private DrawerLayout mDrawerLayout;
+    private static List<PhotoView> mPhotoViewList = new ArrayList<>();
+
+    public static List<PhotoView> getPhotoViewList() {
+        return mPhotoViewList;
+    }
+
+    public static void setPhotoViewList(List<PhotoView> photoViewList) {
+        mPhotoViewList.clear(); // 防止程序通过返回键退出，再次打开时重复添加元素
+        mPhotoViewList.addAll(photoViewList);
+    }
 
     /**
      * 用于在 ImageAdapter 中判断图片是点击添加的还是
@@ -54,12 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setStatusBar(); // 修改状态栏和导航栏
         requestWritePermission(); // 申请存储权限
         // 加载存储在程序外部缓存目录的图片
-        FileUtils.getLocalCache(this, mImageList, mAdapter, "jpg");
-        FileUtils.getLocalCache(this, mImageList, mAdapter, "JPG");
-        FileUtils.getLocalCache(this, mImageList, mAdapter, "jpeg");
-        FileUtils.getLocalCache(this, mImageList, mAdapter, "JPEG");
-        FileUtils.getLocalCache(this, mImageList, mAdapter, "png");
-        FileUtils.getLocalCache(this, mImageList, mAdapter, "PNG");
+        FileUtils.getLocalCache(this, mImageList, mAdapter);
     }
 
     /**
@@ -162,6 +169,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (resultCode == Activity.RESULT_OK) {
                     isClick = true; // 表示此次行为是用户所点击
                     Uri uri = data.getData(); // 获取返回的 URI
+                    String path = FileUtils.getAbsolutePath(uri.getPath());
+
+                    PhotoView photoView = new PhotoView(this);
+                    Picasso.get()
+                            .load(uri)
+                            .resize(3000, 3000)
+                            .onlyScaleDown()
+                            .rotate(FileUtils.getBitmapDegree(FileUtils.getAbsolutePath(path)))
+                            .centerInside()
+                            .into(photoView);
+                    mPhotoViewList.add(photoView);
+
                     // 通知适配器更新并将文件添加至缓存
                     mImageList.add(new Image(uri));
                     mAdapter.notifyDataSetChanged();

@@ -1,5 +1,6 @@
 package com.aaron.justlike;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,6 +12,9 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 
+import com.github.chrisbanes.photoview.PhotoView;
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,10 +25,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class FileUtils {
+class FileUtils {
+
+    private static Activity mActivity;
+    private static List<Image> mImageList;
+    private static ImageAdapter mImageAdapter;
+    private static List<PhotoView> mPhotoViewList = new ArrayList<>(); // ViewPager 需要用到的集合
 
     /**
      * 获取图片的旋转角度
@@ -32,7 +42,7 @@ public class FileUtils {
      * @param path 图片的路径
      * @return 返回图片的旋转角度
      */
-    public static int getBitmapDegree(String path) {
+    static int getBitmapDegree(String path) {
         int degree = 0;
         try {
             // 此类专门用于获取图片资源的信息
@@ -64,7 +74,7 @@ public class FileUtils {
      * @param type    文件类型
      * @return 返回 JSON 数组
      */
-    public static JSONArray getAllFiles(String dirPath, String type) {
+    private static JSONArray getAllFiles(String dirPath, String type) {
         File file = new File(dirPath);
         if (!file.exists()) return null;
         File[] files = file.listFiles();
@@ -99,7 +109,7 @@ public class FileUtils {
      * @param context 上下文
      * @param uri     相册或文件管理器返回的 URI 数据
      */
-    public static void saveToCache(Context context, Uri uri) {
+    static void saveToCache(Context context, Uri uri) {
         String filePath = getPath(context, uri);
         String fileName = filePath.substring(filePath.lastIndexOf("/"));
         File file = new File(context.getExternalCacheDir().getAbsolutePath() + fileName);
@@ -132,7 +142,7 @@ public class FileUtils {
      *
      * @param fileName 文件名
      */
-    public static void deleteFile(Context context, String fileName) {
+    static void deleteFile(Context context, String fileName) {
         if (TextUtils.isEmpty(fileName)) return;
         File file = new File(context.getExternalCacheDir() + fileName);
         if (file.exists()) file.delete();
@@ -169,7 +179,7 @@ public class FileUtils {
      * @param path 原始路径
      * @return 返回绝对路径
      */
-    public static String getAbsolutePath(String path) {
+    static String getAbsolutePath(String path) {
         String absolutePath;
         if (path.startsWith("/e")) {
             absolutePath = path.replace("/external_files",
@@ -182,36 +192,75 @@ public class FileUtils {
 
     /**
      * 加载保存在应用缓存目录的文件
-     *
-     * @param imageType 通过传入的图片类型来加载相关的资源
      */
-    public static void getLocalCache(Activity activity, List<Image> imageList,
-                                     ImageAdapter imageAdapter, String imageType) {
+    static void getLocalCache(Activity activity, List<Image> imageList,
+                              ImageAdapter imageAdapter) {
+        mActivity = activity;
+        mImageList = imageList;
+        mImageAdapter = imageAdapter;
         // 从缓存中读取的数据被放置在 JSON 数组中
-        if (imageType != null) {
-            JSONArray jsonArray = FileUtils
-                    .getAllFiles(activity.getExternalCacheDir().getAbsolutePath(), imageType);
-            try {/*
-             * 遍历 JSON 数组，从中取出文件的路径，并转换为 URI 传入
-             * Image 构造方法，将 Image 对象传入集合并通知适配器更新，
-             * 从而达到加载缓存的目的。
-             */
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    String path = jsonObject.getString("path");
-                    String fileProvider = "com.aaron.justlike.fileprovider";
-                    Uri uri;
-                    if (Build.VERSION.SDK_INT >= 24) {
-                        uri = FileProvider.getUriForFile(activity, fileProvider, new File(path));
-                    } else {
-                        uri = Uri.fromFile(new File(path));
-                    }
-                    imageList.add(new Image(uri));
-                    imageAdapter.notifyDataSetChanged();
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+        JSONArray jpgArray = FileUtils
+                .getAllFiles(activity.getExternalCacheDir().getAbsolutePath(), "jpg");
+        JSONArray jpg2Array = FileUtils
+                .getAllFiles(activity.getExternalCacheDir().getAbsolutePath(), "JPG");
+        JSONArray jpegArray = FileUtils
+                .getAllFiles(activity.getExternalCacheDir().getAbsolutePath(), "jpeg");
+        JSONArray jpeg2Array = FileUtils
+                .getAllFiles(activity.getExternalCacheDir().getAbsolutePath(), "JPEG");
+        JSONArray pngArray = FileUtils
+                .getAllFiles(activity.getExternalCacheDir().getAbsolutePath(), "png");
+        JSONArray png2Array = FileUtils
+                .getAllFiles(activity.getExternalCacheDir().getAbsolutePath(), "PNG");
+        try {/*
+         * 遍历 JSON 数组，从中取出文件的路径，并转换为 URI 传入
+         * Image 构造方法，将 Image 对象传入集合并通知适配器更新，
+         * 从而达到加载缓存的目的。
+         */
+            if (jpgArray != null) noChoice(jpgArray);
+            if (jpg2Array != null) noChoice(jpg2Array);
+            if (jpegArray != null) noChoice(jpegArray);
+            if (jpeg2Array != null) noChoice(jpeg2Array);
+            if (pngArray != null) noChoice(pngArray);
+            if (png2Array != null) noChoice(png2Array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 为了改良 getLocalCache() 方法循环体内的代码重复，目前没有更好的办法。
+     */
+    private static void noChoice(JSONArray jsonArray) throws JSONException {
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            String path = jsonObject.getString("path");
+            String fileProvider = "com.aaron.justlike.fileprovider";
+            Uri uri;
+            if (Build.VERSION.SDK_INT >= 24) {
+                uri = FileProvider.getUriForFile(mActivity, fileProvider, new File(path));
+            } else {
+                uri = Uri.fromFile(new File(path));
             }
+
+            PhotoView photoView = new PhotoView(mActivity);
+            Picasso.get()
+                    .load(uri)
+                    .resize(3000, 3000)
+                    .onlyScaleDown()
+                    .rotate(FileUtils.getBitmapDegree(FileUtils.getAbsolutePath(path)))
+                    .centerInside()
+                    .into(photoView);
+            mPhotoViewList.add(photoView);
+            /*
+             * 之所以不能放在循环体外面，是因为除了 jpg 格式要加载，
+             * 还有其他格式图片，在如果放在循环体外，因为加载其他格式
+             * 图片与 jpg 格式不符合，所以会清空集合，导致 ViewPager
+             * 无法显示。
+             */
+            MainActivity.setPhotoViewList(mPhotoViewList);
+
+            mImageList.add(new Image(uri));
+            mImageAdapter.notifyDataSetChanged();
         }
     }
 
@@ -221,13 +270,13 @@ public class FileUtils {
      * @param param 字符串时间
      * @throws ParseException
      */
-    public static void formatDateAndTime(ActionBar actionBar, String param) throws ParseException {
+    static void formatDateAndTime(ActionBar actionBar, String param) throws ParseException {
         if (param != null) {
             String dateArray[] = param.split(" ");
             String part1 = "yyyy:MM:dd";
             String part2 = "yyyy年MM月dd日";
-            SimpleDateFormat sdf1 = new SimpleDateFormat(part1);
-            SimpleDateFormat sdf2 = new SimpleDateFormat(part2);
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf1 = new SimpleDateFormat(part1);
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf2 = new SimpleDateFormat(part2);
             Date d = sdf1.parse(dateArray[0]);
             String date = sdf2.format(d);
             String time = dateArray[1].substring(0, 5);

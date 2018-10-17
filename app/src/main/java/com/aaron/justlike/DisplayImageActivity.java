@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,19 +13,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.github.chrisbanes.photoview.PhotoView;
-import com.squareup.picasso.Picasso;
-
 import java.io.IOException;
 import java.text.ParseException;
 
-public class DisplayImageActivity extends AppCompatActivity implements View.OnClickListener {
+public class DisplayImageActivity extends AppCompatActivity {
 
     private int mPosition;
     private String mFileName;
     private View mDecorView;
     private ActionBar mActionBar;
-    private boolean isFullScreen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,34 +71,6 @@ public class DisplayImageActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.display_image:
-                if (isFullScreen) {
-                    /*
-                     * 全屏状态下执行此代码块会退出全屏
-                     */
-                    mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                    isFullScreen = false;
-                } else {
-                    /*
-                     * 进入全屏,自动沉浸
-                     */
-                    mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-                    isFullScreen = true;
-                }
-                break;
-        }
-    }
-
     /**
      * 创建删除菜单
      */
@@ -147,8 +116,6 @@ public class DisplayImageActivity extends AppCompatActivity implements View.OnCl
      * 初始化界面
      */
     private void initContent() {
-        PhotoView photoView = findViewById(R.id.display_image);
-        photoView.setOnClickListener(this);
         /*
          * 获取从适配器序列化过来的 Image 对象，并取值
          */
@@ -159,15 +126,11 @@ public class DisplayImageActivity extends AppCompatActivity implements View.OnCl
         String absolutePath = FileUtils.getAbsolutePath(path); // 获取绝对路径
         mFileName = absolutePath.substring(absolutePath.lastIndexOf("/"));
 
-        // 使用 Picasso 加载图片
-        Picasso.get()
-                .load(imageUri)
-                .resize(2000, 2000)
-                .onlyScaleDown()
-                .rotate(FileUtils.getBitmapDegree(absolutePath))
-                .noPlaceholder()
-                .centerInside()
-                .into(photoView);
+        ViewPager viewPager = findViewById(R.id.activity_display_image_vp);
+        viewPager.setOffscreenPageLimit(2);
+        viewPager.setPageMargin(50);
+        viewPager.setAdapter(new MyPagerAdapter(MainActivity.getPhotoViewList(), this));
+        viewPager.setCurrentItem(mPosition);
         /*
          * 获取图片拍摄时间并将信息设置为标题栏标题
          */

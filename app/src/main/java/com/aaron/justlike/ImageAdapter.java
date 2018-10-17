@@ -80,7 +80,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Image image = mImageList.get(position); // 从集合中找到 Image 对象
         /*
          * 使用 Picasso 图片加载库来加载图片
