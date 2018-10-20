@@ -21,9 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.github.chrisbanes.photoview.PhotoView;
 import com.jaeger.library.StatusBarUtil;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +65,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setStatusBar(); // 修改状态栏和导航栏
         requestWritePermission(); // 申请存储权限
         // 加载存储在程序外部缓存目录的图片
-        FileUtils.getLocalCache(this, mImageList, mAdapter);
+        String[] type = {"jpg", "jpeg", "png", "JPG", "JPEG", "PNG"};
+        FileUtils.getLocalCache(this, mImageList, mAdapter, type);
     }
 
     /**
@@ -170,16 +169,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (resultCode == Activity.RESULT_OK) {
                     isClick = true; // 表示此次行为是用户所点击
                     Uri uri = data.getData(); // 获取返回的 URI
-                    String path = FileUtils.getAbsolutePath(uri.getPath());
-
-                    PhotoView photoView = new PhotoView(this);
-                    Picasso.get()
-                            .load(uri)
-                            .resize(3000, 3000)
-                            .onlyScaleDown()
-                            .rotate(FileUtils.getBitmapDegree(FileUtils.getAbsolutePath(path)))
-                            .centerInside()
-                            .into(photoView);
                     mUriList.add(uri);
 
                     // 通知适配器更新并将文件添加至缓存

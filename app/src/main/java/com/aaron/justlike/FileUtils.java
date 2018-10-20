@@ -28,9 +28,6 @@ import java.util.List;
 
 class FileUtils {
 
-    private static Activity mActivity;
-    private static List<Image> mImageList;
-    private static ImageAdapter mImageAdapter;
     private static List<Uri> mUriList = new ArrayList<>(); // ViewPager 需要用到的集合
 
     /**
@@ -191,65 +188,47 @@ class FileUtils {
      * 加载保存在应用缓存目录的文件
      */
     static void getLocalCache(Activity activity, List<Image> imageList,
-                              ImageAdapter imageAdapter) {
-        mActivity = activity;
-        mImageList = imageList;
-        mImageAdapter = imageAdapter;
-        // 从缓存中读取的数据被放置在 JSON 数组中
-        JSONArray jpgArray = FileUtils
-                .getAllFiles(activity.getExternalCacheDir().getAbsolutePath(), "jpg");
-        JSONArray jpg2Array = FileUtils
-                .getAllFiles(activity.getExternalCacheDir().getAbsolutePath(), "JPG");
-        JSONArray jpegArray = FileUtils
-                .getAllFiles(activity.getExternalCacheDir().getAbsolutePath(), "jpeg");
-        JSONArray jpeg2Array = FileUtils
-                .getAllFiles(activity.getExternalCacheDir().getAbsolutePath(), "JPEG");
-        JSONArray pngArray = FileUtils
-                .getAllFiles(activity.getExternalCacheDir().getAbsolutePath(), "png");
-        JSONArray png2Array = FileUtils
-                .getAllFiles(activity.getExternalCacheDir().getAbsolutePath(), "PNG");
-        try {/*
-         * 遍历 JSON 数组，从中取出文件的路径，并转换为 URI 传入
-         * Image 构造方法，将 Image 对象传入集合并通知适配器更新，
-         * 从而达到加载缓存的目的。
-         */
-            if (jpgArray != null) noChoice(jpgArray);
-            if (jpg2Array != null) noChoice(jpg2Array);
-            if (jpegArray != null) noChoice(jpegArray);
-            if (jpeg2Array != null) noChoice(jpeg2Array);
-            if (pngArray != null) noChoice(pngArray);
-            if (png2Array != null) noChoice(png2Array);
+                              ImageAdapter imageAdapter, String[] type) {
+        try {
+            /*
+             * 从缓存中读取的数据被放置在 JSON 数组中,
+             * 并遍历 JSON 数组，从中取出文件的路径，并转换为 URI 传入
+             * Image 构造方法，将 Image 对象传入集合并通知适配器更新，
+             * 从而达到加载缓存的目的。
+             */
+            JSONArray typeArray;
+            for (String imageType : type) {
+                typeArray = getAllFiles(activity.getExternalCacheDir().getAbsolutePath(),
+                        imageType);
+                if (typeArray != null) {
+                    for (int i = 0; i < typeArray.length(); i++) {
+                        JSONObject jsonObject = typeArray.getJSONObject(i);
+                        String path = jsonObject.getString("path");
+                        String fileProvider = "com.aaron.justlike.fileprovider";
+                        Uri uri;
+                        if (Build.VERSION.SDK_INT >= 24) {
+                            uri = FileProvider.getUriForFile(activity,
+                                    fileProvider, new File(path));
+                        } else {
+                            uri = Uri.fromFile(new File(path));
+                        }
+
+                        mUriList.add(uri);
+                        /*
+                         * 之所以不能放在循环体外面，是因为除了 jpg 格式要加载，
+                         * 还有其他格式图片，在如果放在循环体外，因为加载其他格式
+                         * 图片与 jpg 格式不符合，所以会清空集合，导致 ViewPager
+                         * 无法显示。
+                         */
+                        MainActivity.setPhotoViewList(mUriList);
+
+                        imageList.add(new Image(uri));
+                        imageAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * 为了改良 getLocalCache() 方法循环体内的代码重复，目前没有更好的办法。
-     */
-    private static void noChoice(JSONArray jsonArray) throws JSONException {
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject jsonObject = jsonArray.getJSONObject(i);
-            String path = jsonObject.getString("path");
-            String fileProvider = "com.aaron.justlike.fileprovider";
-            Uri uri;
-            if (Build.VERSION.SDK_INT >= 24) {
-                uri = FileProvider.getUriForFile(mActivity, fileProvider, new File(path));
-            } else {
-                uri = Uri.fromFile(new File(path));
-            }
-
-            mUriList.add(uri);
-            /*
-             * 之所以不能放在循环体外面，是因为除了 jpg 格式要加载，
-             * 还有其他格式图片，在如果放在循环体外，因为加载其他格式
-             * 图片与 jpg 格式不符合，所以会清空集合，导致 ViewPager
-             * 无法显示。
-             */
-            MainActivity.setPhotoViewList(mUriList);
-
-            mImageList.add(new Image(uri));
-            mImageAdapter.notifyDataSetChanged();
         }
     }
 
