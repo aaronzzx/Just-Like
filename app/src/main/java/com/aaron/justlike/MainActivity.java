@@ -19,6 +19,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.github.chrisbanes.photoview.PhotoView;
 import com.jaeger.library.StatusBarUtil;
@@ -230,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 mDrawerLayout.closeDrawers();
+                Toast.makeText(MainActivity.this, "暂未开放", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });

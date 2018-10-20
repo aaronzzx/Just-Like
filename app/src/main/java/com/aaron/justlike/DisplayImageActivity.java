@@ -2,7 +2,6 @@ package com.aaron.justlike;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -12,29 +11,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-import java.io.IOException;
-import java.text.ParseException;
+import android.widget.Toast;
 
 public class DisplayImageActivity extends AppCompatActivity {
 
     private int mPosition;
     private String mFileName;
-    private ActionBar mActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_image);
-        /*
-         * 启用标题栏的返回键
-         */
-        mActionBar = getSupportActionBar();
-        if (mActionBar != null) {
-            mActionBar.setDisplayHomeAsUpEnabled(true);
-            mActionBar.setHomeButtonEnabled(true);
-            mActionBar.setHomeAsUpIndicator(R.mipmap.ic_back);
-        }
         initContent();
     }
 
@@ -86,6 +73,9 @@ public class DisplayImageActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_info:
+                Toast.makeText(this, "暂未开放", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.action_delete:
                 new AlertDialog.Builder(this)
                         .setTitle("Warning")
@@ -117,6 +107,13 @@ public class DisplayImageActivity extends AppCompatActivity {
      */
     private void initContent() {
         /*
+         * 启用标题栏的返回键
+         */
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        /*
          * 获取从适配器序列化过来的 Image 对象，并取值
          */
         Image image = getIntent().getParcelableExtra("image");
@@ -129,17 +126,19 @@ public class DisplayImageActivity extends AppCompatActivity {
         ViewPager viewPager = findViewById(R.id.activity_display_image_vp);
         viewPager.setOffscreenPageLimit(2);
         viewPager.setPageMargin(50);
-        viewPager.setAdapter(new MyPagerAdapter(MainActivity.getUriList(), this, absolutePath));
+        MyPagerAdapter adapter = new MyPagerAdapter(MainActivity.getUriList(),
+                this, absolutePath);
+        viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(mPosition);
         /*
          * 获取图片拍摄时间并将信息设置为标题栏标题
          */
-        try {
+        /*try {
             ExifInterface exifInterface = new ExifInterface(absolutePath);
             String dateTime = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
-            FileUtils.formatDateAndTime(mActionBar, dateTime);
+            FileUtils.formatDateAndTime(actionBar, dateTime);
         } catch (IOException | ParseException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }

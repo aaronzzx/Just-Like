@@ -4,6 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_info"
+        android:title="Info"
+        android:icon="@mipmap/ic_info"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_delete"
         android:icon="@mipmap/ic_delete"
         android:title="Delete"
