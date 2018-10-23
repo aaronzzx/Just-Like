@@ -27,7 +27,7 @@
 
         <activity
             android:name="com.aaron.justlike.DisplayImageActivity"
-            android:label="返回"
+            android:label="Like"
             android:theme="@style/AppTheme.DisplayActivity" />
 
         <!-- 自定义 FileProvider ，用于加载缓存 -->

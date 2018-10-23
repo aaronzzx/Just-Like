@@ -32,10 +32,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int CHOOSE_PHOTO = 2; // 定义打开文件管理器需要用的请求码，1 被申请权限用了，所以用2
     private static final int DELETE_PHOTO = 3;
     private static boolean isClick = false; // 点击状态
+    private static List<Uri> mUriList = new ArrayList<>();
     private List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
     private ImageAdapter mAdapter; // 声明一个 Image 适配器
     private DrawerLayout mDrawerLayout;
-    private static List<Uri> mUriList = new ArrayList<>();
 
     public static List<Uri> getUriList() {
         return mUriList;

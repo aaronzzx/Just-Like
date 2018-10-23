@@ -124,7 +124,7 @@ public class DisplayImageActivity extends AppCompatActivity {
         mFileName = absolutePath.substring(absolutePath.lastIndexOf("/"));
 
         ViewPager viewPager = findViewById(R.id.activity_display_image_vp);
-        viewPager.setOffscreenPageLimit(2);
+        viewPager.setOffscreenPageLimit(4);
         viewPager.setPageMargin(50);
         MyPagerAdapter adapter = new MyPagerAdapter(MainActivity.getUriList(),
                 this, absolutePath);
