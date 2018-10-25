@@ -18,11 +18,12 @@
     </style>
 
     <!-- Customize DisplayImageActivity here. -->
-    <style name="AppTheme.DisplayActivity" parent="Theme.AppCompat.Light">
+    <style name="AppTheme.DisplayActivity" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@android:color/white</item>
         <item name="colorPrimaryDark">@android:color/white</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowTranslucentStatus">true</item>
         <item name="android:navigationBarColor">@color/navigationBar</item>
     </style>
 

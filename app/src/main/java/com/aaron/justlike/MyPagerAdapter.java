@@ -1,9 +1,9 @@
 package com.aaron.justlike;
 
-import android.app.Activity;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,11 +15,11 @@ import java.util.List;
 public class MyPagerAdapter extends PagerAdapter {
 
     private List<Uri> mUriList;
-    private Activity mActivity;
+    private DisplayImageActivity mActivity;
     private String mPath;
     private boolean isFullScreen;
 
-    MyPagerAdapter(List<Uri> uriList, Activity activity, String path) {
+    MyPagerAdapter(List<Uri> uriList, DisplayImageActivity activity, String path) {
         mUriList = uriList;
         mActivity = activity;
         mPath = path;
@@ -54,6 +54,7 @@ public class MyPagerAdapter extends PagerAdapter {
         photoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toolbar toolbar = mActivity.getToolbar();
                 if (isFullScreen) {
                     /*
                      * 全屏状态下执行此代码块会退出全屏
@@ -63,6 +64,7 @@ public class MyPagerAdapter extends PagerAdapter {
                             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                    toolbar.setVisibility(View.VISIBLE);
                     isFullScreen = false;
                 } else {
                     /*
@@ -75,6 +77,7 @@ public class MyPagerAdapter extends PagerAdapter {
                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                    toolbar.setVisibility(View.GONE);
                     isFullScreen = true;
                 }
             }
