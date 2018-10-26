@@ -6,8 +6,8 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:openDrawer="start"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
     <LinearLayout
         android:id="@+id/linear_layout"
@@ -29,7 +29,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:contentInsetStartWithNavigation="0dp"
-                    app:titleMarginStart="0dp"
                     android:background="?attr/colorPrimary"
                     android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -58,7 +57,7 @@
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
-        android:layout_width="match_parent"
+        android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:menu="@menu/nav_menu"

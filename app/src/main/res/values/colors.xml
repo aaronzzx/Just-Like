@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#405eae</color>
     <color name="colorAccent">#4b6fca</color>
     <color name="navigationBar">#000000</color>
+    <color name="splash">#FFFFFF</color>
 </resources>

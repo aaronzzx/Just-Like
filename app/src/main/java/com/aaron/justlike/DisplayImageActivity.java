@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.TranslateAnimation;
 import android.widget.Toast;
 
 public class DisplayImageActivity extends AppCompatActivity {
@@ -119,7 +120,7 @@ public class DisplayImageActivity extends AppCompatActivity {
      * 初始化界面
      */
     private void initContent() {
-        mToolbar = findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar2);
         setSupportActionBar(mToolbar);
         /*
          * 启用标题栏的返回键
@@ -127,7 +128,6 @@ public class DisplayImageActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.mipmap.ic_back_black);
         }
         /*
          * 获取从适配器序列化过来的 Image 对象，并取值

@@ -1,11 +1,16 @@
 package com.aaron.justlike;
 
+import android.animation.ObjectAnimator;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.TranslateAnimation;
 
 import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
@@ -38,6 +43,8 @@ public class MyPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
+        final AppBarLayout appBarLayout = mActivity.findViewById(R.id.app_bar_layout);
+        final WrapperView view = new WrapperView(appBarLayout);
         Uri uri = mUriList.get(position);
         PhotoView photoView = new PhotoView(mActivity);
         ViewGroup parent = (ViewGroup) photoView.getParent();
@@ -54,7 +61,6 @@ public class MyPagerAdapter extends PagerAdapter {
         photoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toolbar toolbar = mActivity.getToolbar();
                 if (isFullScreen) {
                     /*
                      * 全屏状态下执行此代码块会退出全屏
@@ -64,7 +70,12 @@ public class MyPagerAdapter extends PagerAdapter {
                             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                    toolbar.setVisibility(View.VISIBLE);
+                    TranslateAnimation ta = new TranslateAnimation(0, 0, -223, 0);
+                    ta.setDuration(300);
+                    appBarLayout.startAnimation(ta);
+                    ObjectAnimator animator = ObjectAnimator.ofFloat(view, "height", 0);
+                    animator.setDuration(0);
+                    animator.start();
                     isFullScreen = false;
                 } else {
                     /*
@@ -77,7 +88,9 @@ public class MyPagerAdapter extends PagerAdapter {
                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-                    toolbar.setVisibility(View.GONE);
+                    ObjectAnimator animator = ObjectAnimator.ofFloat(view, "height", -223);
+//                    animator.setDuration(250);
+                    animator.start();
                     isFullScreen = true;
                 }
             }

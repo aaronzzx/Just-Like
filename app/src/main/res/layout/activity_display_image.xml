@@ -5,7 +5,7 @@
     android:id="@+id/activity_display_image"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000"
+    android:background="#000000"
     android:orientation="vertical">
 
     <android.support.design.widget.CoordinatorLayout
@@ -14,21 +14,19 @@
         android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/toolbar2"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="25dp"
                 app:titleTextColor="#000"
                 android:background="?attr/colorPrimary"
-                android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:contentInsetStartWithNavigation="0dp"
-                app:titleMarginStart="0dp" />
+                app:contentInsetStartWithNavigation="0dp"/>
 
         </android.support.design.widget.AppBarLayout>
 
