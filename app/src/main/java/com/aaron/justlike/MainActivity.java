@@ -1,14 +1,11 @@
 package com.aaron.justlike;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -75,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 加载存储在程序外部缓存目录的图片
         String[] type = {"jpg", "jpeg", "png", "JPG", "JPEG", "PNG"};
         FileUtils.getLocalCache(this, mImageList, mAdapter, type);
-        LogUtil.d(LogUtil.TAG, "" + mUriList.size());
     }
 
     @Override
@@ -126,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             if (mNumber == 1) {
                 super.onBackPressed();
-                android.os.Process.killProcess(android.os.Process.myPid());
             }
             mNumber = 1;
             Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
