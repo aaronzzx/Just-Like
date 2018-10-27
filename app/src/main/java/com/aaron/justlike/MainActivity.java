@@ -197,6 +197,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (resultCode == Activity.RESULT_OK) {
                     isClick = true; // 表示此次行为是用户所点击
                     Uri uri = data.getData(); // 获取返回的 URI
+                    String path = FileUtils.getAbsolutePath(uri.getPath());
+                    String fileName = path.substring(path.lastIndexOf("/") + 1);
+                    mFileNameList.add(fileName);
                     mUriList.add(uri);
 
                     // 通知适配器更新并将文件添加至缓存
