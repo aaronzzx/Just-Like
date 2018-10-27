@@ -204,6 +204,7 @@ class FileUtils {
                     for (int i = 0; i < typeArray.length(); i++) {
                         JSONObject jsonObject = typeArray.getJSONObject(i);
                         String path = jsonObject.getString("path");
+                        String fileName = path.substring(path.lastIndexOf("/") + 1);
                         String fileProvider = "com.aaron.justlike.fileprovider";
                         Uri uri;
                         if (Build.VERSION.SDK_INT >= 24) {
@@ -214,6 +215,7 @@ class FileUtils {
                         }
 
                         mUriList.add(uri);
+                        MainActivity.getFileNameList().add(fileName);
                         /*
                          * 之所以不能放在循环体外面，是因为除了 jpg 格式要加载，
                          * 还有其他格式图片，在如果放在循环体外，因为加载其他格式

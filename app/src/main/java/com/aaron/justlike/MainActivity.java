@@ -1,11 +1,14 @@
 package com.aaron.justlike;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -28,15 +31,20 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private int mNumber = 0;
     private static final int REQUEST_PERMISSION = 1;
     private static final int CHOOSE_PHOTO = 2; // 定义打开文件管理器需要用的请求码，1 被申请权限用了，所以用2
     private static final int DELETE_PHOTO = 3;
     private static boolean isClick = false; // 点击状态
-    private static List<Uri> mUriList = new ArrayList<>();
+    private static List<Uri> mUriList = new ArrayList<>(); // ViewPager 数据源
+    private static List<String> mFileNameList = new ArrayList<>(); // 详情页删除图片时的图片名称集合
     private List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
     private ImageAdapter mAdapter; // 声明一个 Image 适配器
     private DrawerLayout mDrawerLayout;
 
+    public static List<String> getFileNameList() {
+        return mFileNameList;
+    }
     public static List<Uri> getUriList() {
         return mUriList;
     }
@@ -67,6 +75,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 加载存储在程序外部缓存目录的图片
         String[] type = {"jpg", "jpeg", "png", "JPG", "JPEG", "PNG"};
         FileUtils.getLocalCache(this, mImageList, mAdapter, type);
+        LogUtil.d(LogUtil.TAG, "" + mUriList.size());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mNumber == 1) {
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
     }
 
     /**
@@ -107,7 +124,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (mNumber == 1) {
+                super.onBackPressed();
+                android.os.Process.killProcess(android.os.Process.myPid());
+            }
+            mNumber = 1;
+            Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(2000);
+                        mNumber = 0;
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
     }
 
@@ -182,8 +215,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     int position = data.getIntExtra("position", 0);
                     String fileName = data.getStringExtra("fileName");
                     mImageList.remove(position);
+                    mUriList.remove(position);
+                    mFileNameList.remove(position);
                     mAdapter.notifyDataSetChanged();
-                    FileUtils.deleteFile(this, fileName);
+                    FileUtils.deleteFile(this, "/" + fileName);
                 }
                 break;
         }

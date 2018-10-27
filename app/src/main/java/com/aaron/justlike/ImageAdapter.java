@@ -64,6 +64,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                                 String absolutePath = FileUtils.getAbsolutePath(uri.getPath());
                                 String fileName = absolutePath.substring(absolutePath.lastIndexOf("/"));
                                 mImageList.remove(position);
+                                MainActivity.getUriList().remove(position);
                                 notifyDataSetChanged();
                                 FileUtils.deleteFile(mActivity, fileName);
                             }

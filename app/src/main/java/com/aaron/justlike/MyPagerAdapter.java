@@ -49,6 +49,7 @@ public class MyPagerAdapter extends PagerAdapter {
         final WrapperView view = new WrapperView(appBarLayout);
         Uri uri = mUriList.get(position);
         PhotoView photoView = new PhotoView(mActivity);
+        photoView.setTag(position);
         ViewGroup parent = (ViewGroup) photoView.getParent();
         if (parent != null) {
             parent.removeView(photoView);
@@ -125,5 +126,16 @@ public class MyPagerAdapter extends PagerAdapter {
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
+    }
+
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        View view = (View) object;
+        int currentPosition = mActivity.getCurrentPosition();
+        if (currentPosition == (Integer) view.getTag()) {
+            return POSITION_NONE;
+        } else {
+            return POSITION_UNCHANGED;
+        }
     }
 }

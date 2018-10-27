@@ -1,10 +1,13 @@
 package com.aaron.justlike;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -18,6 +21,9 @@ import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DisplayImageActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
@@ -29,6 +35,10 @@ public class DisplayImageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_image);
         initContent();
+    }
+
+    public int getCurrentPosition() {
+        return mPosition;
     }
 
     public Toolbar getToolbar() {
@@ -101,7 +111,8 @@ public class DisplayImageActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent();
                                 intent.putExtra("position", mPosition);
-                                intent.putExtra("fileName", mFileName);
+                                String fileName = MainActivity.getFileNameList().get(mPosition);
+                                intent.putExtra("fileName", fileName);
                                 setResult(RESULT_OK, intent);
                                 finish();
                             }
@@ -146,15 +157,21 @@ public class DisplayImageActivity extends AppCompatActivity {
                 this, absolutePath);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(mPosition);
-        /*
-         * 获取图片拍摄时间并将信息设置为标题栏标题
-         */
-        /*try {
-            ExifInterface exifInterface = new ExifInterface(absolutePath);
-            String dateTime = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
-            FileUtils.formatDateAndTime(actionBar, dateTime);
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-        }*/
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mPosition = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 }
