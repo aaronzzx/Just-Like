@@ -10,7 +10,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -25,6 +24,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +36,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private int mNumber = 0; // 用于判断返回键退出程序
+    private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefresh;
     private static final int REQUEST_PERMISSION = 1;
     private static final int CHOOSE_PHOTO = 2; // 定义打开文件管理器需要用的请求码，1 被申请权限用了，所以用2
     private static final int DELETE_PHOTO = 3;
@@ -45,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
     private ImageAdapter mAdapter; // 声明一个 Image 适配器
     private DrawerLayout mDrawerLayout;
-    private LocalBroadcastManager mBroadcastManager;
     private String[] type = {"jpg", "jpeg", "png", "JPG", "JPEG", "PNG"};
 
     @Override
@@ -251,12 +252,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FloatingActionButton fab = findViewById(R.id.fab); // 浮动按钮
         fab.setOnClickListener(this);
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView = findViewById(R.id.recycler_view);
         // 将 RecyclerView 的布局风格改为网格类型,使用自定义的布局管理器，为了能修改滑动状态
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
-        recyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new ImageAdapter(this, mImageList);
-        recyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
 
         navView.setCheckedItem(R.id.nav_home_page);
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -267,33 +268,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return true;
             }
         });
-        final SwipeRefreshLayout swipeRefresh = findViewById(R.id.swipe_refresh);
-        swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeRefresh = findViewById(R.id.swipe_refresh);
+        mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary);
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(600);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mImageList.clear();
-                                mFileNameList.clear();
-                                mUriList.clear();
-                                FileUtils.getLocalCache(MainActivity.this, mImageList, mUriList, mAdapter, type);
-                                mAdapter.notifyDataSetChanged();
-                                swipeRefresh.setRefreshing(false);
-                                mBroadcastManager = LocalBroadcastManager.getInstance(MainActivity.this);
-                                Intent intent = new Intent("com.aaron.justlike.refresh_view_pager");
-                                mBroadcastManager.sendBroadcast(intent);
+                                refreshRecyclerFirst();
+                                refreshRecyclerLast();
                                 addHintOnBackground();
-                                LogUtil.d(LogUtil.TAG, "mUriList.size() is: " + mUriList.size());
                             }
                         });
                     }
@@ -302,22 +295,71 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    private void refreshRecyclerFirst() {
+        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, 2160);
+        ta.setDuration(400);
+        ta.setFillAfter(true);
+        mRecyclerView.startAnimation(ta);
+    }
+
+    private void refreshRecyclerLast() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(400);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mImageList.clear();
+                        mFileNameList.clear();
+                        mUriList.clear();
+                        FileUtils.getLocalCache(MainActivity.this, mImageList, mUriList, mAdapter, type);
+                        mAdapter.notifyDataSetChanged();
+                        mSwipeRefresh.setRefreshing(false);
+                        TranslateAnimation ta = new TranslateAnimation(0, 0, 2160, 0);
+                        ta.setDuration(400);
+                        mRecyclerView.startAnimation(ta);
+                    }
+                });
+            }
+        }).start();
+    }
+
     public void addHintOnBackground() {
-        TextView hint = findViewById(R.id.hint);
-        if (mImageList.isEmpty()) {
-            AnimationSet as = new AnimationSet(true);
-            as.setDuration(700);
-            RotateAnimation ra = new RotateAnimation(0, 720,
-                    Animation.RELATIVE_TO_SELF, 0.5F,
-                    Animation.RELATIVE_TO_SELF, 0.5F);
-            ScaleAnimation sa = new ScaleAnimation(0, 1, 0, 1);
-            as.addAnimation(ra);
-            as.addAnimation(sa);
-            hint.startAnimation(as);
-            hint.setVisibility(View.VISIBLE);
-        } else {
-            hint.setVisibility(View.GONE);
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(400);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        TextView hint = findViewById(R.id.hint);
+                        if (mImageList.isEmpty()) {
+                            AnimationSet as = new AnimationSet(true);
+                            as.setDuration(500);
+                            RotateAnimation ra = new RotateAnimation(0, 720,
+                                    Animation.RELATIVE_TO_SELF, 0.5F,
+                                    Animation.RELATIVE_TO_SELF, 0.5F);
+                            ScaleAnimation sa = new ScaleAnimation(0, 1, 0, 1);
+                            as.addAnimation(ra);
+                            as.addAnimation(sa);
+                            hint.startAnimation(as);
+                            hint.setVisibility(View.VISIBLE);
+                        } else {
+                            hint.setVisibility(View.GONE);
+                        }
+                    }
+                });
+            }
+        }).start();
     }
 
     private void setStatusBar() {
