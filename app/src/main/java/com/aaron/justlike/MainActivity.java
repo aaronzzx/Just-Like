@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         requestWritePermission(); // 申请存储权限
         // 加载存储在程序外部缓存目录的图片
         FileUtils.getLocalCache(this, mImageList, mUriList, mAdapter, type);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -207,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case CHOOSE_PHOTO:
                 if (resultCode == Activity.RESULT_OK) {
                     isClick = true; // 表示此次行为是用户所点击
-                    Uri uri = data.getData(); // 获取返回的 URI
+                    final Uri uri = data.getData(); // 获取返回的 URI
                     String path = FileUtils.getAbsolutePath(uri.getPath());
                     String fileName = path.substring(path.lastIndexOf("/") + 1);
                     mFileNameList.add(fileName);
@@ -216,7 +217,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // 通知适配器更新并将文件添加至缓存
                     mImageList.add(new Image(uri));
                     mAdapter.notifyDataSetChanged();
-                    FileUtils.saveToCache(this, uri);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            FileUtils.saveToCache(MainActivity.this, uri);
+                        }
+                    }).start();
                 }
                 break;
             case DELETE_PHOTO:
@@ -286,7 +292,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             public void run() {
                                 refreshRecyclerFirst();
                                 refreshRecyclerLast();
-                                addHintOnBackground();
                             }
                         });
                     }
@@ -297,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void refreshRecyclerFirst() {
         TranslateAnimation ta = new TranslateAnimation(0, 0, 0, 2160);
-        ta.setDuration(400);
+        ta.setDuration(250);
         ta.setFillAfter(true);
         mRecyclerView.startAnimation(ta);
     }
@@ -307,6 +312,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 try {
+                    mImageList.clear();
+                    mFileNameList.clear();
+                    mUriList.clear();
+                    FileUtils.getLocalCache(MainActivity.this, mImageList, mUriList, mAdapter, type);
                     Thread.sleep(400);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -314,15 +323,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mImageList.clear();
-                        mFileNameList.clear();
-                        mUriList.clear();
-                        FileUtils.getLocalCache(MainActivity.this, mImageList, mUriList, mAdapter, type);
                         mAdapter.notifyDataSetChanged();
                         mSwipeRefresh.setRefreshing(false);
                         TranslateAnimation ta = new TranslateAnimation(0, 0, 2160, 0);
-                        ta.setDuration(400);
+                        ta.setDuration(250);
                         mRecyclerView.startAnimation(ta);
+                        addHintOnBackground();
                     }
                 });
             }
@@ -330,36 +336,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void addHintOnBackground() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(400);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        TextView hint = findViewById(R.id.hint);
-                        if (mImageList.isEmpty()) {
-                            AnimationSet as = new AnimationSet(true);
-                            as.setDuration(500);
-                            RotateAnimation ra = new RotateAnimation(0, 720,
-                                    Animation.RELATIVE_TO_SELF, 0.5F,
-                                    Animation.RELATIVE_TO_SELF, 0.5F);
-                            ScaleAnimation sa = new ScaleAnimation(0, 1, 0, 1);
-                            as.addAnimation(ra);
-                            as.addAnimation(sa);
-                            hint.startAnimation(as);
-                            hint.setVisibility(View.VISIBLE);
-                        } else {
-                            hint.setVisibility(View.GONE);
-                        }
-                    }
-                });
-            }
-        }).start();
+        TextView hint = findViewById(R.id.hint);
+        if (mImageList.isEmpty()) {
+            AnimationSet as = new AnimationSet(true);
+            as.setDuration(500);
+            RotateAnimation ra = new RotateAnimation(0, 720,
+                    Animation.RELATIVE_TO_SELF, 0.5F,
+                    Animation.RELATIVE_TO_SELF, 0.5F);
+            ScaleAnimation sa = new ScaleAnimation(0, 1, 0, 1);
+            as.addAnimation(ra);
+            as.addAnimation(sa);
+            hint.startAnimation(as);
+            hint.setVisibility(View.VISIBLE);
+        } else {
+            hint.setVisibility(View.GONE);
+        }
     }
 
     private void setStatusBar() {

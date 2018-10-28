@@ -131,6 +131,7 @@ public class DisplayImageActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.mipmap.ic_back_black);
         }
         /*
          * 获取从适配器序列化过来的 Image 对象，并取值

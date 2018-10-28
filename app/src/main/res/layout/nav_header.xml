@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
         android:textColor="#fff"
-        android:text="大碗面，skr~skr~"
+        android:text="Demo"
         android:layout_alignParentBottom="true"/>
 
     <TextView
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
         android:textColor="#fff"
-        android:text="Aaron"
+        android:text="Just Like"
         android:layout_above="@id/head_sign"/>
 
 </RelativeLayout>

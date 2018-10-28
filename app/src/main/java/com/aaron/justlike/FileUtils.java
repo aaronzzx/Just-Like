@@ -4,6 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -103,25 +106,31 @@ class FileUtils {
      */
     static void saveToCache(Context context, Uri uri) {
         String filePath = getPath(context, uri);
-        String fileName = filePath.substring(filePath.lastIndexOf("/"));
-        File file = new File(context.getExternalCacheDir().getAbsolutePath() + fileName);
+        String fileName_before = filePath.substring(filePath.lastIndexOf("/"));
+        Date date = new Date();
+        String fileName = "/" + date.getTime() + ".JPG";
+        File file = new File(context.getExternalCacheDir().getAbsolutePath() + fileName_before);
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(getBitmapDegree(filePath));
+        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         FileInputStream fis = null;
         FileOutputStream fos = null;
         try {
-            if (!file.exists()) {
-                fis = new FileInputStream(filePath);
-                fos = new FileOutputStream(context.getExternalCacheDir() + fileName);
-                byte[] buffer = new byte[1024];
-                int len;
-                while ((len = fis.read(buffer, 0, buffer.length)) != -1) {
-                    fos.write(buffer, 0, len);
-                }
+            if (file.exists()) {
+                file.delete();
             }
+            fis = new FileInputStream(filePath);
+            fos = new FileOutputStream(context.getExternalCacheDir() + fileName);
+            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
-                if (fos != null) fos.close();
+                if (fos != null) {
+                    fos.flush();
+                    fos.close();
+                }
                 if (fis != null) fis.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -222,7 +231,6 @@ class FileUtils {
                         uriList.add(uri);
 
                         imageList.add(new Image(uri));
-                        imageAdapter.notifyDataSetChanged();
                     }
                 }
             }
