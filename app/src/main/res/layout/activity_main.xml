@@ -13,6 +13,7 @@
         android:id="@+id/linear_layout"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:background="#ffffff"
         android:orientation="vertical">
 
         <android.support.design.widget.CoordinatorLayout
@@ -35,13 +36,20 @@
 
             </android.support.design.widget.AppBarLayout>
 
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="1.5dp"
-                android:clipToPadding="false"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                android:clipToPadding="false" />
+
+            </android.support.v4.widget.SwipeRefreshLayout>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fab"
@@ -51,13 +59,24 @@
                 android:layout_margin="16dp"
                 android:src="@mipmap/ic_add" />
 
+            <TextView
+                android:id="@+id/hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="空空如也"
+                android:textSize="24sp"
+                android:textColor="#9b9b9b"
+                android:layout_gravity="center"
+                android:gravity="center"/>
+
         </android.support.design.widget.CoordinatorLayout>
 
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
-        android:layout_width="280dp"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:menu="@menu/nav_menu"

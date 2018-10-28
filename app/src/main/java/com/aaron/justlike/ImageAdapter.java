@@ -19,10 +19,10 @@ import java.util.List;
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
 
     private List<Image> mImageList;
-    private Activity mActivity;
+    private MainActivity mActivity;
     private static final int DELETE_PHOTO = 3;
 
-    ImageAdapter(Activity activity, List<Image> imageList) {
+    ImageAdapter(MainActivity activity, List<Image> imageList) {
         mActivity = activity;
         mImageList = imageList;
     }
@@ -67,6 +67,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                                 MainActivity.getUriList().remove(position);
                                 notifyDataSetChanged();
                                 FileUtils.deleteFile(mActivity, fileName);
+                                mActivity.addHintOnBackground();
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {

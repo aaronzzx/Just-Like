@@ -28,8 +28,6 @@ import java.util.List;
 
 class FileUtils {
 
-    private static List<Uri> mUriList = new ArrayList<>(); // ViewPager 需要用到的集合
-
     /**
      * 获取图片的旋转角度
      *
@@ -187,7 +185,7 @@ class FileUtils {
     /**
      * 加载保存在应用缓存目录的文件
      */
-    static void getLocalCache(Activity activity, List<Image> imageList,
+    static void getLocalCache(Activity activity, List<Image> imageList, List<Uri> uriList,
                               ImageAdapter imageAdapter, String[] type) {
         try {
             /*
@@ -214,7 +212,6 @@ class FileUtils {
                             uri = Uri.fromFile(new File(path));
                         }
 
-                        mUriList.add(uri);
                         MainActivity.getFileNameList().add(fileName);
                         /*
                          * 之所以不能放在循环体外面，是因为除了 jpg 格式要加载，
@@ -222,7 +219,7 @@ class FileUtils {
                          * 图片与 jpg 格式不符合，所以会清空集合，导致 ViewPager
                          * 无法显示。
                          */
-                        MainActivity.setPhotoViewList(mUriList);
+                        uriList.add(uri);
 
                         imageList.add(new Image(uri));
                         imageAdapter.notifyDataSetChanged();

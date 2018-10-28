@@ -10,6 +10,7 @@
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:src="@mipmap/ic_head"
+        android:layout_marginStart="7dp"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"/>
 
@@ -17,7 +18,7 @@
         android:id="@+id/head_sign"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="7dp"
         android:textColor="#fff"
         android:text="大碗面，skr~skr~"
         android:layout_alignParentBottom="true"/>
@@ -25,7 +26,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="7dp"
         android:textColor="#fff"
         android:text="Aaron"
         android:layout_above="@id/head_sign"/>

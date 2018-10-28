@@ -10,8 +10,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -19,6 +21,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.RotateAnimation;
+import android.view.animation.ScaleAnimation;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jaeger.library.StatusBarUtil;
@@ -28,7 +35,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private int mNumber = 0;
+    private int mNumber = 0; // 用于判断返回键退出程序
     private static final int REQUEST_PERMISSION = 1;
     private static final int CHOOSE_PHOTO = 2; // 定义打开文件管理器需要用的请求码，1 被申请权限用了，所以用2
     private static final int DELETE_PHOTO = 3;
@@ -38,28 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
     private ImageAdapter mAdapter; // 声明一个 Image 适配器
     private DrawerLayout mDrawerLayout;
-
-    public static List<String> getFileNameList() {
-        return mFileNameList;
-    }
-    public static List<Uri> getUriList() {
-        return mUriList;
-    }
-
-    public static void setPhotoViewList(List<Uri> photoViewList) {
-        mUriList.clear(); // 防止程序通过返回键退出，再次打开时重复添加元素
-        mUriList.addAll(photoViewList);
-    }
-
-    /**
-     * 用于在 ImageAdapter 中判断图片是点击添加的还是
-     * 自动缓存添加的。
-     *
-     * @return 返回点击状态
-     */
-    public static boolean isClick() {
-        return isClick;
-    }
+    private LocalBroadcastManager mBroadcastManager;
+    private String[] type = {"jpg", "jpeg", "png", "JPG", "JPEG", "PNG"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +57,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setStatusBar(); // 修改状态栏和导航栏
         requestWritePermission(); // 申请存储权限
         // 加载存储在程序外部缓存目录的图片
-        String[] type = {"jpg", "jpeg", "png", "JPG", "JPEG", "PNG"};
-        FileUtils.getLocalCache(this, mImageList, mAdapter, type);
+        FileUtils.getLocalCache(this, mImageList, mUriList, mAdapter, type);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        addHintOnBackground();
     }
 
     @Override
@@ -80,6 +72,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mNumber == 1) {
             android.os.Process.killProcess(android.os.Process.myPid());
         }
+    }
+
+    public static List<String> getFileNameList() {
+        return mFileNameList;
+    }
+
+    public static List<Uri> getUriList() {
+        return mUriList;
+    }
+
+    /**
+     * 用于在 ImageAdapter 中判断图片是点击添加的还是
+     * 自动缓存添加的。
+     *
+     * @return 返回点击状态
+     */
+    public static boolean isClick() {
+        return isClick;
     }
 
     /**
@@ -257,6 +267,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return true;
             }
         });
+        final SwipeRefreshLayout swipeRefresh = findViewById(R.id.swipe_refresh);
+        swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mImageList.clear();
+                                mFileNameList.clear();
+                                mUriList.clear();
+                                FileUtils.getLocalCache(MainActivity.this, mImageList, mUriList, mAdapter, type);
+                                mAdapter.notifyDataSetChanged();
+                                swipeRefresh.setRefreshing(false);
+                                mBroadcastManager = LocalBroadcastManager.getInstance(MainActivity.this);
+                                Intent intent = new Intent("com.aaron.justlike.refresh_view_pager");
+                                mBroadcastManager.sendBroadcast(intent);
+                                addHintOnBackground();
+                                LogUtil.d(LogUtil.TAG, "mUriList.size() is: " + mUriList.size());
+                            }
+                        });
+                    }
+                }).start();
+            }
+        });
+    }
+
+    public void addHintOnBackground() {
+        TextView hint = findViewById(R.id.hint);
+        if (mImageList.isEmpty()) {
+            AnimationSet as = new AnimationSet(true);
+            as.setDuration(700);
+            RotateAnimation ra = new RotateAnimation(0, 720,
+                    Animation.RELATIVE_TO_SELF, 0.5F,
+                    Animation.RELATIVE_TO_SELF, 0.5F);
+            ScaleAnimation sa = new ScaleAnimation(0, 1, 0, 1);
+            as.addAnimation(ra);
+            as.addAnimation(sa);
+            hint.startAnimation(as);
+            hint.setVisibility(View.VISIBLE);
+        } else {
+            hint.setVisibility(View.GONE);
+        }
     }
 
     private void setStatusBar() {

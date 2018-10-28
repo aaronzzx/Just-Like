@@ -1,13 +1,10 @@
 package com.aaron.justlike;
 
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -18,17 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.TranslateAnimation;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DisplayImageActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private int mPosition;
-    private String mFileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +140,6 @@ public class DisplayImageActivity extends AppCompatActivity {
         Uri imageUri = image.getUri(); // 获取 URI
         String path = imageUri.getPath(); // 获取原始路径
         String absolutePath = FileUtils.getAbsolutePath(path); // 获取绝对路径
-        mFileName = absolutePath.substring(absolutePath.lastIndexOf("/"));
 
         ViewPager viewPager = findViewById(R.id.activity_display_image_vp);
         viewPager.setOffscreenPageLimit(4);
@@ -160,7 +151,6 @@ public class DisplayImageActivity extends AppCompatActivity {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
@@ -170,7 +160,6 @@ public class DisplayImageActivity extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
     }
