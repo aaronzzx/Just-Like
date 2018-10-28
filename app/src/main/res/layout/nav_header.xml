@@ -7,6 +7,7 @@
     android:background="@drawable/ic_head_background">
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/head_image"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:src="@mipmap/ic_head"
@@ -20,10 +21,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
         android:textColor="#fff"
-        android:text="Demo"
+        android:text="This is a demo."
         android:layout_alignParentBottom="true"/>
 
     <TextView
+        android:id="@+id/head_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"

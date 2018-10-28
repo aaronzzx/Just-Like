@@ -106,23 +106,31 @@ class FileUtils {
      */
     static void saveToCache(Context context, Uri uri) {
         String filePath = getPath(context, uri);
-        String fileName_before = filePath.substring(filePath.lastIndexOf("/"));
+//        String fileName_before = filePath.substring(filePath.lastIndexOf("/"));
         Date date = new Date();
         String fileName = "/" + date.getTime() + ".JPG";
-        File file = new File(context.getExternalCacheDir().getAbsolutePath() + fileName_before);
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-        Matrix matrix = new Matrix();
-        matrix.postRotate(getBitmapDegree(filePath));
-        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        File file = new File(context.getExternalCacheDir().getAbsolutePath() + fileName);
         FileInputStream fis = null;
         FileOutputStream fos = null;
         try {
-            if (file.exists()) {
-                file.delete();
+            if (!file.exists() & filePath != null) {
+                fis = new FileInputStream(filePath);
+                fos = new FileOutputStream(context.getExternalCacheDir() + fileName);
+                int orientation = getBitmapDegree(filePath);
+                if (orientation != 0 & orientation != 1) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+                    Matrix matrix = new Matrix();
+                    matrix.postRotate(getBitmapDegree(filePath));
+                    Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                    resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                } else {
+                    byte[] buffer = new byte[1024];
+                    int total;
+                    while ((total = fis.read(buffer)) != -1) {
+                        fos.write(buffer, 0, total);
+                    }
+                }
             }
-            fis = new FileInputStream(filePath);
-            fos = new FileOutputStream(context.getExternalCacheDir() + fileName);
-            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
