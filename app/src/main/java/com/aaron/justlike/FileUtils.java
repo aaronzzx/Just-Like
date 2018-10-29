@@ -112,13 +112,13 @@ class FileUtils {
         File file = new File(context.getExternalCacheDir().getAbsolutePath() + fileName);
         FileInputStream fis = null;
         FileOutputStream fos = null;
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
         try {
             if (!file.exists() & filePath != null) {
                 fis = new FileInputStream(filePath);
                 fos = new FileOutputStream(context.getExternalCacheDir() + fileName);
                 int orientation = getBitmapDegree(filePath);
                 if (orientation != 0 & orientation != 1) {
-                    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
                     Matrix matrix = new Matrix();
                     matrix.postRotate(getBitmapDegree(filePath));
                     Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
@@ -140,6 +140,7 @@ class FileUtils {
                     fos.close();
                 }
                 if (fis != null) fis.close();
+                if (!bitmap.isRecycled()) bitmap.recycle();
             } catch (IOException e) {
                 e.printStackTrace();
             }

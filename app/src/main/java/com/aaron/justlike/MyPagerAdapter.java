@@ -3,6 +3,7 @@ package com.aaron.justlike;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -49,6 +50,7 @@ public class MyPagerAdapter extends PagerAdapter {
         final WrapperView view = new WrapperView(appBarLayout);
         Uri uri = mUriList.get(position);
         PhotoView photoView = new PhotoView(mActivity);
+        photoView.setScaleLevels(1, 2, 3);
         photoView.setTag(position);
         ViewGroup parent = (ViewGroup) photoView.getParent();
         if (parent != null) {
@@ -56,7 +58,8 @@ public class MyPagerAdapter extends PagerAdapter {
         }
         Picasso.get()
                 .load(uri)
-                .resize(3000, 3000)
+                .config(Bitmap.Config.RGB_565)
+                .resize(4000, 4000)
                 .onlyScaleDown()
                 .rotate(FileUtils.getBitmapDegree(FileUtils.getAbsolutePath(mPath)))
                 .centerInside()

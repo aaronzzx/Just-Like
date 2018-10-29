@@ -3,6 +3,7 @@ package com.aaron.justlike;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -89,6 +90,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
          */
         Picasso.get()
                 .load(image.getUri()) // 加载数据源
+                .config(Bitmap.Config.RGB_565)
                 .resize(600, 600) // 压缩图片
                 .onlyScaleDown() // 设置 resize() 方法仅在图片分辨率超过参数值才起作用
                 // 将某些方向不正的图片旋转回来

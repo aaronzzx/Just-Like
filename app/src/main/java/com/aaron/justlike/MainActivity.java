@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mRecyclerView = findViewById(R.id.recycler_view);
         // 将 RecyclerView 的布局风格改为网格类型,使用自定义的布局管理器，为了能修改滑动状态
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        final MyGridLayoutManager layoutManager = new MyGridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new ImageAdapter(this, mImageList);
         mRecyclerView.setAdapter(mAdapter);
@@ -279,6 +279,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                layoutManager.setScrollEnabled(false);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -292,6 +293,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             public void run() {
                                 refreshRecyclerFirst();
                                 refreshRecyclerLast();
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            Thread.sleep(400);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        layoutManager.setScrollEnabled(true);
+                                    }
+                                }).start();
                             }
                         });
                     }
@@ -339,6 +351,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextView hint = findViewById(R.id.hint);
         if (mImageList.isEmpty()) {
             AnimationSet as = new AnimationSet(true);
+            as.setStartOffset(150);
             as.setDuration(500);
             RotateAnimation ra = new RotateAnimation(0, 720,
                     Animation.RELATIVE_TO_SELF, 0.5F,
