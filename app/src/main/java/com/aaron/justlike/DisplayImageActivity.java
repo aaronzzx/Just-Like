@@ -1,5 +1,6 @@
 package com.aaron.justlike;
 
+import android.app.WallpaperManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,6 +17,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import java.io.IOException;
 
 public class DisplayImageActivity extends AppCompatActivity {
 
@@ -66,8 +69,7 @@ public class DisplayImageActivity extends AppCompatActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.TRANSPARENT);
-            View decorView = window.getDecorView();
-            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -125,20 +127,16 @@ public class DisplayImageActivity extends AppCompatActivity {
     private void initContent() {
         mToolbar = findViewById(R.id.toolbar2);
         setSupportActionBar(mToolbar);
-        /*
-         * 启用标题栏的返回键
-         */
+        // 启用标题栏的返回键
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.mipmap.ic_back_black);
         }
-        /*
-         * 获取从适配器序列化过来的 Image 对象，并取值
-         */
+        // 获取从适配器序列化过来的 Image 对象，并取值
         Image image = getIntent().getParcelableExtra("image");
         mPosition = getIntent().getIntExtra("position", 0);
-        Uri imageUri = image.getUri(); // 获取 URI
+        Uri imageUri = image.getUri();
         String path = imageUri.getPath(); // 获取原始路径
         String absolutePath = FileUtils.getAbsolutePath(path); // 获取绝对路径
 

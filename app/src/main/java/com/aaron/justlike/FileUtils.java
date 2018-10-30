@@ -165,7 +165,7 @@ class FileUtils {
      * @param uri     相册或文件管理器返回的 URI
      * @return 返回图片的真实路径
      */
-    private static String getPath(Context context, Uri uri) {
+    public static String getPath(Context context, Uri uri) {
         if ("content".equalsIgnoreCase(uri.getScheme())) {
             String[] projection = new String[]{MediaStore.Images.Media.DATA};
             Cursor cursor = context.getContentResolver()

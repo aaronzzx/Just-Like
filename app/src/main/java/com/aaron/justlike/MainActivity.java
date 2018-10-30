@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,11 +16,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
@@ -104,6 +106,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.fab:
                 openAlbum();
+                break;
+            case R.id.toolbar:
+                mRecyclerView.smoothScrollToPosition(0);
                 break;
         }
     }
@@ -245,6 +250,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initViews() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setOnClickListener(this);
         mDrawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navView = findViewById(R.id.nav_view);
         ActionBar actionBar = getSupportActionBar();
@@ -280,6 +286,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onRefresh() {
                 layoutManager.setScrollEnabled(false);
+                mAdapter.setBanClick(true);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -302,6 +309,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                             e.printStackTrace();
                                         }
                                         layoutManager.setScrollEnabled(true);
+                                        mAdapter.setBanClick(false);
                                     }
                                 }).start();
                             }
@@ -367,9 +375,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setStatusBar() {
-        /*
-         * 使用透明状态栏
-         */
+        // 使用透明状态栏
         StatusBarUtil
                 .setColorNoTranslucentForDrawerLayout(this,
                         mDrawerLayout, getResources().getColor(R.color.colorPrimary));

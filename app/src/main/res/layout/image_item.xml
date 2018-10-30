@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="130dp"
+    android:layout_height="wrap_content"
     android:layout_margin="1.5dp">
 
     <LinearLayout
@@ -11,10 +11,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/image_image"
-            android:layout_height="match_parent"
+        <com.aaron.justlike.SquareView
+            android:id="@+id/square_view"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:scaleType="centerCrop"/>
 
     </LinearLayout>

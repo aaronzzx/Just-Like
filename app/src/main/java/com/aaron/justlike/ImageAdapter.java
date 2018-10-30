@@ -1,6 +1,5 @@
 package com.aaron.justlike;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,6 +18,7 @@ import java.util.List;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
 
+    private boolean mBanClick;
     private List<Image> mImageList;
     private MainActivity mActivity;
     private static final int DELETE_PHOTO = 3;
@@ -26,6 +26,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     ImageAdapter(MainActivity activity, List<Image> imageList) {
         mActivity = activity;
         mImageList = imageList;
+    }
+
+    public void setBanClick(boolean flag) {
+        mBanClick = flag;
     }
 
     @NonNull
@@ -37,45 +41,49 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
          * 为子项设置点击监听
          */
         final ViewHolder holder = new ViewHolder(view);
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int position = holder.getAdapterPosition();
-                Image image = mImageList.get(position);
-                Intent intent = new Intent(mActivity, DisplayImageActivity.class);
-                // 将 Image 对象序列化传递给下一个活动，方便下一个活动取值
-                intent.putExtra("image", image);
-                intent.putExtra("position", position);
-                mActivity.startActivityForResult(intent, DELETE_PHOTO);
+                if (!mBanClick) {
+                    int position = holder.getAdapterPosition();
+                    Image image = mImageList.get(position);
+                    Intent intent = new Intent(mActivity, DisplayImageActivity.class);
+                    // 将 Image 对象序列化传递给下一个活动，方便下一个活动取值
+                    intent.putExtra("image", image);
+                    intent.putExtra("position", position);
+                    mActivity.startActivityForResult(intent, DELETE_PHOTO);
+                }
             }
         });
-        holder.imageView.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                new AlertDialog.Builder(mActivity)
-                        .setTitle("Warning")
-                        .setMessage("确定删除图片吗？")
-                        .setIcon(R.mipmap.ic_warn)
-                        .setCancelable(false)
-                        .setPositiveButton("删除", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                int position = holder.getAdapterPosition();
-                                Uri uri = mImageList.get(position).getUri();
-                                String absolutePath = FileUtils.getAbsolutePath(uri.getPath());
-                                String fileName = absolutePath.substring(absolutePath.lastIndexOf("/"));
-                                mImageList.remove(position);
-                                MainActivity.getUriList().remove(position);
-                                notifyDataSetChanged();
-                                FileUtils.deleteFile(mActivity, fileName);
-                                mActivity.addHintOnBackground();
-                            }
-                        })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        }).show();
+                if (!mBanClick) {
+                    new AlertDialog.Builder(mActivity)
+                            .setTitle("Warning")
+                            .setMessage("确定删除图片吗？")
+                            .setIcon(R.mipmap.ic_warn)
+                            .setCancelable(false)
+                            .setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    int position = holder.getAdapterPosition();
+                                    Uri uri = mImageList.get(position).getUri();
+                                    String absolutePath = FileUtils.getAbsolutePath(uri.getPath());
+                                    String fileName = absolutePath.substring(absolutePath.lastIndexOf("/"));
+                                    mImageList.remove(position);
+                                    MainActivity.getUriList().remove(position);
+                                    notifyDataSetChanged();
+                                    FileUtils.deleteFile(mActivity, fileName);
+                                    mActivity.addHintOnBackground();
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            }).show();
+                }
                 return true;
             }
         });
@@ -98,7 +106,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                 /* 由于 ImageView 已经指定 centerCrop,
                    所以这里指定成 centerInside 后图片便不会因为拉伸而变形。*/
                 .centerInside()
-                .into(holder.imageImage);
+                .into(holder.squareView);
     }
 
     @Override
@@ -140,15 +148,15 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        View imageView;
-        ImageView imageImage;
+        View itemView;
+        SquareView squareView;
         /**
          * @param view 子项布局的最外层布局，即父布局。
          */
         ViewHolder(View view) {
             super(view);
-            imageView = view;
-            imageImage = view.findViewById(R.id.image_image);
+            itemView = view;
+            squareView = view.findViewById(R.id.square_view);
         }
     }
 }
