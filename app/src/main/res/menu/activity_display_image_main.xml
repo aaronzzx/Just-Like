@@ -4,9 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_info"
+        android:id="@+id/action_image"
         android:title="Info"
-        android:icon="@mipmap/ic_info"
+        android:icon="@mipmap/ic_image"
         app:showAsAction="always" />
 
     <item

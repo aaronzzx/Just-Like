@@ -24,7 +24,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="25dp"
-                app:titleTextColor="#000"
+                app:titleTextColor="#505050"
                 android:background="?attr/colorPrimary"
                 app:contentInsetStartWithNavigation="0dp"/>
 

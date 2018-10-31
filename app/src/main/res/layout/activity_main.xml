@@ -57,7 +57,8 @@
                 android:layout_height="55dp"
                 android:layout_gravity="bottom|end"
                 android:layout_margin="16dp"
-                android:src="@mipmap/ic_add" />
+                android:src="@mipmap/ic_add"
+                app:layout_behavior="com.aaron.justlike.FabScrollBehavior"/>
 
             <TextView
                 android:id="@+id/hint"

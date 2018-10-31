@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -93,19 +94,14 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Image image = mImageList.get(position); // 从集合中找到 Image 对象
-        /*
-         * 使用 Picasso 图片加载库来加载图片
-         */
         Picasso.get()
                 .load(image.getUri()) // 加载数据源
                 .config(Bitmap.Config.RGB_565)
-                .resize(600, 600) // 压缩图片
-                .onlyScaleDown() // 设置 resize() 方法仅在图片分辨率超过参数值才起作用
+//                .tag("Tag")
+                .fit()
                 // 将某些方向不正的图片旋转回来
                 .rotate(getRotateDegree(image, MainActivity.isClick()))
-                /* 由于 ImageView 已经指定 centerCrop,
-                   所以这里指定成 centerInside 后图片便不会因为拉伸而变形。*/
-                .centerInside()
+                .centerCrop()
                 .into(holder.squareView);
     }
 

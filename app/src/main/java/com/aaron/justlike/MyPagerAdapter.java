@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.github.chrisbanes.photoview.PhotoView;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -33,7 +34,6 @@ import java.util.List;
 
 public class MyPagerAdapter extends PagerAdapter {
 
-    private Uri mUri;
     private List<Uri> mUriList;
     private DisplayImageActivity mActivity;
     private String mPath;
@@ -63,7 +63,7 @@ public class MyPagerAdapter extends PagerAdapter {
 //        final LinearLayout button = mActivity.findViewById(R.id.set_wallpaper);
         final WrapperView view = new WrapperView(appBarLayout);
 //        final WrapperView view1 = new WrapperView(button);
-        mUri = mUriList.get(position);
+        Uri uri = mUriList.get(position);
         /*button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,10 +97,11 @@ public class MyPagerAdapter extends PagerAdapter {
             parent.removeView(photoView);
         }
         Picasso.get()
-                .load(mUri)
+                .load(uri)
                 .config(Bitmap.Config.RGB_565)
-                .resize(4000, 4000)
-                .onlyScaleDown()
+//                .resize(3000, 3000)
+//                .onlyScaleDown()
+                .fit()
                 .rotate(FileUtils.getBitmapDegree(FileUtils.getAbsolutePath(mPath)))
                 .centerInside()
                 .into(photoView);

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -18,12 +20,18 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DisplayImageActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private int mPosition;
+    private static final int SET_WALLPAPER = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +99,40 @@ public class DisplayImageActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_info:
-                Toast.makeText(this, "暂未开放", Toast.LENGTH_SHORT).show();
+            case R.id.action_image:
+                /*Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.putExtra("mimeType", "image/*");
+                try {
+                    Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(),
+                            FileUtils.getAbsolutePath(MainActivity.getUriList().get(mPosition).getPath()),
+                            null, null));
+                    intent.setData(uri);
+                    startActivityForResult(intent, SET_WALLPAPER);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }*/
+                WallpaperManager manager = WallpaperManager.getInstance(this);
+                Uri uri = MainActivity.getUriList().get(mPosition);
+                if (manager != null && uri != null) {
+                    String path = uri.getPath();
+                    String absolutePath = FileUtils.getAbsolutePath(path);
+                    File file = new File(absolutePath);
+                    FileInputStream fis = null;
+                    try {
+                        fis = new FileInputStream(file);
+                        manager.setStream(fis);
+                        Toast.makeText(this, "设置成功", Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            if (fis != null) fis.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
                 break;
             case R.id.action_delete:
                 new AlertDialog.Builder(this)
@@ -121,6 +161,17 @@ public class DisplayImageActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case SET_WALLPAPER:
+                if (resultCode == RESULT_OK) {
+                    Toast.makeText(this, "设置成功", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
     /**
      * 初始化界面
      */
@@ -131,7 +182,7 @@ public class DisplayImageActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.mipmap.ic_back_black);
+            actionBar.setHomeAsUpIndicator(R.mipmap.ic_back);
         }
         // 获取从适配器序列化过来的 Image 对象，并取值
         Image image = getIntent().getParcelableExtra("image");
@@ -150,6 +201,9 @@ public class DisplayImageActivity extends AppCompatActivity {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (mPosition > 0) {
+                    mPosition = position + 1;
+                }
             }
 
             @Override
