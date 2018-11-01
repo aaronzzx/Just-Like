@@ -10,9 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -97,11 +95,11 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         Picasso.get()
                 .load(image.getUri()) // 加载数据源
                 .config(Bitmap.Config.RGB_565)
-//                .tag("Tag")
                 .fit()
                 // 将某些方向不正的图片旋转回来
                 .rotate(getRotateDegree(image, MainActivity.isClick()))
                 .centerCrop()
+                .placeholder(R.drawable.place_holder)
                 .into(holder.squareView);
     }
 

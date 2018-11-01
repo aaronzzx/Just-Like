@@ -3,33 +3,19 @@ package com.aaron.justlike;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
-import android.app.WallpaperManager;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
-import android.service.wallpaper.WallpaperService;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.github.chrisbanes.photoview.PhotoView;
-import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.List;
 
 public class MyPagerAdapter extends PagerAdapter {
@@ -71,7 +57,6 @@ public class MyPagerAdapter extends PagerAdapter {
         }
         Picasso.get()
                 .load(uri)
-                .config(Bitmap.Config.RGB_565)
                 .resize(4000, 4000)
                 .onlyScaleDown()
                 .rotate(FileUtils.getBitmapDegree(FileUtils.getAbsolutePath(mPath)))

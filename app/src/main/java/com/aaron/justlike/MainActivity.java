@@ -112,9 +112,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 openAlbum();
                 break;
             case R.id.toolbar:
-                if (mImageList.size() > 14) {
+                /*if (mImageList.size() > 14) {
                     mRecyclerView.scrollToPosition(14);
-                }
+                }*/
                 mRecyclerView.smoothScrollToPosition(0);
                 break;
         }

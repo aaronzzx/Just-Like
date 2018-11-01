@@ -179,7 +179,7 @@ public class DisplayImageActivity extends AppCompatActivity {
         String path = imageUri.getPath(); // 获取原始路径
         String absolutePath = FileUtils.getAbsolutePath(path); // 获取绝对路径
 
-        ViewPager viewPager = findViewById(R.id.activity_display_image_vp);
+        final ViewPager viewPager = findViewById(R.id.activity_display_image_vp);
         viewPager.setOffscreenPageLimit(4);
         viewPager.setPageMargin(50);
         MyPagerAdapter adapter = new MyPagerAdapter(MainActivity.getUriList(),
@@ -187,11 +187,10 @@ public class DisplayImageActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(mPosition);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (mPosition > 0) {
-                    mPosition = position + 1;
-                }
+                mPosition = viewPager.getCurrentItem();
             }
 
             @Override
