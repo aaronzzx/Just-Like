@@ -268,4 +268,16 @@ class FileUtils {
             actionBar.setSubtitle(time);
         }
     }
+
+    /**
+     * dp 单位转 px
+     *
+     * @param context 上下文
+     * @param values  dp 值
+     * @return        px 值
+     */
+    public static int dpToPixel(Context context, float values) {
+        float density = context.getResources().getDisplayMetrics().density;
+        return (int) (values * density + 0.5F);
+    }
 }

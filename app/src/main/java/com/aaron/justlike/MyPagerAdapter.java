@@ -60,35 +60,8 @@ public class MyPagerAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, final int position) {
         final RelativeLayout background = mActivity.findViewById(R.id.activity_display_image);
         final AppBarLayout appBarLayout = mActivity.findViewById(R.id.app_bar_layout);
-//        final LinearLayout button = mActivity.findViewById(R.id.set_wallpaper);
         final WrapperView view = new WrapperView(appBarLayout);
-//        final WrapperView view1 = new WrapperView(button);
         Uri uri = mUriList.get(position);
-        /*button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                WallpaperManager manager = WallpaperManager.getInstance(mActivity);
-                if (manager != null && mUri != null) {
-                    String path = mUri.getPath();
-                    String absolutePath = FileUtils.getAbsolutePath(path);
-                    File file = new File(absolutePath);
-                    FileInputStream fis = null;
-                    try {
-                        fis = new FileInputStream(file);
-                        manager.setStream(fis);
-                        Toast.makeText(mActivity, "设置成功", Toast.LENGTH_SHORT).show();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        try {
-                            if (fis != null) fis.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        });*/
         PhotoView photoView = new PhotoView(mActivity);
         photoView.setScaleLevels(1, 2, 3);
         photoView.setTag(position);
@@ -99,9 +72,8 @@ public class MyPagerAdapter extends PagerAdapter {
         Picasso.get()
                 .load(uri)
                 .config(Bitmap.Config.RGB_565)
-//                .resize(3000, 3000)
-//                .onlyScaleDown()
-                .fit()
+                .resize(4000, 4000)
+                .onlyScaleDown()
                 .rotate(FileUtils.getBitmapDegree(FileUtils.getAbsolutePath(mPath)))
                 .centerInside()
                 .into(photoView);
@@ -139,7 +111,7 @@ public class MyPagerAdapter extends PagerAdapter {
         }
     }
 
-    private void setFullScreen(final RelativeLayout background, WrapperView view/*, WrapperView view1*/) {
+    private void setFullScreen(final RelativeLayout background, WrapperView view) {
         mActivity.getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -151,10 +123,6 @@ public class MyPagerAdapter extends PagerAdapter {
                 .ofFloat(view, "height", -260);
         animator.setDuration(380);
         animator.start();
-
-        /*ObjectAnimator animator1 = ObjectAnimator.ofFloat(view1, "height", 260);
-        animator1.setDuration(380);
-        animator1.start();*/
         // 背景切换动画
         ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.WHITE, Color.BLACK);
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -169,7 +137,7 @@ public class MyPagerAdapter extends PagerAdapter {
     }
 
     private void exitFullScreen(final RelativeLayout background, WrapperView view,
-                                AppBarLayout appBarLayout/*, WrapperView view1, LinearLayout button*/) {
+                                AppBarLayout appBarLayout) {
         mActivity.getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -181,13 +149,6 @@ public class MyPagerAdapter extends PagerAdapter {
         ObjectAnimator animator = ObjectAnimator.ofFloat(view, "height", 0);
         animator.setDuration(0);
         animator.start();
-
-        /*TranslateAnimation ta1 = new TranslateAnimation(0, 0, 260, 0);
-        ta1.setDuration(250);
-        button.startAnimation(ta1);
-        ObjectAnimator animator1 = ObjectAnimator.ofFloat(view1, "height", 0);
-        animator1.setDuration(0);
-        animator1.start();*/
         // 背景切换动画
         ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.BLACK, Color.WHITE);
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

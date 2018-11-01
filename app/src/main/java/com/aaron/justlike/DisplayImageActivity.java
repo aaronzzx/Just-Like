@@ -99,19 +99,7 @@ public class DisplayImageActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_image:
-                /*Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                intent.putExtra("mimeType", "image/*");
-                try {
-                    Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(),
-                            FileUtils.getAbsolutePath(MainActivity.getUriList().get(mPosition).getPath()),
-                            null, null));
-                    intent.setData(uri);
-                    startActivityForResult(intent, SET_WALLPAPER);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }*/
+            case R.id.action_wallpaper:
                 WallpaperManager manager = WallpaperManager.getInstance(this);
                 Uri uri = MainActivity.getUriList().get(mPosition);
                 if (manager != null && uri != null) {

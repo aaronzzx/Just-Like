@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="1.5dp">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <com.aaron.justlike.SquareView
+        android:id="@+id/square_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:scaleType="centerCrop"/>
 
-        <com.aaron.justlike.SquareView
-            android:id="@+id/square_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"/>
-
-    </LinearLayout>
-
-</android.support.v7.widget.CardView>
+</LinearLayout>

@@ -5,7 +5,7 @@
     android:id="@+id/activity_display_image"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="#ffffff">
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/coordinator_layout"
@@ -24,7 +24,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="25dp"
-                app:titleTextColor="#505050"
+                app:titleTextColor="#3f3f3f"
                 android:background="?attr/colorPrimary"
                 app:contentInsetStartWithNavigation="0dp"/>
 
@@ -35,43 +35,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"/>
-
-       <!-- <LinearLayout
-            android:id="@+id/set_wallpaper"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_gravity="center|bottom"
-            android:background="@android:color/white"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_height="match_parent"
-                    android:layout_width="wrap_content"
-                    android:src="@mipmap/ic_send"
-                    android:layout_gravity="center"/>
-
-                <TextView
-                    android:layout_height="match_parent"
-                    android:layout_width="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:background="@android:color/transparent"
-                    android:text="Set Wallpaper"
-                    android:textAllCaps="false"
-                    android:textSize="20sp"
-                    android:textColor="@android:color/black"/>
-
-            </LinearLayout>
-
-        </LinearLayout>-->
 
     </android.support.design.widget.CoordinatorLayout>
 

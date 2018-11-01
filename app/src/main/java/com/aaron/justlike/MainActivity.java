@@ -2,9 +2,12 @@ package com.aaron.justlike;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.LauncherActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -109,6 +112,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 openAlbum();
                 break;
             case R.id.toolbar:
+                if (mImageList.size() > 14) {
+                    mRecyclerView.scrollToPosition(14);
+                }
                 mRecyclerView.smoothScrollToPosition(0);
                 break;
         }
@@ -271,6 +277,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new ImageAdapter(this, mImageList);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addItemDecoration(new SpacesItemDecoration());
+        mRecyclerView.addItemDecoration(new SpaceItemDecoration());
 
         navView.setCheckedItem(R.id.nav_home_page);
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -380,5 +388,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         StatusBarUtil
                 .setColorNoTranslucentForDrawerLayout(this,
                         mDrawerLayout, getResources().getColor(R.color.colorPrimary));
+    }
+
+    public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            if (parent.getChildAdapterPosition(view) % 3 == 0) {
+                outRect.left = 0;
+                outRect.right = FileUtils.dpToPixel(MainActivity.this, 2.5F); // 8px
+            } else if (parent.getChildAdapterPosition(view) % 3 == 1) {
+                outRect.left = FileUtils.dpToPixel(MainActivity.this, 1); // 4px
+                outRect.right = FileUtils.dpToPixel(MainActivity.this, 1);
+            } else if (parent.getChildAdapterPosition(view) % 3 == 2) {
+                outRect.left = FileUtils.dpToPixel(MainActivity.this, 2.5F); // 8px
+                outRect.right = 0;
+            }
+        }
+    }
+
+    public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            int size = MainActivity.getUriList().size();
+            outRect.top = 0;
+            outRect.bottom = FileUtils.dpToPixel(MainActivity.this, 2.5F); // 8px
+            if (parent.getChildAdapterPosition(view) == size - 1) {
+                outRect.bottom = -1;
+            } else if (parent.getChildAdapterPosition(view) == size - 2) {
+                outRect.bottom = -1;
+            } else if (parent.getChildAdapterPosition(view) == size - 3) {
+                outRect.bottom = -1;
+            }
+        }
     }
 }
