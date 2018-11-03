@@ -144,13 +144,14 @@ public class FileUtils {
      * @param path     相册或文件管理器返回的路径
      */
     public static void saveToCache(Context context, String path) {
-        String fileName = "/" + System.currentTimeMillis() + getNumber() + ".JPG";
+        String fileName = path.substring(path.lastIndexOf("/"),
+                path.lastIndexOf(".") - 1) + ".JPG";
         File file = new File(context.getExternalCacheDir().getAbsolutePath() + fileName);
         FileInputStream fis = null;
         FileOutputStream fos = null;
         Bitmap bitmap = BitmapFactory.decodeFile(path);
         try {
-            if (!file.exists() & path != null) {
+            if (!file.exists()) {
                 fis = new FileInputStream(path);
                 fos = new FileOutputStream(context.getExternalCacheDir() + fileName);
                 int orientation = getBitmapDegree(path);

@@ -198,8 +198,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void openAlbum() {
         PictureSelector.create(this)
                 .openGallery(PictureMimeType.ofImage())
-                .maxSelectNum(21)
-                .imageSpanCount(4)
+                .maxSelectNum(9)
+                .imageSpanCount(3)
                 .selectionMode(PictureConfig.MULTIPLE)
                 .previewImage(true)
                 .previewEggs(true)
