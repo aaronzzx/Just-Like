@@ -1,30 +1,33 @@
-package com.aaron.justlike;
+package com.aaron.justlike.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.LauncherActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.Rect;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+
+import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.another.Image;
+import com.aaron.justlike.adapter.ImageAdapter;
+import com.aaron.justlike.another.MyGridLayoutManager;
+import com.aaron.justlike.R;
+import com.aaron.justlike.util.LogUtil;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
+
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
@@ -34,7 +37,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jaeger.library.StatusBarUtil;
-import com.squareup.picasso.Picasso;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.tools.PictureFileUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +52,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefresh;
     private static final int REQUEST_PERMISSION = 1;
-    private static final int CHOOSE_PHOTO = 2; // 定义打开文件管理器需要用的请求码，1 被申请权限用了，所以用2
-    private static final int DELETE_PHOTO = 3;
-    private static boolean isClick = false; // 点击状态
-    private static List<Uri> mUriList = new ArrayList<>(); // ViewPager 数据源
+    private static final int DELETE_PHOTO = 2;
+    private static List<String> mPathList = new ArrayList<>(); // ViewPager 数据源
     private static List<String> mFileNameList = new ArrayList<>(); // 详情页删除图片时的图片名称集合
     private List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
     private ImageAdapter mAdapter; // 声明一个 Image 适配器
@@ -64,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setStatusBar(); // 修改状态栏和导航栏
         requestWritePermission(); // 申请存储权限
         // 加载存储在程序外部缓存目录的图片
-        FileUtils.getLocalCache(this, mImageList, mUriList, mAdapter, type);
+        FileUtils.getLocalCache(this, mImageList, mPathList, type);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -86,18 +91,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return mFileNameList;
     }
 
-    public static List<Uri> getUriList() {
-        return mUriList;
-    }
-
-    /**
-     * 用于在 ImageAdapter 中判断图片是点击添加的还是
-     * 自动缓存添加的。
-     *
-     * @return 返回点击状态
-     */
-    public static boolean isClick() {
-        return isClick;
+    public static List<String> getPathList() {
+        return mPathList;
     }
 
     /**
@@ -201,10 +196,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 将打开文件管理器的代码封装在此方法内，方便调用和使代码简洁。
      */
     private void openAlbum() {
-        // 参数为获取任意文件的值，由 setType() 方法限定获取范围
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*"); // 设置需要访问的文件类型，避免用户选择其他类型文件导致程序出错
-        startActivityForResult(intent, CHOOSE_PHOTO);
+        PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofImage())
+                .maxSelectNum(21)
+                .imageSpanCount(4)
+                .selectionMode(PictureConfig.MULTIPLE)
+                .previewImage(true)
+                .previewEggs(true)
+                .forResult(PictureConfig.CHOOSE_REQUEST);
     }
 
     /**
@@ -217,24 +216,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case CHOOSE_PHOTO:
+            case PictureConfig.CHOOSE_REQUEST:
                 if (resultCode == Activity.RESULT_OK) {
-                    isClick = true; // 表示此次行为是用户所点击
-                    final Uri uri = data.getData(); // 获取返回的 URI
-                    String path = FileUtils.getAbsolutePath(uri.getPath());
-                    String fileName = path.substring(path.lastIndexOf("/") + 1);
-                    mFileNameList.add(fileName);
-                    mUriList.add(uri);
+                    List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+                    for (LocalMedia media : selectList) {
+                        final String path = media.getPath();
+                        String fileName = path.substring(path.lastIndexOf("/") + 1);
 
-                    // 通知适配器更新并将文件添加至缓存
-                    mImageList.add(new Image(uri));
-                    mAdapter.notifyDataSetChanged();
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            FileUtils.saveToCache(MainActivity.this, uri);
-                        }
-                    }).start();
+                        mFileNameList.add(fileName);
+                        mPathList.add(path);
+                        // 通知适配器更新并将文件添加至缓存
+                        mImageList.add(new Image(path));
+                        mAdapter.notifyDataSetChanged();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                FileUtils.saveToCache(MainActivity.this, path);
+                                PictureFileUtils.deleteCacheDirFile(MainActivity.this);
+                            }
+                        }).start();
+                    }
                 }
                 break;
             case DELETE_PHOTO:
@@ -242,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     int position = data.getIntExtra("position", 0);
                     String fileName = data.getStringExtra("fileName");
                     mImageList.remove(position);
-                    mUriList.remove(position);
+                    mPathList.remove(position);
                     mFileNameList.remove(position);
                     mAdapter.notifyDataSetChanged();
                     FileUtils.deleteFile(this, "/" + fileName);
@@ -343,8 +344,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 try {
                     mImageList.clear();
                     mFileNameList.clear();
-                    mUriList.clear();
-                    FileUtils.getLocalCache(MainActivity.this, mImageList, mUriList, mAdapter, type);
+                    mPathList.clear();
+                    FileUtils.getLocalCache(MainActivity.this, mImageList, mPathList, type);
                     Thread.sleep(400);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -396,12 +397,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) % 3 == 0) {
                 outRect.left = 0;
-                outRect.right = FileUtils.dpToPixel(MainActivity.this, 2.5F); // 8px
+                outRect.right = FileUtils.dp2px(MainActivity.this, 2.5F); // 8px
             } else if (parent.getChildAdapterPosition(view) % 3 == 1) {
-                outRect.left = FileUtils.dpToPixel(MainActivity.this, 1); // 4px
-                outRect.right = FileUtils.dpToPixel(MainActivity.this, 1);
+                outRect.left = FileUtils.dp2px(MainActivity.this, 1); // 4px
+                outRect.right = FileUtils.dp2px(MainActivity.this, 1);
             } else if (parent.getChildAdapterPosition(view) % 3 == 2) {
-                outRect.left = FileUtils.dpToPixel(MainActivity.this, 2.5F); // 8px
+                outRect.left = FileUtils.dp2px(MainActivity.this, 2.5F); // 8px
                 outRect.right = 0;
             }
         }
@@ -411,9 +412,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int size = MainActivity.getUriList().size();
+            int size = MainActivity.getPathList().size();
             outRect.top = 0;
-            outRect.bottom = FileUtils.dpToPixel(MainActivity.this, 2.5F); // 8px
+            outRect.bottom = FileUtils.dp2px(MainActivity.this, 2.5F); // 8px
             if (parent.getChildAdapterPosition(view) == size - 1) {
                 outRect.bottom = -1;
             } else if (parent.getChildAdapterPosition(view) == size - 2) {

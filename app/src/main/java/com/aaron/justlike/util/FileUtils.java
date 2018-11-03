@@ -1,7 +1,8 @@
-package com.aaron.justlike;
+package com.aaron.justlike.util;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.WallpaperManager;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -11,9 +12,11 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
+import android.widget.Toast;
+
+import com.aaron.justlike.another.Image;
+import com.aaron.justlike.activity.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,11 +28,47 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-class FileUtils {
+import androidx.appcompat.app.ActionBar;
+import androidx.core.content.FileProvider;
+
+public class FileUtils {
+
+    private static int num = 0; // 按顺序获取数字
+
+    public static Uri getUriFromPath(Context context, File file) {
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= 24) {
+            uri = FileProvider.getUriForFile(context,
+                    "com.aaron.justlike.fileprovider", file);
+        } else {
+            uri = Uri.fromFile(file);
+        }
+        return uri;
+    }
+
+    public static void setWallpaper(Context context, String path) {
+        WallpaperManager manager = WallpaperManager.getInstance(context);
+        if (manager != null && path != null) {
+            File file = new File(path);
+            FileInputStream fis = null;
+            try {
+                fis = new FileInputStream(file);
+                manager.setStream(fis);
+                Toast.makeText(context, "设置成功", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (fis != null) fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     /**
      * 获取图片的旋转角度
@@ -37,7 +76,7 @@ class FileUtils {
      * @param path 图片的路径
      * @return 返回图片的旋转角度
      */
-    static int getBitmapDegree(String path) {
+    public static int getBitmapDegree(String path) {
         int degree = 0;
         try {
             // 此类专门用于获取图片资源的信息
@@ -69,7 +108,7 @@ class FileUtils {
      * @param type    文件类型
      * @return 返回 JSON 数组
      */
-    private static JSONArray getAllFiles(String dirPath, String type) {
+    public static JSONArray getAllFiles(String dirPath, String type) {
         File file = new File(dirPath);
         if (!file.exists()) return null;
         File[] files = file.listFiles();
@@ -102,25 +141,22 @@ class FileUtils {
      * 获取从用户点击图片资源后返回的 URI ，并直接将文件缓存到应用缓存目录下
      *
      * @param context 上下文
-     * @param uri     相册或文件管理器返回的 URI 数据
+     * @param path     相册或文件管理器返回的路径
      */
-    static void saveToCache(Context context, Uri uri) {
-        String filePath = getPath(context, uri);
-//        String fileName_before = filePath.substring(filePath.lastIndexOf("/"));
-        Date date = new Date();
-        String fileName = "/" + date.getTime() + ".JPG";
+    public static void saveToCache(Context context, String path) {
+        String fileName = "/" + System.currentTimeMillis() + getNumber() + ".JPG";
         File file = new File(context.getExternalCacheDir().getAbsolutePath() + fileName);
         FileInputStream fis = null;
         FileOutputStream fos = null;
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+        Bitmap bitmap = BitmapFactory.decodeFile(path);
         try {
-            if (!file.exists() & filePath != null) {
-                fis = new FileInputStream(filePath);
+            if (!file.exists() & path != null) {
+                fis = new FileInputStream(path);
                 fos = new FileOutputStream(context.getExternalCacheDir() + fileName);
-                int orientation = getBitmapDegree(filePath);
+                int orientation = getBitmapDegree(path);
                 if (orientation != 0 & orientation != 1) {
                     Matrix matrix = new Matrix();
-                    matrix.postRotate(getBitmapDegree(filePath));
+                    matrix.postRotate(getBitmapDegree(path));
                     Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
                     resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                 } else {
@@ -152,7 +188,7 @@ class FileUtils {
      *
      * @param fileName 文件名
      */
-    static void deleteFile(Context context, String fileName) {
+    public static void deleteFile(Context context, String fileName) {
         if (TextUtils.isEmpty(fileName)) return;
         File file = new File(context.getExternalCacheDir() + fileName);
         if (file.exists()) file.delete();
@@ -189,7 +225,7 @@ class FileUtils {
      * @param path 原始路径
      * @return 返回绝对路径
      */
-    static String getAbsolutePath(String path) {
+    public static String getAbsolutePath(String path) {
         String absolutePath;
         if (path.startsWith("/e")) {
             absolutePath = path.replace("/external_files",
@@ -203,8 +239,8 @@ class FileUtils {
     /**
      * 加载保存在应用缓存目录的文件
      */
-    static void getLocalCache(Activity activity, List<Image> imageList, List<Uri> uriList,
-                              ImageAdapter imageAdapter, String[] type) {
+    public static void getLocalCache(Activity activity, List<Image> imageList, List<String> pathList,
+                                     String[] type) {
         try {
             /*
              * 从缓存中读取的数据被放置在 JSON 数组中,
@@ -221,14 +257,6 @@ class FileUtils {
                         JSONObject jsonObject = typeArray.getJSONObject(i);
                         String path = jsonObject.getString("path");
                         String fileName = path.substring(path.lastIndexOf("/") + 1);
-                        String fileProvider = "com.aaron.justlike.fileprovider";
-                        Uri uri;
-                        if (Build.VERSION.SDK_INT >= 24) {
-                            uri = FileProvider.getUriForFile(activity,
-                                    fileProvider, new File(path));
-                        } else {
-                            uri = Uri.fromFile(new File(path));
-                        }
 
                         MainActivity.getFileNameList().add(fileName);
                         /*
@@ -237,9 +265,9 @@ class FileUtils {
                          * 图片与 jpg 格式不符合，所以会清空集合，导致 ViewPager
                          * 无法显示。
                          */
-                        uriList.add(uri);
+                        pathList.add(path);
 
-                        imageList.add(new Image(uri));
+                        imageList.add(new Image(path));
                     }
                 }
             }
@@ -254,7 +282,7 @@ class FileUtils {
      * @param param 字符串时间
      * @throws ParseException
      */
-    static void formatDateAndTime(ActionBar actionBar, String param) throws ParseException {
+    public static void formatDateAndTime(ActionBar actionBar, String param) throws ParseException {
         if (param != null) {
             String dateArray[] = param.split(" ");
             String part1 = "yyyy:MM:dd";
@@ -276,8 +304,17 @@ class FileUtils {
      * @param values  dp 值
      * @return        px 值
      */
-    public static int dpToPixel(Context context, float values) {
+    public static int dp2px(Context context, float values) {
         float density = context.getResources().getDisplayMetrics().density;
         return (int) (values * density + 0.5F);
+    }
+
+    public static int getNumber() {
+        if (num == 21) {
+            num = 0;
+        } else {
+            num++;
+        }
+        return num;
     }
 }

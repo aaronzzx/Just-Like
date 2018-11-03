@@ -1,7 +1,7 @@
-package com.aaron.justlike;
+package com.aaron.justlike.another;
 
 import android.content.Context;
-import android.support.v7.widget.GridLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 public class MyGridLayoutManager extends GridLayoutManager {
 

@@ -1,10 +1,12 @@
-package com.aaron.justlike;
+package com.aaron.justlike.another;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
-public class SquareView extends AppCompatImageView {
+import com.bm.library.PhotoView;
+
+public class SquareView extends PhotoView {
 
     public SquareView(Context context) {
         super(context);

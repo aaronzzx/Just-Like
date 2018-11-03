@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- 指定 FileProvider 的路径 -->
 <paths>
-    <external-cache-path name="/storage/emulated/0/Android/data/com.aaron.justlike/cache" path="" />
+
+    <external-path name="wallpaper" path=""/>
+
 </paths>

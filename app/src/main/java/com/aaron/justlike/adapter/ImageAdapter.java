@@ -1,19 +1,27 @@
-package com.aaron.justlike;
+package com.aaron.justlike.adapter;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.squareup.picasso.Picasso;
+import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.another.Image;
+import com.aaron.justlike.R;
+import com.aaron.justlike.another.SquareView;
+import com.aaron.justlike.activity.DisplayImageActivity;
+import com.aaron.justlike.activity.MainActivity;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
 
@@ -22,7 +30,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     private MainActivity mActivity;
     private static final int DELETE_PHOTO = 3;
 
-    ImageAdapter(MainActivity activity, List<Image> imageList) {
+    public ImageAdapter(MainActivity activity, List<Image> imageList) {
         mActivity = activity;
         mImageList = imageList;
     }
@@ -46,6 +54,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                 if (!mBanClick) {
                     int position = holder.getAdapterPosition();
                     Image image = mImageList.get(position);
+
                     Intent intent = new Intent(mActivity, DisplayImageActivity.class);
                     // 将 Image 对象序列化传递给下一个活动，方便下一个活动取值
                     intent.putExtra("image", image);
@@ -67,11 +76,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     int position = holder.getAdapterPosition();
-                                    Uri uri = mImageList.get(position).getUri();
-                                    String absolutePath = FileUtils.getAbsolutePath(uri.getPath());
-                                    String fileName = absolutePath.substring(absolutePath.lastIndexOf("/"));
+                                    String path = mImageList.get(position).getPath();
+                                    String fileName = path.substring(path.lastIndexOf("/"));
                                     mImageList.remove(position);
-                                    MainActivity.getUriList().remove(position);
+                                    MainActivity.getPathList().remove(position);
                                     notifyDataSetChanged();
                                     FileUtils.deleteFile(mActivity, fileName);
                                     mActivity.addHintOnBackground();
@@ -92,14 +100,17 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Image image = mImageList.get(position); // 从集合中找到 Image 对象
-        Picasso.get()
-                .load(image.getUri()) // 加载数据源
-                .config(Bitmap.Config.RGB_565)
-                .fit()
-                // 将某些方向不正的图片旋转回来
-                .rotate(getRotateDegree(image, MainActivity.isClick()))
-                .centerCrop()
+        String path = image.getPath();
+        RequestOptions options = new RequestOptions()
                 .placeholder(R.drawable.place_holder)
+                .centerCrop();
+        DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
+                .Builder(100)
+                .setCrossFadeEnabled(true).build();
+        Glide.with(mActivity)
+                .load(path)
+                .apply(options)
+                .transition(DrawableTransitionOptions.with(factory))
                 .into(holder.squareView);
     }
 
@@ -118,7 +129,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
      */
     private int getRotateDegree(Image image, boolean isClick) {
         int degree;
-        String path = image.getUri().getPath(); // 获取图片原始路径
+        String path = image.getPath(); // 获取图片原始路径
         /*
          * 判断是点击添加还是缓存加载
          */
@@ -129,7 +140,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                         "/storage/emulated/0");
                 degree = FileUtils.getBitmapDegree(absolutePath);
             } else { // 否则路径正常截取
-                String absolutePath = path.substring(image.getUri().getPath().indexOf("/s"));
+                String absolutePath = path.substring(image.getPath().indexOf("/s"));
                 degree = FileUtils.getBitmapDegree(absolutePath);
             }
         } else { // 由于缓存的文件通过 FileProvider 提供路径，所以需要自己修改成绝对路径
