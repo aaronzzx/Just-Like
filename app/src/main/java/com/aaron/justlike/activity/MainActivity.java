@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
         toolbar.setOnClickListener(this);
         mDrawerLayout = findViewById(R.id.drawer_layout);
-        NavigationView navView = findViewById(R.id.nav_view);
+        final NavigationView navView = findViewById(R.id.nav_view);
         ActionBar actionBar = getSupportActionBar();
         /*
          * 让标题栏启用滑动菜单并设置图标
@@ -285,8 +285,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-                mDrawerLayout.closeDrawers();
-                Toast.makeText(MainActivity.this, "暂未开放", Toast.LENGTH_SHORT).show();
+                if (item.getItemId() == R.id.nav_home_page) {
+                    mDrawerLayout.closeDrawers();
+                } else {
+                    mDrawerLayout.closeDrawers();
+                    Toast.makeText(MainActivity.this, "暂未开放", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             }
         });
