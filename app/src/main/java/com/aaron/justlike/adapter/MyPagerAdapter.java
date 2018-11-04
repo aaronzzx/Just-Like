@@ -1,17 +1,14 @@
 package com.aaron.justlike.adapter;
 
-import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
-import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.another.WrapperView;
 import com.aaron.justlike.activity.DisplayImageActivity;
+import com.aaron.justlike.another.WrapperView;
 import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
@@ -111,7 +108,7 @@ public class MyPagerAdapter extends PagerAdapter {
         animator.setDuration(380);
         animator.start();
         // 背景切换动画
-        ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.WHITE, Color.BLACK);
+        /*ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.WHITE, Color.BLACK);
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -120,7 +117,7 @@ public class MyPagerAdapter extends PagerAdapter {
             }
         });
         va.setDuration(150);
-        va.start();
+        va.start();*/
     }
 
     private void exitFullScreen(final RelativeLayout background, WrapperView view,
@@ -128,16 +125,15 @@ public class MyPagerAdapter extends PagerAdapter {
         mActivity.getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         TranslateAnimation ta = new TranslateAnimation(0, 0, -260, 0);
-        ta.setDuration(300);
+        ta.setDuration(200);
         appBarLayout.startAnimation(ta);
         ObjectAnimator animator = ObjectAnimator.ofFloat(view, "height", 0);
         animator.setDuration(0);
         animator.start();
         // 背景切换动画
-        ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.BLACK, Color.WHITE);
+        /*ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.BLACK, Color.WHITE);
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -146,6 +142,6 @@ public class MyPagerAdapter extends PagerAdapter {
             }
         });
         va.setDuration(150);
-        va.start();
+        va.start();*/
     }
 }

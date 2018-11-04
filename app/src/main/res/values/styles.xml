@@ -20,11 +20,27 @@
     <!-- Customize DisplayImageActivity here. -->
     <style name="AppTheme.DisplayActivity" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@android:color/white</item>
-        <item name="colorPrimaryDark">@android:color/white</item>
+        <item name="colorPrimary">@color/colorGrey</item>
+        <item name="colorPrimaryDark">@color/colorGrey</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:navigationBarColor">@color/navigationBar</item>
+    </style>
+
+    <!--PictureSelector 自定义-->
+    <style name="picture.self.style" parent="picture.default.style">
+        <!--图片列表底部背景色-->
+        <item name="picture.bottom.bg">@color/bar_grey</item>
+        <!--图片列表预览文字颜色-->
+        <item name="picture.preview.textColor">@color/white</item>
+        <!--图片列表已完成文字颜色-->
+        <item name="picture.complete.textColor">@color/checked</item>
+        <!--图片已选数量圆点背景色-->
+        <item name="picture.num.style">@drawable/num_selected</item>
+        <!--预览界面标题文字颜色-->
+        <item name="picture.ac_preview.title.textColor">@color/white</item>
+        <!--预览界面已完成文字颜色-->
+        <item name="picture.ac_preview.complete.textColor">@color/checked</item>
     </style>
 
 </resources>

@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_display_image"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#000000">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator_layout"
@@ -23,9 +24,10 @@
                 android:layout_height="?attr/actionBarSize"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="25dp"
-                app:titleTextColor="#595959"
                 android:background="?attr/colorPrimary"
-                app:contentInsetStartWithNavigation="0dp"/>
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:contentInsetStartWithNavigation="0dp"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

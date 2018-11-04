@@ -6,26 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
-
-import com.aaron.justlike.util.FileUtils;
-import com.aaron.justlike.another.Image;
-import com.aaron.justlike.adapter.ImageAdapter;
-import com.aaron.justlike.another.MyGridLayoutManager;
-import com.aaron.justlike.R;
-import com.aaron.justlike.util.LogUtil;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-
-import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -36,20 +16,39 @@ import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aaron.justlike.R;
+import com.aaron.justlike.adapter.ImageAdapter;
+import com.aaron.justlike.another.Image;
+import com.aaron.justlike.extend.MyGridLayoutManager;
+import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.util.LogUtil;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.jaeger.library.StatusBarUtil;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
-import com.luck.picture.lib.tools.PictureFileUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private int mNumber = 0; // 用于判断返回键退出程序
     private RecyclerView mRecyclerView;
+    private MyGridLayoutManager mLayoutManager;
     private SwipeRefreshLayout mSwipeRefresh;
     private static final int REQUEST_PERMISSION = 1;
     private static final int DELETE_PHOTO = 2;
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
     private ImageAdapter mAdapter; // 声明一个 Image 适配器
     private DrawerLayout mDrawerLayout;
-    private String[] type = {"jpg", "jpeg", "png", "JPG", "JPEG", "PNG"};
+    private String[] type = {"JPG", "JPEG", "PNG", "jpg", "jpeg", "png"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,12 +106,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 openAlbum();
                 break;
             case R.id.toolbar:
-                /*if (mImageList.size() > 14) {
-                    mRecyclerView.scrollToPosition(14);
-                }*/
-                mRecyclerView.smoothScrollToPosition(0);
+                scrollToTop();
                 break;
         }
+    }
+
+    /**
+     * 滑动到指定位置
+     */
+    public void scrollToTop() {
+        int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
+        if (firstItem >= 48) {
+            mRecyclerView.scrollToPosition(36);
+        }
+        mRecyclerView.smoothScrollToPosition(0);
     }
 
     /**
@@ -198,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void openAlbum() {
         PictureSelector.create(this)
                 .openGallery(PictureMimeType.ofImage())
+                .theme(R.style.picture_self_style)
                 .maxSelectNum(9)
                 .imageSpanCount(3)
                 .selectionMode(PictureConfig.MULTIPLE)
@@ -232,7 +240,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void run() {
                                 FileUtils.saveToCache(MainActivity.this, path);
-                                PictureFileUtils.deleteCacheDirFile(MainActivity.this);
                             }
                         }).start();
                     }
@@ -274,8 +281,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mRecyclerView = findViewById(R.id.recycler_view);
         // 将 RecyclerView 的布局风格改为网格类型,使用自定义的布局管理器，为了能修改滑动状态
-        final MyGridLayoutManager layoutManager = new MyGridLayoutManager(this, 3);
-        mRecyclerView.setLayoutManager(layoutManager);
+        mLayoutManager = new MyGridLayoutManager(this, 3);
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new ImageAdapter(this, mImageList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new SpacesItemDecoration());
@@ -299,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                layoutManager.setScrollEnabled(false);
+                mLayoutManager.setScrollEnabled(false);
                 mAdapter.setBanClick(true);
                 new Thread(new Runnable() {
                     @Override
@@ -322,7 +329,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }
-                                        layoutManager.setScrollEnabled(true);
+                                        mLayoutManager.setScrollEnabled(true);
                                         mAdapter.setBanClick(false);
                                     }
                                 }).start();

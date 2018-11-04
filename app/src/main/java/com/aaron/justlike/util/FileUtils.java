@@ -36,7 +36,6 @@ import androidx.core.content.FileProvider;
 
 public class FileUtils {
 
-    private static int num = 0; // 按顺序获取数字
 
     public static Uri getUriFromPath(Context context, File file) {
         Uri uri;
@@ -145,7 +144,7 @@ public class FileUtils {
      */
     public static void saveToCache(Context context, String path) {
         String fileName = path.substring(path.lastIndexOf("/"),
-                path.lastIndexOf(".") - 1) + ".JPG";
+                path.lastIndexOf(".")) + ".JPG";
         File file = new File(context.getExternalCacheDir().getAbsolutePath() + fileName);
         FileInputStream fis = null;
         FileOutputStream fos = null;
@@ -308,14 +307,5 @@ public class FileUtils {
     public static int dp2px(Context context, float values) {
         float density = context.getResources().getDisplayMetrics().density;
         return (int) (values * density + 0.5F);
-    }
-
-    public static int getNumber() {
-        if (num == 21) {
-            num = 0;
-        } else {
-            num++;
-        }
-        return num;
     }
 }
