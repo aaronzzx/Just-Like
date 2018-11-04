@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.aaron.justlike.another.SquareView
+    <com.aaron.justlike.extend.SquareView
         android:id="@+id/square_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

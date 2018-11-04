@@ -263,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 将控件的初始化代码封装在此方法中，方便调用并使代码简洁。
      */
     private void initViews() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.activity_main_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setOnClickListener(this);
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -288,15 +288,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRecyclerView.addItemDecoration(new SpacesItemDecoration());
         mRecyclerView.addItemDecoration(new SpaceItemDecoration());
 
-        navView.setCheckedItem(R.id.nav_home_page);
-        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        navView.setCheckedItem(R.id.nav_home);
+        navView.setNavigationItemSelectedListener
+                (new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-                if (item.getItemId() == R.id.nav_home_page) {
-                    mDrawerLayout.closeDrawers();
-                } else {
-                    mDrawerLayout.closeDrawers();
-                    Toast.makeText(MainActivity.this, "暂未开放", Toast.LENGTH_SHORT).show();
+                switch (item.getItemId()) {
+                    case R.id.nav_home:
+                        mDrawerLayout.closeDrawers();
+                        break;
+                    case R.id.nav_about:
+                        startActivity(new Intent(MainActivity.this,
+                                AboutActivity.class));
+                        break;
+                    default:
+                        Toast.makeText(MainActivity.this,
+                                "暂未开放", Toast.LENGTH_SHORT).show();
+                        break;
                 }
                 return true;
             }

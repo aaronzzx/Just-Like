@@ -172,13 +172,13 @@ public class DisplayImageActivity extends AppCompatActivity {
      * 初始化界面
      */
     private void initContent() {
-        mToolbar = findViewById(R.id.toolbar2);
+        mToolbar = findViewById(R.id.activity_display_image_toolbar);
         setSupportActionBar(mToolbar);
         // 启用标题栏的返回键
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.mipmap.ic_back);
+            actionBar.setDisplayShowHomeEnabled(true);
         }
         // 获取从适配器序列化过来的值
         mPosition = getIntent().getIntExtra("position", 0);

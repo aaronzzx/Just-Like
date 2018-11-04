@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.another.Image;
 import com.aaron.justlike.R;
-import com.aaron.justlike.another.SquareView;
+import com.aaron.justlike.extend.SquareView;
 import com.aaron.justlike.activity.DisplayImageActivity;
 import com.aaron.justlike.activity.MainActivity;
 import com.bumptech.glide.Glide;
@@ -43,7 +43,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.image_item, parent, false);
+                .inflate(R.layout.activity_main_recycler_item, parent, false);
         /*
          * 为子项设置点击监听
          */
