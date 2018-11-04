@@ -1,18 +1,11 @@
-package com.aaron.justlike;
+package com.aaron.justlike.activity;
 
-import android.app.WallpaperManager;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,18 +13,26 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.aaron.justlike.R;
+import com.aaron.justlike.adapter.MyPagerAdapter;
+import com.aaron.justlike.util.FileUtils;
+import com.luck.picture.lib.tools.PictureFileUtils;
+import com.yalantis.ucrop.UCrop;
+
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
 public class DisplayImageActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private int mPosition;
-    private static final int SET_WALLPAPER = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +80,7 @@ public class DisplayImageActivity extends AppCompatActivity {
             window.setStatusBarColor(Color.TRANSPARENT);
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
     }
 
@@ -100,27 +100,31 @@ public class DisplayImageActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_wallpaper:
-                WallpaperManager manager = WallpaperManager.getInstance(this);
-                Uri uri = MainActivity.getUriList().get(mPosition);
-                if (manager != null && uri != null) {
-                    String path = uri.getPath();
-                    String absolutePath = FileUtils.getAbsolutePath(path);
-                    File file = new File(absolutePath);
-                    FileInputStream fis = null;
-                    try {
-                        fis = new FileInputStream(file);
-                        manager.setStream(fis);
-                        Toast.makeText(this, "设置成功", Toast.LENGTH_SHORT).show();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        try {
-                            if (fis != null) fis.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                String sourcePath = MainActivity.getPathList().get(mPosition);
+                // 源文件位置
+                Uri sourceUri = FileUtils.getUriFromPath(this, new File(sourcePath));
+
+                File file = new File(getCacheDir(), "Cropped-Wallpaper.JPG");
+                try {
+                    if (file.exists()) {
+                        file.delete();
                     }
+                    file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+                // 需要输出的位置
+                Uri destinationUri = Uri.fromFile(file);
+                // 设置裁剪页面主题
+                UCrop.Options options = new UCrop.Options();
+                options.setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+                options.setToolbarColor(getResources().getColor(R.color.colorPrimary));
+                options.setActiveWidgetColor(getResources().getColor(R.color.colorPrimary));
+                // 打开裁剪页面
+                UCrop.of(sourceUri, destinationUri)
+                        .withAspectRatio(9, 19.5F)
+                        .withOptions(options)
+                        .start(this);
                 break;
             case R.id.action_delete:
                 new AlertDialog.Builder(this)
@@ -150,11 +154,15 @@ public class DisplayImageActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch (requestCode) {
-            case SET_WALLPAPER:
-                if (resultCode == RESULT_OK) {
-                    Toast.makeText(this, "设置成功", Toast.LENGTH_SHORT).show();
+            case UCrop.REQUEST_CROP:
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri resultUri = UCrop.getOutput(data);
+                    FileUtils.setWallpaper(this, FileUtils.getPath(this, resultUri));
+                    PictureFileUtils.deleteCacheDirFile(this);
+                } else if (resultCode == UCrop.RESULT_ERROR) {
+                    Toast.makeText(this, "设置失败", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -172,18 +180,13 @@ public class DisplayImageActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.mipmap.ic_back);
         }
-        // 获取从适配器序列化过来的 Image 对象，并取值
-        Image image = getIntent().getParcelableExtra("image");
+        // 获取从适配器序列化过来的值
         mPosition = getIntent().getIntExtra("position", 0);
-        Uri imageUri = image.getUri();
-        String path = imageUri.getPath(); // 获取原始路径
-        String absolutePath = FileUtils.getAbsolutePath(path); // 获取绝对路径
 
         final ViewPager viewPager = findViewById(R.id.activity_display_image_vp);
         viewPager.setOffscreenPageLimit(4);
         viewPager.setPageMargin(50);
-        MyPagerAdapter adapter = new MyPagerAdapter(MainActivity.getUriList(),
-                this, absolutePath);
+        MyPagerAdapter adapter = new MyPagerAdapter(MainActivity.getPathList(), this);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(mPosition);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

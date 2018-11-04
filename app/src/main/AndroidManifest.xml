@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.aaron.justlike">
 
@@ -14,10 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
-
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:allowBackup">
         <activity
-            android:name="com.aaron.justlike.MainActivity"
+            android:name=".activity.MainActivity"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,15 +25,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.aaron.justlike.DisplayImageActivity"
+            android:name=".activity.DisplayImageActivity"
             android:label="Like"
             android:theme="@style/AppTheme.DisplayActivity" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
-        <!-- 自定义 FileProvider ，用于加载缓存 -->
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="com.aaron.justlike.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -42,6 +44,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <activity android:name=".activity.NavActivity"></activity>
     </application>
 
 </manifest>

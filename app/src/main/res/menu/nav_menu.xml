@@ -6,9 +6,9 @@
         android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_account"
-            android:title="账号"
-            android:icon="@mipmap/ic_account"/>
+            android:id="@+id/nav_home_page"
+            android:title="首页"
+            android:icon="@mipmap/ic_home_page"/>
 
         <item
             android:id="@+id/nav_wallpaper_center"
@@ -19,12 +19,12 @@
 
     <group
         android:id="@+id/group_2"
-        android:checkableBehavior="single">
+        android:checkableBehavior="none">
 
         <item
-            android:id="@+id/nav_home_page"
-            android:title="首页"
-            android:icon="@mipmap/ic_home_page"/>
+            android:id="@+id/nav_account"
+            android:title="账号"
+            android:icon="@mipmap/ic_account"/>
 
         <item
             android:id="@+id/nav_theme"

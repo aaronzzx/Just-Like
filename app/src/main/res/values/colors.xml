@@ -3,6 +3,8 @@
     <color name="colorPrimary">#4b6fca</color>
     <color name="colorPrimaryDark">#405ea9</color>
     <color name="colorAccent">#4b6fca</color>
+    <color name="colorGrey">#393a3e</color>
     <color name="navigationBar">#FFFFFF</color>
     <color name="splash">#FFFFFF</color>
+    <color name="checked">#019629</color>
 </resources>

@@ -1,29 +1,26 @@
-package com.aaron.justlike;
+package com.aaron.justlike.another;
 
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Image implements Parcelable {
 
-    private String mPath;
+    private String mPath; // 用于在文件管理器中选择图片后传回的路径
 
-    private Uri mUri; // 用于在文件管理器中选择图片后传回的 URI 数据
-
-    Image() {
+    public Image() {
 
     }
 
-    Image(Uri uri) {
-        mUri = uri;
+    public Image(String path) {
+        mPath = path;
     }
 
-    public Uri getUri() {
-        return mUri;
+    public String getPath() {
+        return mPath;
     }
 
-    public void setUri(Uri uri) {
-        mUri = uri;
+    public void setPath(String path) {
+        mPath = path;
     }
 
     public static final Parcelable.Creator<Image> CREATOR = new Parcelable.Creator<Image>() {
@@ -32,7 +29,6 @@ public class Image implements Parcelable {
         public Image createFromParcel(Parcel source) {
             Image image = new Image();
             image.mPath = source.readString();
-            image.mUri = Uri.parse(image.mPath);
             return image;
         }
 
@@ -50,6 +46,6 @@ public class Image implements Parcelable {
     // 将数据写出
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mUri.toString());
+        dest.writeString(mPath);
     }
 }

@@ -1,39 +1,39 @@
-package com.aaron.justlike;
+package com.aaron.justlike.adapter;
 
-import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
-import android.graphics.Color;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 
-import com.github.chrisbanes.photoview.PhotoView;
-import com.squareup.picasso.Picasso;
+import com.aaron.justlike.R;
+import com.aaron.justlike.activity.DisplayImageActivity;
+import com.aaron.justlike.another.WrapperView;
+import com.bm.library.PhotoView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
+import com.google.android.material.appbar.AppBarLayout;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
+
 public class MyPagerAdapter extends PagerAdapter {
 
-    private List<Uri> mUriList;
+    private List<String> mPathList;
     private DisplayImageActivity mActivity;
-    private String mPath;
     private boolean isFullScreen;
 
-    MyPagerAdapter(List<Uri> uriList, DisplayImageActivity activity, String path) {
-        mUriList = uriList;
+    public MyPagerAdapter(List<String> pathList, DisplayImageActivity activity) {
+        mPathList = pathList;
         mActivity = activity;
-        mPath = path;
     }
 
     @Override
     public int getCount() {
-        return mUriList.size();
+        return mPathList.size();
     }
 
     @Override
@@ -43,35 +43,34 @@ public class MyPagerAdapter extends PagerAdapter {
 
     @NonNull
     @Override
-    public Object instantiateItem(@NonNull ViewGroup container, final int position) {
+    public Object instantiateItem(@NonNull ViewGroup container,int position) {
         final RelativeLayout background = mActivity.findViewById(R.id.activity_display_image);
         final AppBarLayout appBarLayout = mActivity.findViewById(R.id.app_bar_layout);
         final WrapperView view = new WrapperView(appBarLayout);
-        Uri uri = mUriList.get(position);
+        String path = mPathList.get(position);
         PhotoView photoView = new PhotoView(mActivity);
-        photoView.setScaleLevels(1, 2, 3);
-        photoView.setTag(position);
+        photoView.enable();
         ViewGroup parent = (ViewGroup) photoView.getParent();
         if (parent != null) {
             parent.removeView(photoView);
         }
-        Picasso.get()
-                .load(uri)
-                .resize(4000, 4000)
-                .onlyScaleDown()
-                .rotate(FileUtils.getBitmapDegree(FileUtils.getAbsolutePath(mPath)))
-                .centerInside()
+        DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
+                .Builder(200)
+                .setCrossFadeEnabled(true).build();
+        Glide.with(mActivity)
+                .load(path)
+                .transition(DrawableTransitionOptions.with(factory))
                 .into(photoView);
         photoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isFullScreen) {
                     // 全屏状态下执行此代码块会退出全屏
-                    exitFullScreen(background, view, appBarLayout/*, view1, button*/);
+                    exitFullScreen(background, view, appBarLayout);
                     isFullScreen = false;
                 } else {
                     // 进入全屏,自动沉浸
-                    setFullScreen(background, view/*, view1*/);
+                    setFullScreen(background, view);
                     isFullScreen = true;
                 }
             }
@@ -109,7 +108,7 @@ public class MyPagerAdapter extends PagerAdapter {
         animator.setDuration(380);
         animator.start();
         // 背景切换动画
-        ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.WHITE, Color.BLACK);
+        /*ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.WHITE, Color.BLACK);
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -117,8 +116,8 @@ public class MyPagerAdapter extends PagerAdapter {
                 background.setBackgroundColor(color);
             }
         });
-        va.setDuration(200);
-        va.start();
+        va.setDuration(150);
+        va.start();*/
     }
 
     private void exitFullScreen(final RelativeLayout background, WrapperView view,
@@ -126,16 +125,15 @@ public class MyPagerAdapter extends PagerAdapter {
         mActivity.getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         TranslateAnimation ta = new TranslateAnimation(0, 0, -260, 0);
-        ta.setDuration(250);
+        ta.setDuration(200);
         appBarLayout.startAnimation(ta);
         ObjectAnimator animator = ObjectAnimator.ofFloat(view, "height", 0);
         animator.setDuration(0);
         animator.start();
         // 背景切换动画
-        ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.BLACK, Color.WHITE);
+        /*ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.BLACK, Color.WHITE);
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -143,7 +141,7 @@ public class MyPagerAdapter extends PagerAdapter {
                 background.setBackgroundColor(color);
             }
         });
-        va.setDuration(200);
-        va.start();
+        va.setDuration(150);
+        va.start();*/
     }
 }
