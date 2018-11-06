@@ -25,9 +25,9 @@
                 android:layout_marginTop="25dp"
                 android:layout_alignParentTop="true"
                 android:background="?attr/colorPrimary"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:contentInsetStartWithNavigation="65dp"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
