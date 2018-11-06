@@ -7,6 +7,7 @@ import com.aaron.justlike.adapter.AboutLibraryAdapter;
 import com.aaron.justlike.adapter.AboutMessageAdapter;
 import com.aaron.justlike.another.AboutLibrary;
 import com.aaron.justlike.another.AboutMessage;
+import com.jaeger.library.StatusBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,8 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+        StatusBarUtil.setColor(this,
+                getResources().getColor(R.color.colorPrimary), 80);
         initView();
     }
 
@@ -72,18 +75,19 @@ public class AboutActivity extends AppCompatActivity {
     private void initAboutMessage() {
         AboutMessage introduce = new AboutMessage(R.drawable.ic_introduce, "关于我");
         mAboutMessageList.add(introduce);
-        AboutMessage github = new AboutMessage(R.drawable.ic_github, "GITHUB");
-        mAboutMessageList.add(github);
         AboutMessage email = new AboutMessage(R.drawable.ic_email, "邮件");
         mAboutMessageList.add(email);
         AboutMessage sourceCode = new AboutMessage(R.drawable.ic_source_code, "源码");
         mAboutMessageList.add(sourceCode);
+        AboutMessage github = new AboutMessage(R.drawable.ic_github, "GITHUB");
+        mAboutMessageList.add(github);
     }
 
     private void initAboutLibrary() {
         AboutLibrary glide = new AboutLibrary("Glide",
                 "bumptech", mLibraryDetails[0]);
-        AboutLibrary circleImageview = new AboutLibrary("CircleImageview",
+        mAboutLibraryList.add(glide);
+        AboutLibrary circleImageview = new AboutLibrary("CircleImageView",
                 "hdodenhof", mLibraryDetails[1]);
         mAboutLibraryList.add(circleImageview);
         AboutLibrary statusBarUtil = new AboutLibrary("StatusBarUtil",

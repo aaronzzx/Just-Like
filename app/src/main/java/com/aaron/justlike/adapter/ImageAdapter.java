@@ -70,7 +70,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                     new AlertDialog.Builder(mActivity)
                             .setTitle("Warning")
                             .setMessage("确定删除图片吗？")
-                            .setIcon(R.mipmap.ic_warn)
                             .setCancelable(false)
                             .setPositiveButton("删除", new DialogInterface.OnClickListener() {
                                 @Override

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.MyPagerAdapter;
 import com.aaron.justlike.util.FileUtils;
+import com.jaeger.library.StatusBarUtil;
 import com.luck.picture.lib.tools.PictureFileUtils;
 import com.yalantis.ucrop.UCrop;
 
@@ -68,16 +69,13 @@ public class DisplayImageActivity extends AppCompatActivity {
     }
 
     /**
-     * 使用透明状态栏并使状态栏字体颜色反转
+     * 使用透明状态栏
      */
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
             Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
@@ -117,7 +115,7 @@ public class DisplayImageActivity extends AppCompatActivity {
                 Uri destinationUri = Uri.fromFile(file);
                 // 设置裁剪页面主题
                 UCrop.Options options = new UCrop.Options();
-                options.setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+                options.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
                 options.setToolbarColor(getResources().getColor(R.color.colorPrimary));
                 options.setActiveWidgetColor(getResources().getColor(R.color.colorPrimary));
                 // 打开裁剪页面
@@ -130,7 +128,6 @@ public class DisplayImageActivity extends AppCompatActivity {
                 new AlertDialog.Builder(this)
                         .setTitle("Warning")
                         .setMessage("确定删除图片吗？")
-                        .setIcon(R.mipmap.ic_warn)
                         .setCancelable(false)
                         .setPositiveButton("删除", new DialogInterface.OnClickListener() {
                             @Override

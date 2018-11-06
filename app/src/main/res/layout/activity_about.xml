@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#e1e1e1">
+    android:background="#efefef">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/activity_about_appbar_layout"
@@ -17,10 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="25dp"
             android:background="?attr/colorPrimary"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:contentInsetStartWithNavigation="0dp"
+            app:contentInsetStartWithNavigation="65dp"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -74,16 +73,17 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="20dp"
+                    android:clipToPadding="true"
                     android:orientation="vertical"
                     android:background="#FFFFFF">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
                         android:text="概览"
                         android:textColor="#737373"
-                        android:textSize="15sp"/>
+                        android:textSize="16sp"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/activity_about_message_recycler"
                         android:layout_width="match_parent"
@@ -94,16 +94,17 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="20dp"
+                    android:clipToPadding="true"
                     android:orientation="vertical"
                     android:background="#FFFFFF">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
                         android:text="开源库"
                         android:textColor="#737373"
-                        android:textSize="15sp"/>
+                        android:textSize="16sp"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/activity_about_library_recycler"
                         android:layout_width="match_parent"

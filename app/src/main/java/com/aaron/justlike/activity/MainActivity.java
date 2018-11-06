@@ -406,8 +406,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setStatusBar() {
         // 使用透明状态栏
         StatusBarUtil
-                .setColorNoTranslucentForDrawerLayout(this,
-                        mDrawerLayout, getResources().getColor(R.color.colorPrimary));
+                .setColorForDrawerLayout(this,
+                        mDrawerLayout, getResources().getColor(R.color.colorPrimary),
+                        80);
     }
 
     public class SpacesItemDecoration extends RecyclerView.ItemDecoration {

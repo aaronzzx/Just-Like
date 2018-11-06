@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#4b6fca</color>
-    <color name="colorPrimaryDark">#405ea9</color>
+    <color name="colorPrimaryDark">#3a5497</color>
     <color name="colorAccent">#4b6fca</color>
     <color name="colorGrey">#393a3e</color>
+    <color name="colorGreyDark">#2b2b2e</color>
     <color name="navigationBar">#FFFFFF</color>
     <color name="splash">#FFFFFF</color>
     <color name="checked">#019629</color>
