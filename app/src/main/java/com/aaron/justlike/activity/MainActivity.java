@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.fab:
                 openAlbum();
                 break;
-            case R.id.toolbar:
+            case R.id.activity_main_toolbar:
                 scrollToTop();
                 break;
         }
@@ -405,10 +405,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setStatusBar() {
         // 使用透明状态栏
-        StatusBarUtil
-                .setColorForDrawerLayout(this,
-                        mDrawerLayout, getResources().getColor(R.color.colorPrimary),
-                        80);
+        StatusBarUtil.setTranslucentForDrawerLayout(this, mDrawerLayout, 70);
     }
 
     public class SpacesItemDecoration extends RecyclerView.ItemDecoration {

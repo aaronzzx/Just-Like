@@ -18,6 +18,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.PagerAdapter;
 
 public class MyPagerAdapter extends PagerAdapter {
@@ -45,8 +46,8 @@ public class MyPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container,int position) {
         final RelativeLayout background = mActivity.findViewById(R.id.activity_display_image);
-        final AppBarLayout appBarLayout = mActivity.findViewById(R.id.app_bar_layout);
-        final WrapperView view = new WrapperView(appBarLayout);
+        final Toolbar toolbar = mActivity.findViewById(R.id.activity_display_image_toolbar);
+        final WrapperView view = new WrapperView(toolbar);
         String path = mPathList.get(position);
         PhotoView photoView = new PhotoView(mActivity);
         photoView.enable();
@@ -66,7 +67,7 @@ public class MyPagerAdapter extends PagerAdapter {
             public void onClick(View v) {
                 if (isFullScreen) {
                     // 全屏状态下执行此代码块会退出全屏
-                    exitFullScreen(background, view, appBarLayout);
+                    exitFullScreen(background, view, toolbar);
                     isFullScreen = false;
                 } else {
                     // 进入全屏,自动沉浸
@@ -120,15 +121,14 @@ public class MyPagerAdapter extends PagerAdapter {
         va.start();*/
     }
 
-    private void exitFullScreen(final RelativeLayout background, WrapperView view,
-                                AppBarLayout appBarLayout) {
+    private void exitFullScreen(final RelativeLayout background, WrapperView view, Toolbar toolbar) {
         mActivity.getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         TranslateAnimation ta = new TranslateAnimation(0, 0, -260, 0);
         ta.setDuration(200);
-        appBarLayout.startAnimation(ta);
+        toolbar.startAnimation(ta);
         ObjectAnimator animator = ObjectAnimator.ofFloat(view, "height", 0);
         animator.setDuration(0);
         animator.start();

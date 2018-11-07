@@ -34,8 +34,8 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-        StatusBarUtil.setColor(this,
-                getResources().getColor(R.color.colorPrimary), 80);
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary),
+                70);
         initView();
     }
 
@@ -73,7 +73,7 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     private void initAboutMessage() {
-        AboutMessage introduce = new AboutMessage(R.drawable.ic_introduce, "关于我");
+        AboutMessage introduce = new AboutMessage(R.drawable.ic_introduce, "介绍");
         mAboutMessageList.add(introduce);
         AboutMessage email = new AboutMessage(R.drawable.ic_email, "邮件");
         mAboutMessageList.add(email);
