@@ -46,6 +46,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private final int mLength = 0;
     private int mNumber = 0; // 用于判断返回键退出程序
     private RecyclerView mRecyclerView;
     private MyGridLayoutManager mLayoutManager;
@@ -276,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.mipmap.ic_drawer_menu);
         }
-        FloatingActionButton fab = findViewById(R.id.fab); // 浮动按钮
+        final FloatingActionButton fab = findViewById(R.id.fab); // 浮动按钮
         fab.setOnClickListener(this);
 
         mRecyclerView = findViewById(R.id.recycler_view);
@@ -285,8 +286,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new ImageAdapter(this, mImageList);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration());
-        mRecyclerView.addItemDecoration(new SpaceItemDecoration());
+        mRecyclerView.addItemDecoration(new XItemDecoration());
+        mRecyclerView.addItemDecoration(new YItemDecoration());
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy > mLength) {
+                    fab.hide();
+                } else if (dy < mLength) {
+                    fab.show();
+                }
+            }
+        });
 
         navView.setCheckedItem(R.id.nav_home);
         navView.setNavigationItemSelectedListener
@@ -408,30 +419,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         StatusBarUtil.setTranslucentForDrawerLayout(this, mDrawerLayout, 70);
     }
 
-    public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+    public class XItemDecoration extends RecyclerView.ItemDecoration {
 
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) % 3 == 0) {
                 outRect.left = 0;
-                outRect.right = FileUtils.dp2px(MainActivity.this, 2.5F); // 8px
+                outRect.right = FileUtils.dp2px(MainActivity.this, 2); // 8px
             } else if (parent.getChildAdapterPosition(view) % 3 == 1) {
-                outRect.left = FileUtils.dp2px(MainActivity.this, 1); // 4px
-                outRect.right = FileUtils.dp2px(MainActivity.this, 1);
+                outRect.left = FileUtils.dp2px(MainActivity.this, 0.9F); // 4px
+                outRect.right = FileUtils.dp2px(MainActivity.this, 0.9F);
             } else if (parent.getChildAdapterPosition(view) % 3 == 2) {
-                outRect.left = FileUtils.dp2px(MainActivity.this, 2.5F); // 8px
+                outRect.left = FileUtils.dp2px(MainActivity.this, 2); // 8px
                 outRect.right = 0;
             }
         }
     }
 
-    public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
+    public class YItemDecoration extends RecyclerView.ItemDecoration {
 
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             int size = MainActivity.getPathList().size();
             outRect.top = 0;
-            outRect.bottom = FileUtils.dp2px(MainActivity.this, 2.5F); // 8px
+            outRect.bottom = FileUtils.dp2px(MainActivity.this, 2); // 8px
             if (parent.getChildAdapterPosition(view) == size - 1) {
                 outRect.bottom = -1;
             } else if (parent.getChildAdapterPosition(view) == size - 2) {

@@ -60,8 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:layout_margin="16dp"
-                android:src="@mipmap/ic_add"
-                app:layout_behavior="com.aaron.justlike.another.ScrollAwareFABBehavior"/>
+                android:src="@mipmap/ic_add"/>
 
             <TextView
                 android:id="@+id/hint"

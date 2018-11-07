@@ -35,11 +35,12 @@
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name=".activity.AboutActivity"
-            android:label="关于"/>
+            android:label="关于"
+            android:theme="@style/AppTheme"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
