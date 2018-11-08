@@ -13,6 +13,7 @@ import com.aaron.justlike.extend.SquareView;
 import com.aaron.justlike.activity.DisplayImageActivity;
 import com.aaron.justlike.activity.MainActivity;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
@@ -102,14 +103,17 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         String path = image.getPath();
         RequestOptions options = new RequestOptions()
                 .placeholder(R.drawable.place_holder)
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop();
-        DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
+        /*DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
                 .Builder(100)
-                .setCrossFadeEnabled(true).build();
+                .setCrossFadeEnabled(true).build();*/
         Glide.with(mActivity)
                 .load(path)
+                .thumbnail(0.1F)
                 .apply(options)
-                .transition(DrawableTransitionOptions.with(factory))
+//                .transition(DrawableTransitionOptions.with(factory))
                 .into(holder.squareView);
     }
 

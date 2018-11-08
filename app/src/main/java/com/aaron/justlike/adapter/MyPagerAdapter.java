@@ -3,12 +3,15 @@ package com.aaron.justlike.adapter;
 import android.animation.ObjectAnimator;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.DisplayImageActivity;
 import com.aaron.justlike.another.WrapperView;
+import com.aaron.justlike.util.FileUtils;
 import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
@@ -67,11 +70,11 @@ public class MyPagerAdapter extends PagerAdapter {
             public void onClick(View v) {
                 if (isFullScreen) {
                     // 全屏状态下执行此代码块会退出全屏
-                    exitFullScreen(background, view, toolbar);
+                    exitFullScreen(background, toolbar, view);
                     isFullScreen = false;
                 } else {
                     // 进入全屏,自动沉浸
-                    setFullScreen(background, view);
+                    setFullScreen(background, toolbar, view);
                     isFullScreen = true;
                 }
             }
@@ -96,7 +99,7 @@ public class MyPagerAdapter extends PagerAdapter {
         }
     }
 
-    private void setFullScreen(final RelativeLayout background, WrapperView view) {
+    private void setFullScreen(final RelativeLayout background, Toolbar toolbar, WrapperView view) {
         mActivity.getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -104,10 +107,10 @@ public class MyPagerAdapter extends PagerAdapter {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        ObjectAnimator animator = ObjectAnimator
-                .ofFloat(view, "height", -260);
-        animator.setDuration(380);
-        animator.start();
+        AlphaAnimation aa = new AlphaAnimation(1, 0);
+        aa.setDuration(300);
+        toolbar.startAnimation(aa);
+        toolbar.setVisibility(View.GONE);
         // 背景切换动画
         /*ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.WHITE, Color.BLACK);
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -121,17 +124,15 @@ public class MyPagerAdapter extends PagerAdapter {
         va.start();*/
     }
 
-    private void exitFullScreen(final RelativeLayout background, WrapperView view, Toolbar toolbar) {
+    private void exitFullScreen(final RelativeLayout background, Toolbar toolbar, WrapperView view) {
         mActivity.getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        TranslateAnimation ta = new TranslateAnimation(0, 0, -260, 0);
-        ta.setDuration(200);
-        toolbar.startAnimation(ta);
-        ObjectAnimator animator = ObjectAnimator.ofFloat(view, "height", 0);
-        animator.setDuration(0);
-        animator.start();
+        AlphaAnimation aa = new AlphaAnimation(0, 1);
+        aa.setDuration(400);
+        toolbar.startAnimation(aa);
+        toolbar.setVisibility(View.VISIBLE);
         // 背景切换动画
         /*ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.BLACK, Color.WHITE);
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

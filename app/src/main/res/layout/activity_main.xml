@@ -29,8 +29,7 @@
                     android:id="@+id/activity_main_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="?attr/actionBarSize"
-                    android:paddingTop="24dp"
+                    android:paddingTop="27.5dp"
                     app:contentInsetStartWithNavigation="65dp"
                     android:background="?attr/colorPrimary"
                     android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -79,7 +78,7 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
-        android:layout_width="300dp"
+        android:layout_width="304dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:menu="@menu/nav_menu"
