@@ -4,15 +4,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_wallpaper"
-        android:title="Info"
+        android:title="设置壁纸"
         android:icon="@mipmap/ic_wallpaper"
-        app:showAsAction="always" />
+        app:showAsAction="always">
+
+        <menu>
+
+            <item
+                android:id="@+id/action_default_crop"
+                android:title="默认裁剪"/>
+
+            <item
+                android:id="@+id/action_free_crop"
+                android:title="自由裁剪"/>
+
+        </menu>
+
+    </item>
 
     <item
         android:id="@+id/action_delete"
         android:icon="@mipmap/ic_delete"
-        android:title="Delete"
+        android:title="删除图片"
         app:showAsAction="always"/>
 
 </menu>

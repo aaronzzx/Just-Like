@@ -29,7 +29,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     private boolean mBanClick;
     private List<Image> mImageList;
     private MainActivity mActivity;
-    private static final int DELETE_PHOTO = 3;
+    private static final int DELETE_PHOTO = 2;
 
     public ImageAdapter(MainActivity activity, List<Image> imageList) {
         mActivity = activity;

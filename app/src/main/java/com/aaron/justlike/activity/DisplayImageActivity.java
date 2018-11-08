@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.MyPagerAdapter;
 import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.util.LogUtil;
 import com.jaeger.library.StatusBarUtil;
 import com.luck.picture.lib.tools.PictureFileUtils;
 import com.yalantis.ucrop.UCrop;
@@ -100,32 +102,11 @@ public class DisplayImageActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_wallpaper:
-                String sourcePath = MainActivity.getPathList().get(mPosition);
-                // 源文件位置
-                Uri sourceUri = FileUtils.getUriFromPath(this, new File(sourcePath));
-
-                File file = new File(getCacheDir(), "Cropped-Wallpaper.JPG");
-                try {
-                    if (file.exists()) {
-                        file.delete();
-                    }
-                    file.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                // 需要输出的位置
-                Uri destinationUri = Uri.fromFile(file);
-                // 设置裁剪页面主题
-                UCrop.Options options = new UCrop.Options();
-                options.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-                options.setToolbarColor(getResources().getColor(R.color.colorPrimary));
-                options.setActiveWidgetColor(getResources().getColor(R.color.colorPrimary));
-                // 打开裁剪页面
-                UCrop.of(sourceUri, destinationUri)
-                        .withAspectRatio(9, 19.5F)
-                        .withOptions(options)
-                        .start(this);
+            case R.id.action_default_crop:
+                cropImage("default");
+                break;
+            case R.id.action_free_crop:
+                cropImage("free");
                 break;
             case R.id.action_delete:
                 new AlertDialog.Builder(this)
@@ -141,6 +122,7 @@ public class DisplayImageActivity extends AppCompatActivity {
                                 intent.putExtra("fileName", fileName);
                                 setResult(RESULT_OK, intent);
                                 finish();
+                                LogUtil.d("DisplayImageActivity", fileName);
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -205,5 +187,44 @@ public class DisplayImageActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
+    }
+
+    private void cropImage(String type) {
+        String sourcePath = MainActivity.getPathList().get(mPosition);
+        // 源文件位置
+        Uri sourceUri = FileUtils.getUriFromPath(this, new File(sourcePath));
+        File file = new File(getCacheDir(), "Cropped-Wallpaper.JPG");
+        try {
+            if (file.exists()) {
+                file.delete();
+            }
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // 需要输出的位置
+        Uri destinationUri = Uri.fromFile(file);
+        // 设置裁剪页面主题
+        UCrop.Options options = new UCrop.Options();
+        options.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        options.setToolbarColor(getResources().getColor(R.color.colorPrimary));
+        options.setActiveWidgetColor(getResources().getColor(R.color.colorPrimary));
+        if (type.equals("default")) {
+            // 获取设备分辨率
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+            int width = metrics.widthPixels;
+            int height = metrics.heightPixels;
+            // 打开默认裁剪页面
+            UCrop.of(sourceUri, destinationUri)
+                    .withAspectRatio(width, height)
+                    .withOptions(options)
+                    .start(this);
+        } else if (type.equals("free")) {
+            // 打开自由裁剪页面
+            UCrop.of(sourceUri, destinationUri)
+                    .withOptions(options)
+                    .start(this);
+        }
     }
 }

@@ -250,6 +250,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (resultCode == Activity.RESULT_OK) {
                     int position = data.getIntExtra("position", 0);
                     String fileName = data.getStringExtra("fileName");
+                    LogUtil.d("MainActivity", fileName);
                     mImageList.remove(position);
                     mPathList.remove(position);
                     mFileNameList.remove(position);
