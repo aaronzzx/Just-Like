@@ -1,11 +1,8 @@
 package com.aaron.justlike.util;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,12 +10,13 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.aaron.justlike.another.Image;
 import com.aaron.justlike.activity.MainActivity;
+import com.aaron.justlike.another.Image;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,12 +26,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.core.content.FileProvider;
 
 public class FileUtils {
@@ -144,16 +138,19 @@ public class FileUtils {
      * @param path     相册或文件管理器返回的路径
      */
     public static void saveToCache(Context context, String path) {
+        File mkDir = new File(Environment.getExternalStorageDirectory(),
+                "JustLike/images");
+        if (!mkDir.exists()) mkDir.mkdirs();
         String fileName = path.substring(path.lastIndexOf("/"),
                 path.lastIndexOf(".")) + ".JPG";
-        File file = new File(context.getExternalCacheDir().getAbsolutePath() + fileName);
+        File file = new File(Environment.getExternalStorageDirectory(),"/JustLike/images" + fileName);
         FileInputStream fis = null;
         FileOutputStream fos = null;
         Bitmap bitmap = BitmapFactory.decodeFile(path);
         try {
             if (!file.exists()) {
                 fis = new FileInputStream(path);
-                fos = new FileOutputStream(context.getExternalCacheDir() + fileName);
+                fos = new FileOutputStream(file);
                 int orientation = getBitmapDegree(path);
                 if (orientation != 0 & orientation != 1) {
                     Matrix matrix = new Matrix();
@@ -191,7 +188,7 @@ public class FileUtils {
      */
     public static void deleteFile(Context context, String fileName) {
         if (TextUtils.isEmpty(fileName)) return;
-        File file = new File(context.getExternalCacheDir() + fileName);
+        File file = new File(Environment.getExternalStorageDirectory(), "/JustLike/images" + fileName);
         if (file.exists()) file.delete();
     }
 
@@ -251,7 +248,7 @@ public class FileUtils {
              */
             JSONArray typeArray;
             for (String imageType : type) {
-                typeArray = getAllFiles(activity.getExternalCacheDir().getAbsolutePath(),
+                typeArray = getAllFiles(Environment.getExternalStorageDirectory().getPath() + "/JustLike/images",
                         imageType);
                 if (typeArray != null) {
                     for (int i = 0; i < typeArray.length(); i++) {

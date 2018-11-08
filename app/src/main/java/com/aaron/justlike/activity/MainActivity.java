@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -31,6 +33,8 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,8 +123,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void scrollToTop() {
         int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
         if (firstItem >= 48) {
+            mRecyclerView.setVisibility(View.INVISIBLE);
             mRecyclerView.scrollToPosition(45);
         }
+        mRecyclerView.setVisibility(View.VISIBLE);
         mRecyclerView.smoothScrollToPosition(0);
     }
 

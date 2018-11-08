@@ -75,7 +75,7 @@ public class AboutActivity extends AppCompatActivity {
     private void initAboutMessage() {
         AboutMessage introduce = new AboutMessage(R.drawable.ic_introduce, "介绍");
         mAboutMessageList.add(introduce);
-        AboutMessage email = new AboutMessage(R.drawable.ic_email, "邮件");
+        AboutMessage email = new AboutMessage(R.drawable.ic_email, "反馈");
         mAboutMessageList.add(email);
         AboutMessage sourceCode = new AboutMessage(R.drawable.ic_source_code, "源码");
         mAboutMessageList.add(sourceCode);
