@@ -1,6 +1,9 @@
 package com.aaron.justlike.adapter;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,20 +12,22 @@ import android.widget.TextView;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.another.AboutMessage;
+import com.aaron.justlike.util.SystemUtils;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class AboutMessageAdapter extends RecyclerView.Adapter<AboutMessageAdapter.ViewHolder> {
 
-    private Context mContext;
+    private Activity mActivity;
     private List<AboutMessage> mAboutMessageList;
 
-    public AboutMessageAdapter(Context context, List<AboutMessage>aboutMessageList) {
-        mContext = context;
+    public AboutMessageAdapter(Activity activity, List<AboutMessage>aboutMessageList) {
+        mActivity = activity;
         mAboutMessageList = aboutMessageList;
     }
 
@@ -31,14 +36,50 @@ public class AboutMessageAdapter extends RecyclerView.Adapter<AboutMessageAdapte
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.activity_about_message_recycler_item, parent, false);
-        ViewHolder holder = new ViewHolder(view);
+        final ViewHolder holder = new ViewHolder(view);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (holder.getAdapterPosition()) {
+                    case 0:
+
+                        break;
+                    case 1:
+                        int[] resolutionArray = SystemUtils.getResolution(mActivity.getWindowManager());
+                        String subject = "Just Like for Android " + SystemUtils.getPackageName(mActivity) + "\n"
+                                + "Feedback(" + Build.BRAND + "-" + Build.MODEL + ")";
+                        String text = "请尽可能详细描述您的问题或建议，请不要删除或修改下列设备信息。" + "\n"
+                                + "Device: " + Build.BRAND + "-" + Build.MODEL + "\n"
+                                + "Android Version: " + Build.VERSION.RELEASE + "(SDK=" + Build.VERSION.SDK_INT + ")" + "\n"
+                                + "Resolution: " + resolutionArray[1] + "*" + resolutionArray[0] + "\n"
+                                + "System Language: " + Locale.getDefault().getLanguage() + "(" + Locale.getDefault().getCountry() + ")" + "\n"
+                                + "App Version: " + SystemUtils.getPackageName(mActivity);
+                        Intent sendEMail = new Intent(Intent.ACTION_SENDTO);
+                        sendEMail.setData(Uri.parse("mailto:aaronzheng9603@gmail.com"));
+                        sendEMail.putExtra(Intent.EXTRA_SUBJECT, subject);
+                        sendEMail.putExtra(Intent.EXTRA_TEXT, text);
+                        mActivity.startActivity(sendEMail);
+                        break;
+                    case 2:
+                        Intent sourceCode = new Intent(Intent.ACTION_VIEW);
+                        sourceCode.setData(Uri.parse("https://github.com/AaronZheng9603/Just-Like"));
+                        mActivity.startActivity(sourceCode);
+                        break;
+                    case 3:
+                        Intent github = new Intent(Intent.ACTION_VIEW);
+                        github.setData(Uri.parse("https://github.com/AaronZheng9603"));
+                        mActivity.startActivity(github);
+                        break;
+                }
+            }
+        });
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AboutMessage aboutMessage = mAboutMessageList.get(position);
-        Glide.with(mContext)
+        Glide.with(mActivity)
                 .load(aboutMessage.getIconId())
                 .into(holder.imageView);
         holder.text.setText(aboutMessage.getText());
@@ -50,6 +91,7 @@ public class AboutMessageAdapter extends RecyclerView.Adapter<AboutMessageAdapte
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        View itemView;
         ImageView imageView;
         TextView text;
         /**
@@ -57,6 +99,7 @@ public class AboutMessageAdapter extends RecyclerView.Adapter<AboutMessageAdapte
          */
         ViewHolder(View view) {
             super(view);
+            itemView = view;
             imageView = view.findViewById(R.id.activity_about_recycler_item_image);
             text = view.findViewById(R.id.activity_about_recycler_item_text);
         }

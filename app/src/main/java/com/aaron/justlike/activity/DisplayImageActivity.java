@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +17,7 @@ import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.MyPagerAdapter;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.LogUtil;
-import com.jaeger.library.StatusBarUtil;
+import com.aaron.justlike.util.SystemUtils;
 import com.luck.picture.lib.tools.PictureFileUtils;
 import com.yalantis.ucrop.UCrop;
 
@@ -211,13 +210,10 @@ public class DisplayImageActivity extends AppCompatActivity {
         options.setActiveWidgetColor(getResources().getColor(R.color.colorPrimary));
         if (type.equals("default")) {
             // 获取设备分辨率
-            DisplayMetrics metrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
-            int width = metrics.widthPixels;
-            int height = metrics.heightPixels;
+            int[] resolutionArray = SystemUtils.getResolution(getWindowManager());
             // 打开默认裁剪页面
             UCrop.of(sourceUri, destinationUri)
-                    .withAspectRatio(width, height)
+                    .withAspectRatio(resolutionArray[0], resolutionArray[1])
                     .withOptions(options)
                     .start(this);
         } else if (type.equals("free")) {

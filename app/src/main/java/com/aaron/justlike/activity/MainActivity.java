@@ -22,6 +22,7 @@ import com.aaron.justlike.another.Image;
 import com.aaron.justlike.extend.MyGridLayoutManager;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.LogUtil;
+import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.jaeger.library.StatusBarUtil;
@@ -426,12 +427,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) % 3 == 0) {
                 outRect.left = 0;
-                outRect.right = FileUtils.dp2px(MainActivity.this, 1.9F); // 8px
+                outRect.right = SystemUtils.dp2px(MainActivity.this, 1.9F); // 8px
             } else if (parent.getChildAdapterPosition(view) % 3 == 1) {
-                outRect.left = FileUtils.dp2px(MainActivity.this, 0.9F); // 4px
-                outRect.right = FileUtils.dp2px(MainActivity.this, 0.9F);
+                outRect.left = SystemUtils.dp2px(MainActivity.this, 0.9F); // 4px
+                outRect.right = SystemUtils.dp2px(MainActivity.this, 0.9F);
             } else if (parent.getChildAdapterPosition(view) % 3 == 2) {
-                outRect.left = FileUtils.dp2px(MainActivity.this, 1.9F); // 8px
+                outRect.left = SystemUtils.dp2px(MainActivity.this, 1.9F); // 8px
                 outRect.right = 0;
             }
         }
@@ -443,7 +444,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             int size = MainActivity.getPathList().size();
             outRect.top = 0;
-            outRect.bottom = FileUtils.dp2px(MainActivity.this, 1.9F); // 8px
+            outRect.bottom = SystemUtils.dp2px(MainActivity.this, 1.9F); // 8px
             if (parent.getChildAdapterPosition(view) == size - 1) {
                 outRect.bottom = -1;
             } else if (parent.getChildAdapterPosition(view) == size - 2) {

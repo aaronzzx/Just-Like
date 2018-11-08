@@ -28,6 +28,10 @@
 
     <!--PictureSelector 自定义-->
     <style name="picture.self.style" parent="picture.default.style">
+        <!--标题栏背景色-->
+        <item name="colorPrimary">@color/bar_grey</item>
+        <!--状态栏背景色-->
+        <item name="colorPrimaryDark">@color/bar_grey</item>
         <!--图片列表底部背景色-->
         <item name="picture.bottom.bg">@color/bar_grey</item>
         <!--图片列表预览文字颜色-->
@@ -40,6 +44,10 @@
         <item name="picture.ac_preview.title.textColor">@color/white</item>
         <!--预览界面已完成文字颜色-->
         <item name="picture.ac_preview.complete.textColor">@color/checked</item>
+        <!--预览界面标题栏背景色-->
+        <item name="picture.ac_preview.title.bg">@color/bar_grey</item>
+        <!--预览界面底部背景色-->
+        <item name="picture.ac_preview.bottom.bg">@color/bar_grey_90</item>
     </style>
 
 </resources>
