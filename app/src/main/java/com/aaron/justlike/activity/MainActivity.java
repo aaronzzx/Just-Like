@@ -320,6 +320,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case R.id.nav_about:
                         startActivity(new Intent(MainActivity.this,
                                 AboutActivity.class));
+                        mDrawerLayout.closeDrawers();
                         break;
                     default:
                         Toast.makeText(MainActivity.this,

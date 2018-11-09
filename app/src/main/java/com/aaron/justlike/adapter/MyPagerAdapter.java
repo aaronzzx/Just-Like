@@ -1,6 +1,5 @@
 package com.aaron.justlike.adapter;
 
-import android.animation.ObjectAnimator;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -11,12 +10,10 @@ import android.widget.RelativeLayout;
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.DisplayImageActivity;
 import com.aaron.justlike.another.WrapperView;
-import com.aaron.justlike.util.FileUtils;
 import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
-import com.google.android.material.appbar.AppBarLayout;
 
 import java.util.List;
 
@@ -135,7 +132,7 @@ public class MyPagerAdapter extends PagerAdapter {
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         AnimationSet as = new AnimationSet(true);
-        as.setDuration(350);
+        as.setDuration(300);
         AlphaAnimation aa = new AlphaAnimation(0, 1);
         as.addAnimation(aa);
         TranslateAnimation ta = new TranslateAnimation(0, 0, -150, 0);
