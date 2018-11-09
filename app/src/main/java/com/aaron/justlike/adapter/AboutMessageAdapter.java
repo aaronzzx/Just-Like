@@ -42,7 +42,9 @@ public class AboutMessageAdapter extends RecyclerView.Adapter<AboutMessageAdapte
             public void onClick(View v) {
                 switch (holder.getAdapterPosition()) {
                     case 0:
-
+                        Intent introduce = new Intent(Intent.ACTION_VIEW);
+                        introduce.setData(Uri.parse("https://www.jianshu.com/p/011e616982f4"));
+                        mActivity.startActivity(introduce);
                         break;
                     case 1:
                         int[] resolutionArray = SystemUtils.getResolution(mActivity.getWindowManager());

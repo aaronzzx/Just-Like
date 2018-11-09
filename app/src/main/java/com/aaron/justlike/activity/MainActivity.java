@@ -73,8 +73,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initViews(); // 初始化控件
         setStatusBar(); // 修改状态栏和导航栏
         requestWritePermission(); // 申请存储权限
-        // 加载存储在程序外部缓存目录的图片
-        FileUtils.getLocalCache(this, mImageList, mPathList, type);
+        // 加载存储在程序外部目录的图片
+        FileUtils.getLocalCache(this, mImageList, mPathList, type, true);
+        FileUtils.getLocalCache(this, mImageList, mPathList, type, false);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -120,13 +121,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 滑动到指定位置
      */
-    public void scrollToTop() {
+    public void scrollToTop() {/*
         int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
         if (firstItem >= 48) {
             mRecyclerView.setVisibility(View.INVISIBLE);
             mRecyclerView.scrollToPosition(45);
         }
-        mRecyclerView.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.VISIBLE);*/
         mRecyclerView.smoothScrollToPosition(0);
     }
 
@@ -383,7 +384,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mImageList.clear();
                     mFileNameList.clear();
                     mPathList.clear();
-                    FileUtils.getLocalCache(MainActivity.this, mImageList, mPathList, type);
+                    FileUtils.getLocalCache(MainActivity.this, mImageList, mPathList, type, true);
+                    FileUtils.getLocalCache(MainActivity.this, mImageList, mPathList, type, false);
                     Thread.sleep(400);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

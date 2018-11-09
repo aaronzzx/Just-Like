@@ -54,6 +54,7 @@ public class MyPagerAdapter extends PagerAdapter {
         String path = mPathList.get(position);
         PhotoView photoView = new PhotoView(mActivity);
         photoView.enable();
+        photoView.setMaxScale(3);
         ViewGroup parent = (ViewGroup) photoView.getParent();
         if (parent != null) {
             parent.removeView(photoView);
@@ -107,9 +108,13 @@ public class MyPagerAdapter extends PagerAdapter {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        AnimationSet as = new AnimationSet(true);
+        as.setDuration(300);
         AlphaAnimation aa = new AlphaAnimation(1, 0);
-        aa.setDuration(300);
-        toolbar.startAnimation(aa);
+        as.addAnimation(aa);
+        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -200);
+        as.addAnimation(ta);
+        toolbar.startAnimation(as);
         toolbar.setVisibility(View.GONE);
         // 背景切换动画
         /*ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.WHITE, Color.BLACK);
@@ -129,9 +134,13 @@ public class MyPagerAdapter extends PagerAdapter {
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        AnimationSet as = new AnimationSet(true);
+        as.setDuration(350);
         AlphaAnimation aa = new AlphaAnimation(0, 1);
-        aa.setDuration(400);
-        toolbar.startAnimation(aa);
+        as.addAnimation(aa);
+        TranslateAnimation ta = new TranslateAnimation(0, 0, -150, 0);
+        as.addAnimation(ta);
+        toolbar.startAnimation(as);
         toolbar.setVisibility(View.VISIBLE);
         // 背景切换动画
         /*ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.BLACK, Color.WHITE);

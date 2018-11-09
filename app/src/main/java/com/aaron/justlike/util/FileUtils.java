@@ -190,6 +190,8 @@ public class FileUtils {
         if (TextUtils.isEmpty(fileName)) return;
         File file = new File(Environment.getExternalStorageDirectory(), "/JustLike/images" + fileName);
         if (file.exists()) file.delete();
+        File file1 = new File(context.getExternalCacheDir(), "/" + fileName);
+        if (file1.exists()) file1.delete();
     }
 
     /**
@@ -238,7 +240,7 @@ public class FileUtils {
      * 加载保存在应用缓存目录的文件
      */
     public static void getLocalCache(Activity activity, List<Image> imageList, List<String> pathList,
-                                     String[] type) {
+                                     String[] type, boolean b) {
         try {
             /*
              * 从缓存中读取的数据被放置在 JSON 数组中,
@@ -248,8 +250,13 @@ public class FileUtils {
              */
             JSONArray typeArray;
             for (String imageType : type) {
-                typeArray = getAllFiles(Environment.getExternalStorageDirectory().getPath() + "/JustLike/images",
-                        imageType);
+                if (b) {
+                    typeArray = getAllFiles(Environment.getExternalStorageDirectory().getPath() + "/JustLike/images",
+                            imageType);
+                } else {
+                    typeArray = getAllFiles(activity.getExternalCacheDir().getAbsolutePath() + "/JustLike/images",
+                            imageType);
+                }
                 if (typeArray != null) {
                     for (int i = 0; i < typeArray.length(); i++) {
                         JSONObject jsonObject = typeArray.getJSONObject(i);
