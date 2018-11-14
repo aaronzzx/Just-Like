@@ -1,12 +1,15 @@
 package com.aaron.justlike.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.AboutLibraryAdapter;
 import com.aaron.justlike.adapter.AboutMessageAdapter;
 import com.aaron.justlike.another.AboutLibrary;
 import com.aaron.justlike.another.AboutMessage;
+import com.aaron.justlike.util.SystemUtils;
 import com.jaeger.library.StatusBarUtil;
 
 import java.util.ArrayList;
@@ -48,6 +51,7 @@ public class AboutActivity extends AppCompatActivity {
         return super.onSupportNavigateUp();
     }
 
+    @SuppressLint("SetTextI18n")
     private void initView() {
         Toolbar toolbar = findViewById(R.id.activity_about_toolbar);
         setSupportActionBar(toolbar);
@@ -56,6 +60,8 @@ public class AboutActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
+        TextView versionName = findViewById(R.id.activity_about_version);
+        versionName.setText("Version " + SystemUtils.getVersionName(this));
         initAboutMessage();
         initAboutLibrary();
 

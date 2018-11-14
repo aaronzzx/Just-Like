@@ -48,14 +48,14 @@ public class AboutMessageAdapter extends RecyclerView.Adapter<AboutMessageAdapte
                         break;
                     case 1:
                         int[] resolutionArray = SystemUtils.getResolution(mActivity.getWindowManager());
-                        String subject = "Just Like for Android " + SystemUtils.getPackageName(mActivity) + "\n"
+                        String subject = "Just Like for Android " + SystemUtils.getVersionName(mActivity) + "\n"
                                 + "Feedback(" + Build.BRAND + "-" + Build.MODEL + ")";
                         String text = "请尽可能详细描述您的问题或建议，请不要删除或修改下列设备信息。" + "\n"
                                 + "Device: " + Build.BRAND + "-" + Build.MODEL + "\n"
                                 + "Android Version: " + Build.VERSION.RELEASE + "(SDK=" + Build.VERSION.SDK_INT + ")" + "\n"
                                 + "Resolution: " + resolutionArray[1] + "*" + resolutionArray[0] + "\n"
                                 + "System Language: " + Locale.getDefault().getLanguage() + "(" + Locale.getDefault().getCountry() + ")" + "\n"
-                                + "App Version: " + SystemUtils.getPackageName(mActivity);
+                                + "App Version: " + SystemUtils.getVersionName(mActivity);
                         Intent sendEMail = new Intent(Intent.ACTION_SENDTO);
                         sendEMail.setData(Uri.parse("mailto:aaronzheng9603@gmail.com"));
                         sendEMail.putExtra(Intent.EXTRA_SUBJECT, subject);

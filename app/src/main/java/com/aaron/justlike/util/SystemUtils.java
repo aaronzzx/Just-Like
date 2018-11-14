@@ -6,17 +6,24 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.view.WindowManager;
+
+import com.aaron.justlike.extend.MyGridLayoutManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class SystemUtils {
 
-    public static String getPackageName(Context context) {
+    public static String getVersionName(Context context) {
         PackageManager manager = context.getPackageManager();
         String versionName = null;
         try {

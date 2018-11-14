@@ -15,6 +15,8 @@ import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,7 @@ import com.aaron.justlike.extend.MyGridLayoutManager;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.LogUtil;
 import com.aaron.justlike.util.SystemUtils;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.jaeger.library.StatusBarUtil;
@@ -54,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final int mLength = 0;
     private int mNumber = 0; // 用于判断返回键退出程序
     private RecyclerView mRecyclerView;
-    private MyGridLayoutManager mLayoutManager;
+    private static MyGridLayoutManager mLayoutManager;
     private SwipeRefreshLayout mSwipeRefresh;
     private static final int REQUEST_PERMISSION = 1;
     private static final int DELETE_PHOTO = 2;
@@ -77,6 +80,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FileUtils.getLocalCache(this, mImageList, mPathList, type, true);
         FileUtils.getLocalCache(this, mImageList, mPathList, type, false);
         mAdapter.notifyDataSetChanged();
+        LinearLayout parentOfToolbar = findViewById(R.id.activity_main_linear_layout);
+        AppBarLayout.LayoutParams layoutParams = (AppBarLayout.LayoutParams) parentOfToolbar.getLayoutParams();
+        if (mImageList.size() < 19) {
+            layoutParams.setScrollFlags(0);
+        }
     }
 
     @Override
@@ -318,9 +326,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mDrawerLayout.closeDrawers();
                         break;
                     case R.id.nav_about:
-                        startActivity(new Intent(MainActivity.this,
-                                AboutActivity.class));
                         mDrawerLayout.closeDrawers();
+                        mDrawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                            @Override
+                            public void onDrawerClosed(View drawerView) {
+                                startActivity(new Intent(MainActivity.this,
+                                        AboutActivity.class));
+                                mDrawerLayout.removeDrawerListener(this);
+                            }
+                        });
                         break;
                     default:
                         Toast.makeText(MainActivity.this,

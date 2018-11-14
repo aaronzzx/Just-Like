@@ -6,12 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.aaron.justlike.util.FileUtils;
-import com.aaron.justlike.another.Image;
 import com.aaron.justlike.R;
-import com.aaron.justlike.extend.SquareView;
 import com.aaron.justlike.activity.DisplayImageActivity;
 import com.aaron.justlike.activity.MainActivity;
+import com.aaron.justlike.another.Image;
+import com.aaron.justlike.extend.SquareView;
+import com.aaron.justlike.util.FileUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
@@ -54,11 +54,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             public void onClick(View v) {
                 if (!mBanClick) {
                     int position = holder.getAdapterPosition();
-                    Image image = mImageList.get(position);
-
                     Intent intent = new Intent(mActivity, DisplayImageActivity.class);
                     // 将 Image 对象序列化传递给下一个活动，方便下一个活动取值
-                    intent.putExtra("image", image);
                     intent.putExtra("position", position);
                     mActivity.startActivityForResult(intent, DELETE_PHOTO);
                 }
@@ -103,56 +100,24 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         String path = image.getPath();
         RequestOptions options = new RequestOptions()
                 .placeholder(R.drawable.place_holder)
-                .dontAnimate()
+//                .dontAnimate()
+//                .override(10)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop();
-        /*DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
+        DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
                 .Builder(100)
-                .setCrossFadeEnabled(true).build();*/
+                .setCrossFadeEnabled(true).build();
         Glide.with(mActivity)
                 .load(path)
-                .thumbnail(0.1F)
+//                .thumbnail(0.1F)
                 .apply(options)
-//                .transition(DrawableTransitionOptions.with(factory))
+                .transition(DrawableTransitionOptions.with(factory))
                 .into(holder.squareView);
     }
 
     @Override
     public int getItemCount() {
         return mImageList.size();
-    }
-
-
-    /**
-     * 获取需要旋转的角度，将返回的值给 Picasso 的 rotate() 方法
-     *
-     * @param image   Image对象
-     * @param isClick 通过点击判断路径来源
-     * @return 返回需要旋转的角度
-     */
-    private int getRotateDegree(Image image, boolean isClick) {
-        int degree;
-        String path = image.getPath(); // 获取图片原始路径
-        /*
-         * 判断是点击添加还是缓存加载
-         */
-        if (isClick) {
-            // 如果路径是 /e 开头则是 FileProvider 返回
-            if (path.startsWith("/e")) {
-                String absolutePath = path.replace("/external_files",
-                        "/storage/emulated/0");
-                degree = FileUtils.getBitmapDegree(absolutePath);
-            } else { // 否则路径正常截取
-                String absolutePath = path.substring(image.getPath().indexOf("/s"));
-                degree = FileUtils.getBitmapDegree(absolutePath);
-            }
-        } else { // 由于缓存的文件通过 FileProvider 提供路径，所以需要自己修改成绝对路径
-            String fileName = path.substring(path.lastIndexOf("/"));
-            String absolutePath = "/storage/emulated/0/Android/data/com.aaron.justlike/cache"
-                    + fileName;
-            degree = FileUtils.getBitmapDegree(absolutePath);
-        }
-        return degree;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

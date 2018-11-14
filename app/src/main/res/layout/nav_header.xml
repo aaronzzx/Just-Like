@@ -10,8 +10,8 @@
         android:id="@+id/head_image"
         android:layout_width="70dp"
         android:layout_height="70dp"
+        android:layout_marginStart="5dp"
         android:src="@mipmap/ic_head"
-        android:layout_marginStart="7dp"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"/>
 
@@ -19,7 +19,7 @@
         android:id="@+id/head_sign"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
+        android:layout_marginStart="5dp"
         android:textColor="#fff"
         android:text="This is a demo."
         android:layout_alignParentBottom="true"/>
@@ -28,7 +28,7 @@
         android:id="@+id/head_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
+        android:layout_marginStart="5dp"
         android:textColor="#fff"
         android:text="Just Like"
         android:layout_above="@id/head_sign"/>

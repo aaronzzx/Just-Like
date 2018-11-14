@@ -237,6 +237,38 @@ public class FileUtils {
     }
 
     /**
+     * 获取需要旋转的角度，将返回的值给 Picasso 的 rotate() 方法
+     *
+     * @param image   Image对象
+     * @param isClick 通过点击判断路径来源
+     * @return 返回需要旋转的角度
+     */
+    public static int getRotateDegree(Image image, boolean isClick) {
+        int degree;
+        String path = image.getPath(); // 获取图片原始路径
+        /*
+         * 判断是点击添加还是缓存加载
+         */
+        if (isClick) {
+            // 如果路径是 /e 开头则是 FileProvider 返回
+            if (path.startsWith("/e")) {
+                String absolutePath = path.replace("/external_files",
+                        "/storage/emulated/0");
+                degree = FileUtils.getBitmapDegree(absolutePath);
+            } else { // 否则路径正常截取
+                String absolutePath = path.substring(image.getPath().indexOf("/s"));
+                degree = FileUtils.getBitmapDegree(absolutePath);
+            }
+        } else { // 由于缓存的文件通过 FileProvider 提供路径，所以需要自己修改成绝对路径
+            String fileName = path.substring(path.lastIndexOf("/"));
+            String absolutePath = "/storage/emulated/0/Android/data/com.aaron.justlike/cache"
+                    + fileName;
+            degree = FileUtils.getBitmapDegree(absolutePath);
+        }
+        return degree;
+    }
+
+    /**
      * 加载保存在应用缓存目录的文件
      */
     public static void getLocalCache(Activity activity, List<Image> imageList, List<String> pathList,

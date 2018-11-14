@@ -28,8 +28,8 @@
 
         <item
             android:id="@+id/nav_theme"
-            android:title="主题"
-            android:icon="@mipmap/ic_theme"/>
+            android:title="标签"
+            android:icon="@mipmap/ic_tag"/>
 
         <item
             android:id="@+id/nav_settings"

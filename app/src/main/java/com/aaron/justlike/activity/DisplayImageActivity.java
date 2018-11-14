@@ -11,12 +11,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.MyPagerAdapter;
 import com.aaron.justlike.util.FileUtils;
-import com.aaron.justlike.util.LogUtil;
 import com.aaron.justlike.util.SystemUtils;
 import com.luck.picture.lib.tools.PictureFileUtils;
 import com.yalantis.ucrop.UCrop;
@@ -33,6 +35,7 @@ import androidx.viewpager.widget.ViewPager;
 
 public class DisplayImageActivity extends AppCompatActivity {
 
+    private ViewPager mViewPager;
     private Toolbar mToolbar;
     private int mPosition;
 
@@ -66,7 +69,6 @@ public class DisplayImageActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
     }
 
     /**
@@ -121,7 +123,6 @@ public class DisplayImageActivity extends AppCompatActivity {
                                 intent.putExtra("fileName", fileName);
                                 setResult(RESULT_OK, intent);
                                 finish();
-                                LogUtil.d("DisplayImageActivity", fileName);
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -162,19 +163,22 @@ public class DisplayImageActivity extends AppCompatActivity {
             actionBar.setDisplayShowHomeEnabled(true);
         }
         // 获取从适配器序列化过来的值
-        mPosition = getIntent().getIntExtra("position", 0);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            mPosition = bundle.getInt("position");
+        }
 
-        final ViewPager viewPager = findViewById(R.id.activity_display_image_vp);
-        viewPager.setOffscreenPageLimit(4);
-        viewPager.setPageMargin(50);
-        MyPagerAdapter adapter = new MyPagerAdapter(MainActivity.getPathList(), this);
-        viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(mPosition);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mViewPager = findViewById(R.id.activity_display_image_vp);
+        mViewPager.setOffscreenPageLimit(4);
+        mViewPager.setPageMargin(50);
+        MyPagerAdapter pagerAdapter = new MyPagerAdapter(this, MainActivity.getPathList());
+        mViewPager.setAdapter(pagerAdapter);
+        mViewPager.setCurrentItem(mPosition);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                mPosition = viewPager.getCurrentItem();
+                mPosition = mViewPager.getCurrentItem();
             }
 
             @Override
