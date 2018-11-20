@@ -54,8 +54,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             public void onClick(View v) {
                 if (!mBanClick) {
                     int position = holder.getAdapterPosition();
-                    Intent intent = new Intent(mActivity, DisplayImageActivity.class);
                     // 将 Image 对象序列化传递给下一个活动，方便下一个活动取值
+                    Intent intent = new Intent(mActivity, DisplayImageActivity.class);
                     intent.putExtra("position", position);
                     mActivity.startActivityForResult(intent, DELETE_PHOTO);
                 }

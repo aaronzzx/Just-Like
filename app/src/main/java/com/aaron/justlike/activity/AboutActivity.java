@@ -37,8 +37,7 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary),
-                70);
+        StatusBarUtil.setColorNoTranslucent(this, getResources().getColor(R.color.colorPrimary));
         initView();
     }
 

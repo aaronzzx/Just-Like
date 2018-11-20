@@ -223,6 +223,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         PictureSelector.create(this)
                 .openGallery(PictureMimeType.ofImage())
                 .theme(R.style.picture_self_style)
+                .isCamera(false)
                 .maxSelectNum(9)
                 .imageSpanCount(3)
                 .selectionMode(PictureConfig.MULTIPLE)
@@ -441,7 +442,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setStatusBar() {
         // 使用透明状态栏
-        StatusBarUtil.setTranslucentForDrawerLayout(this, mDrawerLayout, 70);
+        StatusBarUtil.setTransparentForDrawerLayout(this, mDrawerLayout);
     }
 
     public class XItemDecoration extends RecyclerView.ItemDecoration {
