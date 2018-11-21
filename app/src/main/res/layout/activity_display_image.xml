@@ -6,13 +6,6 @@
     android:layout_height="match_parent"
     android:background="#000000">
 
-    <com.bm.library.PhotoView
-        android:id="@+id/photo_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerInside"
-        android:visibility="gone"/>
-
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/activity_display_image_vp"
         android:layout_width="match_parent"
@@ -27,6 +20,6 @@
         android:layout_alignParentTop="true"
         android:background="#56000000"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
 </RelativeLayout>

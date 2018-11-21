@@ -5,7 +5,6 @@ import android.view.ViewGroup;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.DisplayImageActivity;
-import com.aaron.justlike.another.WrapperView;
 import com.aaron.justlike.util.AnimationUtil;
 import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
@@ -44,7 +43,6 @@ public class MyPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container,int position) {
         final Toolbar toolbar = mActivity.findViewById(R.id.activity_display_image_toolbar);
-        final WrapperView view = new WrapperView(toolbar);
         String path = mPathList.get(position);
         final PhotoView photoView = new PhotoView(mActivity);
         photoView.enable();
@@ -55,7 +53,7 @@ public class MyPagerAdapter extends PagerAdapter {
         }
         RequestOptions options = new RequestOptions().override(1440);
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
-                .Builder(100)
+                .Builder(200)
                 .setCrossFadeEnabled(true).build();
         Glide.with(mActivity)
                 .load(path)
@@ -67,11 +65,11 @@ public class MyPagerAdapter extends PagerAdapter {
             public void onClick(View v) {
                 if (isFullScreen) {
                     // 全屏状态下执行此代码块会退出全屏
-                    AnimationUtil.exitFullScreen(mActivity, toolbar, view);
+                    AnimationUtil.exitFullScreen(mActivity, toolbar, 0);
                     isFullScreen = false;
                 } else {
                     // 进入全屏,自动沉浸
-                    AnimationUtil.setFullScreen(mActivity, toolbar, view);
+                    AnimationUtil.setFullScreen(mActivity, toolbar, 0);
                     isFullScreen = true;
                 }
             }

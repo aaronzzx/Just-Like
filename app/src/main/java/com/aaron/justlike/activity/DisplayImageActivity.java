@@ -11,13 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.AnimationSet;
-import android.view.animation.TranslateAnimation;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.MyPagerAdapter;
+import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
 import com.luck.picture.lib.tools.PictureFileUtils;
@@ -60,6 +58,7 @@ public class DisplayImageActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         return super.onSupportNavigateUp();
     }
 
@@ -69,6 +68,7 @@ public class DisplayImageActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     /**
@@ -154,6 +154,11 @@ public class DisplayImageActivity extends AppCompatActivity {
      * 初始化界面
      */
     private void initContent() {
+        // 获取从适配器序列化过来的值
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            mPosition = bundle.getInt("position");
+        }
         mToolbar = findViewById(R.id.activity_display_image_toolbar);
         setSupportActionBar(mToolbar);
         // 启用标题栏的返回键
@@ -162,11 +167,7 @@ public class DisplayImageActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
-        // 获取从适配器序列化过来的值
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            mPosition = bundle.getInt("position");
-        }
+        AnimationUtil.exitFullScreen(this, mToolbar, 300);
 
         mViewPager = findViewById(R.id.activity_display_image_vp);
         mViewPager.setOffscreenPageLimit(4);
@@ -175,7 +176,6 @@ public class DisplayImageActivity extends AppCompatActivity {
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setCurrentItem(mPosition);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 mPosition = mViewPager.getCurrentItem();

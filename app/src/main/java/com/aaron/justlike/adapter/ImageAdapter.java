@@ -1,5 +1,6 @@
 package com.aaron.justlike.adapter;
 
+import android.app.ActivityOptions;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -58,6 +59,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                     Intent intent = new Intent(mActivity, DisplayImageActivity.class);
                     intent.putExtra("position", position);
                     mActivity.startActivityForResult(intent, DELETE_PHOTO);
+                    mActivity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
             }
         });
