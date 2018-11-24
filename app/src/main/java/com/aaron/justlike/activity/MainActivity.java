@@ -79,8 +79,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setStatusBar(); // 修改状态栏和导航栏
         requestWritePermission(); // 申请存储权限
         // 加载存储在程序外部目录的图片
-        FileUtils.getLocalCache(this, mImageList, mPathList, true, type);
         FileUtils.getLocalCache(this, mImageList, mPathList, false, type);
+        FileUtils.getLocalCache(this, mImageList, mPathList, true, type);
         mAdapter.notifyDataSetChanged();
         LinearLayout parentOfToolbar = findViewById(R.id.activity_main_linear_layout);
         AppBarLayout.LayoutParams layoutParams = (AppBarLayout.LayoutParams) parentOfToolbar.getLayoutParams();
@@ -131,13 +131,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 滑动到指定位置
      */
-    public void scrollToTop() {/*
+    public void scrollToTop() {
         int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
         if (firstItem >= 48) {
-            mRecyclerView.setVisibility(View.INVISIBLE);
-            mRecyclerView.scrollToPosition(45);
+            mRecyclerView.scrollToPosition(25);
         }
-        mRecyclerView.setVisibility(View.VISIBLE);*/
         mRecyclerView.smoothScrollToPosition(0);
     }
 

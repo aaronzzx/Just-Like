@@ -271,10 +271,10 @@ public class FileUtils {
     /**
      * 加载保存在应用缓存目录的文件
      *
-     * @param b 判断是加载应用缓存目录还是加载应用目录
+     * @param searchCacheDir 判断是加载应用缓存目录还是加载应用目录
      */
     public static void getLocalCache(Activity activity, List<Image> imageList, List<String> pathList,
-                                     boolean b, String... type) {
+                                     boolean searchCacheDir, String... type) {
         try {
              // 从缓存中读取的数据被放置在 JSON 数组中,
              // 并遍历 JSON 数组，从中取出文件的路径，并转换为 URI 传入
@@ -282,11 +282,11 @@ public class FileUtils {
              // 从而达到加载缓存的目的。
             JSONArray typeArray;
             for (String imageType : type) {
-                if (b) {
-                    typeArray = getAllFiles(Environment.getExternalStorageDirectory().getPath() + "/JustLike/images",
+                if (searchCacheDir) {
+                    typeArray = getAllFiles(activity.getExternalCacheDir().getAbsolutePath(),
                             imageType);
                 } else {
-                    typeArray = getAllFiles(activity.getExternalCacheDir().getAbsolutePath() + "/JustLike/images",
+                    typeArray = getAllFiles(Environment.getExternalStorageDirectory().getPath() + "/JustLike/images",
                             imageType);
                 }
                 if (typeArray != null) {
