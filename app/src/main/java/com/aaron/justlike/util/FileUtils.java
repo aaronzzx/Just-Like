@@ -270,16 +270,16 @@ public class FileUtils {
 
     /**
      * 加载保存在应用缓存目录的文件
+     *
+     * @param b 判断是加载应用缓存目录还是加载应用目录
      */
     public static void getLocalCache(Activity activity, List<Image> imageList, List<String> pathList,
-                                     String[] type, boolean b) {
+                                     boolean b, String... type) {
         try {
-            /*
-             * 从缓存中读取的数据被放置在 JSON 数组中,
-             * 并遍历 JSON 数组，从中取出文件的路径，并转换为 URI 传入
-             * Image 构造方法，将 Image 对象传入集合并通知适配器更新，
-             * 从而达到加载缓存的目的。
-             */
+             // 从缓存中读取的数据被放置在 JSON 数组中,
+             // 并遍历 JSON 数组，从中取出文件的路径，并转换为 URI 传入
+             // Image 构造方法，将 Image 对象传入集合并通知适配器更新，
+             // 从而达到加载缓存的目的。
             JSONArray typeArray;
             for (String imageType : type) {
                 if (b) {
@@ -296,12 +296,11 @@ public class FileUtils {
                         String fileName = path.substring(path.lastIndexOf("/") + 1);
 
                         MainActivity.getFileNameList().add(fileName);
-                        /*
-                         * 之所以不能放在循环体外面，是因为除了 jpg 格式要加载，
-                         * 还有其他格式图片，在如果放在循环体外，因为加载其他格式
-                         * 图片与 jpg 格式不符合，所以会清空集合，导致 ViewPager
-                         * 无法显示。
-                         */
+
+                         // 之所以不能放在循环体外面，是因为除了 jpg 格式要加载，
+                         // 还有其他格式图片，在如果放在循环体外，因为加载其他格式
+                         // 图片与 jpg 格式不符合，所以会清空集合，导致 ViewPager
+                         // 无法显示。
                         pathList.add(path);
 
                         imageList.add(new Image(path));

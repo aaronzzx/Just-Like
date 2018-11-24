@@ -2,6 +2,7 @@ package com.aaron.justlike.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;

@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:textColor="#fff"
-        android:text="This is a demo."
+        android:text="Feel this moment."
         android:layout_alignParentBottom="true"/>
 
     <TextView

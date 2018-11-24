@@ -53,11 +53,11 @@ public class MyPagerAdapter extends PagerAdapter {
         }
         RequestOptions options = new RequestOptions().override(1440);
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
-                .Builder(200)
+                .Builder(300)
                 .setCrossFadeEnabled(true).build();
         Glide.with(mActivity)
                 .load(path)
-                .apply(options)
+//                .apply(options)
                 .transition(DrawableTransitionOptions.with(factory))
                 .into(photoView);
         photoView.setOnClickListener(new View.OnClickListener() {

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Environment;
@@ -78,8 +79,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setStatusBar(); // 修改状态栏和导航栏
         requestWritePermission(); // 申请存储权限
         // 加载存储在程序外部目录的图片
-        FileUtils.getLocalCache(this, mImageList, mPathList, type, true);
-        FileUtils.getLocalCache(this, mImageList, mPathList, type, false);
+        FileUtils.getLocalCache(this, mImageList, mPathList, true, type);
+        FileUtils.getLocalCache(this, mImageList, mPathList, false, type);
         mAdapter.notifyDataSetChanged();
         LinearLayout parentOfToolbar = findViewById(R.id.activity_main_linear_layout);
         AppBarLayout.LayoutParams layoutParams = (AppBarLayout.LayoutParams) parentOfToolbar.getLayoutParams();
@@ -401,8 +402,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mImageList.clear();
                     mFileNameList.clear();
                     mPathList.clear();
-                    FileUtils.getLocalCache(MainActivity.this, mImageList, mPathList, type, true);
-                    FileUtils.getLocalCache(MainActivity.this, mImageList, mPathList, type, false);
+                    FileUtils.getLocalCache(MainActivity.this, mImageList, mPathList, true, type);
+                    FileUtils.getLocalCache(MainActivity.this, mImageList, mPathList, false, type);
                     Thread.sleep(400);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
