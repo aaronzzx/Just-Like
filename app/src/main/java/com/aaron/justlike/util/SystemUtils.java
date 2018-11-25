@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,6 +43,11 @@ public class SystemUtils {
         resolutionArray[0] = metrics.widthPixels;
         resolutionArray[1] = metrics.heightPixels;
         return resolutionArray;
+    }
+
+    public static int getRandomNum() {
+        Random random = new Random();
+        return random.nextInt(9);
     }
 
     /**

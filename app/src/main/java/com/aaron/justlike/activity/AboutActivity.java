@@ -2,7 +2,6 @@ package com.aaron.justlike.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
@@ -24,15 +23,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class AboutActivity extends AppCompatActivity {
 
-    private List<AboutMessage> mAboutMessageList = new ArrayList<>();
-    private List<AboutLibrary> mAboutLibraryList = new ArrayList<>();
     private final String[] mLibraryDetails = new String[]{
             "An image loading and caching library for Android focused on smooth scrolling",
             "A circular ImageView for Android",
-            "A util for setting status bar style on Android App.",
+            "A util for setting status bar style on Android App",
             "PhotoView 图片浏览缩放控件",
             "Picture Selector Library for Android",
-            "Image Cropping Library for Android"};
+            "Image Cropping Library for Android",
+            "An unofficial Unsplash API library for Android"};
+    private List<AboutMessage> mAboutMessageList = new ArrayList<>();
+    private List<AboutLibrary> mAboutLibraryList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,5 +108,8 @@ public class AboutActivity extends AppCompatActivity {
         AboutLibrary uCrop = new AboutLibrary("uCrop",
                 "Yalantis", mLibraryDetails[5]);
         mAboutLibraryList.add(uCrop);
+        AboutLibrary androidUnsplash = new AboutLibrary("AndroidUnsplash(Unofficial)",
+                "KeenenCharles", mLibraryDetails[6]);
+        mAboutLibraryList.add(androidUnsplash);
     }
 }

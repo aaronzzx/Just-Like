@@ -2,14 +2,11 @@ package com.aaron.justlike.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -17,7 +14,6 @@ import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,8 +34,6 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +42,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -56,19 +51,29 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int REQUEST_PERMISSION = 1;
+    private static final int DELETE_PHOTO = 2;
+    private static MyGridLayoutManager mLayoutManager;
+    //    private static List<String> mPathList = new ArrayList<>(); // ViewPager 数据源
+    private static List<String> mFileNameList = new ArrayList<>(); // 详情页删除图片时的图片名称集合
+    private static List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
     private final int mLength = 0;
     private int mNumber = 0; // 用于判断返回键退出程序
     private RecyclerView mRecyclerView;
-    private static MyGridLayoutManager mLayoutManager;
     private SwipeRefreshLayout mSwipeRefresh;
-    private static final int REQUEST_PERMISSION = 1;
-    private static final int DELETE_PHOTO = 2;
-    private static List<String> mPathList = new ArrayList<>(); // ViewPager 数据源
-    private static List<String> mFileNameList = new ArrayList<>(); // 详情页删除图片时的图片名称集合
-    private List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
     private ImageAdapter mAdapter; // 声明一个 Image 适配器
-    private DrawerLayout mDrawerLayout;
+    private DrawerLayout mParent;
+    private NavigationView mNavView;
+    private Toolbar mToolbar;
     private String[] type = {"JPG", "JPEG", "PNG", "jpg", "jpeg", "png"};
+
+    public static List<String> getFileNameList() {
+        return mFileNameList;
+    }
+
+    public static List<Image> getImageList() {
+        return mImageList;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +81,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews(); // 初始化控件
-        setStatusBar(); // 修改状态栏和导航栏
+        StatusBarUtil.setTransparentForDrawerLayout(this, mParent); // 修改状态栏
         requestWritePermission(); // 申请存储权限
         // 加载存储在程序外部目录的图片
-        FileUtils.getLocalCache(this, mImageList, mPathList, false, type);
-        FileUtils.getLocalCache(this, mImageList, mPathList, true, type);
+        FileUtils.getLocalCache(this, mImageList, /*mPathList,*/ true, type);
+        FileUtils.getLocalCache(this, mImageList, /*mPathList,*/ false, type);
         mAdapter.notifyDataSetChanged();
         LinearLayout parentOfToolbar = findViewById(R.id.activity_main_linear_layout);
         AppBarLayout.LayoutParams layoutParams = (AppBarLayout.LayoutParams) parentOfToolbar.getLayoutParams();
@@ -92,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
+        mNavView.setCheckedItem(R.id.nav_home);
         addHintOnBackground();
     }
 
@@ -103,13 +109,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public static List<String> getFileNameList() {
-        return mFileNameList;
-    }
-
-    public static List<String> getPathList() {
-        return mPathList;
-    }
+//    public static List<String> getPathList() {
+//        return mPathList;
+//    }
 
     /**
      * 浮动按钮的点击事件
@@ -140,7 +142,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * 设置可以打开滑动菜单
+     * 创建菜单
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * 设置可以打开菜单
      *
      * @param item item 传入的 View 实例
      * @return 返回 true 才执行
@@ -149,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
+                mParent.openDrawer(GravityCompat.START);
                 break;
         }
         return true;
@@ -160,8 +171,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (mParent.isDrawerOpen(GravityCompat.START)) {
+            mParent.closeDrawer(GravityCompat.START);
         } else {
             if (mNumber == 1) {
                 super.onBackPressed();
@@ -250,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         String fileName = path.substring(path.lastIndexOf("/") + 1);
 
                         mFileNameList.add(fileName);
-                        mPathList.add(path);
+//                        mPathList.add(path);
                         // 通知适配器更新并将文件添加至缓存
                         mImageList.add(new Image(path));
                         mAdapter.notifyDataSetChanged();
@@ -269,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String fileName = data.getStringExtra("fileName");
                     LogUtil.d("MainActivity", fileName);
                     mImageList.remove(position);
-                    mPathList.remove(position);
+//                    mPathList.remove(position);
                     mFileNameList.remove(position);
                     mAdapter.notifyDataSetChanged();
                     FileUtils.deleteFile(this, "/" + fileName);
@@ -282,11 +293,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 将控件的初始化代码封装在此方法中，方便调用并使代码简洁。
      */
     private void initViews() {
-        Toolbar toolbar = findViewById(R.id.activity_main_toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setOnClickListener(this);
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        final NavigationView navView = findViewById(R.id.nav_view);
+        mToolbar = findViewById(R.id.activity_main_toolbar);
+        setSupportActionBar(mToolbar);
+        mToolbar.setOnClickListener(this);
+        mParent = findViewById(R.id.drawer_layout);
+        mNavView = findViewById(R.id.nav_view);
         ActionBar actionBar = getSupportActionBar();
         /*
          * 让标题栏启用滑动菜单并设置图标
@@ -317,23 +328,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        navView.setCheckedItem(R.id.nav_home);
-        navView.setNavigationItemSelectedListener
-                (new NavigationView.OnNavigationItemSelectedListener() {
+        mNavView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_home:
-                        mDrawerLayout.closeDrawers();
+                        mParent.closeDrawers();
+                        break;
+                    case R.id.nav_online_wallpaper:
+                        mParent.closeDrawers();
+                        mParent.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                            @Override
+                            public void onDrawerClosed(View drawerView) {
+                                Intent intent = new Intent(MainActivity.this,
+                                        OnlineWallpaperActivity.class);
+                                ActivityOptionsCompat toolbarShare = ActivityOptionsCompat
+                                        .makeSceneTransitionAnimation(MainActivity.this,
+                                                mToolbar, "toolbar_share");
+                                startActivity(intent, toolbarShare.toBundle());
+                                mParent.removeDrawerListener(this);
+                            }
+                        });
                         break;
                     case R.id.nav_about:
-                        mDrawerLayout.closeDrawers();
-                        mDrawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                        mParent.closeDrawers();
+                        mParent.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
                             @Override
                             public void onDrawerClosed(View drawerView) {
                                 startActivity(new Intent(MainActivity.this,
                                         AboutActivity.class));
-                                mDrawerLayout.removeDrawerListener(this);
+                                mParent.removeDrawerListener(this);
                             }
                         });
                         break;
@@ -399,9 +423,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 try {
                     mImageList.clear();
                     mFileNameList.clear();
-                    mPathList.clear();
-                    FileUtils.getLocalCache(MainActivity.this, mImageList, mPathList, true, type);
-                    FileUtils.getLocalCache(MainActivity.this, mImageList, mPathList, false, type);
+//                    mPathList.clear();
+                    FileUtils.getLocalCache(MainActivity.this, mImageList, /*mPathList,*/ true, type);
+                    FileUtils.getLocalCache(MainActivity.this, mImageList, /*mPathList,*/ false, type);
                     Thread.sleep(400);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -440,11 +464,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void setStatusBar() {
-        // 使用透明状态栏
-        StatusBarUtil.setTransparentForDrawerLayout(this, mDrawerLayout);
-    }
-
     public class XItemDecoration extends RecyclerView.ItemDecoration {
 
         @Override
@@ -466,7 +485,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int size = MainActivity.getPathList().size();
+            int size = mImageList.size();
             outRect.top = 0;
             outRect.bottom = SystemUtils.dp2px(MainActivity.this, 1.9F); // 8px
             if (parent.getChildAdapterPosition(view) == size - 1) {

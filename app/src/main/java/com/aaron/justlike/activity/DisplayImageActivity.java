@@ -89,7 +89,7 @@ public class DisplayImageActivity extends AppCompatActivity {
     }
 
     /**
-     * 创建删除菜单
+     * 创建菜单
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -172,7 +172,7 @@ public class DisplayImageActivity extends AppCompatActivity {
         mViewPager = findViewById(R.id.activity_display_image_vp);
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setPageMargin(50);
-        MyPagerAdapter pagerAdapter = new MyPagerAdapter(this, MainActivity.getPathList());
+        MyPagerAdapter pagerAdapter = new MyPagerAdapter(this, MainActivity.getImageList());
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setCurrentItem(mPosition);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -193,7 +193,7 @@ public class DisplayImageActivity extends AppCompatActivity {
     }
 
     private void cropImage(String type) {
-        String sourcePath = MainActivity.getPathList().get(mPosition);
+        String sourcePath = MainActivity.getImageList().get(mPosition).getPath();
         // 源文件位置
         Uri sourceUri = FileUtils.getUriFromPath(this, new File(sourcePath));
         File file = new File(getCacheDir(), "Cropped-Wallpaper.JPG");

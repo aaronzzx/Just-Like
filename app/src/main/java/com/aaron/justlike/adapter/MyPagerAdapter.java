@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.DisplayImageActivity;
+import com.aaron.justlike.another.Image;
 import com.aaron.justlike.util.AnimationUtil;
 import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
@@ -20,11 +21,11 @@ import androidx.viewpager.widget.PagerAdapter;
 
 public class MyPagerAdapter extends PagerAdapter {
 
-    private List<String> mPathList;
+    private List<Image> mPathList;
     private DisplayImageActivity mActivity;
     private boolean isFullScreen;
 
-    public MyPagerAdapter(DisplayImageActivity activity, List<String> pathList) {
+    public MyPagerAdapter(DisplayImageActivity activity, List<Image> pathList) {
         mActivity = activity;
         mPathList = pathList;
     }
@@ -43,7 +44,7 @@ public class MyPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container,int position) {
         final Toolbar toolbar = mActivity.findViewById(R.id.activity_display_image_toolbar);
-        String path = mPathList.get(position);
+        String path = mPathList.get(position).getPath();
         final PhotoView photoView = new PhotoView(mActivity);
         photoView.enable();
         photoView.setMaxScale(2.5F);

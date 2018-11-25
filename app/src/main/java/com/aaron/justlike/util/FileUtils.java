@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.aaron.justlike.activity.MainActivity;
 import com.aaron.justlike.another.Image;
+import com.yalantis.ucrop.model.ExifInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -93,6 +94,30 @@ public class FileUtils {
             e.printStackTrace();
         }
         return degree;
+    }
+
+    /**
+     * 获取图片生产时间
+     *
+     * @param path
+     * @return
+     */
+    public static int getImageTime(String path) {
+        int time = 0;
+        try {
+            ExifInterface ei = new ExifInterface(path);
+            time = ei.getAttributeInt(ExifInterface.TAG_DATETIME, 0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return time;
+    }
+
+    public static long getImageSize(String path) {
+        long size = 0;
+        File file = new File(path);
+        size = file.length();
+        return size;
     }
 
     /**
@@ -273,7 +298,7 @@ public class FileUtils {
      *
      * @param searchCacheDir 判断是加载应用缓存目录还是加载应用目录
      */
-    public static void getLocalCache(Activity activity, List<Image> imageList, List<String> pathList,
+    public static void getLocalCache(Activity activity, List<Image> imageList, /*List<String> pathList,*/
                                      boolean searchCacheDir, String... type) {
         try {
              // 从缓存中读取的数据被放置在 JSON 数组中,
@@ -301,9 +326,16 @@ public class FileUtils {
                          // 还有其他格式图片，在如果放在循环体外，因为加载其他格式
                          // 图片与 jpg 格式不符合，所以会清空集合，导致 ViewPager
                          // 无法显示。
-                        pathList.add(path);
+//                        pathList.add(path);
 
-                        imageList.add(new Image(path));
+                        Image image = new Image(path);
+                        image.setCreateDate(getImageTime(path));
+                        int createDate = image.getCreateDate();
+                        image.setSize(getImageSize(path));
+                        long size = image.getSize();
+                        LogUtil.d(LogUtil.TAG, "createDate: " + createDate);
+                        LogUtil.d(LogUtil.TAG, "size: " + size);
+                        imageList.add(image);
                     }
                 }
             }
