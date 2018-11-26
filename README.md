@@ -27,8 +27,8 @@
 
 
 ## 「Screenshots」
-- ![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot_2018-10-30-02-35-02-583_com.aaron.justlike.png)
-- ![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot_2018-10-30-02-35-09-770_com.aaron.justlike.png)
-- ![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot_2018-10-30-02-35-50-787_com.aaron.justlike.png)
-- ![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot_2018-10-30-02-35-16-539_android.png)
-- ![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot_2018-10-30-02-35-38-061_com.aaron.justlike.png)
+- ![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot(1).jpg)
+- ![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot(2).jpg)
+- ![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot(3).jpg)
+- ![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot(4).jpg)
+- ![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot(5).jpg)
