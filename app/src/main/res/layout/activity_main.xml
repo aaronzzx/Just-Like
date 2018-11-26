@@ -39,8 +39,7 @@
                         android:paddingTop="27.5dp"
                         android:background="?attr/colorPrimary"
                         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                        android:transitionName="toolbar_share"/>
+                        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
                 </LinearLayout>
 

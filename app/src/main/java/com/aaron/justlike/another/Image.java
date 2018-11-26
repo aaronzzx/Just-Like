@@ -8,7 +8,8 @@ import java.util.Comparator;
 public class Image implements Parcelable{
 
     private String mPath; // 用于在文件管理器中选择图片后传回的路径
-    private int mCreateDate;
+    private String mFileName;
+    private long mCreateDate;
     private long mSize;
 
     public Image() {
@@ -27,11 +28,19 @@ public class Image implements Parcelable{
         mPath = path;
     }
 
-    public int getCreateDate() {
+    public String getFileName() {
+        return mFileName;
+    }
+
+    public void setFileName(String fileName) {
+        mFileName = fileName;
+    }
+
+    public long getCreateDate() {
         return mCreateDate;
     }
 
-    public void setCreateDate(int createDate) {
+    public void setCreateDate(long createDate) {
         mCreateDate = createDate;
     }
 

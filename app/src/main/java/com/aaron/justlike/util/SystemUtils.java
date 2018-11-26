@@ -20,9 +20,12 @@ import java.util.List;
 import java.util.Random;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class SystemUtils {
+
+    private static int mNum = 0; // getOrderNum()
 
     public static String getVersionName(Context context) {
         PackageManager manager = context.getPackageManager();
@@ -45,30 +48,9 @@ public class SystemUtils {
         return resolutionArray;
     }
 
-    public static int getRandomNum() {
+    public static int getRandomNum(int num) {
         Random random = new Random();
-        return random.nextInt(9);
-    }
-
-    /**
-     * 格式化时间
-     *
-     * @param param 字符串时间
-     * @throws ParseException
-     */
-    public static void formatDateAndTime(ActionBar actionBar, String param) throws ParseException {
-        if (param != null) {
-            String dateArray[] = param.split(" ");
-            String part1 = "yyyy:MM:dd";
-            String part2 = "yyyy年MM月dd日";
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf1 = new SimpleDateFormat(part1);
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf2 = new SimpleDateFormat(part2);
-            Date d = sdf1.parse(dateArray[0]);
-            String date = sdf2.format(d);
-            String time = dateArray[1].substring(0, 5);
-            actionBar.setTitle(date);
-            actionBar.setSubtitle(time);
-        }
+        return random.nextInt(num);
     }
 
     /**

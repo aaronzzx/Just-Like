@@ -107,7 +107,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         Image image = mImageList.get(position); // 从集合中找到 Image 对象
         String path = image.getPath();
         RequestOptions options = new RequestOptions()
-                .placeholder(placeHolders[SystemUtils.getRandomNum()])
+                .placeholder(placeHolders[SystemUtils.getRandomNum(9)])
 //                .dontAnimate()
 //                .override(10)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)

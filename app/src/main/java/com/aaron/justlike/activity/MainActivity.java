@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final int REQUEST_PERMISSION = 1;
     private static final int DELETE_PHOTO = 2;
+    private int mAsciiNum = 64;
     private static MyGridLayoutManager mLayoutManager;
     //    private static List<String> mPathList = new ArrayList<>(); // ViewPager 数据源
     private static List<String> mFileNameList = new ArrayList<>(); // 详情页删除图片时的图片名称集合
@@ -255,6 +256,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (requestCode) {
             case PictureConfig.CHOOSE_REQUEST:
                 if (resultCode == Activity.RESULT_OK) {
+                    mAsciiNum = 0;
                     List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
                     for (LocalMedia media : selectList) {
                         final String path = media.getPath();
@@ -268,7 +270,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                FileUtils.saveToCache(MainActivity.this, path);
+                                if (mAsciiNum > 9) {
+                                    mAsciiNum = 0;
+                                }
+                                mAsciiNum++;
+                                FileUtils.saveToCache(MainActivity.this, path, mAsciiNum);
                             }
                         }).start();
                     }
@@ -342,10 +348,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             public void onDrawerClosed(View drawerView) {
                                 Intent intent = new Intent(MainActivity.this,
                                         OnlineWallpaperActivity.class);
-                                ActivityOptionsCompat toolbarShare = ActivityOptionsCompat
-                                        .makeSceneTransitionAnimation(MainActivity.this,
-                                                mToolbar, "toolbar_share");
-                                startActivity(intent, toolbarShare.toBundle());
+                                startActivity(intent);
                                 mParent.removeDrawerListener(this);
                             }
                         });

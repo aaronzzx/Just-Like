@@ -23,6 +23,9 @@ import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -160,6 +163,7 @@ public class DisplayImageActivity extends AppCompatActivity {
             mPosition = bundle.getInt("position");
         }
         mToolbar = findViewById(R.id.activity_display_image_toolbar);
+        setTitle();
         setSupportActionBar(mToolbar);
         // 启用标题栏的返回键
         ActionBar actionBar = getSupportActionBar();
@@ -190,6 +194,16 @@ public class DisplayImageActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
+    }
+
+    private void setTitle() {
+        String path = MainActivity.getImageList().get(mPosition).getPath();
+        Date d = new Date(new File(path).lastModified());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd/HH:mm:ss");
+        String result = formatter.format(d);
+        String[] dateArray = result.split("/");
+        mToolbar.setTitle(dateArray[0]);
+        mToolbar.setSubtitle(dateArray[1]);
     }
 
     private void cropImage(String type) {

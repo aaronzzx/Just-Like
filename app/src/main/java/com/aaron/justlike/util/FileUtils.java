@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.aaron.justlike.activity.MainActivity;
 import com.aaron.justlike.another.Image;
-import com.yalantis.ucrop.model.ExifInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +26,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import androidx.core.content.FileProvider;
@@ -96,20 +97,20 @@ public class FileUtils {
         return degree;
     }
 
+    public static String getImageName(String path) {
+        return path.substring(path.lastIndexOf("/"));
+    }
+
     /**
      * 获取图片生产时间
      *
      * @param path
      * @return
      */
-    public static int getImageTime(String path) {
-        int time = 0;
-        try {
-            ExifInterface ei = new ExifInterface(path);
-            time = ei.getAttributeInt(ExifInterface.TAG_DATETIME, 0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public static long getImageDate(String path) {
+        long time = 0;
+            File file = new File(path);
+            time = file.lastModified();
         return time;
     }
 
@@ -162,12 +163,20 @@ public class FileUtils {
      * @param context 上下文
      * @param path     相册或文件管理器返回的路径
      */
-    public static void saveToCache(Context context, String path) {
+    public static void saveToCache(Context context, String path, int num) {
         File mkDir = new File(Environment.getExternalStorageDirectory(),
                 "JustLike/images");
         if (!mkDir.exists()) mkDir.mkdirs();
-        String fileName = path.substring(path.lastIndexOf("/"),
-                path.lastIndexOf(".")) + ".JPG";
+        /*String fileName = path.substring(path.lastIndexOf("/"),
+                path.lastIndexOf(".")) + ".JPG";*/
+        long time = System.currentTimeMillis();
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        Date d = new Date(time);
+        String date = format.format(d);
+//        String nameSuffix = "_" + SystemUtils.getRandomNum(9) + SystemUtils.getRandomNum(9);
+        String name = "/IMG_" + date + "（" + num + "）";
+        String suffix = ".JPG";
+        final String fileName = name + suffix;
         File file = new File(Environment.getExternalStorageDirectory(),"/JustLike/images" + fileName);
         FileInputStream fis = null;
         FileOutputStream fos = null;
@@ -181,13 +190,19 @@ public class FileUtils {
                     Matrix matrix = new Matrix();
                     matrix.postRotate(getBitmapDegree(path));
                     Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                    resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                } else {
-                    byte[] buffer = new byte[1024];
+                    resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
+                    /*byte[] buffer = new byte[1024];
                     int total;
                     while ((total = fis.read(buffer)) != -1) {
                         fos.write(buffer, 0, total);
-                    }
+                    }*/
+                } else {
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos);
+                    /*byte[] buffer = new byte[1024];
+                    int total;
+                    while ((total = fis.read(buffer)) != -1) {
+                        fos.write(buffer, 0, total);
+                    }*/
                 }
             }
         } catch (IOException e) {
@@ -329,12 +344,12 @@ public class FileUtils {
 //                        pathList.add(path);
 
                         Image image = new Image(path);
-                        image.setCreateDate(getImageTime(path));
-                        int createDate = image.getCreateDate();
+                        image.setFileName(getImageName(path));
+                        String name = image.getFileName();
+                        image.setCreateDate(getImageDate(path));
+                        long createDate = image.getCreateDate();
                         image.setSize(getImageSize(path));
                         long size = image.getSize();
-                        LogUtil.d(LogUtil.TAG, "createDate: " + createDate);
-                        LogUtil.d(LogUtil.TAG, "size: " + size);
                         imageList.add(image);
                     }
                 }
