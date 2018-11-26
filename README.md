@@ -27,11 +27,11 @@
 
 
 ## 「Screenshots」
-![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot(1).jpg)
-![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot(2).jpg)
-![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot(3).jpg)
-![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot(4).jpg)
-![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot(5).jpg)
+- ![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot(1).jpg)
+- ![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot(2).jpg)
+- ![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot(3).jpg)
+- ![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot(4).jpg)
+- ![image](https://github.com/AaronZheng9603/Just-Like/blob/master/images/Screenshot(5).jpg)
 
 
 # License
