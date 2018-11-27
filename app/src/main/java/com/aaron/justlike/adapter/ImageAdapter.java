@@ -12,6 +12,7 @@ import com.aaron.justlike.activity.MainActivity;
 import com.aaron.justlike.another.Image;
 import com.aaron.justlike.extend.SquareView;
 import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.util.SystemUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
@@ -26,10 +27,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
 
+    private static final int DELETE_PHOTO = 2;
     private boolean mBanClick;
     private List<Image> mImageList;
     private MainActivity mActivity;
-    private static final int DELETE_PHOTO = 2;
+    private int[] placeHolders = {R.drawable.place_holder_1,
+            R.drawable.place_holder_2, R.drawable.place_holder_3,
+            R.drawable.place_holder_4, R.drawable.place_holder_5,
+            R.drawable.place_holder_6, R.drawable.place_holder_7,
+            R.drawable.place_holder_8, R.drawable.place_holder_9,
+            R.drawable.place_holder_10};
 
     public ImageAdapter(MainActivity activity, List<Image> imageList) {
         mActivity = activity;
@@ -58,6 +65,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                     Intent intent = new Intent(mActivity, DisplayImageActivity.class);
                     intent.putExtra("position", position);
                     mActivity.startActivityForResult(intent, DELETE_PHOTO);
+                    mActivity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
             }
         });
@@ -76,7 +84,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                                     String path = mImageList.get(position).getPath();
                                     String fileName = path.substring(path.lastIndexOf("/"));
                                     mImageList.remove(position);
-                                    MainActivity.getPathList().remove(position);
+//                                    MainActivity.getPathList().remove(position);
                                     notifyDataSetChanged();
                                     FileUtils.deleteFile(mActivity, fileName);
                                     mActivity.addHintOnBackground();
@@ -99,7 +107,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         Image image = mImageList.get(position); // 从集合中找到 Image 对象
         String path = image.getPath();
         RequestOptions options = new RequestOptions()
-                .placeholder(R.drawable.place_holder)
+                .placeholder(placeHolders[SystemUtils.getRandomNum(9)])
 //                .dontAnimate()
 //                .override(10)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -123,6 +131,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     static class ViewHolder extends RecyclerView.ViewHolder {
         View itemView;
         SquareView squareView;
+
         /**
          * @param view 子项布局的最外层布局，即父布局。
          */

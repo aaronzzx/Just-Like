@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
+    android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -22,18 +22,18 @@
             android:layout_height="match_parent">
 
             <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/activity_main_appbar_layout"
+                android:id="@+id/appbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:id="@+id/activity_main_linear_layout"
+                    android:id="@+id/layout_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_scrollFlags="scroll|enterAlways|snap">
 
                     <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/activity_main_toolbar"
+                        android:id="@+id/toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="27.5dp"
@@ -58,26 +58,6 @@
                     android:clipToPadding="false" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab"
-                app:fabSize="normal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="16dp"
-                android:src="@mipmap/ic_add"/>
-
-            <TextView
-                android:id="@+id/hint"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:text="空空如也"
-                android:textSize="24sp"
-                android:textColor="#9b9b9b"
-                android:layout_gravity="center"
-                android:gravity="center"/>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

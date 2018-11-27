@@ -26,11 +26,43 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import androidx.core.content.FileProvider;
 
 public class FileUtils {
+
+    public static void sortByDate(List<Image> imageList, final boolean isOrder) {
+        if (!imageList.isEmpty()) {
+            Collections.sort(imageList, new Comparator<Image>() {
+                @Override
+                public int compare(Image o1, Image o2) {
+                    if (isOrder) {
+                        return o1.getCreateDate().compareTo(o2.getCreateDate());
+                    } else {
+                        return o2.getCreateDate().compareTo(o1.getCreateDate());
+                    }
+                }
+            });
+        }
+    }
+
+    public static void sortBySize(List<Image> imageList, final boolean isOrder) {
+        if (!imageList.isEmpty()) {
+            Collections.sort(imageList, new Comparator<Image>() {
+                @Override
+                public int compare(Image o1, Image o2) {
+                    if (isOrder) {
+                        return Long.compare(o1.getSize(), o2.getSize());
+                    } else {
+                        return Long.compare(o2.getSize(), o1.getSize());
+                    }
+                }
+            });
+        }
+    }
 
     public static Uri getUriFromPath(Context context, File file) {
         Uri uri;
@@ -95,6 +127,30 @@ public class FileUtils {
         return degree;
     }
 
+    public static String getImageName(String path) {
+        return path.substring(path.lastIndexOf("/"));
+    }
+
+    /**
+     * 获取图片生产时间
+     *
+     * @param path
+     * @return
+     */
+    public static String getImageDate(String path) {
+        String time;
+        File file = new File(path);
+        time = file.getName();
+        return time;
+    }
+
+    public static long getImageSize(String path) {
+        long size = 0;
+        File file = new File(path);
+        size = file.length();
+        return size;
+    }
+
     /**
      * 获取指定目录指定类型的文件，并将其转换成 JSON 数组
      *
@@ -137,13 +193,23 @@ public class FileUtils {
      * @param context 上下文
      * @param path     相册或文件管理器返回的路径
      */
-    public static void saveToCache(Context context, String path) {
-        File mkDir = new File(Environment.getExternalStorageDirectory(),
-                "JustLike/images");
+    public static void saveToCache(Context context, String path, int num) {
+        String originalDate;
+        String createDate = SystemUtils.getCreateDate(path);
+        if (!TextUtils.isEmpty(createDate)) {
+            originalDate = createDate;
+        } else {
+            originalDate = SystemUtils.getLastModified(path, "yyyy-MM-dd HH:mm:ss");
+        }
+        String dirPath = Environment.getExternalStorageDirectory().getPath() + "/JustLike/images";
+        File mkDir = new File(dirPath);
         if (!mkDir.exists()) mkDir.mkdirs();
-        String fileName = path.substring(path.lastIndexOf("/"),
-                path.lastIndexOf(".")) + ".JPG";
-        File file = new File(Environment.getExternalStorageDirectory(),"/JustLike/images" + fileName);
+        String date = SystemUtils.getCurrentDate("yyyyMMdd_HHmmss");
+        String name = "/IMG_" + date + "（" + num + "）";
+        String suffix = path.substring(path.lastIndexOf("."));
+        final String fileName = name + suffix;
+        String filePath = dirPath + fileName;
+        File file = new File(filePath);
         FileInputStream fis = null;
         FileOutputStream fos = null;
         Bitmap bitmap = BitmapFactory.decodeFile(path);
@@ -156,14 +222,13 @@ public class FileUtils {
                     Matrix matrix = new Matrix();
                     matrix.postRotate(getBitmapDegree(path));
                     Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                    resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                    resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
                 } else {
-                    byte[] buffer = new byte[1024];
-                    int total;
-                    while ((total = fis.read(buffer)) != -1) {
-                        fos.write(buffer, 0, total);
-                    }
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
                 }
+                ExifInterface exif2 = new ExifInterface(filePath);
+                exif2.setAttribute(ExifInterface.TAG_DATETIME, originalDate);
+                exif2.saveAttributes();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -270,23 +335,23 @@ public class FileUtils {
 
     /**
      * 加载保存在应用缓存目录的文件
+     *
+     * @param searchCacheDir 判断是加载应用缓存目录还是加载应用目录
      */
-    public static void getLocalCache(Activity activity, List<Image> imageList, List<String> pathList,
-                                     String[] type, boolean b) {
+    public static void getLocalCache(Activity activity, List<Image> imageList, /*List<String> pathList,*/
+                                     boolean searchCacheDir, String... type) {
         try {
-            /*
-             * 从缓存中读取的数据被放置在 JSON 数组中,
-             * 并遍历 JSON 数组，从中取出文件的路径，并转换为 URI 传入
-             * Image 构造方法，将 Image 对象传入集合并通知适配器更新，
-             * 从而达到加载缓存的目的。
-             */
+             // 从缓存中读取的数据被放置在 JSON 数组中,
+             // 并遍历 JSON 数组，从中取出文件的路径，并转换为 URI 传入
+             // Image 构造方法，将 Image 对象传入集合并通知适配器更新，
+             // 从而达到加载缓存的目的。
             JSONArray typeArray;
             for (String imageType : type) {
-                if (b) {
-                    typeArray = getAllFiles(Environment.getExternalStorageDirectory().getPath() + "/JustLike/images",
+                if (searchCacheDir) {
+                    typeArray = getAllFiles(activity.getExternalCacheDir().getAbsolutePath(),
                             imageType);
                 } else {
-                    typeArray = getAllFiles(activity.getExternalCacheDir().getAbsolutePath() + "/JustLike/images",
+                    typeArray = getAllFiles(Environment.getExternalStorageDirectory().getPath() + "/JustLike/images",
                             imageType);
                 }
                 if (typeArray != null) {
@@ -296,15 +361,10 @@ public class FileUtils {
                         String fileName = path.substring(path.lastIndexOf("/") + 1);
 
                         MainActivity.getFileNameList().add(fileName);
-                        /*
-                         * 之所以不能放在循环体外面，是因为除了 jpg 格式要加载，
-                         * 还有其他格式图片，在如果放在循环体外，因为加载其他格式
-                         * 图片与 jpg 格式不符合，所以会清空集合，导致 ViewPager
-                         * 无法显示。
-                         */
-                        pathList.add(path);
-
-                        imageList.add(new Image(path));
+                        Image image = new Image(path);
+                        image.setCreateDate(getImageDate(path));
+                        image.setSize(getImageSize(path));
+                        imageList.add(image);
                     }
                 }
             }

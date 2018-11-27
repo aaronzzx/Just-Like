@@ -4,24 +4,33 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.media.ExifInterface;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.aaron.justlike.extend.MyGridLayoutManager;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class SystemUtils {
+
+    private static int mNum = 0; // getOrderNum()
 
     public static String getVersionName(Context context) {
         PackageManager manager = context.getPackageManager();
@@ -44,25 +53,41 @@ public class SystemUtils {
         return resolutionArray;
     }
 
-    /**
-     * 格式化时间
-     *
-     * @param param 字符串时间
-     * @throws ParseException
-     */
-    public static void formatDateAndTime(ActionBar actionBar, String param) throws ParseException {
-        if (param != null) {
-            String dateArray[] = param.split(" ");
-            String part1 = "yyyy:MM:dd";
-            String part2 = "yyyy年MM月dd日";
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf1 = new SimpleDateFormat(part1);
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf2 = new SimpleDateFormat(part2);
-            Date d = sdf1.parse(dateArray[0]);
-            String date = sdf2.format(d);
-            String time = dateArray[1].substring(0, 5);
-            actionBar.setTitle(date);
-            actionBar.setSubtitle(time);
+    public static int getRandomNum(int num) {
+        Random random = new Random();
+        return random.nextInt(num);
+    }
+
+    public static String getCreateDate(String path) {
+        String date = null;
+        try {
+            ExifInterface exif = new ExifInterface(path);
+            date = exif.getAttribute(ExifInterface.TAG_DATETIME);
+            if (!TextUtils.isEmpty(date)) {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+                SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date d = formatter.parse(date);
+                date = formatter2.format(d);
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
         }
+
+        return date;
+    }
+
+    public static String getLastModified(String path, String pattern) {
+        long time = new File(path).lastModified();
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+        Date d = new Date(time);
+        return formatter.format(d);
+    }
+
+    public static String getCurrentDate(String pattern) {
+        long time = System.currentTimeMillis();
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        Date d = new Date(time);
+        return format.format(d);
     }
 
     /**

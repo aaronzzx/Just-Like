@@ -8,7 +8,7 @@
         android:height="90dp"
         android:width="90dp">
 
-        <bitmap android:src="@drawable/ic_launcher_round" />
+        <bitmap android:src="@drawable/ic_launcher_round"/>
 
     </item>
 

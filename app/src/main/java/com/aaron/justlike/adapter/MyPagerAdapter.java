@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.DisplayImageActivity;
-import com.aaron.justlike.another.WrapperView;
+import com.aaron.justlike.another.Image;
 import com.aaron.justlike.util.AnimationUtil;
 import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
@@ -21,11 +21,11 @@ import androidx.viewpager.widget.PagerAdapter;
 
 public class MyPagerAdapter extends PagerAdapter {
 
-    private List<String> mPathList;
+    private List<Image> mPathList;
     private DisplayImageActivity mActivity;
     private boolean isFullScreen;
 
-    public MyPagerAdapter(DisplayImageActivity activity, List<String> pathList) {
+    public MyPagerAdapter(DisplayImageActivity activity, List<Image> pathList) {
         mActivity = activity;
         mPathList = pathList;
     }
@@ -44,8 +44,7 @@ public class MyPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container,int position) {
         final Toolbar toolbar = mActivity.findViewById(R.id.activity_display_image_toolbar);
-        final WrapperView view = new WrapperView(toolbar);
-        String path = mPathList.get(position);
+        String path = mPathList.get(position).getPath();
         final PhotoView photoView = new PhotoView(mActivity);
         photoView.enable();
         photoView.setMaxScale(2.5F);
@@ -55,11 +54,11 @@ public class MyPagerAdapter extends PagerAdapter {
         }
         RequestOptions options = new RequestOptions().override(1440);
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
-                .Builder(100)
+                .Builder(300)
                 .setCrossFadeEnabled(true).build();
         Glide.with(mActivity)
                 .load(path)
-                .apply(options)
+//                .apply(options)
                 .transition(DrawableTransitionOptions.with(factory))
                 .into(photoView);
         photoView.setOnClickListener(new View.OnClickListener() {
@@ -67,11 +66,11 @@ public class MyPagerAdapter extends PagerAdapter {
             public void onClick(View v) {
                 if (isFullScreen) {
                     // 全屏状态下执行此代码块会退出全屏
-                    AnimationUtil.exitFullScreen(mActivity, toolbar, view);
+                    AnimationUtil.exitFullScreen(mActivity, toolbar, 0);
                     isFullScreen = false;
                 } else {
                     // 进入全屏,自动沉浸
-                    AnimationUtil.setFullScreen(mActivity, toolbar, view);
+                    AnimationUtil.setFullScreen(mActivity, toolbar, 0);
                     isFullScreen = true;
                 }
             }

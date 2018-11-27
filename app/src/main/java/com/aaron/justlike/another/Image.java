@@ -3,9 +3,14 @@ package com.aaron.justlike.another;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Image implements Parcelable {
+import java.util.Comparator;
+
+public class Image implements Parcelable{
 
     private String mPath; // 用于在文件管理器中选择图片后传回的路径
+    private String mFileName;
+    private String mCreateDate;
+    private long mSize;
 
     public Image() {
 
@@ -21,6 +26,30 @@ public class Image implements Parcelable {
 
     public void setPath(String path) {
         mPath = path;
+    }
+
+    public String getFileName() {
+        return mFileName;
+    }
+
+    public void setFileName(String fileName) {
+        mFileName = fileName;
+    }
+
+    public String getCreateDate() {
+        return mCreateDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        mCreateDate = createDate;
+    }
+
+    public long getSize() {
+        return mSize;
+    }
+
+    public void setSize(long size) {
+        mSize = size;
     }
 
     public static final Parcelable.Creator<Image> CREATOR = new Parcelable.Creator<Image>() {

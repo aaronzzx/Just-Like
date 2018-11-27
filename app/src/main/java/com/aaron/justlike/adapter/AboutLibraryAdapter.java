@@ -66,6 +66,11 @@ public class AboutLibraryAdapter extends RecyclerView.Adapter<AboutLibraryAdapte
                         uCrop.setData(Uri.parse("https://github.com/Yalantis/uCrop"));
                         mContext.startActivity(uCrop);
                         break;
+                    case 6:
+                        Intent androidUnsplash = new Intent(Intent.ACTION_VIEW);
+                        androidUnsplash.setData(Uri.parse("https://github.com/KeenenCharles/AndroidUnplash"));
+                        mContext.startActivity(androidUnsplash);
+                        break;
                 }
             }
         });

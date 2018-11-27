@@ -11,8 +11,8 @@
             android:icon="@mipmap/ic_home_page"/>
 
         <item
-            android:id="@+id/nav_wallpaper_center"
-            android:title="壁纸中心"
+            android:id="@+id/nav_online_wallpaper"
+            android:title="在线壁纸"
             android:icon="@mipmap/ic_wallpaper_center"/>
 
     </group>

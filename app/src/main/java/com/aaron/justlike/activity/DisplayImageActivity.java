@@ -4,27 +4,32 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.AnimationSet;
-import android.view.animation.TranslateAnimation;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.MyPagerAdapter;
+import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.util.LogUtil;
 import com.aaron.justlike.util.SystemUtils;
 import com.luck.picture.lib.tools.PictureFileUtils;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -60,6 +65,7 @@ public class DisplayImageActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         return super.onSupportNavigateUp();
     }
 
@@ -69,6 +75,7 @@ public class DisplayImageActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     /**
@@ -89,7 +96,7 @@ public class DisplayImageActivity extends AppCompatActivity {
     }
 
     /**
-     * 创建删除菜单
+     * 创建菜单
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -154,7 +161,13 @@ public class DisplayImageActivity extends AppCompatActivity {
      * 初始化界面
      */
     private void initContent() {
+        // 获取从适配器序列化过来的值
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            mPosition = bundle.getInt("position");
+        }
         mToolbar = findViewById(R.id.activity_display_image_toolbar);
+        setTitle();
         setSupportActionBar(mToolbar);
         // 启用标题栏的返回键
         ActionBar actionBar = getSupportActionBar();
@@ -162,23 +175,19 @@ public class DisplayImageActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
-        // 获取从适配器序列化过来的值
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            mPosition = bundle.getInt("position");
-        }
+        AnimationUtil.exitFullScreen(this, mToolbar, 300);
 
         mViewPager = findViewById(R.id.activity_display_image_vp);
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setPageMargin(50);
-        MyPagerAdapter pagerAdapter = new MyPagerAdapter(this, MainActivity.getPathList());
+        MyPagerAdapter pagerAdapter = new MyPagerAdapter(this, MainActivity.getImageList());
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setCurrentItem(mPosition);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 mPosition = mViewPager.getCurrentItem();
+                setTitle();
             }
 
             @Override
@@ -192,8 +201,23 @@ public class DisplayImageActivity extends AppCompatActivity {
         });
     }
 
+    private void setTitle() {
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(MainActivity.getImageList().get(mPosition).getPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String originalDate = exif.getAttribute(ExifInterface.TAG_DATETIME);
+        if (!TextUtils.isEmpty(originalDate)) {
+            String[] dateArray = originalDate.split(" ");
+            mToolbar.setTitle(dateArray[0]);
+            mToolbar.setSubtitle(dateArray[1]);
+        }
+    }
+
     private void cropImage(String type) {
-        String sourcePath = MainActivity.getPathList().get(mPosition);
+        String sourcePath = MainActivity.getImageList().get(mPosition).getPath();
         // 源文件位置
         Uri sourceUri = FileUtils.getUriFromPath(this, new File(sourcePath));
         File file = new File(getCacheDir(), "Cropped-Wallpaper.JPG");

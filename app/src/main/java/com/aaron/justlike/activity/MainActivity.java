@@ -3,11 +3,11 @@ package com.aaron.justlike.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -15,7 +15,6 @@ import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,8 +35,6 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,19 +51,31 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int REQUEST_PERMISSION = 1;
+    private static final int DELETE_PHOTO = 2;
+    private int mAsciiNum = 64;
+    private static MyGridLayoutManager mLayoutManager;
+    private static List<String> mFileNameList = new ArrayList<>(); // 详情页删除图片时的图片名称集合
+    private static List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
     private final int mLength = 0;
     private int mNumber = 0; // 用于判断返回键退出程序
     private RecyclerView mRecyclerView;
-    private static MyGridLayoutManager mLayoutManager;
     private SwipeRefreshLayout mSwipeRefresh;
-    private static final int REQUEST_PERMISSION = 1;
-    private static final int DELETE_PHOTO = 2;
-    private static List<String> mPathList = new ArrayList<>(); // ViewPager 数据源
-    private static List<String> mFileNameList = new ArrayList<>(); // 详情页删除图片时的图片名称集合
-    private List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
     private ImageAdapter mAdapter; // 声明一个 Image 适配器
-    private DrawerLayout mDrawerLayout;
+    private DrawerLayout mParent;
+    private NavigationView mNavView;
+    private MenuItem mSortByDate;
+    private MenuItem mSortBySize;
+    private MenuItem mSortByOrder;
     private String[] type = {"JPG", "JPEG", "PNG", "jpg", "jpeg", "png"};
+
+    public static List<String> getFileNameList() {
+        return mFileNameList;
+    }
+
+    public static List<Image> getImageList() {
+        return mImageList;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,11 +83,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews(); // 初始化控件
-        setStatusBar(); // 修改状态栏和导航栏
+        StatusBarUtil.setTransparentForDrawerLayout(this, mParent); // 修改状态栏
         requestWritePermission(); // 申请存储权限
         // 加载存储在程序外部目录的图片
-        FileUtils.getLocalCache(this, mImageList, mPathList, type, true);
-        FileUtils.getLocalCache(this, mImageList, mPathList, type, false);
+        FileUtils.getLocalCache(this, mImageList, true, type);
+        FileUtils.getLocalCache(this, mImageList, false, type);
+        sortForInit();
         mAdapter.notifyDataSetChanged();
         LinearLayout parentOfToolbar = findViewById(R.id.activity_main_linear_layout);
         AppBarLayout.LayoutParams layoutParams = (AppBarLayout.LayoutParams) parentOfToolbar.getLayoutParams();
@@ -90,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
+        mNavView.setCheckedItem(R.id.nav_home);
         addHintOnBackground();
     }
 
@@ -99,14 +110,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mNumber == 1) {
             android.os.Process.killProcess(android.os.Process.myPid());
         }
-    }
-
-    public static List<String> getFileNameList() {
-        return mFileNameList;
-    }
-
-    public static List<String> getPathList() {
-        return mPathList;
     }
 
     /**
@@ -129,27 +132,100 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 滑动到指定位置
      */
-    public void scrollToTop() {/*
+    public void scrollToTop() {
         int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
         if (firstItem >= 48) {
-            mRecyclerView.setVisibility(View.INVISIBLE);
-            mRecyclerView.scrollToPosition(45);
+            mRecyclerView.scrollToPosition(25);
         }
-        mRecyclerView.setVisibility(View.VISIBLE);*/
         mRecyclerView.smoothScrollToPosition(0);
     }
 
     /**
-     * 设置可以打开滑动菜单
+     * 创建菜单
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main_menu, menu);
+        mSortByDate = menu.findItem(R.id.sort_date);
+        mSortBySize = menu.findItem(R.id.sort_size);
+        mSortByOrder = menu.findItem(R.id.sort_order);
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        int mode_sort = preferences.getInt("mode_sort", 0);
+        int order_or_reverse = preferences.getInt("order_or_reverse", 0);
+        if (mode_sort == 1) {
+            mSortByDate.setChecked(true);
+        } else if (mode_sort == 2) {
+            mSortBySize.setChecked(true);
+        } else {
+            mSortByDate.setChecked(true);
+        }
+        if (order_or_reverse == 1) {
+            mSortByOrder.setChecked(true);
+        } else if (order_or_reverse == 2) {
+            mSortByOrder.setChecked(false);
+        } else {
+            mSortByOrder.setChecked(true);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * 设置可以打开菜单
      *
      * @param item item 传入的 View 实例
      * @return 返回 true 才执行
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
         switch (item.getItemId()) {
             case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
+                mParent.openDrawer(GravityCompat.START);
+                break;
+            case R.id.sort_date:
+                item.setChecked(true);
+                if (mSortByOrder.isChecked()) {
+                    FileUtils.sortByDate(mImageList, true);
+                } else {
+                    FileUtils.sortByDate(mImageList, false);
+                }
+                mAdapter.notifyDataSetChanged();
+                editor.putInt("mode_sort", 1);
+                editor.apply();
+                break;
+            case R.id.sort_size:
+                item.setChecked(true);
+                if (mSortByOrder.isChecked()) {
+                    FileUtils.sortBySize(mImageList, true);
+                } else {
+                    FileUtils.sortBySize(mImageList, false);
+                }
+                mAdapter.notifyDataSetChanged();
+                editor.putInt("mode_sort", 2);
+                editor.apply();
+                break;
+            case R.id.sort_order:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    if (mSortByDate.isChecked()) {
+                        FileUtils.sortByDate(mImageList, false);
+                    } else {
+                        FileUtils.sortBySize(mImageList, false);
+                    }
+                    mAdapter.notifyDataSetChanged();
+                    editor.putInt("order_or_reverse", 2);
+                    editor.apply();
+                } else {
+                    item.setChecked(true);
+                    if (mSortByDate.isChecked()) {
+                        FileUtils.sortByDate(mImageList, true);
+                    } else {
+                        FileUtils.sortBySize(mImageList, true);
+                    }
+                    mAdapter.notifyDataSetChanged();
+                    editor.putInt("order_or_reverse", 1);
+                    editor.apply();
+                }
                 break;
         }
         return true;
@@ -160,8 +236,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (mParent.isDrawerOpen(GravityCompat.START)) {
+            mParent.closeDrawer(GravityCompat.START);
         } else {
             if (mNumber == 1) {
                 super.onBackPressed();
@@ -244,20 +320,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (requestCode) {
             case PictureConfig.CHOOSE_REQUEST:
                 if (resultCode == Activity.RESULT_OK) {
+                    mAsciiNum = 0;
                     List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
                     for (LocalMedia media : selectList) {
                         final String path = media.getPath();
                         String fileName = path.substring(path.lastIndexOf("/") + 1);
 
                         mFileNameList.add(fileName);
-                        mPathList.add(path);
                         // 通知适配器更新并将文件添加至缓存
                         mImageList.add(new Image(path));
+//                        sort();
                         mAdapter.notifyDataSetChanged();
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                FileUtils.saveToCache(MainActivity.this, path);
+                                if (mAsciiNum > 9) {
+                                    mAsciiNum = 0;
+                                }
+                                mAsciiNum++;
+                                FileUtils.saveToCache(MainActivity.this, path, mAsciiNum);
                             }
                         }).start();
                     }
@@ -269,12 +350,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String fileName = data.getStringExtra("fileName");
                     LogUtil.d("MainActivity", fileName);
                     mImageList.remove(position);
-                    mPathList.remove(position);
                     mFileNameList.remove(position);
+//                    sort();
                     mAdapter.notifyDataSetChanged();
                     FileUtils.deleteFile(this, "/" + fileName);
                 }
                 break;
+        }
+    }
+
+    private void sortForInit() {
+        int mode_sort = getPreferences(MODE_PRIVATE).getInt("mode_sort", 0);
+        int order_or_reverse = getPreferences(MODE_PRIVATE).getInt("order_or_reverse", 0);
+        if (mode_sort != 0 | order_or_reverse != 0) {
+            switch (mode_sort) {
+                case 1:
+                    if (order_or_reverse == 1) {
+                        FileUtils.sortByDate(mImageList, true);
+                    } else if (order_or_reverse == 2) {
+                        FileUtils.sortByDate(mImageList, false);
+                    } else {
+                        FileUtils.sortByDate(mImageList, true);
+                    }
+                    break;
+                case 2:
+                    if (order_or_reverse == 1) {
+                        FileUtils.sortBySize(mImageList, true);
+                    } else if (order_or_reverse == 2) {
+                        FileUtils.sortBySize(mImageList, false);
+                    } else {
+                        FileUtils.sortBySize(mImageList, true);
+                    }
+                    break;
+            }
+        } else {
+            FileUtils.sortByDate(mImageList, true);
+        }
+    }
+
+    private void sort() {
+        if (mSortByOrder.isChecked()) {
+            if (mSortByDate.isChecked()) {
+                FileUtils.sortByDate(mImageList, true);
+            } else {
+                FileUtils.sortBySize(mImageList, true);
+            }
+        } else {
+            if (mSortBySize.isChecked()) {
+                FileUtils.sortByDate(mImageList, false);
+            } else {
+                FileUtils.sortBySize(mImageList, false);
+            }
         }
     }
 
@@ -285,8 +411,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar toolbar = findViewById(R.id.activity_main_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setOnClickListener(this);
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        final NavigationView navView = findViewById(R.id.nav_view);
+        mParent = findViewById(R.id.drawer_layout);
+        mNavView = findViewById(R.id.nav_view);
         ActionBar actionBar = getSupportActionBar();
         /*
          * 让标题栏启用滑动菜单并设置图标
@@ -317,23 +443,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        navView.setCheckedItem(R.id.nav_home);
-        navView.setNavigationItemSelectedListener
-                (new NavigationView.OnNavigationItemSelectedListener() {
+        mNavView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_home:
-                        mDrawerLayout.closeDrawers();
+                        mParent.closeDrawers();
+                        break;
+                    case R.id.nav_online_wallpaper:
+                        mParent.closeDrawers();
+//                        mParent.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+//                            @Override
+//                            public void onDrawerClosed(View drawerView) {
+//                                Intent intent = new Intent(MainActivity.this,
+//                                        OnlineWallpaperActivity.class);
+//                                startActivity(intent);
+//                                mParent.removeDrawerListener(this);
+//                            }
+//                        });
+                        Toast.makeText(MainActivity.this,
+                                "暂未开放", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.nav_about:
-                        mDrawerLayout.closeDrawers();
-                        mDrawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                        mParent.closeDrawers();
+                        mParent.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
                             @Override
                             public void onDrawerClosed(View drawerView) {
                                 startActivity(new Intent(MainActivity.this,
                                         AboutActivity.class));
-                                mDrawerLayout.removeDrawerListener(this);
+                                mParent.removeDrawerListener(this);
                             }
                         });
                         break;
@@ -399,9 +537,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 try {
                     mImageList.clear();
                     mFileNameList.clear();
-                    mPathList.clear();
-                    FileUtils.getLocalCache(MainActivity.this, mImageList, mPathList, type, true);
-                    FileUtils.getLocalCache(MainActivity.this, mImageList, mPathList, type, false);
+                    FileUtils.getLocalCache(MainActivity.this, mImageList, true, type);
+                    FileUtils.getLocalCache(MainActivity.this, mImageList, false, type);
+                    sort();
                     Thread.sleep(400);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -440,11 +578,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void setStatusBar() {
-        // 使用透明状态栏
-        StatusBarUtil.setTransparentForDrawerLayout(this, mDrawerLayout);
-    }
-
     public class XItemDecoration extends RecyclerView.ItemDecoration {
 
         @Override
@@ -466,7 +599,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int size = MainActivity.getPathList().size();
+            int size = mImageList.size();
             outRect.top = 0;
             outRect.bottom = SystemUtils.dp2px(MainActivity.this, 1.9F); // 8px
             if (parent.getChildAdapterPosition(view) == size - 1) {

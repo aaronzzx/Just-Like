@@ -3,9 +3,23 @@
     <color name="colorPrimary">#4b6fca</color>
     <color name="colorPrimaryDark">#3a5497</color>
     <color name="colorAccent">#4b6fca</color>
+    <color name="colorRed">#b71c1c</color>
+    <color name="colorGreen">#388e3c</color>
     <color name="colorGrey">#46232323</color>
     <color name="colorGreyDark">#46181818</color>
     <color name="navigationBar">#56000000</color>
+    <color name="toolbarTop">#c8000000</color>
+    <color name="toolbarBottom">#00000000</color>
     <color name="splash">#FFFFFF</color>
     <color name="checked">#00bf33</color>
+    <color name="place_holder_1">#b67676</color>
+    <color name="place_holder_2">#9d70a4</color>
+    <color name="place_holder_3">#7f85ac</color>
+    <color name="place_holder_4">#6a93b6</color>
+    <color name="place_holder_5">#2088b7</color>
+    <color name="place_holder_6">#8bb18c</color>
+    <color name="place_holder_7">#babf7d</color>
+    <color name="place_holder_8">#bfa762</color>
+    <color name="place_holder_9">#b3a29d</color>
+    <color name="place_holder_10">#afafaf</color>
 </resources>
