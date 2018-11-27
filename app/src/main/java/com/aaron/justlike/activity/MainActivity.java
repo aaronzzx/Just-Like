@@ -329,7 +329,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mFileNameList.add(fileName);
                         // 通知适配器更新并将文件添加至缓存
                         mImageList.add(new Image(path));
-                        sort();
+//                        sort();
                         mAdapter.notifyDataSetChanged();
                         new Thread(new Runnable() {
                             @Override
@@ -351,7 +351,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     LogUtil.d("MainActivity", fileName);
                     mImageList.remove(position);
                     mFileNameList.remove(position);
-                    sort();
+//                    sort();
                     mAdapter.notifyDataSetChanged();
                     FileUtils.deleteFile(this, "/" + fileName);
                 }
@@ -452,15 +452,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case R.id.nav_online_wallpaper:
                         mParent.closeDrawers();
-                        mParent.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
-                            @Override
-                            public void onDrawerClosed(View drawerView) {
-                                Intent intent = new Intent(MainActivity.this,
-                                        OnlineWallpaperActivity.class);
-                                startActivity(intent);
-                                mParent.removeDrawerListener(this);
-                            }
-                        });
+//                        mParent.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+//                            @Override
+//                            public void onDrawerClosed(View drawerView) {
+//                                Intent intent = new Intent(MainActivity.this,
+//                                        OnlineWallpaperActivity.class);
+//                                startActivity(intent);
+//                                mParent.removeDrawerListener(this);
+//                            }
+//                        });
+                        Toast.makeText(MainActivity.this,
+                                "暂未开放", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.nav_about:
                         mParent.closeDrawers();
