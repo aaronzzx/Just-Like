@@ -86,8 +86,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         StatusBarUtil.setTransparentForDrawerLayout(this, mParent); // 修改状态栏
         requestWritePermission(); // 申请存储权限
         // 加载存储在程序外部目录的图片
-        FileUtils.getLocalCache(this, mImageList, /*mPathList,*/ true, type);
-        FileUtils.getLocalCache(this, mImageList, /*mPathList,*/ false, type);
+        FileUtils.getLocalCache(this, mImageList, true, type);
+        FileUtils.getLocalCache(this, mImageList, false, type);
         sortForInit();
         mAdapter.notifyDataSetChanged();
         LinearLayout parentOfToolbar = findViewById(R.id.activity_main_linear_layout);
@@ -362,17 +362,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void sortForInit() {
         int mode_sort = getPreferences(MODE_PRIVATE).getInt("mode_sort", 0);
         int order_or_reverse = getPreferences(MODE_PRIVATE).getInt("order_or_reverse", 0);
-        if (order_or_reverse == 1) {
-            if (mode_sort == 1) {
-                FileUtils.sortByDate(mImageList, true);
-            } else {
-                FileUtils.sortBySize(mImageList, true);
-            }
-        } else if (order_or_reverse == 2) {
-            if (mode_sort == 2) {
-                FileUtils.sortByDate(mImageList, false);
-            } else {
-                FileUtils.sortBySize(mImageList, false);
+        if (mode_sort != 0 | order_or_reverse != 0) {
+            switch (mode_sort) {
+                case 1:
+                    if (order_or_reverse == 1) {
+                        FileUtils.sortByDate(mImageList, true);
+                    } else if (order_or_reverse == 2) {
+                        FileUtils.sortByDate(mImageList, false);
+                    } else {
+                        FileUtils.sortByDate(mImageList, true);
+                    }
+                    break;
+                case 2:
+                    if (order_or_reverse == 1) {
+                        FileUtils.sortBySize(mImageList, true);
+                    } else if (order_or_reverse == 2) {
+                        FileUtils.sortBySize(mImageList, false);
+                    } else {
+                        FileUtils.sortBySize(mImageList, true);
+                    }
+                    break;
             }
         } else {
             FileUtils.sortByDate(mImageList, true);
