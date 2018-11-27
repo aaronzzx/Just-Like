@@ -26,13 +26,43 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import androidx.core.content.FileProvider;
 
 public class FileUtils {
+
+    public static void sortByDate(List<Image> imageList, final boolean isOrder) {
+        if (!imageList.isEmpty()) {
+            Collections.sort(imageList, new Comparator<Image>() {
+                @Override
+                public int compare(Image o1, Image o2) {
+                    if (isOrder) {
+                        return o1.getCreateDate().compareTo(o2.getCreateDate());
+                    } else {
+                        return o2.getCreateDate().compareTo(o1.getCreateDate());
+                    }
+                }
+            });
+        }
+    }
+
+    public static void sortBySize(List<Image> imageList, final boolean isOrder) {
+        if (!imageList.isEmpty()) {
+            Collections.sort(imageList, new Comparator<Image>() {
+                @Override
+                public int compare(Image o1, Image o2) {
+                    if (isOrder) {
+                        return Long.compare(o1.getSize(), o2.getSize());
+                    } else {
+                        return Long.compare(o2.getSize(), o1.getSize());
+                    }
+                }
+            });
+        }
+    }
 
     public static Uri getUriFromPath(Context context, File file) {
         Uri uri;
@@ -107,10 +137,10 @@ public class FileUtils {
      * @param path
      * @return
      */
-    public static long getImageDate(String path) {
-        long time = 0;
-            File file = new File(path);
-            time = file.lastModified();
+    public static String getImageDate(String path) {
+        String time;
+        File file = new File(path);
+        time = file.getName();
         return time;
     }
 
@@ -164,20 +194,22 @@ public class FileUtils {
      * @param path     相册或文件管理器返回的路径
      */
     public static void saveToCache(Context context, String path, int num) {
-        File mkDir = new File(Environment.getExternalStorageDirectory(),
-                "JustLike/images");
+        String originalDate;
+        String createDate = SystemUtils.getCreateDate(path);
+        if (!TextUtils.isEmpty(createDate)) {
+            originalDate = createDate;
+        } else {
+            originalDate = SystemUtils.getLastModified(path, "yyyy-MM-dd HH:mm:ss");
+        }
+        String dirPath = Environment.getExternalStorageDirectory().getPath() + "/JustLike/images";
+        File mkDir = new File(dirPath);
         if (!mkDir.exists()) mkDir.mkdirs();
-        /*String fileName = path.substring(path.lastIndexOf("/"),
-                path.lastIndexOf(".")) + ".JPG";*/
-        long time = System.currentTimeMillis();
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        Date d = new Date(time);
-        String date = format.format(d);
-//        String nameSuffix = "_" + SystemUtils.getRandomNum(9) + SystemUtils.getRandomNum(9);
+        String date = SystemUtils.getCurrentDate("yyyyMMdd_HHmmss");
         String name = "/IMG_" + date + "（" + num + "）";
-        String suffix = ".JPG";
+        String suffix = path.substring(path.lastIndexOf("."));
         final String fileName = name + suffix;
-        File file = new File(Environment.getExternalStorageDirectory(),"/JustLike/images" + fileName);
+        String filePath = dirPath + fileName;
+        File file = new File(filePath);
         FileInputStream fis = null;
         FileOutputStream fos = null;
         Bitmap bitmap = BitmapFactory.decodeFile(path);
@@ -190,20 +222,13 @@ public class FileUtils {
                     Matrix matrix = new Matrix();
                     matrix.postRotate(getBitmapDegree(path));
                     Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                    resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
-                    /*byte[] buffer = new byte[1024];
-                    int total;
-                    while ((total = fis.read(buffer)) != -1) {
-                        fos.write(buffer, 0, total);
-                    }*/
+                    resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
                 } else {
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos);
-                    /*byte[] buffer = new byte[1024];
-                    int total;
-                    while ((total = fis.read(buffer)) != -1) {
-                        fos.write(buffer, 0, total);
-                    }*/
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
                 }
+                ExifInterface exif2 = new ExifInterface(filePath);
+                exif2.setAttribute(ExifInterface.TAG_DATETIME, originalDate);
+                exif2.saveAttributes();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -336,20 +361,9 @@ public class FileUtils {
                         String fileName = path.substring(path.lastIndexOf("/") + 1);
 
                         MainActivity.getFileNameList().add(fileName);
-
-                         // 之所以不能放在循环体外面，是因为除了 jpg 格式要加载，
-                         // 还有其他格式图片，在如果放在循环体外，因为加载其他格式
-                         // 图片与 jpg 格式不符合，所以会清空集合，导致 ViewPager
-                         // 无法显示。
-//                        pathList.add(path);
-
                         Image image = new Image(path);
-                        image.setFileName(getImageName(path));
-                        String name = image.getFileName();
                         image.setCreateDate(getImageDate(path));
-                        long createDate = image.getCreateDate();
                         image.setSize(getImageSize(path));
-                        long size = image.getSize();
                         imageList.add(image);
                     }
                 }

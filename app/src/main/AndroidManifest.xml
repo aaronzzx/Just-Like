@@ -32,7 +32,7 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".activity.DisplayImageActivity"
-            android:label="Like"
+            android:label=""
             android:theme="@style/AppTheme.DisplayActivity" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"

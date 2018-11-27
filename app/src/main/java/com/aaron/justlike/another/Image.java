@@ -9,7 +9,7 @@ public class Image implements Parcelable{
 
     private String mPath; // 用于在文件管理器中选择图片后传回的路径
     private String mFileName;
-    private long mCreateDate;
+    private String mCreateDate;
     private long mSize;
 
     public Image() {
@@ -36,11 +36,11 @@ public class Image implements Parcelable{
         mFileName = fileName;
     }
 
-    public long getCreateDate() {
+    public String getCreateDate() {
         return mCreateDate;
     }
 
-    public void setCreateDate(long createDate) {
+    public void setCreateDate(String createDate) {
         mCreateDate = createDate;
     }
 

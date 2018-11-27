@@ -4,13 +4,18 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.media.ExifInterface;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.aaron.justlike.extend.MyGridLayoutManager;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,6 +56,38 @@ public class SystemUtils {
     public static int getRandomNum(int num) {
         Random random = new Random();
         return random.nextInt(num);
+    }
+
+    public static String getCreateDate(String path) {
+        String date = null;
+        try {
+            ExifInterface exif = new ExifInterface(path);
+            date = exif.getAttribute(ExifInterface.TAG_DATETIME);
+            if (!TextUtils.isEmpty(date)) {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+                SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date d = formatter.parse(date);
+                date = formatter2.format(d);
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        return date;
+    }
+
+    public static String getLastModified(String path, String pattern) {
+        long time = new File(path).lastModified();
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+        Date d = new Date(time);
+        return formatter.format(d);
+    }
+
+    public static String getCurrentDate(String pattern) {
+        long time = System.currentTimeMillis();
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        Date d = new Date(time);
+        return format.format(d);
     }
 
     /**

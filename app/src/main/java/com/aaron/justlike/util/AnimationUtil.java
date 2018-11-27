@@ -20,7 +20,7 @@ public class AnimationUtil {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         // Toolbar 动画
         AnimationSet as = new AnimationSet(true);
-        as.setDuration(200);
+        as.setDuration(250);
         AlphaAnimation aa = new AlphaAnimation(1, 0);
         as.addAnimation(aa);
         TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -150);
@@ -48,7 +48,7 @@ public class AnimationUtil {
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         // Toolbar 动画
         AnimationSet as = new AnimationSet(true);
-        as.setDuration(200);
+        as.setDuration(250);
         AlphaAnimation aa = new AlphaAnimation(0, 1);
         as.addAnimation(aa);
         TranslateAnimation ta = new TranslateAnimation(0, 0, -150, 0);

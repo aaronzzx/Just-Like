@@ -9,7 +9,7 @@
     <color name="colorGreyDark">#46181818</color>
     <color name="navigationBar">#56000000</color>
     <color name="toolbarTop">#c8000000</color>
-    <color name="toolbarBottom">@color/transparent</color>
+    <color name="toolbarBottom">#00000000</color>
     <color name="splash">#FFFFFF</color>
     <color name="checked">#00bf33</color>
     <color name="place_holder_1">#b67676</color>

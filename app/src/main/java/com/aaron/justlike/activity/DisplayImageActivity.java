@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,12 +19,14 @@ import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.MyPagerAdapter;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.util.LogUtil;
 import com.aaron.justlike.util.SystemUtils;
 import com.luck.picture.lib.tools.PictureFileUtils;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -183,6 +187,7 @@ public class DisplayImageActivity extends AppCompatActivity {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 mPosition = mViewPager.getCurrentItem();
+                setTitle();
             }
 
             @Override
@@ -197,13 +202,18 @@ public class DisplayImageActivity extends AppCompatActivity {
     }
 
     private void setTitle() {
-        String path = MainActivity.getImageList().get(mPosition).getPath();
-        Date d = new Date(new File(path).lastModified());
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd/HH:mm:ss");
-        String result = formatter.format(d);
-        String[] dateArray = result.split("/");
-        mToolbar.setTitle(dateArray[0]);
-        mToolbar.setSubtitle(dateArray[1]);
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(MainActivity.getImageList().get(mPosition).getPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String originalDate = exif.getAttribute(ExifInterface.TAG_DATETIME);
+        if (!TextUtils.isEmpty(originalDate)) {
+            String[] dateArray = originalDate.split(" ");
+            mToolbar.setTitle(dateArray[0]);
+            mToolbar.setSubtitle(dateArray[1]);
+        }
     }
 
     private void cropImage(String type) {
