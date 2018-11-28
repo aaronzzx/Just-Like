@@ -19,17 +19,12 @@ import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.MyPagerAdapter;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
-import com.aaron.justlike.util.LogUtil;
 import com.aaron.justlike.util.SystemUtils;
 import com.luck.picture.lib.tools.PictureFileUtils;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -38,7 +33,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
-public class DisplayImageActivity extends AppCompatActivity {
+public class MainImageActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private Toolbar mToolbar;
@@ -47,7 +42,7 @@ public class DisplayImageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_image);
+        setContentView(R.layout.activity_main_image);
         initContent();
     }
 

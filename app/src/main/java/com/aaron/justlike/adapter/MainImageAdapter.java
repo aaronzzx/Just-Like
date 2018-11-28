@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.activity.DisplayImageActivity;
+import com.aaron.justlike.activity.MainImageActivity;
 import com.aaron.justlike.activity.MainActivity;
 import com.aaron.justlike.another.Image;
 import com.aaron.justlike.extend.SquareView;
@@ -25,7 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
+public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.ViewHolder> {
 
     private static final int DELETE_PHOTO = 2;
     private boolean mBanClick;
@@ -38,7 +38,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             R.drawable.place_holder_8, R.drawable.place_holder_9,
             R.drawable.place_holder_10};
 
-    public ImageAdapter(MainActivity activity, List<Image> imageList) {
+    public MainImageAdapter(MainActivity activity, List<Image> imageList) {
         mActivity = activity;
         mImageList = imageList;
     }
@@ -62,7 +62,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                 if (!mBanClick) {
                     int position = holder.getAdapterPosition();
                     // 将 Image 对象序列化传递给下一个活动，方便下一个活动取值
-                    Intent intent = new Intent(mActivity, DisplayImageActivity.class);
+                    Intent intent = new Intent(mActivity, MainImageActivity.class);
                     intent.putExtra("position", position);
                     mActivity.startActivityForResult(intent, DELETE_PHOTO);
                     mActivity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

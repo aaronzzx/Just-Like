@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.adapter.ImageAdapter;
+import com.aaron.justlike.adapter.MainImageAdapter;
 import com.aaron.justlike.another.Image;
 import com.aaron.justlike.extend.MyGridLayoutManager;
 import com.aaron.justlike.util.FileUtils;
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int mNumber = 0; // 用于判断返回键退出程序
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefresh;
-    private ImageAdapter mAdapter; // 声明一个 Image 适配器
+    private MainImageAdapter mAdapter; // 声明一个 Image 适配器
     private DrawerLayout mParent;
     private NavigationView mNavView;
     private MenuItem mSortByDate;
@@ -431,7 +431,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 将 RecyclerView 的布局风格改为网格类型,使用自定义的布局管理器，为了能修改滑动状态
         mLayoutManager = new MyGridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new ImageAdapter(this, mImageList);
+        mAdapter = new MainImageAdapter(this, mImageList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mRecyclerView.addItemDecoration(new YItemDecoration());
@@ -455,17 +455,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case R.id.nav_online_wallpaper:
                         mParent.closeDrawers();
-//                        mParent.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
-//                            @Override
-//                            public void onDrawerClosed(View drawerView) {
-//                                Intent intent = new Intent(MainActivity.this,
-//                                        OnlineWallpaperActivity.class);
-//                                startActivity(intent);
-//                                mParent.removeDrawerListener(this);
-//                            }
-//                        });
-                        Toast.makeText(MainActivity.this,
-                                "暂未开放", Toast.LENGTH_SHORT).show();
+                        mParent.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                            @Override
+                            public void onDrawerClosed(View drawerView) {
+                                Intent intent = new Intent(MainActivity.this,
+                                        OnlineWallpaperActivity.class);
+                                startActivity(intent);
+                                mParent.removeDrawerListener(this);
+                            }
+                        });
                         break;
                     case R.id.nav_about:
                         mParent.closeDrawers();

@@ -29,9 +29,10 @@
         <activity
             android:name=".activity.OnlineWallpaperActivity"
             android:label="Online"
+            android:theme="@style/AppTheme.OnlineWallpaperActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.DisplayImageActivity"
+            android:name=".activity.MainImageActivity"
             android:label=""
             android:theme="@style/AppTheme.DisplayActivity" />
         <activity

@@ -30,7 +30,7 @@ public class AboutActivity extends AppCompatActivity {
             "PhotoView 图片浏览缩放控件",
             "Picture Selector Library for Android",
             "Image Cropping Library for Android",
-            "An unofficial Unsplash API library for Android"};
+            "An unofficial Splash API library for Android"};
     private List<AboutMessage> mAboutMessageList = new ArrayList<>();
     private List<AboutLibrary> mAboutLibraryList = new ArrayList<>();
 

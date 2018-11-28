@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
-import android.view.animation.TranslateAnimation;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -67,5 +67,21 @@ public class AnimationUtil {
         });
         va.setDuration(150);
         va.start();*/
+    }
+
+    public static void showProgressBar(ProgressBar progressBar) {
+        progressBar.setVisibility(View.VISIBLE);
+        AlphaAnimation animation = new AlphaAnimation(0, 1);
+        animation.setDuration(300);
+        animation.setFillAfter(true);
+        progressBar.startAnimation(animation);
+    }
+
+    public static void hideProgressBar(ProgressBar progressBar) {
+        AlphaAnimation animation = new AlphaAnimation(1, 0);
+        animation.setDuration(300);
+        animation.setFillAfter(true);
+        progressBar.startAnimation(animation);
+        progressBar.setVisibility(View.GONE);
     }
 }

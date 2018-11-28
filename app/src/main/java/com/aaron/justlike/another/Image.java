@@ -3,6 +3,10 @@ package com.aaron.justlike.another;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.kc.unsplash.models.Photo;
+import com.kc.unsplash.models.Urls;
+
+import java.net.URL;
 import java.util.Comparator;
 
 public class Image implements Parcelable{
