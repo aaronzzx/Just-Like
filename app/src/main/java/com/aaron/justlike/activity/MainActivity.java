@@ -53,11 +53,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final int REQUEST_PERMISSION = 1;
     private static final int DELETE_PHOTO = 2;
-    private int mAsciiNum = 64;
     private static MyGridLayoutManager mLayoutManager;
     private static List<String> mFileNameList = new ArrayList<>(); // 详情页删除图片时的图片名称集合
     private static List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
     private final int mLength = 0;
+    private int mAsciiNum = 64;
     private int mNumber = 0; // 用于判断返回键退出程序
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefresh;
@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DrawerLayout mParent;
     private NavigationView mNavView;
     private MenuItem mSortByDate;
-    private MenuItem mSortBySize;
     private MenuItem mSortByOrder;
     private String[] type = {"JPG", "JPEG", "PNG", "jpg", "jpeg", "png"};
 
@@ -147,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
         mSortByDate = menu.findItem(R.id.sort_date);
-        mSortBySize = menu.findItem(R.id.sort_size);
+        MenuItem sortBySize = menu.findItem(R.id.sort_size);
         mSortByOrder = menu.findItem(R.id.sort_order);
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         int mode_sort = preferences.getInt("mode_sort", 0);
@@ -155,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mode_sort == 1) {
             mSortByDate.setChecked(true);
         } else if (mode_sort == 2) {
-            mSortBySize.setChecked(true);
+            sortBySize.setChecked(true);
         } else {
             mSortByDate.setChecked(true);
         }
@@ -321,27 +320,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case PictureConfig.CHOOSE_REQUEST:
                 if (resultCode == Activity.RESULT_OK) {
                     mAsciiNum = 0;
-                    List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
-                    for (LocalMedia media : selectList) {
-                        final String path = media.getPath();
-                        String fileName = path.substring(path.lastIndexOf("/") + 1);
+                    final List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (LocalMedia media : selectList) {
+                                final String path = media.getPath();
+                                String fileName = path.substring(path.lastIndexOf("/") + 1);
 
-                        mFileNameList.add(fileName);
-                        // 通知适配器更新并将文件添加至缓存
-                        mImageList.add(new Image(path));
-//                        sort();
-                        mAdapter.notifyDataSetChanged();
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
+                                mFileNameList.add(fileName);
+                                // 通知适配器更新并将文件添加至缓存
+                                mImageList.add(new Image(path));
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mAdapter.notifyDataSetChanged();
+                                    }
+                                });
                                 if (mAsciiNum > 9) {
                                     mAsciiNum = 0;
                                 }
                                 mAsciiNum++;
                                 FileUtils.saveToCache(MainActivity.this, path, mAsciiNum);
                             }
-                        }).start();
-                    }
+                        }
+                    }).start();
                 }
                 break;
             case DELETE_PHOTO:
@@ -396,7 +399,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 FileUtils.sortBySize(mImageList, true);
             }
         } else {
-            if (mSortBySize.isChecked()) {
+            if (mSortByDate.isChecked()) {
                 FileUtils.sortByDate(mImageList, false);
             } else {
                 FileUtils.sortBySize(mImageList, false);
