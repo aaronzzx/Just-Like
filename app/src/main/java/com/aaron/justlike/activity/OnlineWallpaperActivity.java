@@ -11,11 +11,10 @@ import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.OnlineImageAdapter;
 import com.aaron.justlike.another.Splash;
 import com.aaron.justlike.util.AnimationUtil;
-import com.aaron.justlike.util.LogUtil;
 import com.aaron.justlike.util.SystemUtils;
 import com.kc.unsplash.Unsplash;
+import com.kc.unsplash.api.Order;
 import com.kc.unsplash.models.Photo;
-import com.kc.unsplash.models.SearchResults;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +24,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -46,7 +46,6 @@ public class OnlineWallpaperActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online_wallpaper);
         initViews(); // 初始化控件
-//        StatusBarUtil.setTransparentForDrawerLayout(this, mParent); // 修改状态栏
     }
 
     @Override
@@ -101,7 +100,7 @@ public class OnlineWallpaperActivity extends AppCompatActivity implements View.O
 
     private void initViews() {
         mSwipeRefresh = findViewById(R.id.swipe_refresh);
-        mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary);
+        mSwipeRefresh.setColorSchemeResources(R.color.colorBlack);
         mToolbar = findViewById(R.id.activity_online_toolbar);
         setSupportActionBar(mToolbar);
         mToolbar.setOnClickListener(this);
@@ -116,7 +115,7 @@ public class OnlineWallpaperActivity extends AppCompatActivity implements View.O
         mProgressBar = findViewById(R.id.progress_bar);
         AnimationUtil.showProgressBar(mProgressBar);
         mRecyclerView = findViewById(R.id.recycler_view);
-        // 将 RecyclerView 的布局风格改为网格类型,使用自定义的布局管理器，为了能修改滑动状态
+
         mLayoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());
@@ -141,29 +140,29 @@ public class OnlineWallpaperActivity extends AppCompatActivity implements View.O
         new Thread(new Runnable() {
             @Override
             public void run() {
-                unsplash.searchPhotos("wallpapers", mLoadNum, 10, new Unsplash.OnSearchCompleteListener() {
-                    @Override
-                    public void onComplete(SearchResults results) {
-                        mLoadNum++;
-                        AnimationUtil.hideProgressBar(mProgressBar);
-                        List<Photo> photoList = results.getResults();
-                        for (Photo photo : photoList) {
-                            mSplashList.add(new Splash(photo));
-                        }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mAdapter.notifyDataSetChanged();
+                for (int i = 0; i < 2; i++) {
+                    unsplash.getPhotos(mLoadNum++, 10, Order.LATEST, new Unsplash.OnPhotosLoadedListener() {
+                        @Override
+                        public void onComplete(List<Photo> photos) {
+                            AnimationUtil.hideProgressBar(mProgressBar);
+                            for (Photo photo : photos) {
+                                mSplashList.add(new Splash(photo));
                             }
-                        });
-                    }
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
 
-                    @Override
-                    public void onError(String error) {
-                        Toast.makeText(OnlineWallpaperActivity.this,
-                                "出错了", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onError(String error) {
+                            Toast.makeText(OnlineWallpaperActivity.this,
+                                    "出错了", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         }).start();
     }
@@ -173,10 +172,10 @@ public class OnlineWallpaperActivity extends AppCompatActivity implements View.O
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) % 2 == 0) {
-                outRect.left = 0;
-                outRect.right = SystemUtils.dp2px(OnlineWallpaperActivity.this, 3.0F);
-            } else {
-                outRect.left = SystemUtils.dp2px(OnlineWallpaperActivity.this, 3.0F);
+//                outRect.left = 0;
+                outRect.right = SystemUtils.dp2px(OnlineWallpaperActivity.this, 2.5F);
+            } else if (parent.getChildAdapterPosition(view) % 2 == 1) {
+                outRect.left = SystemUtils.dp2px(OnlineWallpaperActivity.this, 2.5F);
             }
         }
     }

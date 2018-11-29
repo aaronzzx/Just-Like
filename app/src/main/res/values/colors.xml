@@ -3,6 +3,7 @@
     <color name="colorPrimary">#4b6fca</color>
     <color name="colorPrimaryDark">#3a5497</color>
     <color name="colorAccent">#4b6fca</color>
+    <color name="colorBlack">#000000</color>
     <color name="colorRed">#b71c1c</color>
     <color name="colorGreen">#388e3c</color>
     <color name="colorGrey">#46232323</color>
@@ -10,6 +11,8 @@
     <color name="navigationBar">#56000000</color>
     <color name="toolbarTop">#c8000000</color>
     <color name="toolbarBottom">#00000000</color>
+    <color name="authorImageNameTop">#00000000</color>
+    <color name="authorImageNameBottom">#7a000000</color>
     <color name="splash">#FFFFFF</color>
     <color name="checked">#00bf33</color>
     <color name="place_holder_1">#b67676</color>

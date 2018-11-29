@@ -1,9 +1,12 @@
 package com.aaron.justlike.adapter;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.OnlineWallpaperActivity;
@@ -64,19 +67,22 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Splash splash = mSplashList.get(position);
         Photo photo = splash.getPhoto();
+        String authorName = photo.getUser().getName();
+        String authorImage = photo.getUser().getProfileImage().getMedium();
+        String urls = photo.getUrls().getRaw() + "&fm=jpg&w=600&q=75";
+        Glide.with(mActivity)
+                .load(authorImage)
+                .into(holder.authorImage);
+        holder.authorName.setText(authorName);
         RequestOptions options = new RequestOptions()
-//                .placeholder(placeHolders[SystemUtils.getRandomNum(9)])
-//                .dontAnimate()
-//                .override(10)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop();
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL);
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
                 .Builder(300)
                 .setCrossFadeEnabled(true).build();
         Glide.with(mActivity)
-                .load(photo.getUrls().getFull())
-                /*.thumbnail(Glide.with(mActivity)
-                        .load(photo.getUrls().getThumb()))*/
+                .load(urls)
+//                .thumbnail(0.6F)
                 .apply(options)
                 .transition(DrawableTransitionOptions.with(factory))
                 .into(holder.imageView);
@@ -90,6 +96,8 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
     static class ViewHolder extends RecyclerView.ViewHolder {
         View itemView;
         ImageView imageView;
+        ImageView authorImage;
+        TextView authorName;
 
         /**
          * @param view 子项布局的最外层布局，即父布局。
@@ -98,6 +106,8 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
             super(view);
             itemView = view;
             imageView = view.findViewById(R.id.image_view);
+            authorImage = view.findViewById(R.id.author_image);
+            authorName = view.findViewById(R.id.author_name);
         }
     }
 }

@@ -18,7 +18,6 @@
         tools:replace="android:allowBackup">
         <activity
             android:name=".activity.MainActivity"
-            android:launchMode="singleTask"
             android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,8 +28,7 @@
         <activity
             android:name=".activity.OnlineWallpaperActivity"
             android:label="Online"
-            android:theme="@style/AppTheme.OnlineWallpaperActivity"
-            android:launchMode="singleTask" />
+            android:theme="@style/AppTheme.OnlineWallpaperActivity" />
         <activity
             android:name=".activity.MainImageActivity"
             android:label=""
