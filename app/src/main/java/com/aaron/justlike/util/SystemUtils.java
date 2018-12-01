@@ -5,32 +5,18 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.media.ExifInterface;
-import android.os.Build;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.view.View;
 import android.view.WindowManager;
-
-import com.aaron.justlike.extend.MyGridLayoutManager;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.RecyclerView;
-
 public class SystemUtils {
-
-    private static int mNum = 0; // getOrderNum()
 
     public static String getVersionName(Context context) {
         PackageManager manager = context.getPackageManager();
@@ -88,6 +74,20 @@ public class SystemUtils {
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         Date d = new Date(time);
         return format.format(d);
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String getUnsplashDate(String date) {
+        String finalDate = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy年MM月dd日");
+        try {
+            Date d = sdf.parse(date.substring(0, 9));
+            finalDate = sdf1.format(d);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return finalDate;
     }
 
     /**

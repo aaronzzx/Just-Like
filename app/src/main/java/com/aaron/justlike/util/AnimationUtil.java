@@ -126,7 +126,7 @@ public class AnimationUtil {
         img.setImageResource(R.drawable.ic_done_circle);
         img.setVisibility(View.VISIBLE);
         AlphaAnimation aa = new AlphaAnimation(0, 1);
-        aa.setDuration(500);
+        aa.setDuration(300);
         aa.setFillAfter(true);
         aa.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -136,9 +136,9 @@ public class AnimationUtil {
             @Override
             public void onAnimationEnd(Animation animation) {
                 AlphaAnimation aa1 = new AlphaAnimation(1, 0);
-                aa1.setDuration(500);
+                aa1.setDuration(300);
                 aa1.setFillAfter(true);
-                aa1.setStartOffset(1000);
+                aa1.setStartOffset(600);
                 img.startAnimation(aa1);
             }
 

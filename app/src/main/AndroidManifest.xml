@@ -39,7 +39,8 @@
 
         <activity
             android:name=".activity.OnlineImageActivity"
-            android:label=""/>
+            android:label=""
+            android:theme="@style/AppTheme.OnlineWallpaperActivity"/>
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"

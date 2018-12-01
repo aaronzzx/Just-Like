@@ -1,18 +1,23 @@
 package com.aaron.justlike.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.util.AnimationUtil;
+import com.aaron.justlike.util.SystemUtils;
 import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -20,6 +25,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.material.snackbar.Snackbar;
+import com.jaeger.library.StatusBarUtil;
 import com.kc.unsplash.models.Photo;
 
 import java.lang.reflect.Method;
@@ -28,12 +34,16 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OnlineImageActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Toolbar mToolbar;
     private ProgressBar mProgressBar;
     private ImageView mProgressImage;
+    private CircleImageView mAuthorImage;
+    private TextView mAuthorName;
+    private TextView mImageDate;
     private PhotoView mPhotoView;
     private Photo mPhoto;
 
@@ -42,6 +52,7 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online_image);
         initViews();
+        loadImageByGlide();
     }
 
     @Override
@@ -63,6 +74,26 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
         getMenuInflater().inflate(R.menu.activity_online_image_main, menu);
         setIconEnable(menu, true);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_share:
+
+                break;
+            case R.id.action_go_web:
+                Intent goWeb = new Intent(Intent.ACTION_VIEW);
+                goWeb.setData(Uri.parse("https://unsplash.com"));
+                startActivity(goWeb);
+                break;
+            case R.id.action_go_photographer:
+                Intent goAuthor = new Intent(Intent.ACTION_VIEW);
+                goAuthor.setData(Uri.parse(mPhoto.getUser().getLinks().getHtml()));
+                startActivity(goAuthor);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setIconEnable(Menu menu, boolean enable) {
@@ -112,15 +143,22 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        mAuthorImage = findViewById(R.id.author_image);
+        mAuthorName = findViewById(R.id.author_name);
+        mImageDate = findViewById(R.id.image_date);
         mPhotoView = findViewById(R.id.activity_online_image_view);
-        loadImageByGlide();
         AnimationUtil.exitFullScreen(this, mToolbar, 200);
     }
 
     private void loadImageByGlide() {
         mProgressBar.setVisibility(View.VISIBLE);
+        mAuthorName.setText(mPhoto.getUser().getName());
+        mImageDate.setText(SystemUtils.getUnsplashDate(mPhoto.getCreatedAt()));
         Glide.with(this)
-                .load(mPhoto.getUrls().getRaw() + "&fm=jpg&h=2160&q=80")
+                .load(mPhoto.getUser().getProfileImage().getLarge())
+                .into(mAuthorImage);
+        Glide.with(this)
+                .load(mPhoto.getUrls().getRaw() + "&fm=jpg&h=2160&q=50")
                 .thumbnail(Glide.with(this).load(mPhoto.getUrls().getRegular()))
                 .listener(mListener)
                 .into(mPhotoView);

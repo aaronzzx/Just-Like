@@ -61,7 +61,7 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Photo photo = mPhotoList.get(position);
         String authorName = photo.getUser().getName();
-        String authorImage = photo.getUser().getProfileImage().getMedium();
+        String authorImage = photo.getUser().getProfileImage().getLarge();
         String urls = photo.getUrls().getRegular();
         Glide.with(mActivity)
                 .load(authorImage)
@@ -74,7 +74,7 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
                 .Builder(300)
                 .setCrossFadeEnabled(true).build();
         Glide.with(mActivity)
-                .load(urls/* + "&fm=jpg&w=720"*/)
+                .load(urls)
 //                .thumbnail(0.5F)
 //                .apply(options)
                 .transition(DrawableTransitionOptions.with(factory))

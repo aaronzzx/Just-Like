@@ -1,10 +1,13 @@
 package com.aaron.justlike.activity;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -47,16 +50,17 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online);
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorBlack), 0);
         initViews(); // 初始化控件
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        getWindow().getDecorView()
-                .setSystemUiVisibility(/*View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | */View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        if (hasFocus) {
+            Window window = getWindow();
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        }
     }
 
     @Override
@@ -108,9 +112,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
         setSupportActionBar(mToolbar);
         mToolbar.setOnClickListener(this);
         ActionBar actionBar = getSupportActionBar();
-        /*
-         * 让标题栏启用滑动菜单并设置图标
-         */
+        // 让标题栏启用滑动菜单并设置图标
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.mipmap.ic_back);
