@@ -10,6 +10,8 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.aaron.justlike.R;
+
 import androidx.appcompat.widget.Toolbar;
 
 public class AnimationUtil {
@@ -121,13 +123,14 @@ public class AnimationUtil {
     }
 
     public static void showProgressImage(final ImageView img) {
+        img.setImageResource(R.drawable.ic_done_circle);
+        img.setVisibility(View.VISIBLE);
         AlphaAnimation aa = new AlphaAnimation(0, 1);
         aa.setDuration(500);
         aa.setFillAfter(true);
         aa.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                img.setVisibility(View.VISIBLE);
             }
 
             @Override

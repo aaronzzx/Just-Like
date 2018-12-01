@@ -38,7 +38,6 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     private OnlineImageAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefresh;
     private Toolbar mToolbar;
-    private Snackbar mSnackbar;
     private ProgressBar mProgressBar;
     private boolean canScrollVertical;
     private int mLoadNum = 1;
@@ -172,27 +171,15 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
 //                AnimationUtil.hideProgressBar(mProgressBar);
                 mProgressBar.setVisibility(View.GONE);
                 mSwipeRefresh.setEnabled(true);
-                if (mSnackbar == null) {
-                    mSnackbar = Snackbar.make(mRecyclerView, "加载失败", Snackbar.LENGTH_LONG);
-                    mSnackbar.setAction("刷新", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                Snackbar.make(mRecyclerView, "加载失败，请检查网络", Snackbar.LENGTH_LONG)
+                .setAction("刷新", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 //                            AnimationUtil.showProgressBar(mProgressBar);
-                            mProgressBar.setVisibility(View.VISIBLE);
-                            loadUnsplash();
-                        }
-                    });
-                } else {
-                    mSnackbar.setAction("刷新", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-//                            AnimationUtil.showProgressBar(mProgressBar);
-                            mProgressBar.setVisibility(View.VISIBLE);
-                            loadUnsplash();
-                        }
-                    });
-                }
-                mSnackbar.show();
+                        mProgressBar.setVisibility(View.VISIBLE);
+                        loadUnsplash();
+                    }
+                }).show();
                 if (mSwipeRefresh.isRefreshing()) {
                     mSwipeRefresh.setRefreshing(false);
                 }

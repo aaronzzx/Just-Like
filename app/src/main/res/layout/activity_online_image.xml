@@ -23,21 +23,26 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-        <ProgressBar
-            android:id="@+id/toolbar_progress_bar"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="18dp"
-            android:indeterminateTint="@color/white"/>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end">
 
-        <ImageView
-            android:id="@+id/toolbar_progress_image"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="18dp"
-            android:visibility="gone"/>
+            <ProgressBar
+                android:id="@+id/toolbar_progress_bar"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="18dp"
+                android:indeterminateTint="@color/white"/>
+
+            <ImageView
+                android:id="@+id/toolbar_progress_image"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="18dp"
+                android:visibility="gone"/>
+
+        </FrameLayout>
 
     </androidx.appcompat.widget.Toolbar>
 
