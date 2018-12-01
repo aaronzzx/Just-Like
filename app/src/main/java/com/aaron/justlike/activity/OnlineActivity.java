@@ -1,5 +1,6 @@
 package com.aaron.justlike.activity;
 
+import android.annotation.SuppressLint;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -9,9 +10,11 @@ import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.OnlineImageAdapter;
-import com.aaron.justlike.another.Splash;
 import com.aaron.justlike.util.AnimationUtil;
+import com.aaron.justlike.util.LogUtil;
 import com.aaron.justlike.util.SystemUtils;
+import com.google.android.material.snackbar.Snackbar;
+import com.jaeger.library.StatusBarUtil;
 import com.kc.unsplash.Unsplash;
 import com.kc.unsplash.api.Order;
 import com.kc.unsplash.models.Photo;
@@ -24,27 +27,28 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class OnlineWallpaperActivity extends AppCompatActivity implements View.OnClickListener {
+public class OnlineActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private final Unsplash unsplash = new Unsplash("936a1449161e2845eff4da43b160cea25e234a32188cc16c981e997590c65086");
+    private static final Unsplash unsplash = new Unsplash("936a1449161e2845eff4da43b160cea25e234a32188cc16c981e997590c65086");
     private RecyclerView mRecyclerView;
     private GridLayoutManager mLayoutManager;
     private OnlineImageAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefresh;
     private Toolbar mToolbar;
+    private Snackbar mSnackbar;
     private ProgressBar mProgressBar;
     private boolean canScrollVertical;
     private int mLoadNum = 1;
-    private List<Splash> mSplashList = new ArrayList<>();
+    private List<Photo> mPhotoList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_online_wallpaper);
+        setContentView(R.layout.activity_online);
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorBlack), 0);
         initViews(); // 初始化控件
     }
 
@@ -113,13 +117,13 @@ public class OnlineWallpaperActivity extends AppCompatActivity implements View.O
             actionBar.setHomeAsUpIndicator(R.mipmap.ic_back);
         }
         mProgressBar = findViewById(R.id.progress_bar);
-        AnimationUtil.showProgressBar(mProgressBar);
+        mSwipeRefresh.setEnabled(false);
         mRecyclerView = findViewById(R.id.recycler_view);
 
         mLayoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());
-        mAdapter = new OnlineImageAdapter(this, mSplashList);
+        mAdapter = new OnlineImageAdapter(this, mPhotoList);
         mRecyclerView.setAdapter(mAdapter);
         loadUnsplash();
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -134,37 +138,66 @@ public class OnlineWallpaperActivity extends AppCompatActivity implements View.O
                 }
             }
         });
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mLoadNum = 1;
+                mPhotoList.clear();
+                loadUnsplash();
+            }
+        });
     }
 
     private void loadUnsplash() {
-        new Thread(new Runnable() {
+        unsplash.getPhotos(mLoadNum++, 10, Order.LATEST, new Unsplash.OnPhotosLoadedListener() {
             @Override
-            public void run() {
-                for (int i = 0; i < 2; i++) {
-                    unsplash.getPhotos(mLoadNum++, 10, Order.LATEST, new Unsplash.OnPhotosLoadedListener() {
-                        @Override
-                        public void onComplete(List<Photo> photos) {
-                            AnimationUtil.hideProgressBar(mProgressBar);
-                            for (Photo photo : photos) {
-                                mSplashList.add(new Splash(photo));
-                            }
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mAdapter.notifyDataSetChanged();
-                                }
-                            });
-                        }
+            public void onComplete(List<Photo> photos) {
+//                AnimationUtil.hideProgressBar(mProgressBar);
+                mProgressBar.setVisibility(View.GONE);
+                mSwipeRefresh.setEnabled(true);
+                mPhotoList.addAll(photos);
+                mAdapter.notifyDataSetChanged();
+                if (mSwipeRefresh.isRefreshing()) {
+                    mSwipeRefresh.setRefreshing(false);
+                }
+                if ((mLoadNum - 1) % 2 == 0) {
+                    return;
+                }
+                loadUnsplash();
+            }
 
+            @SuppressLint("ShowToast")
+            @Override
+            public void onError(String error) {
+//                AnimationUtil.hideProgressBar(mProgressBar);
+                mProgressBar.setVisibility(View.GONE);
+                mSwipeRefresh.setEnabled(true);
+                if (mSnackbar == null) {
+                    mSnackbar = Snackbar.make(mRecyclerView, "加载失败", Snackbar.LENGTH_LONG);
+                    mSnackbar.setAction("刷新", new View.OnClickListener() {
                         @Override
-                        public void onError(String error) {
-                            Toast.makeText(OnlineWallpaperActivity.this,
-                                    "出错了", Toast.LENGTH_SHORT).show();
+                        public void onClick(View v) {
+//                            AnimationUtil.showProgressBar(mProgressBar);
+                            mProgressBar.setVisibility(View.VISIBLE);
+                            loadUnsplash();
+                        }
+                    });
+                } else {
+                    mSnackbar.setAction("刷新", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+//                            AnimationUtil.showProgressBar(mProgressBar);
+                            mProgressBar.setVisibility(View.VISIBLE);
+                            loadUnsplash();
                         }
                     });
                 }
+                mSnackbar.show();
+                if (mSwipeRefresh.isRefreshing()) {
+                    mSwipeRefresh.setRefreshing(false);
+                }
             }
-        }).start();
+        });
     }
 
     public class XItemDecoration extends RecyclerView.ItemDecoration {
@@ -173,9 +206,9 @@ public class OnlineWallpaperActivity extends AppCompatActivity implements View.O
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) % 2 == 0) {
 //                outRect.left = 0;
-                outRect.right = SystemUtils.dp2px(OnlineWallpaperActivity.this, 2.5F);
+                outRect.right = SystemUtils.dp2px(OnlineActivity.this, 3.0F);
             } else if (parent.getChildAdapterPosition(view) % 2 == 1) {
-                outRect.left = SystemUtils.dp2px(OnlineWallpaperActivity.this, 2.5F);
+                outRect.left = SystemUtils.dp2px(OnlineActivity.this, 3.0F);
             }
         }
     }

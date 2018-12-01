@@ -459,7 +459,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onDrawerClosed(View drawerView) {
                                 Intent intent = new Intent(MainActivity.this,
-                                        OnlineWallpaperActivity.class);
+                                        OnlineActivity.class);
                                 startActivity(intent);
                                 mParent.removeDrawerListener(this);
                             }
@@ -585,12 +585,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) % 3 == 0) {
                 outRect.left = 0;
-                outRect.right = SystemUtils.dp2px(MainActivity.this, 1.9F); // 8px
+                outRect.right = SystemUtils.dp2px(MainActivity.this, 2.5F);
             } else if (parent.getChildAdapterPosition(view) % 3 == 1) {
-                outRect.left = SystemUtils.dp2px(MainActivity.this, 0.9F); // 4px
-                outRect.right = SystemUtils.dp2px(MainActivity.this, 0.9F);
+                outRect.left = SystemUtils.dp2px(MainActivity.this, 1.5F);
+                outRect.right = SystemUtils.dp2px(MainActivity.this, 1.5F);
             } else if (parent.getChildAdapterPosition(view) % 3 == 2) {
-                outRect.left = SystemUtils.dp2px(MainActivity.this, 1.9F); // 8px
+                outRect.left = SystemUtils.dp2px(MainActivity.this, 2.5F);
                 outRect.right = 0;
             }
         }
@@ -602,7 +602,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             int size = mImageList.size();
             outRect.top = 0;
-            outRect.bottom = SystemUtils.dp2px(MainActivity.this, 1.9F); // 8px
+            outRect.bottom = SystemUtils.dp2px(MainActivity.this, 4.0F);
             if (parent.getChildAdapterPosition(view) == size - 1) {
                 outRect.bottom = -1;
             } else if (parent.getChildAdapterPosition(view) == size - 2) {

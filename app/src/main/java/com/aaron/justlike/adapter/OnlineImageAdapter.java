@@ -1,17 +1,15 @@
 package com.aaron.justlike.adapter;
 
-import android.net.Uri;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.activity.OnlineWallpaperActivity;
-import com.aaron.justlike.another.Splash;
-import com.aaron.justlike.util.SystemUtils;
+import com.aaron.justlike.activity.OnlineActivity;
+import com.aaron.justlike.activity.OnlineImageActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
@@ -26,8 +24,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.ViewHolder> {
 
-    private List<Splash> mSplashList;
-    private OnlineWallpaperActivity mActivity;
+    private List<Photo> mPhotoList;
+    private OnlineActivity mActivity;
     private int[] placeHolders = {R.drawable.place_holder_1,
             R.drawable.place_holder_2, R.drawable.place_holder_3,
             R.drawable.place_holder_4, R.drawable.place_holder_5,
@@ -35,9 +33,9 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
             R.drawable.place_holder_8, R.drawable.place_holder_9,
             R.drawable.place_holder_10};
 
-    public OnlineImageAdapter(OnlineWallpaperActivity activity, List<Splash> splashList) {
+    public OnlineImageAdapter(OnlineActivity activity, List<Photo> photoList) {
         mActivity = activity;
-        mSplashList = splashList;
+        mPhotoList = photoList;
     }
 
     @NonNull
@@ -45,19 +43,15 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.activity_online_recycler_item, parent, false);
-        /*
-         * 为子项设置点击监听
-         */
+        // 为子项设置点击监听
         final ViewHolder holder = new ViewHolder(view);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                    int position = holder.getAdapterPosition();
-                    // 将 Image 对象序列化传递给下一个活动，方便下一个活动取值
-//                    Intent intent = new Intent(mActivity, );
-//                    intent.putExtra("position", position);
-//                    mActivity.startActivity(intent);
-//                    mActivity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                int position = holder.getAdapterPosition();
+                Intent intent = new Intent(mActivity, OnlineImageActivity.class);
+                intent.putExtra("urls", mPhotoList.get(position));
+                mActivity.startActivity(intent);
             }
         });
         return holder;
@@ -65,32 +59,31 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Splash splash = mSplashList.get(position);
-        Photo photo = splash.getPhoto();
+        Photo photo = mPhotoList.get(position);
         String authorName = photo.getUser().getName();
         String authorImage = photo.getUser().getProfileImage().getMedium();
-        String urls = photo.getUrls().getRaw() + "&fm=jpg&w=600&q=75";
+        String urls = photo.getUrls().getRegular();
         Glide.with(mActivity)
                 .load(authorImage)
                 .into(holder.authorImage);
         holder.authorName.setText(authorName);
         RequestOptions options = new RequestOptions()
-                .centerCrop()
+//                .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
                 .Builder(300)
                 .setCrossFadeEnabled(true).build();
         Glide.with(mActivity)
-                .load(urls)
-//                .thumbnail(0.6F)
-                .apply(options)
+                .load(urls/* + "&fm=jpg&w=720"*/)
+//                .thumbnail(0.5F)
+//                .apply(options)
                 .transition(DrawableTransitionOptions.with(factory))
                 .into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return mSplashList.size();
+        return mPhotoList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

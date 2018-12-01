@@ -65,7 +65,6 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
                     Intent intent = new Intent(mActivity, MainImageActivity.class);
                     intent.putExtra("position", position);
                     mActivity.startActivityForResult(intent, DELETE_PHOTO);
-                    mActivity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
             }
         });
@@ -107,11 +106,11 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
         Image image = mImageList.get(position); // 从集合中找到 Image 对象
         String path = image.getPath();
         RequestOptions options = new RequestOptions()
-                .placeholder(placeHolders[SystemUtils.getRandomNum(9)])
+                .placeholder(placeHolders[SystemUtils.getRandomNum(9)]);
 //                .dontAnimate()
 //                .override(10)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop();
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .centerCrop();
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
                 .Builder(100)
                 .setCrossFadeEnabled(true).build();

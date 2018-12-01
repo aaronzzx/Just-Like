@@ -59,8 +59,7 @@ public class MainImageActivity extends AppCompatActivity {
      */
     @Override
     public boolean onSupportNavigateUp() {
-        finish();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        onBackPressed();
         return super.onSupportNavigateUp();
     }
 
@@ -70,7 +69,6 @@ public class MainImageActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     /**
@@ -95,7 +93,7 @@ public class MainImageActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_display_image_main, menu);
+        getMenuInflater().inflate(R.menu.activity_main_image_main, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

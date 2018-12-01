@@ -52,7 +52,8 @@ public class MyPagerAdapter extends PagerAdapter {
         if (parent != null) {
             parent.removeView(photoView);
         }
-        RequestOptions options = new RequestOptions().override(1440);
+        RequestOptions options = new RequestOptions()
+                .centerCrop();
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
                 .Builder(300)
                 .setCrossFadeEnabled(true).build();

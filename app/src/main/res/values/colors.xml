@@ -3,11 +3,12 @@
     <color name="colorPrimary">#4b6fca</color>
     <color name="colorPrimaryDark">#3a5497</color>
     <color name="colorAccent">#4b6fca</color>
+    <color name="snackBar">#628fff</color>
     <color name="colorBlack">#000000</color>
     <color name="colorRed">#b71c1c</color>
     <color name="colorGreen">#388e3c</color>
-    <color name="colorGrey">#46232323</color>
-    <color name="colorGreyDark">#46181818</color>
+    <color name="colorGrey">#212121</color>
+    <color name="colorGreyDark">#0e0e0e</color>
     <color name="navigationBar">#56000000</color>
     <color name="toolbarTop">#c8000000</color>
     <color name="toolbarBottom">#00000000</color>

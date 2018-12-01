@@ -12,11 +12,11 @@
 
             <item
                 android:id="@+id/action_default_crop"
-                android:title="默认裁剪"/>
+                android:title="设置壁纸（适应屏幕）"/>
 
             <item
                 android:id="@+id/action_free_crop"
-                android:title="自由裁剪"/>
+                android:title="设置壁纸（全图）"/>
 
         </menu>
 

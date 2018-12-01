@@ -1,9 +1,13 @@
 package com.aaron.justlike.util;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.widget.Toolbar;
@@ -23,8 +27,8 @@ public class AnimationUtil {
         as.setDuration(200);
         AlphaAnimation aa = new AlphaAnimation(1, 0);
         as.addAnimation(aa);
-//        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -150);
-//        as.addAnimation(ta);
+        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -150);
+        as.addAnimation(ta);
         as.setStartOffset(startOffset);
         toolbar.startAnimation(as);
         toolbar.setVisibility(View.GONE);
@@ -51,8 +55,8 @@ public class AnimationUtil {
         as.setDuration(200);
         AlphaAnimation aa = new AlphaAnimation(0, 1);
         as.addAnimation(aa);
-//        TranslateAnimation ta = new TranslateAnimation(0, 0, -150, 0);
-//        as.addAnimation(ta);
+        TranslateAnimation ta = new TranslateAnimation(0, 0, -150, 0);
+        as.addAnimation(ta);
         as.setStartOffset(startOffset);
         toolbar.startAnimation(as);
         toolbar.setVisibility(View.VISIBLE);
@@ -69,19 +73,77 @@ public class AnimationUtil {
         va.start();*/
     }
 
-    public static void showProgressBar(ProgressBar progressBar) {
-        progressBar.setVisibility(View.VISIBLE);
-        AlphaAnimation animation = new AlphaAnimation(0, 1);
+    public static void showProgressBar(final ProgressBar progressBar) {
+        TranslateAnimation animation = new TranslateAnimation(0, 1, 0, 1);
         animation.setDuration(300);
         animation.setFillAfter(true);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                progressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         progressBar.startAnimation(animation);
     }
 
-    public static void hideProgressBar(ProgressBar progressBar) {
-        AlphaAnimation animation = new AlphaAnimation(1, 0);
-        animation.setDuration(300);
+    public static void hideProgressBar(final ProgressBar progressBar, final ImageView img) {
+        TranslateAnimation animation = new TranslateAnimation(1, 0, 1, 0);
+        animation.setDuration(500);
         animation.setFillAfter(true);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                progressBar.setVisibility(View.GONE);
+                showProgressImage(img);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         progressBar.startAnimation(animation);
-        progressBar.setVisibility(View.GONE);
+    }
+
+    public static void showProgressImage(final ImageView img) {
+        AlphaAnimation aa = new AlphaAnimation(0, 1);
+        aa.setDuration(500);
+        aa.setFillAfter(true);
+        aa.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                img.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                AlphaAnimation aa1 = new AlphaAnimation(1, 0);
+                aa1.setDuration(500);
+                aa1.setFillAfter(true);
+                aa1.setStartOffset(1000);
+                img.startAnimation(aa1);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        img.startAnimation(aa);
     }
 }

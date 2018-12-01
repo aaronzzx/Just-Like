@@ -1,41 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="270dp"
-    android:layout_marginBottom="5dp"
+    app:cardBackgroundColor="@color/black"
+    app:cardCornerRadius="5dp"
+    android:layout_marginBottom="6dp"
     android:animateLayoutChanges="true">
 
-    <ImageView
-        android:id="@+id/image_view"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/author_image_name"
-        android:clipToPadding="true"
-        android:padding="5dp"
-        android:layout_above="@id/image_view"
-        android:layout_alignBottom="@id/image_view">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/author_image"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_gravity="center"
+        <ImageView
+            android:id="@+id/image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:scaleType="centerCrop"/>
 
-        <TextView
-            android:id="@+id/author_name"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="#fff"
-            android:textSize="13sp"
-            android:maxLines="1"
-            android:layout_marginStart="8dp"/>
+            android:layout_above="@id/image_view"
+            android:layout_alignBottom="@id/image_view"
+            android:background="@drawable/author_image_name"
+            android:clipToPadding="true"
+            android:padding="5dp">
 
-    </LinearLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/author_image"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop" />
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/author_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:maxLines="1"
+                android:textColor="#fff"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

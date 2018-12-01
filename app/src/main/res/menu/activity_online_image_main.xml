@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_share"
+        android:icon="@mipmap/ic_share"
+        android:title="分享"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:icon="@mipmap/ic_more_vert"
+        android:title="访问网页"
+        app:showAsAction="always">
+
+        <menu>
+
+            <item
+                android:id="@+id/action_go_web"
+                android:icon="@mipmap/ic_web"
+                android:title="访问下载页" />
+
+            <item
+                android:id="@+id/action_go_photographer"
+                android:icon="@mipmap/ic_face"
+                android:title="访问摄影师" />
+
+        </menu>
+
+    </item>
+
+</menu>
