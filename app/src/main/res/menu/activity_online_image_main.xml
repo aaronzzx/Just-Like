@@ -18,7 +18,7 @@
             <item
                 android:id="@+id/action_go_web"
                 android:icon="@mipmap/ic_web"
-                android:title="访问下载页" />
+                android:title="访问源网站" />
 
             <item
                 android:id="@+id/action_go_photographer"

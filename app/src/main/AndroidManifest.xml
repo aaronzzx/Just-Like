@@ -35,12 +35,12 @@
         <activity
             android:name=".activity.OnlineActivity"
             android:label="Online"
-            android:theme="@style/AppTheme.OnlineWallpaperActivity" />
+            android:theme="@style/AppTheme.OnlineActivity" />
 
         <activity
             android:name=".activity.OnlineImageActivity"
             android:label=""
-            android:theme="@style/AppTheme.OnlineWallpaperActivity"/>
+            android:theme="@style/AppTheme.OnlineActivity"/>
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"

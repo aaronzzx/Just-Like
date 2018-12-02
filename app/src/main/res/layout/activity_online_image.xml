@@ -4,7 +4,7 @@
     android:id="@+id/activity_online_image"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000">
+    android:background="@color/black">
 
     <com.bm.library.PhotoView
         android:id="@+id/activity_online_image_view"
@@ -52,7 +52,7 @@
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:paddingTop="20dp"
-        android:paddingBottom="55dp"
+        android:paddingBottom="65dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/online_image_bg"
         android:clipToPadding="true">
@@ -60,6 +60,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -71,8 +72,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginBottom="2dp"
+                android:layout_marginStart="10dp"
                 android:orientation="vertical"
                 android:layout_gravity="center">
 
@@ -85,7 +85,7 @@
                     android:maxEms="9"
                     android:ellipsize="end"
                     android:textColor="#ffffff"
-                    android:textSize="16sp"/>
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:id="@+id/image_date"
@@ -102,7 +102,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:orientation="horizontal">
 
@@ -110,21 +110,21 @@
                 android:id="@+id/download"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="15dp"
                 android:src="@mipmap/ic_download"/>
 
             <ImageView
                 android:id="@+id/collect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="15dp"
                 android:src="@mipmap/ic_collect_not"/>
 
             <ImageView
-                android:id="@+id/set_wallpaper"
+                android:id="@+id/like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/ic_wallpaper"/>
+                android:src="@mipmap/ic_favorite_border"/>
 
         </LinearLayout>
 

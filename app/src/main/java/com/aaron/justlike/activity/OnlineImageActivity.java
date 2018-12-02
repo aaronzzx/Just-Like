@@ -60,9 +60,10 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
             Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.TRANSPARENT);
+            window.setNavigationBarColor(Color.TRANSPARENT);
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
@@ -158,7 +159,7 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
                 .load(mPhoto.getUser().getProfileImage().getLarge())
                 .into(mAuthorImage);
         Glide.with(this)
-                .load(mPhoto.getUrls().getRaw() + "&fm=jpg&h=2160&q=50")
+                .load(mPhoto.getUrls().getRaw() + "&fm=jpg&h=2160&q=80&fit=crop")
                 .thumbnail(Glide.with(this).load(mPhoto.getUrls().getRegular()))
                 .listener(mListener)
                 .into(mPhotoView);
@@ -169,8 +170,8 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
             mProgressBar.setVisibility(View.GONE);
             mProgressImage.setVisibility(View.VISIBLE);
-            mProgressImage.setImageResource(R.drawable.ic_error_circle);
-            Snackbar.make(mPhotoView, "加载失败,请检查网络", Snackbar.LENGTH_LONG).show();
+            mProgressImage.setImageResource(R.mipmap.ic_error_circle);
+            Snackbar.make(mPhotoView, "加载失败，请检查网络", Snackbar.LENGTH_LONG).show();
             return true;
         }
 
