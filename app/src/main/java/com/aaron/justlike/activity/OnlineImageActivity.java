@@ -44,6 +44,7 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
     private CircleImageView mAuthorImage;
     private TextView mAuthorName;
     private TextView mImageDate;
+    private TextView mImageLike;
     private PhotoView mPhotoView;
     private Photo mPhoto;
 
@@ -147,6 +148,7 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
         mAuthorImage = findViewById(R.id.author_image);
         mAuthorName = findViewById(R.id.author_name);
         mImageDate = findViewById(R.id.image_date);
+        mImageLike = findViewById(R.id.image_like);
         mPhotoView = findViewById(R.id.activity_online_image_view);
         AnimationUtil.exitFullScreen(this, mToolbar, 200);
     }
@@ -155,11 +157,12 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
         mProgressBar.setVisibility(View.VISIBLE);
         mAuthorName.setText(mPhoto.getUser().getName());
         mImageDate.setText(SystemUtils.getUnsplashDate(mPhoto.getCreatedAt()));
+        mImageLike.setText(mPhoto.getLikes().toString());
         Glide.with(this)
                 .load(mPhoto.getUser().getProfileImage().getLarge())
                 .into(mAuthorImage);
         Glide.with(this)
-                .load(mPhoto.getUrls().getRaw() + "&fm=jpg&h=2160&q=80&fit=crop")
+                .load(mPhoto.getUrls().getRaw() + "&fm=jpg&h=2160&q=80")
                 .thumbnail(Glide.with(this).load(mPhoto.getUrls().getRegular()))
                 .listener(mListener)
                 .into(mPhotoView);

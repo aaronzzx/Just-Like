@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
@@ -56,9 +57,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static MyGridLayoutManager mLayoutManager;
     private static List<String> mFileNameList = new ArrayList<>(); // 详情页删除图片时的图片名称集合
     private static List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
-    private final int mLength = 0;
-    private int mAsciiNum = 64;
+    private int mAsciiNum = 64; // 相当于大写 A
     private int mNumber = 0; // 用于判断返回键退出程序
+    private int mScrollFlags = 0; // AppBar 滑动属性
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefresh;
     private MainImageAdapter mAdapter; // 声明一个 Image 适配器
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mImageList.size() < 19) {
             layoutParams.setScrollFlags(0);
         }
+        mScrollFlags = layoutParams.getScrollFlags();
     }
 
     @Override
@@ -438,9 +440,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if (dy > mLength) {
+                View decorView = getWindow().getDecorView();
+                if (dy > 0) {
+                    if (mScrollFlags == 21) {
+                        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                    }
                     fab.hide();
-                } else if (dy < mLength) {
+                } else if (dy < 0) {
+                    if (mScrollFlags == 21) {
+                        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                    }
                     fab.show();
                 }
             }

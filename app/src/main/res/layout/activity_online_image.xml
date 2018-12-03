@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_online_image"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,7 +20,7 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/toolbar_bg"
         android:paddingTop="27.5dp"
-        android:paddingBottom="5dp"
+        android:paddingBottom="10dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
@@ -46,88 +47,141 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:paddingTop="20dp"
-        android:paddingBottom="65dp"
-        android:layout_alignParentBottom="true"
+        android:paddingBottom="50dp"
+        android:layout_gravity="bottom"
         android:background="@drawable/online_image_bg"
-        android:clipToPadding="true">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/author_image"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center" />
+        android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/images"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:orientation="vertical"
                 android:layout_gravity="center">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/author_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_gravity="center" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_date"/>
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_good"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/texts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/about_provider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/author_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
                     android:maxLines="1"
                     android:maxEms="9"
                     android:ellipsize="end"
                     android:textColor="#ffffff"
-                    android:textSize="15sp"/>
+                    android:textSize="16sp"/>
 
                 <TextView
-                    android:id="@+id/image_date"
+                    android:id="@+id/image_provider"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:textColor="#deffffff"
-                    android:textSize="13sp"/>
+                    android:text="Unsplash.com"
+                    android:textColor="#b4ffffff"
+                    android:textSize="14sp"/>
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/image_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:maxLines="1"
+                android:textColor="#deffffff"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/image_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:maxLines="1"
+                android:textColor="#deffffff"
+                android:textSize="16sp"/>
+
         </LinearLayout>
 
-        <LinearLayout
+    </LinearLayout>
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fab_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="75dp"
+        android:layout_marginEnd="20dp"
+        fab:menu_icon="@mipmap/ic_fab_menu"
+        fab:menu_fab_size="normal"
+        fab:menu_colorNormal="@color/white"
+        fab:menu_colorPressed="@color/white"
+        fab:menu_colorRipple="#afafaf"
+        fab:menu_labels_textColor="#000000"
+        fab:menu_labels_colorNormal="#FFFFFF"
+        fab:menu_labels_colorPressed="#FFFFFF">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_set_wallpaper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:orientation="horizontal">
+            android:src="@mipmap/ic_fab_set_wallpaper"
+            app:fab_size="mini"
+            app:fab_label="设置壁纸"
+            app:fab_colorNormal="@color/white"
+            app:fab_colorPressed="@color/white"
+            app:fab_colorRipple="#afafaf" />
 
-            <ImageView
-                android:id="@+id/download"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:src="@mipmap/ic_download"/>
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_download"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_fab_download"
+            app:fab_size="mini"
+            app:fab_label="下载"
+            app:fab_colorNormal="@color/white"
+            app:fab_colorPressed="@color/white"
+            app:fab_colorRipple="#afafaf" />
 
-            <ImageView
-                android:id="@+id/collect"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:src="@mipmap/ic_collect_not"/>
+    </com.github.clans.fab.FloatingActionMenu>
 
-            <ImageView
-                android:id="@+id/like"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_favorite_border"/>
-
-        </LinearLayout>
-
-    </RelativeLayout>
-
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

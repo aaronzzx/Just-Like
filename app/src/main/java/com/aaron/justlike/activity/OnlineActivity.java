@@ -1,6 +1,5 @@
 package com.aaron.justlike.activity;
 
-import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -9,15 +8,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.OnlineImageAdapter;
-import com.aaron.justlike.util.AnimationUtil;
-import com.aaron.justlike.util.LogUtil;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.snackbar.Snackbar;
-import com.jaeger.library.StatusBarUtil;
 import com.kc.unsplash.Unsplash;
 import com.kc.unsplash.api.Order;
 import com.kc.unsplash.models.Photo;
@@ -43,7 +38,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     private Toolbar mToolbar;
     private ProgressBar mProgressBar;
     private boolean canScrollVertical;
-    private int mLoadNum = 1;
+    private int mLoadNum = 1; // 1 代表加载 Unsplash 最新的图像
     private List<Photo> mPhotoList = new ArrayList<>();
 
     @Override
@@ -137,6 +132,20 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                     if (!canScrollVertical) {
                         loadUnsplash();
                     }
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                View decorView = getWindow().getDecorView();
+                if (dy > 0) {
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                } else if (dy < 0) {
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
                 }
             }
         });

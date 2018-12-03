@@ -31,6 +31,7 @@ dependencies {
     implementation 'com.bm.photoview:library:1.4.1'
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
     implementation 'com.kc.androidunsplash:androidunsplash:0.2.1'
+    implementation 'com.github.clans:fab:1.6.4'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'

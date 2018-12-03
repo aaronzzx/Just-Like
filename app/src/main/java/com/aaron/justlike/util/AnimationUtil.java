@@ -122,6 +122,11 @@ public class AnimationUtil {
         progressBar.startAnimation(animation);
     }
 
+    /**
+     * 用于在线图片详情页的进度显示
+     *
+     * @param img
+     */
     public static void showProgressImage(final ImageView img) {
         img.setImageResource(R.mipmap.ic_done_circle);
         img.setVisibility(View.VISIBLE);

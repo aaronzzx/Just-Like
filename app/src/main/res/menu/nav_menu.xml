@@ -7,7 +7,7 @@
 
         <item
             android:id="@+id/nav_home"
-            android:title="首页"
+            android:title="主页"
             android:icon="@mipmap/ic_home_page"/>
 
         <item
