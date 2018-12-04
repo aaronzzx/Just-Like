@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
@@ -65,7 +64,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MainImageAdapter mAdapter; // 声明一个 Image 适配器
     private DrawerLayout mParent;
     private NavigationView mNavView;
+    private MenuItem mSortByName;
     private MenuItem mSortByDate;
+    private MenuItem mSortBySize;
     private MenuItem mSortByOrder;
     private String[] type = {"JPG", "JPEG", "PNG", "jpg", "jpeg", "png"};
 
@@ -147,18 +148,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
+        mSortByName = menu.findItem(R.id.sort_name);
         mSortByDate = menu.findItem(R.id.sort_date);
-        MenuItem sortBySize = menu.findItem(R.id.sort_size);
+        mSortBySize = menu.findItem(R.id.sort_size);
         mSortByOrder = menu.findItem(R.id.sort_order);
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         int mode_sort = preferences.getInt("mode_sort", 0);
         int order_or_reverse = preferences.getInt("order_or_reverse", 0);
         if (mode_sort == 1) {
-            mSortByDate.setChecked(true);
+            mSortByName.setChecked(true);
         } else if (mode_sort == 2) {
-            sortBySize.setChecked(true);
-        } else {
             mSortByDate.setChecked(true);
+        } else if (mode_sort == 3) {
+            mSortBySize.setChecked(true);
+        } else {
+            mSortByName.setChecked(true);
         }
         if (order_or_reverse == 1) {
             mSortByOrder.setChecked(true);
@@ -183,6 +187,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case android.R.id.home:
                 mParent.openDrawer(GravityCompat.START);
                 break;
+            case R.id.sort_name:
+                item.setChecked(true);
+                if (mSortByOrder.isChecked()) {
+                    FileUtils.sortByName(mImageList, true);
+                } else {
+                    FileUtils.sortByName(mImageList, false);
+                }
+                mAdapter.notifyDataSetChanged();
+                editor.putInt("mode_sort", 1);
+                editor.apply();
+                break;
             case R.id.sort_date:
                 item.setChecked(true);
                 if (mSortByOrder.isChecked()) {
@@ -191,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     FileUtils.sortByDate(mImageList, false);
                 }
                 mAdapter.notifyDataSetChanged();
-                editor.putInt("mode_sort", 1);
+                editor.putInt("mode_sort", 2);
                 editor.apply();
                 break;
             case R.id.sort_size:
@@ -202,13 +217,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     FileUtils.sortBySize(mImageList, false);
                 }
                 mAdapter.notifyDataSetChanged();
-                editor.putInt("mode_sort", 2);
+                editor.putInt("mode_sort", 3);
                 editor.apply();
                 break;
             case R.id.sort_order:
                 if (item.isChecked()) {
                     item.setChecked(false);
-                    if (mSortByDate.isChecked()) {
+                    if (mSortByName.isChecked()) {
+                        FileUtils.sortByName(mImageList, false);
+                    } else if (mSortByDate.isChecked()) {
                         FileUtils.sortByDate(mImageList, false);
                     } else {
                         FileUtils.sortBySize(mImageList, false);
@@ -218,7 +235,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     editor.apply();
                 } else {
                     item.setChecked(true);
-                    if (mSortByDate.isChecked()) {
+                    if (mSortByName.isChecked()) {
+                        FileUtils.sortByName(mImageList, true);
+                    } else if (mSortByDate.isChecked()) {
                         FileUtils.sortByDate(mImageList, true);
                     } else {
                         FileUtils.sortBySize(mImageList, true);
@@ -356,7 +375,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     LogUtil.d("MainActivity", fileName);
                     mImageList.remove(position);
                     mFileNameList.remove(position);
-//                    sort();
                     mAdapter.notifyDataSetChanged();
                     FileUtils.deleteFile(this, "/" + fileName);
                 }
@@ -371,6 +389,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             switch (mode_sort) {
                 case 1:
                     if (order_or_reverse == 1) {
+                        FileUtils.sortByName(mImageList, true);
+                    } else if (order_or_reverse == 2) {
+                        FileUtils.sortByName(mImageList, false);
+                    } else {
+                        FileUtils.sortByName(mImageList, true);
+                    }
+                    break;
+                case 2:
+                    if (order_or_reverse == 1) {
                         FileUtils.sortByDate(mImageList, true);
                     } else if (order_or_reverse == 2) {
                         FileUtils.sortByDate(mImageList, false);
@@ -378,7 +405,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         FileUtils.sortByDate(mImageList, true);
                     }
                     break;
-                case 2:
+                case 3:
                     if (order_or_reverse == 1) {
                         FileUtils.sortBySize(mImageList, true);
                     } else if (order_or_reverse == 2) {
@@ -389,19 +416,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
             }
         } else {
-            FileUtils.sortByDate(mImageList, true);
+            FileUtils.sortByName(mImageList, true);
         }
     }
 
     private void sort() {
         if (mSortByOrder.isChecked()) {
-            if (mSortByDate.isChecked()) {
+            if (mSortByName.isChecked()) {
+                FileUtils.sortByName(mImageList, true);
+            } else if (mSortByDate.isChecked()) {
                 FileUtils.sortByDate(mImageList, true);
             } else {
                 FileUtils.sortBySize(mImageList, true);
             }
         } else {
-            if (mSortByDate.isChecked()) {
+            if (mSortByName.isChecked()) {
+                FileUtils.sortByName(mImageList, false);
+            } else if (mSortByDate.isChecked()) {
                 FileUtils.sortByDate(mImageList, false);
             } else {
                 FileUtils.sortBySize(mImageList, false);

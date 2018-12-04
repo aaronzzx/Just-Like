@@ -63,11 +63,14 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
         String authorName = photo.getUser().getName();
         String authorImage = photo.getUser().getProfileImage().getLarge();
         String urls = photo.getUrls().getRegular();
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.drawable.ic_place_holder);
         Glide.with(mActivity)
                 .load(authorImage)
+                .apply(options)
                 .into(holder.authorImage);
         holder.authorName.setText(authorName);
-        RequestOptions options = new RequestOptions()
+        RequestOptions options1 = new RequestOptions()
 //                .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory

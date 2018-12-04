@@ -16,7 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 
 public class AnimationUtil {
 
-    public static void setFullScreen(Activity activity, Toolbar toolbar, long startOffset) {
+    public static void setFullScreen(Activity activity, View view, long startOffset) {
         activity.getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -26,14 +26,14 @@ public class AnimationUtil {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         // Toolbar 动画
         AnimationSet as = new AnimationSet(true);
-        as.setDuration(200);
+        as.setDuration(250);
         AlphaAnimation aa = new AlphaAnimation(1, 0);
         as.addAnimation(aa);
-        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -150);
+        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -130);
         as.addAnimation(ta);
         as.setStartOffset(startOffset);
-        toolbar.startAnimation(as);
-        toolbar.setVisibility(View.GONE);
+        view.startAnimation(as);
+        view.setVisibility(View.GONE);
         // 背景切换动画
         /*ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.WHITE, Color.BLACK);
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -47,21 +47,21 @@ public class AnimationUtil {
         va.start();*/
     }
 
-    public static void exitFullScreen(Activity activity, Toolbar toolbar, long startOffset) {
+    public static void exitFullScreen(Activity activity, View view, long startOffset) {
         activity.getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         // Toolbar 动画
         AnimationSet as = new AnimationSet(true);
-        as.setDuration(200);
+        as.setDuration(250);
         AlphaAnimation aa = new AlphaAnimation(0, 1);
         as.addAnimation(aa);
-        TranslateAnimation ta = new TranslateAnimation(0, 0, -150, 0);
+        TranslateAnimation ta = new TranslateAnimation(0, 0, -130, 0);
         as.addAnimation(ta);
         as.setStartOffset(startOffset);
-        toolbar.startAnimation(as);
-        toolbar.setVisibility(View.VISIBLE);
+        view.startAnimation(as);
+        view.setVisibility(View.VISIBLE);
         // 背景切换动画
         /*ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.BLACK, Color.WHITE);
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

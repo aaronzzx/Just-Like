@@ -71,7 +71,7 @@ public class MyPagerAdapter extends PagerAdapter {
                     isFullScreen = false;
                 } else {
                     // 进入全屏,自动沉浸
-                    AnimationUtil.setFullScreen(mActivity, toolbar, 0);
+                    AnimationUtil.setFullScreen(mActivity, toolbar, 100);
                     isFullScreen = true;
                 }
             }

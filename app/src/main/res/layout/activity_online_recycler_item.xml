@@ -43,7 +43,8 @@
                 android:layout_marginStart="8dp"
                 android:maxLines="1"
                 android:textColor="#fff"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                android:textStyle="bold"/>
 
         </LinearLayout>
 

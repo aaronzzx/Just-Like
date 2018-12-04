@@ -14,16 +14,21 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.util.AnimationUtil;
+import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
 import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.github.clans.fab.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.jaeger.library.StatusBarUtil;
 import com.kc.unsplash.models.Photo;
@@ -47,6 +52,9 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
     private TextView mImageLike;
     private PhotoView mPhotoView;
     private Photo mPhoto;
+    private FloatingActionButton mFabDownload;
+    private FloatingActionButton mFabWallpaper;
+    private FloatingActionButton mFabImageInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +90,12 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share:
-
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_SUBJECT, "图片分享");
+                share.putExtra(Intent.EXTRA_TEXT, "来自 Unsplash: " + mPhoto.getLinks().getHtml());
+                share = Intent.createChooser(share, "分享");
+                startActivity(share);
                 break;
             case R.id.action_go_web:
                 Intent goWeb = new Intent(Intent.ACTION_VIEW);
@@ -126,6 +139,15 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
                 loadImageByGlide();
                 mProgressImage.setVisibility(View.GONE);
                 break;
+            case R.id.fab_download:
+
+                break;
+            case R.id.fab_set_wallpaper:
+
+                break;
+            case R.id.fab_image_info:
+
+                break;
         }
     }
 
@@ -150,16 +172,25 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
         mImageDate = findViewById(R.id.image_date);
         mImageLike = findViewById(R.id.image_like);
         mPhotoView = findViewById(R.id.activity_online_image_view);
+        mFabDownload = findViewById(R.id.fab_download);
+        mFabWallpaper = findViewById(R.id.fab_set_wallpaper);
+        mFabImageInfo = findViewById(R.id.fab_image_info);
+        mFabDownload.setOnClickListener(this);
+        mFabWallpaper.setOnClickListener(this);
+        mFabImageInfo.setOnClickListener(this);
         AnimationUtil.exitFullScreen(this, mToolbar, 200);
     }
 
     private void loadImageByGlide() {
         mProgressBar.setVisibility(View.VISIBLE);
         mAuthorName.setText(mPhoto.getUser().getName());
-        mImageDate.setText(SystemUtils.getUnsplashDate(mPhoto.getCreatedAt()));
-        mImageLike.setText(mPhoto.getLikes().toString());
+        mImageDate.setText(mPhoto.getUpdatedAt().substring(0, 10));
+        mImageLike.setText(mPhoto.getLikes().toString() + " Likes");
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.drawable.ic_place_holder);
         Glide.with(this)
                 .load(mPhoto.getUser().getProfileImage().getLarge())
+                .apply(options)
                 .into(mAuthorImage);
         Glide.with(this)
                 .load(mPhoto.getUrls().getRaw() + "&fm=jpg&h=2160&q=80")

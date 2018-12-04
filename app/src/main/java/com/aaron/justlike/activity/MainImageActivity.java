@@ -160,7 +160,7 @@ public class MainImageActivity extends AppCompatActivity {
             mPosition = bundle.getInt("position");
         }
         mToolbar = findViewById(R.id.activity_display_image_toolbar);
-//        setTitle();
+        setTitle();
         setSupportActionBar(mToolbar);
         // 启用标题栏的返回键
         ActionBar actionBar = getSupportActionBar();
@@ -180,7 +180,7 @@ public class MainImageActivity extends AppCompatActivity {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 mPosition = mViewPager.getCurrentItem();
-//                setTitle();
+                setTitle();
             }
 
             @Override
@@ -205,7 +205,7 @@ public class MainImageActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(originalDate)) {
             String[] dateArray = originalDate.split(" ");
             mToolbar.setTitle(dateArray[0]);
-            mToolbar.setSubtitle(dateArray[1]);
+//            mToolbar.setSubtitle(dateArray[1].substring(0, 5));
         }
     }
 

@@ -34,6 +34,21 @@ import androidx.core.content.FileProvider;
 
 public class FileUtils {
 
+    public static void sortByName(List<Image> imageList, final boolean isOrder) {
+        if (!imageList.isEmpty()) {
+            Collections.sort(imageList, new Comparator<Image>() {
+                @Override
+                public int compare(Image o1, Image o2) {
+                    if (isOrder) {
+                        return o1.getFileName().compareTo(o2.getFileName());
+                    } else {
+                        return o2.getFileName().compareTo(o1.getFileName());
+                    }
+                }
+            });
+        }
+    }
+
     public static void sortByDate(List<Image> imageList, final boolean isOrder) {
         if (!imageList.isEmpty()) {
             Collections.sort(imageList, new Comparator<Image>() {
@@ -138,10 +153,10 @@ public class FileUtils {
      * @return
      */
     public static String getImageDate(String path) {
-        String time;
+        long time;
         File file = new File(path);
-        time = file.getName();
-        return time;
+        time = file.lastModified();
+        return String.valueOf(time);
     }
 
     public static long getImageSize(String path) {
@@ -201,13 +216,14 @@ public class FileUtils {
         } else {
             originalDate = SystemUtils.getLastModified(path, "yyyy-MM-dd HH:mm:ss");
         }
-        String dirPath = Environment.getExternalStorageDirectory().getPath() + "/JustLike/images";
+        String dirPath = Environment.getExternalStorageDirectory().getPath() +  "/JustLike/images";
         File mkDir = new File(dirPath);
-        if (!mkDir.exists()) mkDir.mkdirs();
+        if (!mkDir.exists())
+            mkDir.mkdirs();
         String date = SystemUtils.getCurrentDate("yyyyMMdd_HHmmss");
         String name = "/IMG_" + date + "（" + num + "）";
         String suffix = path.substring(path.lastIndexOf("."));
-        final String fileName = name + suffix;
+        String fileName = name + suffix;
         String filePath = dirPath + fileName;
         File file = new File(filePath);
         FileInputStream fis = null;
@@ -362,6 +378,7 @@ public class FileUtils {
 
                         MainActivity.getFileNameList().add(fileName);
                         Image image = new Image(path);
+                        image.setFileName(getImageName(path));
                         image.setCreateDate(getImageDate(path));
                         image.setSize(getImageSize(path));
                         imageList.add(image);
