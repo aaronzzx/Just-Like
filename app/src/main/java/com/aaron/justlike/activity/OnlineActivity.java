@@ -1,6 +1,7 @@
 package com.aaron.justlike.activity;
 
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import android.widget.ProgressBar;
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.OnlineImageAdapter;
 import com.aaron.justlike.util.SystemUtils;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.kc.unsplash.Unsplash;
 import com.kc.unsplash.api.Order;
@@ -35,6 +37,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     private GridLayoutManager mLayoutManager;
     private OnlineImageAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefresh;
+    private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
     private ProgressBar mProgressBar;
     private boolean canScrollVertical;
@@ -61,7 +64,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        finish();
     }
 
     /**
@@ -104,6 +107,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     private void initViews() {
         mSwipeRefresh = findViewById(R.id.swipe_refresh);
         mSwipeRefresh.setColorSchemeResources(R.color.colorBlack);
+        mAppBarLayout = findViewById(R.id.appbar_layout);
         mToolbar = findViewById(R.id.activity_online_toolbar);
         setSupportActionBar(mToolbar);
         mToolbar.setOnClickListener(this);
@@ -134,18 +138,19 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 }
             }
-
+        });
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
                 View decorView = getWindow().getDecorView();
-                if (dy > 0) {
+                if (SystemUtils.isViewVisible(mToolbar)) {
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                } else {
                     decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-                } else if (dy < 0) {
-                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
                 }
             }
         });
@@ -203,10 +208,9 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) % 2 == 0) {
-//                outRect.left = 0;
-                outRect.right = SystemUtils.dp2px(OnlineActivity.this, 3.0F);
+                outRect.right = SystemUtils.dp2px(OnlineActivity.this, 4.0F);
             } else if (parent.getChildAdapterPosition(view) % 2 == 1) {
-                outRect.left = SystemUtils.dp2px(OnlineActivity.this, 3.0F);
+                outRect.left = SystemUtils.dp2px(OnlineActivity.this, 4.0F);
             }
         }
     }

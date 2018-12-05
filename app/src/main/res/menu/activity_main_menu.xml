@@ -14,12 +14,12 @@
                 android:checkableBehavior="single">
 
                 <item
-                    android:id="@+id/sort_name"
-                    android:title="名称"/>
-
-                <item
                     android:id="@+id/sort_date"
                     android:title="日期"/>
+
+                <item
+                    android:id="@+id/sort_name"
+                    android:title="名称"/>
 
                 <item
                     android:id="@+id/sort_size"

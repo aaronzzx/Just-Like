@@ -17,6 +17,11 @@ import android.widget.Toast;
 
 import com.aaron.justlike.activity.MainActivity;
 import com.aaron.justlike.another.Image;
+import com.aaron.justlike.data.Downloads;
+import com.aaron.justlike.data.Likes;
+import com.aaron.justlike.data.Views;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,8 +36,20 @@ import java.util.Comparator;
 import java.util.List;
 
 import androidx.core.content.FileProvider;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class FileUtils {
+
+    public static void getPhotoStats(String id, String clientId, okhttp3.Callback callback) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("https://api.unsplash.com/photos/" + id + "/statistics/?client_id=" + clientId)
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
 
     public static void sortByName(List<Image> imageList, final boolean isOrder) {
         if (!imageList.isEmpty()) {
@@ -228,12 +245,17 @@ public class FileUtils {
         File file = new File(filePath);
         FileInputStream fis = null;
         FileOutputStream fos = null;
-        Bitmap bitmap = BitmapFactory.decodeFile(path);
+//        Bitmap bitmap = BitmapFactory.decodeFile(path);
         try {
             if (!file.exists()) {
                 fis = new FileInputStream(path);
                 fos = new FileOutputStream(file);
-                int orientation = getBitmapDegree(path);
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = fis.read(buffer)) != -1) {
+                    fos.write(buffer, 0, length);
+                }
+                /*int orientation = getBitmapDegree(path);
                 if (orientation != 0 & orientation != 1) {
                     Matrix matrix = new Matrix();
                     matrix.postRotate(getBitmapDegree(path));
@@ -241,7 +263,7 @@ public class FileUtils {
                     resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
                 } else {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
-                }
+                }*/
                 ExifInterface exif2 = new ExifInterface(filePath);
                 exif2.setAttribute(ExifInterface.TAG_DATETIME, originalDate);
                 exif2.saveAttributes();
@@ -255,7 +277,7 @@ public class FileUtils {
                     fos.close();
                 }
                 if (fis != null) fis.close();
-                if (!bitmap.isRecycled()) bitmap.recycle();
+//                if (!bitmap.isRecycled()) bitmap.recycle();
             } catch (IOException e) {
                 e.printStackTrace();
             }

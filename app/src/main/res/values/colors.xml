@@ -9,6 +9,7 @@
     <color name="colorGreen">#388e3c</color>
     <color name="colorGrey">#212121</color>
     <color name="colorGreyDark">#0e0e0e</color>
+    <color name="transparent">#00ffffff</color>
     <color name="navigationBar">#56000000</color>
     <color name="toolbarTop">#96000000</color>
     <color name="toolbarBottom">#00000000</color>

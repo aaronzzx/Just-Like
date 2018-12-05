@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.view.WindowManager;
 
 import java.io.File;
@@ -17,6 +19,12 @@ import java.util.Date;
 import java.util.Random;
 
 public class SystemUtils {
+
+    public static boolean isViewVisible(View view) {
+        Rect rect = new Rect();
+        view.getLocalVisibleRect(rect);
+        return rect.top == 0;
+    }
 
     public static String getVersionName(Context context) {
         PackageManager manager = context.getPackageManager();

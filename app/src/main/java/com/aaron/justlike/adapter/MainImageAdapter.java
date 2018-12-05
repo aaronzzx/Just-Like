@@ -7,14 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.activity.MainImageActivity;
 import com.aaron.justlike.activity.MainActivity;
+import com.aaron.justlike.activity.MainImageActivity;
 import com.aaron.justlike.another.Image;
 import com.aaron.justlike.extend.SquareView;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;

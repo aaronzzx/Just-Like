@@ -20,7 +20,6 @@ import com.aaron.justlike.adapter.MyPagerAdapter;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
-import com.luck.picture.lib.tools.PictureFileUtils;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -142,7 +141,7 @@ public class MainImageActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     Uri resultUri = UCrop.getOutput(data);
                     FileUtils.setWallpaper(this, FileUtils.getPath(this, resultUri));
-                    PictureFileUtils.deleteCacheDirFile(this);
+//                    PictureFileUtils.deleteCacheDirFile(this);
                 } else if (resultCode == UCrop.RESULT_ERROR) {
                     Toast.makeText(this, "设置失败", Toast.LENGTH_SHORT).show();
                 }
