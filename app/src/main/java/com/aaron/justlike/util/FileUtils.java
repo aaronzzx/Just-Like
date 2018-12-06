@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -17,11 +14,6 @@ import android.widget.Toast;
 
 import com.aaron.justlike.activity.MainActivity;
 import com.aaron.justlike.another.Image;
-import com.aaron.justlike.data.Downloads;
-import com.aaron.justlike.data.Likes;
-import com.aaron.justlike.data.Views;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,24 +23,44 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import androidx.core.content.FileProvider;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 
 public class FileUtils {
 
     public static void getPhotoStats(String id, String clientId, okhttp3.Callback callback) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://api.unsplash.com/photos/" + id + "/statistics/?client_id=" + clientId)
-                .build();
+                .url("https://api.unsplash.com/photos/"
+                        + id + "/statistics/?client_id=" + clientId).build();
         client.newCall(request).enqueue(callback);
+    }
+
+    public static int parseJson(String json, String type) {
+        int data = 0;
+        try {
+            JSONObject obj = new JSONObject(json);
+            switch (type) {
+                case "downloads":
+                    JSONObject obj1 = obj.getJSONObject("downloads");
+                    data = obj1.getInt("total");
+                    LogUtil.w("downloads", "" + obj1);
+                    break;
+                case "likes":
+                    JSONObject obj2 = obj.getJSONObject("likes");
+                    data = obj2.getInt("total");
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return data;
     }
 
     public static void sortByName(List<Image> imageList, final boolean isOrder) {
@@ -199,10 +211,10 @@ public class FileUtils {
         // 遍历数组内的文件
         for (File aFile : files) {
             // 如果是文件且后缀名为 type 就执行以下操作
-            if (aFile.isFile() && aFile.getName().endsWith(type)) {
-                /*
-                 * 获取文件的绝对路径，并存入 JSON 数组
-                 */
+            if (aFile.isFile() && aFile.getName()
+                    .substring(aFile.getName().lastIndexOf(".") + 1)
+                    .toLowerCase().equals(type)) {
+                // 获取文件的绝对路径，并存入 JSON 数组
                 String filePath = aFile.getAbsolutePath();
                 JSONObject fileInfo = new JSONObject();
                 try {
@@ -233,12 +245,13 @@ public class FileUtils {
         } else {
             originalDate = SystemUtils.getLastModified(path, "yyyy-MM-dd HH:mm:ss");
         }
-        String dirPath = Environment.getExternalStorageDirectory().getPath() +  "/JustLike/images";
+        String dirPath = Environment.getExternalStorageDirectory().getPath() + "/JustLike/images";
         File mkDir = new File(dirPath);
         if (!mkDir.exists())
+            //noinspection ResultOfMethodCallIgnored
             mkDir.mkdirs();
         String date = SystemUtils.getCurrentDate("yyyyMMdd_HHmmss");
-        String name = "/IMG_" + date + "（" + num + "）";
+        String name = "/IMG_" + date + "_" + num;
         String suffix = path.substring(path.lastIndexOf("."));
         String fileName = name + suffix;
         String filePath = dirPath + fileName;
@@ -290,11 +303,14 @@ public class FileUtils {
      * @param fileName 文件名
      */
     public static void deleteFile(Context context, String fileName) {
-        if (TextUtils.isEmpty(fileName)) return;
+        if (TextUtils.isEmpty(fileName))
+            return;
         File file = new File(Environment.getExternalStorageDirectory(), "/JustLike/images" + fileName);
-        if (file.exists()) file.delete();
-        File file1 = new File(context.getExternalCacheDir(), "/" + fileName);
-        if (file1.exists()) file1.delete();
+        if (file.exists())
+            file.delete();
+        File file1 = new File(context.getExternalCacheDir(), fileName);
+        if (file1.exists())
+            file1.delete();
     }
 
     /**
@@ -376,7 +392,7 @@ public class FileUtils {
      *
      * @param searchCacheDir 判断是加载应用缓存目录还是加载应用目录
      */
-    public static void getLocalCache(Activity activity, List<Image> imageList, /*List<String> pathList,*/
+    public static void getLocalCache(Activity activity, List<Image> imageList,
                                      boolean searchCacheDir, String... type) {
         try {
              // 从缓存中读取的数据被放置在 JSON 数组中,
@@ -397,7 +413,6 @@ public class FileUtils {
                         JSONObject jsonObject = typeArray.getJSONObject(i);
                         String path = jsonObject.getString("path");
                         String fileName = path.substring(path.lastIndexOf("/") + 1);
-
                         MainActivity.getFileNameList().add(fileName);
                         Image image = new Image(path);
                         image.setFileName(getImageName(path));
@@ -409,6 +424,19 @@ public class FileUtils {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 为了统一将图片存放在公共 Pictures 目录，清空旧的已转移的图片
+     *
+     * @param imageList
+     */
+    public static void clearOldCache(List<Image> imageList) {
+        for (Image image : imageList) {
+            File clearFile = new File(image.getPath());
+            //noinspection ResultOfMethodCallIgnored
+            clearFile.delete();
         }
     }
 }

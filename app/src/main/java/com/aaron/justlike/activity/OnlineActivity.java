@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.OnlineImageAdapter;
+import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
@@ -19,6 +20,7 @@ import com.kc.unsplash.Unsplash;
 import com.kc.unsplash.api.Order;
 import com.kc.unsplash.models.Photo;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +31,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class OnlineActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final Unsplash unsplash = new Unsplash("936a1449161e2845eff4da43b160cea25e234a32188cc16c981e997590c65086");
+    private static final String CLIENT_ID = "936a1449161e2845eff4da43b160cea25e234a32188cc16c981e997590c65086";
+    private static final Unsplash unsplash = new Unsplash(CLIENT_ID);
     private RecyclerView mRecyclerView;
     private GridLayoutManager mLayoutManager;
     private OnlineImageAdapter mAdapter;
@@ -60,6 +66,12 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
         window.setStatusBarColor(Color.TRANSPARENT);
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        if (!SystemUtils.isViewVisible(mToolbar)) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
     }
 
     @Override
@@ -165,10 +177,9 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void loadUnsplash() {
-        unsplash.getPhotos(mLoadNum++, 10, Order.LATEST, new Unsplash.OnPhotosLoadedListener() {
+        unsplash.getPhotos(mLoadNum++, 30, Order.LATEST, new Unsplash.OnPhotosLoadedListener() {
             @Override
             public void onComplete(List<Photo> photos) {
-//                AnimationUtil.hideProgressBar(mProgressBar);
                 mProgressBar.setVisibility(View.GONE);
                 mSwipeRefresh.setEnabled(true);
                 mPhotoList.addAll(photos);
@@ -176,10 +187,10 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                 if (mSwipeRefresh.isRefreshing()) {
                     mSwipeRefresh.setRefreshing(false);
                 }
-                if ((mLoadNum - 1) % 2 == 0) {
+                /*if ((mLoadNum - 1) % 2 == 0) {
                     return;
                 }
-                loadUnsplash();
+                loadUnsplash();*/
             }
 
             @Override

@@ -85,7 +85,7 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
 //                                    MainActivity.getPathList().remove(position);
                                     notifyDataSetChanged();
                                     FileUtils.deleteFile(mActivity, fileName);
-                                    mActivity.addHintOnBackground();
+//                                    mActivity.addHintOnBackground();
                                 }
                             })
                             .setNegativeButton("取消", new DialogInterface.OnClickListener() {

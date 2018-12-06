@@ -28,7 +28,7 @@ public class AboutActivity extends AppCompatActivity {
             "A circular ImageView for Android",
             "A util for setting status bar style on Android App",
             "PhotoView 图片浏览缩放控件",
-            "Picture Selector Library for Android",
+            "A well-designed local image and video selector for Android",
             "Image Cropping Library for Android",
             "An unofficial Splash API library for Android"};
     private List<AboutMessage> mAboutMessageList = new ArrayList<>();
@@ -102,8 +102,8 @@ public class AboutActivity extends AppCompatActivity {
         AboutLibrary photoView = new AboutLibrary("PhotoView",
                 "bm-x", mLibraryDetails[3]);
         mAboutLibraryList.add(photoView);
-        AboutLibrary pictureSelector = new AboutLibrary("PictureSelector",
-                "LuckSiege", mLibraryDetails[4]);
+        AboutLibrary pictureSelector = new AboutLibrary("Matisse",
+                "zhihu", mLibraryDetails[4]);
         mAboutLibraryList.add(pictureSelector);
         AboutLibrary uCrop = new AboutLibrary("uCrop",
                 "Yalantis", mLibraryDetails[5]);

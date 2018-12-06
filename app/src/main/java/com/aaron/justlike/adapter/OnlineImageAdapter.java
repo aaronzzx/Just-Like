@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.OnlineActivity;
 import com.aaron.justlike.activity.OnlineImageActivity;
+import com.aaron.justlike.util.FileUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
@@ -17,10 +18,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.kc.unsplash.models.Photo;
 
+import java.io.IOException;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.ViewHolder> {
 
@@ -50,7 +55,7 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 Intent intent = new Intent(mActivity, OnlineImageActivity.class);
-                intent.putExtra("urls", mPhotoList.get(position));
+                intent.putExtra("photo", mPhotoList.get(position));
                 mActivity.startActivity(intent);
             }
         });

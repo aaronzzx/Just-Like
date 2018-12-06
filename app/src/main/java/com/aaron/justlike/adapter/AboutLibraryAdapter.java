@@ -58,7 +58,7 @@ public class AboutLibraryAdapter extends RecyclerView.Adapter<AboutLibraryAdapte
                         break;
                     case 4:
                         Intent pictureSelector = new Intent(Intent.ACTION_VIEW);
-                        pictureSelector.setData(Uri.parse("https://github.com/LuckSiege/PictureSelector"));
+                        pictureSelector.setData(Uri.parse("https://github.com/zhihu/Matisse"));
                         mContext.startActivity(pictureSelector);
                         break;
                     case 5:

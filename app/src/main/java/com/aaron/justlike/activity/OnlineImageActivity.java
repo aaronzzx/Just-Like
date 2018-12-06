@@ -15,9 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.data.Downloads;
-import com.aaron.justlike.data.Likes;
-import com.aaron.justlike.data.Views;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.LogUtil;
@@ -29,18 +26,11 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.github.clans.fab.FloatingActionButton;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.kc.unsplash.models.Photo;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -49,14 +39,11 @@ import androidx.appcompat.widget.Toolbar;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 
 public class OnlineImageActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String CLIENT_ID = "936a1449161e2845eff4da43b160cea25e234a32188cc16c981e997590c65086";
-    private String mPhotoStats;
     private Toolbar mToolbar;
     private ProgressBar mProgressBar;
     private ImageView mProgressImage;
@@ -169,7 +156,7 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
         // 获取从适配器序列化过来的值
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            mPhoto = bundle.getParcelable("urls");
+            mPhoto = bundle.getParcelable("photo");
         }
         mProgressBar = findViewById(R.id.toolbar_progress_bar);
         mProgressImage = findViewById(R.id.toolbar_progress_image);
@@ -197,24 +184,6 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
 
     @SuppressLint("SetTextI18n")
     private void loadImageByGlide() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mAuthorName.setText(mPhoto.getUser().getName());
-        mImageLikes.setText(getPhotoStats("likes") + " Likes");
-        mImageDownloads.setText(getPhotoStats("downloads") + " Downloads");
-        RequestOptions options = new RequestOptions()
-                .placeholder(R.drawable.ic_place_holder);
-        Glide.with(this)
-                .load(mPhoto.getUser().getProfileImage().getLarge())
-                .apply(options)
-                .into(mAuthorImage);
-        Glide.with(this)
-                .load(mPhoto.getUrls().getFull()/* + "&fm=jpg&h=2160&q=80"*/)
-                .thumbnail(Glide.with(this).load(mPhoto.getUrls().getRegular()))
-                .listener(mListener)
-                .into(mPhotoView);
-    }
-
-    private String getPhotoStats(final String type) {
         FileUtils.getPhotoStats(mPhoto.getId(), CLIENT_ID, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -223,39 +192,31 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String responseData = response.body().string();
-                LogUtil.w(LogUtil.TAG, responseData);
-                Gson gson = new Gson();
-                try {
-                    switch (type) {
-                        case "downloads":
-                            JSONObject object = new JSONObject(responseData);
-                            JSONArray array = object.getJSONArray("downloads");
-                            String downloadsArray = array.getJSONObject(0).toString();
-                            List<Downloads> downloads = gson.fromJson(downloadsArray, new TypeToken<List<Downloads>>(){}.getType());
-                            mPhotoStats = downloads.get(0).getTotal();
-                            break;
-                        case "views":
-                            JSONObject object1 = new JSONObject(responseData);
-                            JSONArray array1 = object1.getJSONArray("views");
-                            String viewsArray = array1.getJSONObject(0).toString();
-                            List<Views> views = gson.fromJson(viewsArray, new TypeToken<List<Views>>(){}.getType());
-                            mPhotoStats = views.get(0).getTotal();
-                            break;
-                        case "likes":
-                            JSONObject object2 = new JSONObject(responseData);
-                            JSONArray array2 = object2.getJSONArray("likes");
-                            String likesArray = array2.getJSONObject(0).toString();
-                            List<Likes> likes = gson.fromJson(likesArray, new TypeToken<List<Likes>>(){}.getType());
-                            mPhotoStats = likes.get(0).getTotal();
-                            break;
+                String json = response.body().string();
+                final int likes = FileUtils.parseJson(json, "likes");
+                final int downloads = FileUtils.parseJson(json, "downloads");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mImageLikes.setText(likes + " Likes");
+                        mImageDownloads.setText(downloads + " Downloads");
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                });
             }
         });
-        return mPhotoStats;
+        mProgressBar.setVisibility(View.VISIBLE);
+        mAuthorName.setText(mPhoto.getUser().getName());
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.drawable.ic_place_holder);
+        Glide.with(this)
+                .load(mPhoto.getUser().getProfileImage().getLarge())
+                .apply(options)
+                .into(mAuthorImage);
+        Glide.with(this)
+                .load(mPhoto.getUrls().getRaw() + "&fm=jpg&h=2160&q=80")
+                .thumbnail(Glide.with(this).load(mPhoto.getUrls().getRegular()))
+                .listener(mListener)
+                .into(mPhotoView);
     }
 
     private RequestListener mListener = new RequestListener() {

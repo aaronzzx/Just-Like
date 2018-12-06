@@ -8,6 +8,8 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +38,7 @@ import com.jaeger.library.StatusBarUtil;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MenuItem mSortByName;
     private MenuItem mSortBySize;
     private MenuItem mSortByOrder;
-    private String[] type = {"JPG", "JPEG", "PNG", "jpg", "jpeg", "png"};
+    private String[] type = {"jpg", "jpeg", "png", "gif"};
 
     public static List<String> getFileNameList() {
         return mFileNameList;
@@ -107,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStart() {
         super.onStart();
         mNavView.setCheckedItem(R.id.nav_home);
-        addHintOnBackground();
+//        addHintOnBackground();
     }
 
     @Override
@@ -115,6 +118,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
         if (mIsFinish == 1) {
             android.os.Process.killProcess(android.os.Process.myPid());
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        View decorView = getWindow().getDecorView();
+        if (!SystemUtils.isViewVisible(mToolbar)) {
+            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
     }
 
@@ -617,7 +632,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         TranslateAnimation ta = new TranslateAnimation(0, 0, 2160, 0);
                         ta.setDuration(250);
                         mRecyclerView.startAnimation(ta);
-                        addHintOnBackground();
+//                        addHintOnBackground();
                     }
                 });
             }
