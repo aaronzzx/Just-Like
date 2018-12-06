@@ -16,9 +16,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
+
         <activity
             android:name=".activity.MainActivity"
-            android:launchMode="singleTask"
             android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,18 +26,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".activity.OnlineWallpaperActivity"
-            android:label="Online"
-            android:launchMode="singleTask" />
-        <activity
-            android:name=".activity.DisplayImageActivity"
+            android:name=".activity.MainImageActivity"
             android:label=""
             android:theme="@style/AppTheme.DisplayActivity" />
+
+        <activity
+            android:name=".activity.OnlineActivity"
+            android:label="Online"
+            android:theme="@style/AppTheme.OnlineActivity" />
+
+        <activity
+            android:name=".activity.OnlineImageActivity"
+            android:label=""
+            android:theme="@style/AppTheme.OnlineActivity"/>
+
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".activity.AboutActivity"
             android:label="关于"
@@ -52,6 +61,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
     </application>
 
 </manifest>

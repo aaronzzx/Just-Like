@@ -19,17 +19,11 @@ import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.MyPagerAdapter;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
-import com.aaron.justlike.util.LogUtil;
 import com.aaron.justlike.util.SystemUtils;
-import com.luck.picture.lib.tools.PictureFileUtils;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -38,7 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
-public class DisplayImageActivity extends AppCompatActivity {
+public class MainImageActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private Toolbar mToolbar;
@@ -47,7 +41,7 @@ public class DisplayImageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_image);
+        setContentView(R.layout.activity_main_image);
         initContent();
     }
 
@@ -64,8 +58,7 @@ public class DisplayImageActivity extends AppCompatActivity {
      */
     @Override
     public boolean onSupportNavigateUp() {
-        finish();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        onBackPressed();
         return super.onSupportNavigateUp();
     }
 
@@ -75,7 +68,6 @@ public class DisplayImageActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     /**
@@ -100,7 +92,7 @@ public class DisplayImageActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_display_image_main, menu);
+        getMenuInflater().inflate(R.menu.activity_main_image_main, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -149,7 +141,7 @@ public class DisplayImageActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     Uri resultUri = UCrop.getOutput(data);
                     FileUtils.setWallpaper(this, FileUtils.getPath(this, resultUri));
-                    PictureFileUtils.deleteCacheDirFile(this);
+//                    PictureFileUtils.deleteCacheDirFile(this);
                 } else if (resultCode == UCrop.RESULT_ERROR) {
                     Toast.makeText(this, "设置失败", Toast.LENGTH_SHORT).show();
                 }
@@ -212,7 +204,7 @@ public class DisplayImageActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(originalDate)) {
             String[] dateArray = originalDate.split(" ");
             mToolbar.setTitle(dateArray[0]);
-            mToolbar.setSubtitle(dateArray[1]);
+//            mToolbar.setSubtitle(dateArray[1].substring(0, 5));
         }
     }
 

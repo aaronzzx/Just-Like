@@ -7,14 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.activity.DisplayImageActivity;
 import com.aaron.justlike.activity.MainActivity;
+import com.aaron.justlike.activity.MainImageActivity;
 import com.aaron.justlike.another.Image;
 import com.aaron.justlike.extend.SquareView;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
@@ -25,7 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
+public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.ViewHolder> {
 
     private static final int DELETE_PHOTO = 2;
     private boolean mBanClick;
@@ -38,7 +37,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             R.drawable.place_holder_8, R.drawable.place_holder_9,
             R.drawable.place_holder_10};
 
-    public ImageAdapter(MainActivity activity, List<Image> imageList) {
+    public MainImageAdapter(MainActivity activity, List<Image> imageList) {
         mActivity = activity;
         mImageList = imageList;
     }
@@ -62,10 +61,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                 if (!mBanClick) {
                     int position = holder.getAdapterPosition();
                     // 将 Image 对象序列化传递给下一个活动，方便下一个活动取值
-                    Intent intent = new Intent(mActivity, DisplayImageActivity.class);
+                    Intent intent = new Intent(mActivity, MainImageActivity.class);
                     intent.putExtra("position", position);
                     mActivity.startActivityForResult(intent, DELETE_PHOTO);
-                    mActivity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
             }
         });
@@ -87,7 +85,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 //                                    MainActivity.getPathList().remove(position);
                                     notifyDataSetChanged();
                                     FileUtils.deleteFile(mActivity, fileName);
-                                    mActivity.addHintOnBackground();
+//                                    mActivity.addHintOnBackground();
                                 }
                             })
                             .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -107,11 +105,11 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         Image image = mImageList.get(position); // 从集合中找到 Image 对象
         String path = image.getPath();
         RequestOptions options = new RequestOptions()
-                .placeholder(placeHolders[SystemUtils.getRandomNum(9)])
+                .placeholder(placeHolders[SystemUtils.getRandomNum(9)]);
 //                .dontAnimate()
 //                .override(10)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop();
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .centerCrop();
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
                 .Builder(100)
                 .setCrossFadeEnabled(true).build();

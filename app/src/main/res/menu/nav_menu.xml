@@ -7,7 +7,7 @@
 
         <item
             android:id="@+id/nav_home"
-            android:title="首页"
+            android:title="主页"
             android:icon="@mipmap/ic_home_page"/>
 
         <item
@@ -27,9 +27,9 @@
             android:icon="@mipmap/ic_account"/>
 
         <item
-            android:id="@+id/nav_theme"
-            android:title="标签"
-            android:icon="@mipmap/ic_tag"/>
+            android:id="@+id/nav_collection"
+            android:title="集合"
+            android:icon="@mipmap/ic_collection"/>
 
         <item
             android:id="@+id/nav_settings"

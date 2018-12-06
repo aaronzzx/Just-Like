@@ -4,9 +4,12 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,13 +18,15 @@ import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
+import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.adapter.ImageAdapter;
+import com.aaron.justlike.adapter.MainImageAdapter;
 import com.aaron.justlike.another.Image;
+import com.aaron.justlike.extend.GlideEngine;
 import com.aaron.justlike.extend.MyGridLayoutManager;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.LogUtil;
@@ -30,11 +35,10 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.jaeger.library.StatusBarUtil;
-import com.luck.picture.lib.PictureSelector;
-import com.luck.picture.lib.config.PictureConfig;
-import com.luck.picture.lib.config.PictureMimeType;
-import com.luck.picture.lib.entity.LocalMedia;
+import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,22 +55,27 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int REQUEST_CODE_CHOOSE = 10;
     private static final int REQUEST_PERMISSION = 1;
     private static final int DELETE_PHOTO = 2;
     private static MyGridLayoutManager mLayoutManager;
     private static List<String> mFileNameList = new ArrayList<>(); // 详情页删除图片时的图片名称集合
     private static List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
-    private final int mLength = 0;
-    private int mAsciiNum = 64;
-    private int mNumber = 0; // 用于判断返回键退出程序
+    private int mAsciiNum = 64; // 相当于大写 A
+    private int mIsFinish = 0; // 用于判断返回键退出程序
+    private int mScrollFlags = 0; // AppBar 滑动属性
+    private AppBarLayout mAppBarLayout;
+    private Toolbar mToolbar;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefresh;
-    private ImageAdapter mAdapter; // 声明一个 Image 适配器
+    private MainImageAdapter mAdapter; // 声明一个 Image 适配器
     private DrawerLayout mParent;
     private NavigationView mNavView;
     private MenuItem mSortByDate;
+    private MenuItem mSortByName;
+    private MenuItem mSortBySize;
     private MenuItem mSortByOrder;
-    private String[] type = {"JPG", "JPEG", "PNG", "jpg", "jpeg", "png"};
+    private String[] type = {"jpg", "jpeg", "png", "gif"};
 
     public static List<String> getFileNameList() {
         return mFileNameList;
@@ -94,20 +103,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mImageList.size() < 19) {
             layoutParams.setScrollFlags(0);
         }
+        mScrollFlags = layoutParams.getScrollFlags();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         mNavView.setCheckedItem(R.id.nav_home);
-        addHintOnBackground();
+//        addHintOnBackground();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mNumber == 1) {
+        if (mIsFinish == 1) {
             android.os.Process.killProcess(android.os.Process.myPid());
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        View decorView = getWindow().getDecorView();
+        if (!SystemUtils.isViewVisible(mToolbar)) {
+            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
     }
 
@@ -146,7 +168,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
         mSortByDate = menu.findItem(R.id.sort_date);
-        MenuItem sortBySize = menu.findItem(R.id.sort_size);
+        mSortByName = menu.findItem(R.id.sort_name);
+        mSortBySize = menu.findItem(R.id.sort_size);
         mSortByOrder = menu.findItem(R.id.sort_order);
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         int mode_sort = preferences.getInt("mode_sort", 0);
@@ -154,7 +177,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mode_sort == 1) {
             mSortByDate.setChecked(true);
         } else if (mode_sort == 2) {
-            sortBySize.setChecked(true);
+            mSortByName.setChecked(true);
+        } else if (mode_sort == 3) {
+            mSortBySize.setChecked(true);
         } else {
             mSortByDate.setChecked(true);
         }
@@ -192,6 +217,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 editor.putInt("mode_sort", 1);
                 editor.apply();
                 break;
+            case R.id.sort_name:
+                item.setChecked(true);
+                if (mSortByOrder.isChecked()) {
+                    FileUtils.sortByName(mImageList, true);
+                } else {
+                    FileUtils.sortByName(mImageList, false);
+                }
+                mAdapter.notifyDataSetChanged();
+                editor.putInt("mode_sort", 2);
+                editor.apply();
+                break;
             case R.id.sort_size:
                 item.setChecked(true);
                 if (mSortByOrder.isChecked()) {
@@ -200,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     FileUtils.sortBySize(mImageList, false);
                 }
                 mAdapter.notifyDataSetChanged();
-                editor.putInt("mode_sort", 2);
+                editor.putInt("mode_sort", 3);
                 editor.apply();
                 break;
             case R.id.sort_order:
@@ -208,6 +244,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     item.setChecked(false);
                     if (mSortByDate.isChecked()) {
                         FileUtils.sortByDate(mImageList, false);
+                    } else if (mSortByName.isChecked()) {
+                        FileUtils.sortByName(mImageList, false);
                     } else {
                         FileUtils.sortBySize(mImageList, false);
                     }
@@ -218,6 +256,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     item.setChecked(true);
                     if (mSortByDate.isChecked()) {
                         FileUtils.sortByDate(mImageList, true);
+                    } else if (mSortByName.isChecked()) {
+                        FileUtils.sortByName(mImageList, true);
                     } else {
                         FileUtils.sortBySize(mImageList, true);
                     }
@@ -238,17 +278,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mParent.isDrawerOpen(GravityCompat.START)) {
             mParent.closeDrawer(GravityCompat.START);
         } else {
-            if (mNumber == 1) {
+            if (mIsFinish == 1) {
                 super.onBackPressed();
             }
-            mNumber = 1;
+            mIsFinish = 1;
             Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         Thread.sleep(2000);
-                        mNumber = 0;
+                        mIsFinish = 0;
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -295,16 +335,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 将打开文件管理器的代码封装在此方法内，方便调用和使代码简洁。
      */
     private void openAlbum() {
-        PictureSelector.create(this)
-                .openGallery(PictureMimeType.ofImage())
-                .theme(R.style.picture_self_style)
-                .isCamera(false)
-                .maxSelectNum(9)
-                .imageSpanCount(3)
-                .selectionMode(PictureConfig.MULTIPLE)
-                .previewImage(true)
-                .previewEggs(true)
-                .forResult(PictureConfig.CHOOSE_REQUEST);
+        Matisse.from(MainActivity.this)
+                .choose(MimeType.ofImage())
+                .showSingleMediaType(true)
+                .countable(true)
+                .maxSelectable(9)
+//                .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                .gridExpectedSize(SystemUtils.dp2px(this, 120.0F))
+                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                .thumbnailScale(0.85f)
+                .imageEngine(new GlideEngine())
+                .theme(R.style.MatisseTheme)
+                .forResult(REQUEST_CODE_CHOOSE);
     }
 
     /**
@@ -317,15 +359,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case PictureConfig.CHOOSE_REQUEST:
+            case REQUEST_CODE_CHOOSE:
                 if (resultCode == Activity.RESULT_OK) {
                     mAsciiNum = 0;
-                    final List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+                    final List<String> selectList = Matisse.obtainPathResult(data);
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            for (LocalMedia media : selectList) {
-                                final String path = media.getPath();
+                            for (String path : selectList) {
                                 String fileName = path.substring(path.lastIndexOf("/") + 1);
 
                                 mFileNameList.add(fileName);
@@ -354,7 +395,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     LogUtil.d("MainActivity", fileName);
                     mImageList.remove(position);
                     mFileNameList.remove(position);
-//                    sort();
                     mAdapter.notifyDataSetChanged();
                     FileUtils.deleteFile(this, "/" + fileName);
                 }
@@ -378,6 +418,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case 2:
                     if (order_or_reverse == 1) {
+                        FileUtils.sortByName(mImageList, true);
+                    } else if (order_or_reverse == 2) {
+                        FileUtils.sortByName(mImageList, false);
+                    } else {
+                        FileUtils.sortByName(mImageList, true);
+                    }
+                    break;
+                case 3:
+                    if (order_or_reverse == 1) {
                         FileUtils.sortBySize(mImageList, true);
                     } else if (order_or_reverse == 2) {
                         FileUtils.sortBySize(mImageList, false);
@@ -394,6 +443,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void sort() {
         if (mSortByOrder.isChecked()) {
             if (mSortByDate.isChecked()) {
+                FileUtils.sortByName(mImageList, true);
+            } else if (mSortByName.isChecked()) {
                 FileUtils.sortByDate(mImageList, true);
             } else {
                 FileUtils.sortBySize(mImageList, true);
@@ -401,6 +452,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             if (mSortByDate.isChecked()) {
                 FileUtils.sortByDate(mImageList, false);
+            } else if (mSortByName.isChecked()) {
+                FileUtils.sortByName(mImageList, false);
             } else {
                 FileUtils.sortBySize(mImageList, false);
             }
@@ -411,9 +464,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 将控件的初始化代码封装在此方法中，方便调用并使代码简洁。
      */
     private void initViews() {
-        Toolbar toolbar = findViewById(R.id.activity_main_toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setOnClickListener(this);
+        mAppBarLayout = findViewById(R.id.activity_main_appbar_layout);
+        mToolbar = findViewById(R.id.activity_main_toolbar);
+        setSupportActionBar(mToolbar);
+        mToolbar.setOnClickListener(this);
         mParent = findViewById(R.id.drawer_layout);
         mNavView = findViewById(R.id.nav_view);
         ActionBar actionBar = getSupportActionBar();
@@ -431,17 +485,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 将 RecyclerView 的布局风格改为网格类型,使用自定义的布局管理器，为了能修改滑动状态
         mLayoutManager = new MyGridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new ImageAdapter(this, mImageList);
+        mAdapter = new MainImageAdapter(this, mImageList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mRecyclerView.addItemDecoration(new YItemDecoration());
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if (dy > mLength) {
+                View decorView = getWindow().getDecorView();
+                if (dy > 0) {
+                    if (mScrollFlags == 21) {
+                        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                    }
                     fab.hide();
-                } else if (dy < mLength) {
+                } else if (dy < 0) {
+                    if (mScrollFlags == 21) {
+                        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                    }
                     fab.show();
+                }
+            }
+        });
+
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+                View decorView = getWindow().getDecorView();
+                if (SystemUtils.isViewVisible(mToolbar)) {
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                } else {
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
                 }
             }
         });
@@ -455,17 +534,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case R.id.nav_online_wallpaper:
                         mParent.closeDrawers();
-//                        mParent.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
-//                            @Override
-//                            public void onDrawerClosed(View drawerView) {
-//                                Intent intent = new Intent(MainActivity.this,
-//                                        OnlineWallpaperActivity.class);
-//                                startActivity(intent);
-//                                mParent.removeDrawerListener(this);
-//                            }
-//                        });
-                        Toast.makeText(MainActivity.this,
-                                "暂未开放", Toast.LENGTH_SHORT).show();
+                        mParent.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                            @Override
+                            public void onDrawerClosed(View drawerView) {
+                                Intent intent = new Intent(MainActivity.this,
+                                        OnlineActivity.class);
+                                startActivity(intent);
+                                mParent.removeDrawerListener(this);
+                            }
+                        });
                         break;
                     case R.id.nav_about:
                         mParent.closeDrawers();
@@ -555,7 +632,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         TranslateAnimation ta = new TranslateAnimation(0, 0, 2160, 0);
                         ta.setDuration(250);
                         mRecyclerView.startAnimation(ta);
-                        addHintOnBackground();
+//                        addHintOnBackground();
                     }
                 });
             }
@@ -587,12 +664,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) % 3 == 0) {
                 outRect.left = 0;
-                outRect.right = SystemUtils.dp2px(MainActivity.this, 1.9F); // 8px
+                outRect.right = SystemUtils.dp2px(MainActivity.this, 2.5F);
             } else if (parent.getChildAdapterPosition(view) % 3 == 1) {
-                outRect.left = SystemUtils.dp2px(MainActivity.this, 0.9F); // 4px
-                outRect.right = SystemUtils.dp2px(MainActivity.this, 0.9F);
+                outRect.left = SystemUtils.dp2px(MainActivity.this, 1.5F);
+                outRect.right = SystemUtils.dp2px(MainActivity.this, 1.5F);
             } else if (parent.getChildAdapterPosition(view) % 3 == 2) {
-                outRect.left = SystemUtils.dp2px(MainActivity.this, 1.9F); // 8px
+                outRect.left = SystemUtils.dp2px(MainActivity.this, 2.5F);
                 outRect.right = 0;
             }
         }
@@ -604,7 +681,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             int size = mImageList.size();
             outRect.top = 0;
-            outRect.bottom = SystemUtils.dp2px(MainActivity.this, 1.9F); // 8px
+            outRect.bottom = SystemUtils.dp2px(MainActivity.this, 4.0F);
             if (parent.getChildAdapterPosition(view) == size - 1) {
                 outRect.bottom = -1;
             } else if (parent.getChildAdapterPosition(view) == size - 2) {

@@ -16,7 +16,7 @@
         <item name="android:navigationBarColor">#000000</item>
     </style>
 
-    <!-- Customize DisplayImageActivity here. -->
+    <!-- Customize MainImageActivity here. -->
     <style name="AppTheme.DisplayActivity" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorGrey</item>
@@ -28,28 +28,22 @@
         <item name="android:navigationBarColor">@color/transparent</item>
     </style>
 
-    <!--PictureSelector 自定义-->
-    <style name="picture.self.style" parent="picture.default.style">
-        <!--标题栏背景色-->
-        <item name="colorPrimary">@color/bar_grey</item>
-        <!--状态栏背景色-->
-        <item name="colorPrimaryDark">@color/bar_grey</item>
-        <!--图片列表底部背景色-->
-        <item name="picture.bottom.bg">@color/bar_grey</item>
-        <!--图片列表预览文字颜色-->
-        <item name="picture.preview.textColor">@color/white</item>
-        <!--图片列表已完成文字颜色-->
-        <item name="picture.complete.textColor">@color/checked</item>
-        <!--图片已选数量圆点背景色-->
-        <item name="picture.num.style">@drawable/num_selected</item>
-        <!--预览界面标题文字颜色-->
-        <item name="picture.ac_preview.title.textColor">@color/white</item>
-        <!--预览界面已完成文字颜色-->
-        <item name="picture.ac_preview.complete.textColor">@color/checked</item>
-        <!--预览界面标题栏背景色-->
-        <item name="picture.ac_preview.title.bg">@color/bar_grey</item>
-        <!--预览界面底部背景色-->
-        <item name="picture.ac_preview.bottom.bg">@color/bar_grey_90</item>
+    <style name="AppTheme.OnlineActivity" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#000</item>
+        <item name="colorPrimaryDark">#000</item>
+        <item name="colorAccent">@color/snackBar</item>
+        <item name="android:navigationBarColor">#000</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="MatisseTheme" parent="Matisse.Zhihu">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="bottomToolbar.apply.textColor">@color/colorPrimary</item>
+        <item name="preview.bottomToolbar.apply.textColor">@color/colorPrimary</item>
+        <item name="item.checkCircle.backgroundColor">@color/colorPrimary</item>
+        <item name="android:navigationBarColor">#000000</item>
     </style>
 
 </resources>

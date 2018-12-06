@@ -4,7 +4,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.activity.DisplayImageActivity;
+import com.aaron.justlike.activity.MainImageActivity;
 import com.aaron.justlike.another.Image;
 import com.aaron.justlike.util.AnimationUtil;
 import com.bm.library.PhotoView;
@@ -22,10 +22,10 @@ import androidx.viewpager.widget.PagerAdapter;
 public class MyPagerAdapter extends PagerAdapter {
 
     private List<Image> mPathList;
-    private DisplayImageActivity mActivity;
+    private MainImageActivity mActivity;
     private boolean isFullScreen;
 
-    public MyPagerAdapter(DisplayImageActivity activity, List<Image> pathList) {
+    public MyPagerAdapter(MainImageActivity activity, List<Image> pathList) {
         mActivity = activity;
         mPathList = pathList;
     }
@@ -52,7 +52,8 @@ public class MyPagerAdapter extends PagerAdapter {
         if (parent != null) {
             parent.removeView(photoView);
         }
-        RequestOptions options = new RequestOptions().override(1440);
+        RequestOptions options = new RequestOptions()
+                .centerCrop();
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
                 .Builder(300)
                 .setCrossFadeEnabled(true).build();
@@ -70,7 +71,7 @@ public class MyPagerAdapter extends PagerAdapter {
                     isFullScreen = false;
                 } else {
                     // 进入全屏,自动沉浸
-                    AnimationUtil.setFullScreen(mActivity, toolbar, 0);
+                    AnimationUtil.setFullScreen(mActivity, toolbar, 100);
                     isFullScreen = true;
                 }
             }
