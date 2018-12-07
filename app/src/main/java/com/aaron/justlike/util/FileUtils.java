@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -33,6 +37,17 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 public class FileUtils {
+
+    public static Bitmap getBitmapFormDrawable(Drawable drawable){
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+        drawable.getIntrinsicHeight(),drawable.getOpacity()!= PixelFormat.OPAQUE
+        ?Bitmap.Config.ARGB_8888:Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0,0,drawable.getIntrinsicWidth(),drawable.getIntrinsicHeight());
+        //设置绘画的边界，此处表示完整绘制
+        drawable.draw(canvas);
+        return bitmap;
+    }
 
     public static void getPhotoStats(String id, String clientId, okhttp3.Callback callback) {
         OkHttpClient client = new OkHttpClient();

@@ -184,28 +184,30 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
 
     @SuppressLint("SetTextI18n")
     private void loadImageByGlide() {
-        FileUtils.getPhotoStats(mPhoto.getId(), CLIENT_ID, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String json = response.body().string();
-                final int likes = FileUtils.parseJson(json, "likes");
-                final int downloads = FileUtils.parseJson(json, "downloads");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mImageLikes.setText(likes + " Likes");
-                        mImageDownloads.setText(downloads + " Downloads");
-                    }
-                });
-            }
-        });
+//        FileUtils.getPhotoStats(mPhoto.getId(), CLIENT_ID, new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                String json = response.body().string();
+//                final int likes = FileUtils.parseJson(json, "likes");
+//                final int downloads = FileUtils.parseJson(json, "downloads");
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        mImageLikes.setText(likes + " Likes");
+//                        mImageDownloads.setText(downloads + " Downloads");
+//                    }
+//                });
+//            }
+//        });
         mProgressBar.setVisibility(View.VISIBLE);
         mAuthorName.setText(mPhoto.getUser().getName());
+        mImageLikes.setText(mPhoto.getLikes() + " Likes");
+        mImageDownloads.setText(mPhoto.getDownloads() + " Downloads");
         RequestOptions options = new RequestOptions()
                 .placeholder(R.drawable.ic_place_holder);
         Glide.with(this)

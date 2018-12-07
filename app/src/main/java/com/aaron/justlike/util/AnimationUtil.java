@@ -1,7 +1,12 @@
 package com.aaron.justlike.util;
 
 import android.app.Activity;
-import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -11,10 +16,28 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.aaron.justlike.R;
-
-import androidx.appcompat.widget.Toolbar;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 
 public class AnimationUtil {
+
+    public static Bitmap handleImageEffect(Bitmap bm, float saturation) {
+        Bitmap bmp = Bitmap.createBitmap(bm.getWidth(), bm.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bmp);
+        Paint paint = new Paint();
+        ColorMatrix saturationMatrix = new ColorMatrix();
+        saturationMatrix.setSaturation(saturation);
+        paint.setColorFilter(new ColorMatrixColorFilter(saturationMatrix));
+        canvas.drawBitmap(bm, 0, 0, paint);
+        return bmp;
+    }
+
+    public static void showFakeView(ImageView imageView, Drawable drawable) {
+        imageView.setAlpha(0.0F);
+        imageView.setImageDrawable(drawable);
+        imageView.animate().setDuration(2000).alpha(1.0F).start();
+    }
 
     public static void setFullScreen(Activity activity, View view, long startOffset) {
         activity.getWindow().getDecorView().setSystemUiVisibility(

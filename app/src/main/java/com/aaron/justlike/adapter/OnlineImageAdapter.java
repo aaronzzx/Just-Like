@@ -1,6 +1,15 @@
 package com.aaron.justlike.adapter;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,22 +19,27 @@ import android.widget.TextView;
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.OnlineActivity;
 import com.aaron.justlike.activity.OnlineImageActivity;
+import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.ImageViewTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
+import com.bumptech.glide.request.transition.Transition;
 import com.kc.unsplash.models.Photo;
 
-import java.io.IOException;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.ViewHolder> {
 
@@ -63,7 +77,7 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         Photo photo = mPhotoList.get(position);
         String authorName = photo.getUser().getName();
         String authorImage = photo.getUser().getProfileImage().getLarge();
@@ -77,16 +91,37 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
         holder.authorName.setText(authorName);
         RequestOptions options1 = new RequestOptions()
 //                .centerCrop()
+                .placeholder(placeHolders[1])
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
                 .Builder(300)
                 .setCrossFadeEnabled(true).build();
         Glide.with(mActivity)
                 .load(urls)
-//                .thumbnail(0.5F)
-//                .apply(options)
+//                .apply(options1)
                 .transition(DrawableTransitionOptions.with(factory))
-                .into(holder.imageView);
+                .into(new ImageViewTarget<Drawable>(holder.imageView) {
+                    @Override
+                    protected void setResource(@Nullable Drawable resource) {
+                        ColorMatrix matrix = new ColorMatrix();
+                        matrix.setSaturation(0);
+                        if (resource != null) {
+                            resource.setColorFilter(new ColorMatrixColorFilter(matrix));
+                            holder.imageView.setImageDrawable(resource);
+                        }
+                    }
+                });
+        Glide.with(mActivity)
+                .load(urls)
+                .transition(DrawableTransitionOptions.with(factory))
+                .into(new ImageViewTarget<Drawable>(holder.fakeView) {
+                    @Override
+                    protected void setResource(@Nullable Drawable resource) {
+                        if (resource != null) {
+                            AnimationUtil.showFakeView(holder.fakeView, resource);
+                        }
+                    }
+                });
     }
 
     @Override
@@ -97,6 +132,7 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
     static class ViewHolder extends RecyclerView.ViewHolder {
         View itemView;
         ImageView imageView;
+        ImageView fakeView;
         ImageView authorImage;
         TextView authorName;
 
@@ -107,6 +143,7 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
             super(view);
             itemView = view;
             imageView = view.findViewById(R.id.image_view);
+            fakeView = view.findViewById(R.id.fake_view);
             authorImage = view.findViewById(R.id.author_image);
             authorName = view.findViewById(R.id.author_name);
         }
