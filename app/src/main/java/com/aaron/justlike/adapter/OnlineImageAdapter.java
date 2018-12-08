@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -81,45 +82,53 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
         Photo photo = mPhotoList.get(position);
         String authorName = photo.getUser().getName();
         String authorImage = photo.getUser().getProfileImage().getLarge();
-        String urls = photo.getUrls().getRegular();
+        String urlsForImageView = photo.getUrls().getThumb();
+        String urlsForFakeView = photo.getUrls().getRegular();
         RequestOptions options = new RequestOptions()
                 .placeholder(R.drawable.ic_place_holder);
-        Glide.with(mActivity)
-                .load(authorImage)
-                .apply(options)
-                .into(holder.authorImage);
-        holder.authorName.setText(authorName);
-        RequestOptions options1 = new RequestOptions()
-//                .centerCrop()
-                .placeholder(placeHolders[1])
-                .diskCacheStrategy(DiskCacheStrategy.ALL);
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
                 .Builder(300)
                 .setCrossFadeEnabled(true).build();
         Glide.with(mActivity)
-                .load(urls)
-//                .apply(options1)
+                .load(authorImage)
+                .apply(options)
                 .transition(DrawableTransitionOptions.with(factory))
-                .into(new ImageViewTarget<Drawable>(holder.imageView) {
+                .into(holder.authorImage);
+        holder.authorName.setText(authorName);
+        RequestOptions options1 = new RequestOptions()
+//                .centerCrop()
+//                .placeholder(placeHolders[1])
+                .diskCacheStrategy(DiskCacheStrategy.ALL);
+        Glide.with(mActivity)
+                .load(urlsForImageView)
+//                .apply(options1)
+                .listener(new RequestListener<Drawable>() {
                     @Override
-                    protected void setResource(@Nullable Drawable resource) {
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         ColorMatrix matrix = new ColorMatrix();
                         matrix.setSaturation(0);
-                        if (resource != null) {
-                            resource.setColorFilter(new ColorMatrixColorFilter(matrix));
-                            holder.imageView.setImageDrawable(resource);
-                        }
+                        resource.setColorFilter(new ColorMatrixColorFilter(matrix));
+                        holder.imageView.setImageDrawable(resource);
+                        AlphaAnimation aa = new AlphaAnimation(0, 1);
+                        aa.setDuration(300);
+                        aa.setFillAfter(true);
+                        holder.imageView.startAnimation(aa);
+                        return false;
                     }
-                });
+                })
+                .into(holder.imageView);
         Glide.with(mActivity)
-                .load(urls)
-                .transition(DrawableTransitionOptions.with(factory))
+                .load(urlsForFakeView)
+//                .apply(options1)
                 .into(new ImageViewTarget<Drawable>(holder.fakeView) {
                     @Override
                     protected void setResource(@Nullable Drawable resource) {
-                        if (resource != null) {
-                            AnimationUtil.showFakeView(holder.fakeView, resource);
-                        }
+                        AnimationUtil.showFakeView(holder.fakeView, resource);
                     }
                 });
     }

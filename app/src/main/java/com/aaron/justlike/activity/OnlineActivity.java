@@ -30,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -37,7 +38,7 @@ import okhttp3.Response;
 
 public class OnlineActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String CLIENT_ID = "936a1449161e2845eff4da43b160cea25e234a32188cc16c981e997590c65086";
+    private static final String CLIENT_ID = "18db24a3d59a1b2633897fa63f3f49455c2cbfa8a22e5b8520141cb2660fa816";
     private static final Unsplash unsplash = new Unsplash(CLIENT_ID);
     private RecyclerView mRecyclerView;
     private GridLayoutManager mLayoutManager;
@@ -183,7 +184,8 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                 mProgressBar.setVisibility(View.GONE);
                 mSwipeRefresh.setEnabled(true);
                 mPhotoList.addAll(photos);
-                mAdapter.notifyDataSetChanged();
+//                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemChanged(8, "abc");
                 if (mSwipeRefresh.isRefreshing()) {
                     mSwipeRefresh.setRefreshing(false);
                 }
@@ -203,7 +205,8 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void onClick(View v) {
 //                            AnimationUtil.showProgressBar(mProgressBar);
-                        mProgressBar.setVisibility(View.VISIBLE);
+//                        mProgressBar.setVisibility(View.VISIBLE);
+                        mSwipeRefresh.setRefreshing(true);
                         loadUnsplash();
                     }
                 }).show();

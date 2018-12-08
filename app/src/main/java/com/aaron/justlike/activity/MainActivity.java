@@ -395,7 +395,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     LogUtil.d("MainActivity", fileName);
                     mImageList.remove(position);
                     mFileNameList.remove(position);
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter.notifyItemRemoved(position);
                     FileUtils.deleteFile(this, "/" + fileName);
                 }
                 break;

@@ -8,9 +8,11 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -36,7 +38,7 @@ public class AnimationUtil {
     public static void showFakeView(ImageView imageView, Drawable drawable) {
         imageView.setAlpha(0.0F);
         imageView.setImageDrawable(drawable);
-        imageView.animate().setDuration(2000).alpha(1.0F).start();
+        imageView.animate().setDuration(2000).setInterpolator(new DecelerateInterpolator()).alpha(1.0F).start();
     }
 
     public static void setFullScreen(Activity activity, View view, long startOffset) {

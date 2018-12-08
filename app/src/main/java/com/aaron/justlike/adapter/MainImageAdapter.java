@@ -2,9 +2,11 @@ package com.aaron.justlike.adapter;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.MainActivity;
@@ -16,11 +18,13 @@ import com.aaron.justlike.util.SystemUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -101,7 +105,7 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         Image image = mImageList.get(position); // 从集合中找到 Image 对象
         String path = image.getPath();
         RequestOptions options = new RequestOptions()
@@ -115,10 +119,18 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
                 .setCrossFadeEnabled(true).build();
         Glide.with(mActivity)
                 .load(path)
-//                .thumbnail(0.1F)
                 .apply(options)
-                .transition(DrawableTransitionOptions.with(factory))
-                .into(holder.squareView);
+//                .transition(DrawableTransitionOptions.with(factory))
+                .into(new ImageViewTarget<Drawable>(holder.squareView) {
+                    @Override
+                    protected void setResource(@Nullable Drawable resource) {
+                        holder.squareView.setImageDrawable(resource);
+                        AlphaAnimation aa = new AlphaAnimation(0.5F, 1);
+                        aa.setDuration(250);
+                        aa.setFillAfter(true);
+                        holder.squareView.startAnimation(aa);
+                    }
+                });
     }
 
     @Override
