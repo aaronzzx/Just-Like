@@ -8,21 +8,48 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.aaron.justlike.R;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 
 public class AnimationUtil {
+
+    public static void handleBottomBar(ViewGroup group, View view, String type, long startOffset) {
+        AnimationSet as = new AnimationSet(true);
+        as.setFillAfter(true);
+        as.setDuration(250);
+        as.setStartOffset(startOffset);
+        switch (type) {
+            case "hide":
+                AlphaAnimation aa1 = new AlphaAnimation(1, 0);
+                TranslateAnimation ta1 = new TranslateAnimation(0, 0, 0, 200);
+                as.addAnimation(aa1);
+                as.addAnimation(ta1);
+                group.startAnimation(as);
+                view.startAnimation(as);
+                group.setVisibility(View.GONE);
+                view.setSystemUiVisibility(View.GONE);
+                break;
+            case "show":
+                AlphaAnimation aa2 = new AlphaAnimation(0, 1);
+                TranslateAnimation ta2 = new TranslateAnimation(0, 0, 200, 0);
+                as.addAnimation(aa2);
+                as.addAnimation(ta2);
+                group.startAnimation(as);
+                view.startAnimation(as);
+                group.setVisibility(View.VISIBLE);
+                view.setSystemUiVisibility(View.VISIBLE);
+                break;
+        }
+    }
 
     public static Bitmap handleImageEffect(Bitmap bm, float saturation) {
         Bitmap bmp = Bitmap.createBitmap(bm.getWidth(), bm.getHeight(), Bitmap.Config.ARGB_8888);
@@ -49,7 +76,6 @@ public class AnimationUtil {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        // Toolbar 动画
         AnimationSet as = new AnimationSet(true);
         as.setDuration(250);
         AlphaAnimation aa = new AlphaAnimation(1, 0);
@@ -59,17 +85,6 @@ public class AnimationUtil {
         as.setStartOffset(startOffset);
         view.startAnimation(as);
         view.setVisibility(View.GONE);
-        // 背景切换动画
-        /*ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.WHITE, Color.BLACK);
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int color = (int) animation.getAnimatedValue();
-                background.setBackgroundColor(color);
-            }
-        });
-        va.setDuration(150);
-        va.start();*/
     }
 
     public static void exitFullScreen(Activity activity, View view, long startOffset) {
@@ -77,7 +92,6 @@ public class AnimationUtil {
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        // Toolbar 动画
         AnimationSet as = new AnimationSet(true);
         as.setDuration(250);
         AlphaAnimation aa = new AlphaAnimation(0, 1);
@@ -87,17 +101,6 @@ public class AnimationUtil {
         as.setStartOffset(startOffset);
         view.startAnimation(as);
         view.setVisibility(View.VISIBLE);
-        // 背景切换动画
-        /*ValueAnimator va = ValueAnimator.ofObject(new ArgbEvaluator(), Color.BLACK, Color.WHITE);
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int color = (int) animation.getAnimatedValue();
-                background.setBackgroundColor(color);
-            }
-        });
-        va.setDuration(150);
-        va.start();*/
     }
 
     public static void showProgressBar(final ProgressBar progressBar) {

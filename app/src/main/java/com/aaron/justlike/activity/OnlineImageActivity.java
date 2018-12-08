@@ -11,13 +11,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.util.AnimationUtil;
-import com.aaron.justlike.util.FileUtils;
-import com.aaron.justlike.util.LogUtil;
 import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -26,10 +25,10 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.snackbar.Snackbar;
 import com.kc.unsplash.models.Photo;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 
 import androidx.annotation.Nullable;
@@ -37,13 +36,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class OnlineImageActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String CLIENT_ID = "936a1449161e2845eff4da43b160cea25e234a32188cc16c981e997590c65086";
     private Toolbar mToolbar;
     private ProgressBar mProgressBar;
     private ImageView mProgressImage;
@@ -53,9 +48,10 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
     private TextView mImageLikes;
     private PhotoView mPhotoView;
     private Photo mPhoto;
+    private LinearLayout mBottomBar;
+    private FloatingActionMenu mFloatingActionMenu;
     private FloatingActionButton mFabDownload;
     private FloatingActionButton mFabWallpaper;
-    private FloatingActionButton mFabImageInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +66,6 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
             Window window = getWindow();
-//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.TRANSPARENT);
             window.setNavigationBarColor(Color.TRANSPARENT);
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -133,6 +127,7 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
         return super.onSupportNavigateUp();
     }
 
+    @SuppressLint("SwitchIntDef")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -140,14 +135,25 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
                 loadImageByGlide();
                 mProgressImage.setVisibility(View.GONE);
                 break;
+            case R.id.activity_online_image_view:
+                if (mFloatingActionMenu.isOpened()) {
+                    mFloatingActionMenu.close(true);
+                    break;
+                }
+                int flag = mToolbar.getVisibility();
+                if (flag == View.GONE) {
+                    AnimationUtil.exitFullScreen(this, mToolbar, 0);
+                    AnimationUtil.handleBottomBar(mBottomBar, mFloatingActionMenu, "show", 0);
+                } else {
+                    AnimationUtil.setFullScreen(this, mToolbar, 100);
+                    AnimationUtil.handleBottomBar(mBottomBar, mFloatingActionMenu, "hide", 100);
+                }
+                break;
             case R.id.fab_download:
-
+                mFloatingActionMenu.close(true);
                 break;
             case R.id.fab_set_wallpaper:
-
-                break;
-            case R.id.fab_image_info:
-
+                mFloatingActionMenu.close(true);
                 break;
         }
     }
@@ -173,41 +179,23 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
         mImageLikes = findViewById(R.id.image_likes);
         mImageDownloads = findViewById(R.id.image_downloads);
         mPhotoView = findViewById(R.id.activity_online_image_view);
+        mPhotoView.setOnClickListener(this);
+        mBottomBar = findViewById(R.id.bottom_bar);
+        mFloatingActionMenu = findViewById(R.id.fab_menu);
         mFabDownload = findViewById(R.id.fab_download);
         mFabWallpaper = findViewById(R.id.fab_set_wallpaper);
-        mFabImageInfo = findViewById(R.id.fab_image_info);
         mFabDownload.setOnClickListener(this);
         mFabWallpaper.setOnClickListener(this);
-        mFabImageInfo.setOnClickListener(this);
         AnimationUtil.exitFullScreen(this, mToolbar, 200);
+        AnimationUtil.handleBottomBar(mBottomBar, mFloatingActionMenu, "show", 200);
     }
 
     @SuppressLint("SetTextI18n")
     private void loadImageByGlide() {
-//        FileUtils.getPhotoStats(mPhoto.getId(), CLIENT_ID, new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                String json = response.body().string();
-//                final int likes = FileUtils.parseJson(json, "likes");
-//                final int downloads = FileUtils.parseJson(json, "downloads");
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        mImageLikes.setText(likes + " Likes");
-//                        mImageDownloads.setText(downloads + " Downloads");
-//                    }
-//                });
-//            }
-//        });
         mProgressBar.setVisibility(View.VISIBLE);
         mAuthorName.setText(mPhoto.getUser().getName());
         mImageLikes.setText(mPhoto.getLikes() + " Likes");
-        mImageDownloads.setText(mPhoto.getDownloads() + " Downloads");
+        mImageDownloads.setText(mPhoto.getCreatedAt().substring(0, 10));
         RequestOptions options = new RequestOptions()
                 .placeholder(R.drawable.ic_place_holder);
         Glide.with(this)

@@ -82,55 +82,25 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
         Photo photo = mPhotoList.get(position);
         String authorName = photo.getUser().getName();
         String authorImage = photo.getUser().getProfileImage().getLarge();
-        String urlsForImageView = photo.getUrls().getThumb();
-        String urlsForFakeView = photo.getUrls().getRegular();
+        String urls = photo.getUrls().getRegular();
+
         RequestOptions options = new RequestOptions()
                 .placeholder(R.drawable.ic_place_holder);
+
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
                 .Builder(300)
                 .setCrossFadeEnabled(true).build();
+
         Glide.with(mActivity)
                 .load(authorImage)
                 .apply(options)
-                .transition(DrawableTransitionOptions.with(factory))
                 .into(holder.authorImage);
         holder.authorName.setText(authorName);
-        RequestOptions options1 = new RequestOptions()
-//                .centerCrop()
-//                .placeholder(placeHolders[1])
-                .diskCacheStrategy(DiskCacheStrategy.ALL);
-        Glide.with(mActivity)
-                .load(urlsForImageView)
-//                .apply(options1)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        return false;
-                    }
 
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        ColorMatrix matrix = new ColorMatrix();
-                        matrix.setSaturation(0);
-                        resource.setColorFilter(new ColorMatrixColorFilter(matrix));
-                        holder.imageView.setImageDrawable(resource);
-                        AlphaAnimation aa = new AlphaAnimation(0, 1);
-                        aa.setDuration(300);
-                        aa.setFillAfter(true);
-                        holder.imageView.startAnimation(aa);
-                        return false;
-                    }
-                })
-                .into(holder.imageView);
         Glide.with(mActivity)
-                .load(urlsForFakeView)
-//                .apply(options1)
-                .into(new ImageViewTarget<Drawable>(holder.fakeView) {
-                    @Override
-                    protected void setResource(@Nullable Drawable resource) {
-                        AnimationUtil.showFakeView(holder.fakeView, resource);
-                    }
-                });
+                .load(urls)
+                .transition(DrawableTransitionOptions.with(factory))
+                .into(holder.imageView);
     }
 
     @Override
@@ -141,7 +111,6 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
     static class ViewHolder extends RecyclerView.ViewHolder {
         View itemView;
         ImageView imageView;
-        ImageView fakeView;
         ImageView authorImage;
         TextView authorName;
 
@@ -152,7 +121,6 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<OnlineImageAdapter.
             super(view);
             itemView = view;
             imageView = view.findViewById(R.id.image_view);
-            fakeView = view.findViewById(R.id.fake_view);
             authorImage = view.findViewById(R.id.author_image);
             authorName = view.findViewById(R.id.author_name);
         }

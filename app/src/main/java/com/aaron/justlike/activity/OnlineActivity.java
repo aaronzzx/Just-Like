@@ -184,8 +184,8 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                 mProgressBar.setVisibility(View.GONE);
                 mSwipeRefresh.setEnabled(true);
                 mPhotoList.addAll(photos);
-//                mAdapter.notifyDataSetChanged();
-                mAdapter.notifyItemChanged(8, "abc");
+                mAdapter.notifyDataSetChanged();
+//                mAdapter.notifyItemChanged(8, "abc");
                 if (mSwipeRefresh.isRefreshing()) {
                     mSwipeRefresh.setRefreshing(false);
                 }

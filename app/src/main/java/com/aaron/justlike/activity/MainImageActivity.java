@@ -167,7 +167,7 @@ public class MainImageActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
-        AnimationUtil.exitFullScreen(this, mToolbar, 300);
+        AnimationUtil.exitFullScreen(this, mToolbar, 200);
 
         mViewPager = findViewById(R.id.activity_display_image_vp);
         mViewPager.setOffscreenPageLimit(4);
