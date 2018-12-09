@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -139,6 +140,12 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mAdapter = new OnlineImageAdapter(this, mPhotoList);
         mRecyclerView.setAdapter(mAdapter);
+        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return mAdapter.isFooterView(position) ? mLayoutManager.getSpanCount() : 1;
+            }
+        });
         loadUnsplash();
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -189,15 +196,10 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                 if (mSwipeRefresh.isRefreshing()) {
                     mSwipeRefresh.setRefreshing(false);
                 }
-                /*if ((mLoadNum - 1) % 2 == 0) {
-                    return;
-                }
-                loadUnsplash();*/
             }
 
             @Override
             public void onError(String error) {
-//                AnimationUtil.hideProgressBar(mProgressBar);
                 mProgressBar.setVisibility(View.GONE);
                 mSwipeRefresh.setEnabled(true);
                 Snackbar.make(mRecyclerView, "加载失败，请检查网络", Snackbar.LENGTH_LONG)

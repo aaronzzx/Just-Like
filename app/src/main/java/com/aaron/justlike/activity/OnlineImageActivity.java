@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -35,6 +36,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OnlineImageActivity extends AppCompatActivity implements View.OnClickListener {
@@ -145,8 +147,8 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
                     AnimationUtil.exitFullScreen(this, mToolbar, 0);
                     AnimationUtil.handleBottomBar(mBottomBar, mFloatingActionMenu, "show", 0);
                 } else {
-                    AnimationUtil.setFullScreen(this, mToolbar, 100);
-                    AnimationUtil.handleBottomBar(mBottomBar, mFloatingActionMenu, "hide", 100);
+                    AnimationUtil.setFullScreen(this, mToolbar, 90);
+                    AnimationUtil.handleBottomBar(mBottomBar, mFloatingActionMenu, "hide", 90);
                 }
                 break;
             case R.id.fab_download:
@@ -158,6 +160,7 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initViews() {
         // 获取从适配器序列化过来的值
         Bundle bundle = getIntent().getExtras();
