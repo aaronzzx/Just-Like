@@ -22,6 +22,13 @@ import com.aaron.justlike.R;
 
 public class AnimationUtil {
 
+    public static void showView(View view) {
+        AlphaAnimation aa = new AlphaAnimation(0, 1);
+        aa.setFillAfter(true);
+        aa.setDuration(300);
+        view.startAnimation(aa);
+    }
+
     public static void handleBottomBar(ViewGroup group, View view, String type, long startOffset) {
         AnimationSet as = new AnimationSet(true);
         as.setFillAfter(true);

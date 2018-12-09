@@ -9,10 +9,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.ProgressBar;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.OnlineImageAdapter;
+import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.appbar.AppBarLayout;
@@ -48,6 +51,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
     private ProgressBar mProgressBar;
+    private ProgressBar mFooterProgress;
     private boolean canScrollVertical;
     private int mLoadNum = 1; // 1 代表加载 Unsplash 最新的图像
     private List<Photo> mPhotoList = new ArrayList<>();
@@ -132,6 +136,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
             actionBar.setHomeAsUpIndicator(R.mipmap.ic_back);
         }
         mProgressBar = findViewById(R.id.progress_bar);
+        mFooterProgress = findViewById(R.id.footer_progress);
         mSwipeRefresh.setEnabled(false);
         mRecyclerView = findViewById(R.id.recycler_view);
 
@@ -154,6 +159,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     canScrollVertical = mRecyclerView.canScrollVertically(1);
                     if (!canScrollVertical) {
+                        mFooterProgress.setVisibility(View.VISIBLE);
                         loadUnsplash();
                     }
                 }
@@ -188,11 +194,11 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
         unsplash.getPhotos(mLoadNum++, 30, Order.LATEST, new Unsplash.OnPhotosLoadedListener() {
             @Override
             public void onComplete(List<Photo> photos) {
-                mProgressBar.setVisibility(View.GONE);
                 mSwipeRefresh.setEnabled(true);
                 mPhotoList.addAll(photos);
                 mAdapter.notifyDataSetChanged();
-//                mAdapter.notifyItemChanged(8, "abc");
+                mFooterProgress.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.GONE);
                 if (mSwipeRefresh.isRefreshing()) {
                     mSwipeRefresh.setRefreshing(false);
                 }
@@ -200,6 +206,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onError(String error) {
+                mFooterProgress.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.GONE);
                 mSwipeRefresh.setEnabled(true);
                 Snackbar.make(mRecyclerView, "加载失败，请检查网络", Snackbar.LENGTH_LONG)

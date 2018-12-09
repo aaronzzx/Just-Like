@@ -147,8 +147,8 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
                     AnimationUtil.exitFullScreen(this, mToolbar, 0);
                     AnimationUtil.handleBottomBar(mBottomBar, mFloatingActionMenu, "show", 0);
                 } else {
-                    AnimationUtil.setFullScreen(this, mToolbar, 90);
-                    AnimationUtil.handleBottomBar(mBottomBar, mFloatingActionMenu, "hide", 90);
+                    AnimationUtil.setFullScreen(this, mToolbar, 0);
+                    AnimationUtil.handleBottomBar(mBottomBar, mFloatingActionMenu, "hide", 0);
                 }
                 break;
             case R.id.fab_download:

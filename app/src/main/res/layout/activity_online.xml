@@ -57,4 +57,14 @@
         android:layout_centerInParent="true"
         android:indeterminateTint="#fff" />
 
+    <ProgressBar
+        android:id="@+id/footer_progress"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:indeterminateTint="#fff"
+        android:visibility="gone"/>
+
 </RelativeLayout>

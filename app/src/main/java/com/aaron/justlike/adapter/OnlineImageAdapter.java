@@ -43,7 +43,7 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public boolean isFooterView(int position) {
-        return position >= getItemCount() - 1;
+        return position == getItemCount() - 1;
     }
 
     @Override
