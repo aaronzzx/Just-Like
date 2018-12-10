@@ -1,14 +1,17 @@
 package com.aaron.justlike.activity;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -17,7 +20,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.service.DownloadService;
 import com.aaron.justlike.util.AnimationUtil;
+import com.aaron.justlike.util.FileUtils;
 import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -30,16 +35,20 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.snackbar.Snackbar;
 import com.kc.unsplash.models.Photo;
 
+import java.io.File;
 import java.lang.reflect.Method;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OnlineImageActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private DownloadService.DownloadBinder mDownloadBinder;
+    private static final int NORMAL = 0;
+    private static final int SET_WALLPAPER = 1;
 
     private Toolbar mToolbar;
     private ProgressBar mProgressBar;
@@ -55,12 +64,31 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
     private FloatingActionButton mFabDownload;
     private FloatingActionButton mFabWallpaper;
 
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mDownloadBinder = (DownloadService.DownloadBinder) service;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) { }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online_image);
         initViews();
         loadImageByGlide();
+        Intent intent = new Intent(this, DownloadService.class);
+        startService(intent);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(mConnection);
     }
 
     @Override
@@ -153,9 +181,19 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.fab_download:
                 mFloatingActionMenu.close(true);
+                String url = mPhoto.getLinks().getDownload();
+                mDownloadBinder.startDownload(url, mPhoto.getId(), NORMAL);
                 break;
             case R.id.fab_set_wallpaper:
                 mFloatingActionMenu.close(true);
+                String path = Environment.getExternalStorageDirectory().getPath() + "/JustLike/online/" + mPhoto.getId() + ".JPG";
+                File file = new File(path);
+                if (file.exists()) {
+                    FileUtils.setWallpaper(this, path);
+                } else {
+                    String url1 = mPhoto.getLinks().getDownload();
+                    mDownloadBinder.startDownload(url1, mPhoto.getId(), SET_WALLPAPER);
+                }
                 break;
         }
     }

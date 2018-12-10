@@ -29,6 +29,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,6 +39,8 @@ import java.util.List;
 import androidx.core.content.FileProvider;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 public class FileUtils {
 
@@ -137,6 +141,7 @@ public class FileUtils {
     }
 
     public static void setWallpaper(Context context, String path) {
+        Toast.makeText(context, "改造中...", Toast.LENGTH_SHORT).show();
         WallpaperManager manager = WallpaperManager.getInstance(context);
         if (manager != null && path != null) {
             File file = new File(path);
@@ -221,9 +226,13 @@ public class FileUtils {
      */
     public static JSONArray getAllFiles(String dirPath, String type) {
         File file = new File(dirPath);
-        if (!file.exists()) return null;
+        if (!file.exists()) {
+            return null;
+        }
         File[] files = file.listFiles();
-        if (files == null) return null;
+        if (files == null) {
+            return null;
+        }
         JSONArray fileList = new JSONArray();
         // 遍历数组内的文件
         for (File aFile : files) {
@@ -417,6 +426,7 @@ public class FileUtils {
              // Image 构造方法，将 Image 对象传入集合并通知适配器更新，
              // 从而达到加载缓存的目的。
             JSONArray typeArray;
+            JSONArray onlineArray = null;
             for (String imageType : type) {
                 if (searchCacheDir) {
                     typeArray = getAllFiles(activity.getExternalCacheDir().getAbsolutePath(),
@@ -424,10 +434,25 @@ public class FileUtils {
                 } else {
                     typeArray = getAllFiles(Environment.getExternalStorageDirectory().getPath() + "/JustLike/images",
                             imageType);
+                    onlineArray = getAllFiles(Environment.getExternalStorageDirectory().getPath() + "/JustLike/online",
+                            imageType);
                 }
                 if (typeArray != null) {
                     for (int i = 0; i < typeArray.length(); i++) {
                         JSONObject jsonObject = typeArray.getJSONObject(i);
+                        String path = jsonObject.getString("path");
+                        String fileName = path.substring(path.lastIndexOf("/") + 1);
+                        MainActivity.getFileNameList().add(fileName);
+                        Image image = new Image(path);
+                        image.setFileName(getImageName(path));
+                        image.setCreateDate(getImageDate(path));
+                        image.setSize(getImageSize(path));
+                        imageList.add(image);
+                    }
+                }
+                if (onlineArray != null) {
+                    for (int i = 0; i < onlineArray.length(); i++) {
+                        JSONObject jsonObject = onlineArray.getJSONObject(i);
                         String path = jsonObject.getString("path");
                         String fileName = path.substring(path.lastIndexOf("/") + 1);
                         MainActivity.getFileNameList().add(fileName);

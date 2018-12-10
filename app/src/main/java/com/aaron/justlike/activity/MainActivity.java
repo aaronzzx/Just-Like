@@ -443,9 +443,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void sort() {
         if (mSortByOrder.isChecked()) {
             if (mSortByDate.isChecked()) {
-                FileUtils.sortByName(mImageList, true);
-            } else if (mSortByName.isChecked()) {
                 FileUtils.sortByDate(mImageList, true);
+            } else if (mSortByName.isChecked()) {
+                FileUtils.sortByName(mImageList, true);
             } else {
                 FileUtils.sortBySize(mImageList, true);
             }

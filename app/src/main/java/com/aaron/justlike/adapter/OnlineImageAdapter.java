@@ -97,7 +97,7 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Glide.with(mActivity)
                     .load(authorImage)
                     .apply(options)
-                    .into(((ViewHolder) holder).imageView);
+                    .into(((ViewHolder) holder).authorImage);
             ((ViewHolder) holder).authorName.setText(authorName);
 
             Glide.with(mActivity)

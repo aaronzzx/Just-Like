@@ -16,7 +16,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-
         <activity
             android:name=".activity.MainActivity"
             android:theme="@style/AppTheme.Splash">
@@ -26,27 +25,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.MainImageActivity"
             android:label=""
             android:theme="@style/AppTheme.DisplayActivity" />
-
         <activity
             android:name=".activity.OnlineActivity"
             android:label="Online"
             android:theme="@style/AppTheme.OnlineActivity" />
-
         <activity
             android:name=".activity.OnlineImageActivity"
             android:label=""
-            android:theme="@style/AppTheme.OnlineActivity"/>
-
+            android:theme="@style/AppTheme.OnlineActivity" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".activity.AboutActivity"
             android:label="关于"
@@ -62,6 +56,10 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <service
+            android:name=".service.DownloadService"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
 </manifest>
