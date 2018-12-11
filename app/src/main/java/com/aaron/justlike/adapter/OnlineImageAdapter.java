@@ -1,9 +1,13 @@
 package com.aaron.justlike.adapter;
 
 import android.content.Intent;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -12,14 +16,20 @@ import com.aaron.justlike.R;
 import com.aaron.justlike.activity.OnlineActivity;
 import com.aaron.justlike.activity.OnlineImageActivity;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.kc.unsplash.models.Photo;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class OnlineImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -85,10 +95,11 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Photo photo = mPhotoList.get(position);
             String authorName = photo.getUser().getName();
             String authorImage = photo.getUser().getProfileImage().getLarge();
-            String urls = photo.getUrls().getRegular();
+            String forImage = photo.getUrls().getRegular();
+            String forFake = photo.getUrls().getSmall();
 
             RequestOptions options = new RequestOptions()
-                    .placeholder(R.drawable.ic_place_holder);
+                    .priority(Priority.HIGH);
 
             DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
                     .Builder(300)
@@ -101,8 +112,47 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((ViewHolder) holder).authorName.setText(authorName);
 
             Glide.with(mActivity)
-                    .load(urls)
-                    .transition(DrawableTransitionOptions.with(factory))
+                    .load(forFake)
+                    .apply(options)
+//                    .transition(DrawableTransitionOptions.with(factory))
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            ColorMatrix matrix = new ColorMatrix();
+                            matrix.setSaturation(0);
+                            resource.setColorFilter(new ColorMatrixColorFilter(matrix));
+                            ((ViewHolder) holder).fakeView.setImageDrawable(resource);
+                            AlphaAnimation aa = new AlphaAnimation(0, 1);
+                            aa.setDuration(250);
+                            aa.setFillAfter(true);
+                            ((ViewHolder) holder).fakeView.startAnimation(aa);
+                            return false;
+                        }
+                    })
+                    .into(((ViewHolder) holder).fakeView);
+            Glide.with(mActivity)
+                    .load(forFake)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            ((ViewHolder) holder).imageView.setImageDrawable(resource);
+                            AlphaAnimation aa = new AlphaAnimation(0, 1);
+                            aa.setDuration(2000);
+                            aa.setFillAfter(true);
+                            ((ViewHolder) holder).imageView.startAnimation(aa);
+                            return false;
+                        }
+                    })
                     .into(((ViewHolder) holder).imageView);
         } else if (holder instanceof FooterViewHolder) {
 
@@ -124,6 +174,7 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     class ViewHolder extends RecyclerView.ViewHolder {
         View itemView;
         ImageView imageView;
+        ImageView fakeView;
         ImageView authorImage;
         TextView authorName;
 
@@ -134,6 +185,7 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             super(view);
             itemView = view;
             imageView = view.findViewById(R.id.image_view);
+            fakeView = view.findViewById(R.id.fake_view);
             authorImage = view.findViewById(R.id.author_image);
             authorName = view.findViewById(R.id.author_name);
         }

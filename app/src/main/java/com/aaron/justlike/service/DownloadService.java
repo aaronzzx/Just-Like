@@ -1,5 +1,6 @@
 package com.aaron.justlike.service;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -7,19 +8,27 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
+import android.text.TextUtils;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.util.DownloadListener;
 import com.aaron.justlike.util.DownloadTask;
 import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.util.SystemUtils;
 
 import java.io.File;
+import java.io.IOException;
 
 import androidx.core.app.NotificationCompat;
 
@@ -36,7 +45,7 @@ public class DownloadService extends Service {
     private DownloadListener mDownloadListener = new DownloadListener() {
         @Override
         public void onProgress(int progress) {
-            getNotificationManager().notify(DOWNLOAD_NOTIFICATION_ID, getNotification("正在下载 " + mPhotoId + ".JPG", "假装正在加速...", progress));
+            getNotificationManager().notify(DOWNLOAD_NOTIFICATION_ID, getNotification("正在下载 " + mPhotoId + ".JPG", "全力冲刺中", progress, false));
         }
 
         @Override
@@ -44,11 +53,21 @@ public class DownloadService extends Service {
             mDownloadTask = null;
             // 下载成功时将前台服务通知关闭，并创建一个下载成功的通知
             stopForeground(true);
-            getNotificationManager().notify(DOWNLOAD_NOTIFICATION_ID, getNotification(mPhotoId + ".JPG", "下载成功", -1));
+            getNotificationManager().notify(DOWNLOAD_NOTIFICATION_ID, getNotification(mPhotoId + ".JPG", "下载成功", -1, false));
             Toast.makeText(DownloadService.this, "下载成功", Toast.LENGTH_SHORT).show();
             if (mFabType == 1) {
                 String path = Environment.getExternalStorageDirectory().getPath() + "/JustLike/online/" + mPhotoId + ".JPG";
                 FileUtils.setWallpaper(DownloadService.this, path);
+                // 为下载的壁纸创建日期
+                String originalDate = SystemUtils.getLastModified(path, "yyyy-MM-dd HH:mm:ss");
+                ExifInterface exif;
+                try {
+                    exif = new ExifInterface(path);
+                    exif.setAttribute(ExifInterface.TAG_DATETIME, originalDate);
+                    exif.saveAttributes();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -57,7 +76,7 @@ public class DownloadService extends Service {
             mDownloadTask = null;
             // 下载失败时将前台服务通知关闭，并创建一个下载失败的通知
             stopForeground(true);
-            getNotificationManager().notify(DOWNLOAD_NOTIFICATION_ID, getNotification(mPhotoId + ".JPG", "下载失败", -1));
+            getNotificationManager().notify(DOWNLOAD_NOTIFICATION_ID, getNotification(mPhotoId + ".JPG", "下载失败", -1, false));
             Toast.makeText(DownloadService.this, "下载失败", Toast.LENGTH_SHORT).show();
         }
 
@@ -84,7 +103,7 @@ public class DownloadService extends Service {
                 mFabType = fabType;
                 mDownloadTask = new DownloadTask(mDownloadListener);
                 mDownloadTask.execute(mDownloadUrl, photoId);
-                startForeground(1, getNotification("正在下载 " + mPhotoId + ".JPG", "假装正在加速...", 0));
+                startForeground(1, getNotification("正在下载 " + mPhotoId + ".JPG", "加载资源", 0, true));
                 Toast.makeText(DownloadService.this, "正在下载", Toast.LENGTH_SHORT).show();
             }
         }
@@ -94,15 +113,15 @@ public class DownloadService extends Service {
         return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
 
-    private Notification getNotification(String title, String subText, int progress) {
+    private Notification getNotification(String title, String subText, int progress, boolean indeterminate) {
         NotificationManager manager = getNotificationManager();
         Intent intent = new Intent(Intent.ACTION_VIEW);
         String path = Environment.getExternalStorageDirectory().getPath() + "/JustLike/online/" + mPhotoId + ".JPG";
         Uri uri = Uri.parse(path);
         intent.setDataAndType(uri, "image/*");
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.drawable.ic_for_nofitication);
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setSmallIcon(R.drawable.ic_nofitication_white);
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_for_nofitication_large));
         builder.setContentIntent(pi);
         builder.setContentTitle(title);
@@ -110,7 +129,7 @@ public class DownloadService extends Service {
         builder.setAutoCancel(true);
         if (progress >= 0) {
             // 当 progress 大于或等于 0 时才需显示下载进度
-            builder.setProgress(100, progress, false);
+            builder.setProgress(100, progress, indeterminate);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(DOWNLOAD_CHANNEL_ID,

@@ -8,17 +8,14 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
-import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +35,6 @@ import com.jaeger.library.StatusBarUtil;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,8 +92,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 加载存储在程序外部目录的图片
         FileUtils.getLocalCache(this, mImageList, true, type);
         FileUtils.getLocalCache(this, mImageList, false, type);
-        sortForInit();
         mAdapter.notifyDataSetChanged();
+        sortForInit();
         LinearLayout parentOfToolbar = findViewById(R.id.activity_main_linear_layout);
         AppBarLayout.LayoutParams layoutParams = (AppBarLayout.LayoutParams) parentOfToolbar.getLayoutParams();
         if (mImageList.size() < 19) {
@@ -156,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void scrollToTop() {
         int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
         if (firstItem >= 48) {
-            mRecyclerView.scrollToPosition(25);
+            mRecyclerView.scrollToPosition(45);
         }
         mRecyclerView.smoothScrollToPosition(0);
     }
@@ -375,7 +371,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        mAdapter.notifyDataSetChanged();
+                                        mAdapter.notifyItemInserted(mImageList.size());
                                     }
                                 });
                                 if (mAsciiNum > 9) {
@@ -581,8 +577,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                refreshRecyclerFirst();
-                                refreshRecyclerLast();
+                                refreshRecycler();
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -603,14 +598,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    private void refreshRecyclerFirst() {
-        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, 2160);
-        ta.setDuration(250);
-        ta.setFillAfter(true);
-        mRecyclerView.startAnimation(ta);
-    }
-
-    private void refreshRecyclerLast() {
+    private void refreshRecycler() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -629,10 +617,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void run() {
                         mAdapter.notifyDataSetChanged();
                         mSwipeRefresh.setRefreshing(false);
-                        TranslateAnimation ta = new TranslateAnimation(0, 0, 2160, 0);
-                        ta.setDuration(250);
-                        mRecyclerView.startAnimation(ta);
 //                        addHintOnBackground();
+                        AlphaAnimation aa = new AlphaAnimation(0, 1);
+                        aa.setDuration(1000);
+                        aa.setFillAfter(true);
+                        mRecyclerView.startAnimation(aa);
                     }
                 });
             }

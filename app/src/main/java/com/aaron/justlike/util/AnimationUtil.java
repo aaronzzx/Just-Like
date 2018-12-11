@@ -25,7 +25,7 @@ public class AnimationUtil {
     public static void showView(View view) {
         AlphaAnimation aa = new AlphaAnimation(0, 1);
         aa.setFillAfter(true);
-        aa.setDuration(300);
+        aa.setDuration(1000);
         view.startAnimation(aa);
     }
 

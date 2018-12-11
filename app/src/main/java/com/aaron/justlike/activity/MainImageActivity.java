@@ -195,17 +195,20 @@ public class MainImageActivity extends AppCompatActivity {
 
     private void setTitle() {
         ExifInterface exif = null;
+        String path = MainActivity.getImageList().get(mPosition).getPath();
         try {
             exif = new ExifInterface(MainActivity.getImageList().get(mPosition).getPath());
         } catch (IOException e) {
             e.printStackTrace();
         }
+        String[] dateArray;
         String originalDate = exif.getAttribute(ExifInterface.TAG_DATETIME);
         if (!TextUtils.isEmpty(originalDate)) {
-            String[] dateArray = originalDate.split(" ");
-            mToolbar.setTitle(dateArray[0]);
-//            mToolbar.setSubtitle(dateArray[1].substring(0, 5));
+            dateArray = originalDate.split(" ");
+        } else {
+            dateArray = SystemUtils.getLastModified(path, "yyyy-MM-dd HH:mm:ss").split(" ");
         }
+        mToolbar.setTitle(dateArray[0]);
     }
 
     private void cropImage(String type) {

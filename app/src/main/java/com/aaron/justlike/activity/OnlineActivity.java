@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.OnlineImageAdapter;
+import com.aaron.justlike.extend.MyGridLayoutManager;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
@@ -45,7 +46,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     private static final String CLIENT_ID = "18db24a3d59a1b2633897fa63f3f49455c2cbfa8a22e5b8520141cb2660fa816";
     private static final Unsplash unsplash = new Unsplash(CLIENT_ID);
     private RecyclerView mRecyclerView;
-    private GridLayoutManager mLayoutManager;
+    private MyGridLayoutManager mLayoutManager;
     private OnlineImageAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefresh;
     private AppBarLayout mAppBarLayout;
@@ -116,8 +117,8 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
      */
     public void scrollToTop() {
         int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
-        if (firstItem >= 15) {
-            mRecyclerView.scrollToPosition(9);
+        if (firstItem >= 30) {
+            mRecyclerView.scrollToPosition(22);
         }
         mRecyclerView.smoothScrollToPosition(0);
     }
@@ -140,7 +141,8 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
         mSwipeRefresh.setEnabled(false);
         mRecyclerView = findViewById(R.id.recycler_view);
 
-        mLayoutManager = new GridLayoutManager(this, 2);
+        mLayoutManager = new MyGridLayoutManager(this, 2);
+        mLayoutManager.setScrollEnabled(false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mAdapter = new OnlineImageAdapter(this, mPhotoList);
@@ -151,6 +153,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                 return mAdapter.isFooterView(position) ? mLayoutManager.getSpanCount() : 1;
             }
         });
+        AnimationUtil.showView(mRecyclerView);
         loadUnsplash();
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -196,7 +199,12 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
             public void onComplete(List<Photo> photos) {
                 mSwipeRefresh.setEnabled(true);
                 mPhotoList.addAll(photos);
-                mAdapter.notifyDataSetChanged();
+                if (mLoadNum == 1) {
+                    mAdapter.notifyDataSetChanged();
+                } else {
+                    mAdapter.notifyItemRangeInserted(mPhotoList.size(), 30);
+                }
+                mLayoutManager.setScrollEnabled(true);
                 mFooterProgress.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.GONE);
                 if (mSwipeRefresh.isRefreshing()) {

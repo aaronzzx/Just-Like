@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.service.DownloadService;
@@ -180,16 +181,22 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
                 }
                 break;
             case R.id.fab_download:
-                mFloatingActionMenu.close(true);
-                String url = mPhoto.getLinks().getDownload();
-                mDownloadBinder.startDownload(url, mPhoto.getId(), NORMAL);
-                break;
-            case R.id.fab_set_wallpaper:
-                mFloatingActionMenu.close(true);
                 String path = Environment.getExternalStorageDirectory().getPath() + "/JustLike/online/" + mPhoto.getId() + ".JPG";
                 File file = new File(path);
                 if (file.exists()) {
-                    FileUtils.setWallpaper(this, path);
+                    Toast.makeText(this, "本地已下载", Toast.LENGTH_SHORT).show();
+                } else {
+                    mFloatingActionMenu.close(true);
+                    String url = mPhoto.getLinks().getDownload();
+                    mDownloadBinder.startDownload(url, mPhoto.getId(), NORMAL);
+                }
+                break;
+            case R.id.fab_set_wallpaper:
+                mFloatingActionMenu.close(true);
+                String path1 = Environment.getExternalStorageDirectory().getPath() + "/JustLike/online/" + mPhoto.getId() + ".JPG";
+                File file1 = new File(path1);
+                if (file1.exists()) {
+                    FileUtils.setWallpaper(this, path1);
                 } else {
                     String url1 = mPhoto.getLinks().getDownload();
                     mDownloadBinder.startDownload(url1, mPhoto.getId(), SET_WALLPAPER);

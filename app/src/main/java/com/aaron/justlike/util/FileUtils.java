@@ -141,7 +141,7 @@ public class FileUtils {
     }
 
     public static void setWallpaper(Context context, String path) {
-        Toast.makeText(context, "改造中...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "改造中", Toast.LENGTH_SHORT).show();
         WallpaperManager manager = WallpaperManager.getInstance(context);
         if (manager != null && path != null) {
             File file = new File(path);
