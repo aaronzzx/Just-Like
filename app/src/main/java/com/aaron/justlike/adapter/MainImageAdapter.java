@@ -15,6 +15,7 @@ import com.aaron.justlike.activity.MainActivity;
 import com.aaron.justlike.activity.MainImageActivity;
 import com.aaron.justlike.another.Image;
 import com.aaron.justlike.extend.SquareView;
+import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -23,7 +24,6 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 
 import java.util.List;
 
@@ -91,6 +91,7 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
                                     String fileName = path.substring(path.lastIndexOf("/"));
                                     mImageList.remove(position);
                                     notifyItemRemoved(position);
+                                    notifyItemRangeChanged(position, mImageList.size() - 1, null);
                                     FileUtils.deleteFile(mActivity, fileName);
                                 }
                             })
@@ -113,9 +114,6 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
         RequestOptions options = new RequestOptions()
                 .placeholder(R.color.colorGrey)
                 .priority(Priority.HIGH);
-        DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
-                .Builder(100)
-                .setCrossFadeEnabled(true).build();
         Glide.with(mActivity)
                 .load(path)
                 .apply(options)
@@ -141,8 +139,6 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
                 .into(holder.fakeView);
         Glide.with(mActivity)
                 .load(path)
-//                .apply(options)
-//                .transition(DrawableTransitionOptions.with(factory))
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -152,10 +148,7 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         holder.squareView.setImageDrawable(resource);
-                        AlphaAnimation aa = new AlphaAnimation(0, 1);
-                        aa.setDuration(600);
-                        aa.setFillAfter(true);
-                        holder.squareView.startAnimation(aa);
+                        AnimationUtil.showViewByAlpha(holder.fakeView, 600);
                         return false;
                     }
                 })

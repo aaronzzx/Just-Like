@@ -240,10 +240,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     item.setChecked(false);
                     if (mSortByDate.isChecked()) {
                         FileUtils.sortByDate(mImageList, false);
+                        editor.putInt("mode_sort", 1);
                     } else if (mSortByName.isChecked()) {
                         FileUtils.sortByName(mImageList, false);
+                        editor.putInt("mode_sort", 2);
                     } else {
                         FileUtils.sortBySize(mImageList, false);
+                        editor.putInt("mode_sort", 3);
                     }
                     mAdapter.notifyDataSetChanged();
                     editor.putInt("order_or_reverse", 2);
@@ -252,10 +255,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     item.setChecked(true);
                     if (mSortByDate.isChecked()) {
                         FileUtils.sortByDate(mImageList, true);
+                        editor.putInt("mode_sort", 1);
                     } else if (mSortByName.isChecked()) {
                         FileUtils.sortByName(mImageList, true);
+                        editor.putInt("mode_sort", 2);
                     } else {
                         FileUtils.sortBySize(mImageList, true);
+                        editor.putInt("mode_sort", 3);
                     }
                     mAdapter.notifyDataSetChanged();
                     editor.putInt("order_or_reverse", 1);
@@ -392,6 +398,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mImageList.remove(position);
                     mFileNameList.remove(position);
                     mAdapter.notifyItemRemoved(position);
+                    mAdapter.notifyItemRangeChanged(position, mImageList.size() - 1);
                     FileUtils.deleteFile(this, "/" + fileName);
                 }
                 break;
@@ -653,12 +660,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) % 3 == 0) {
                 outRect.left = 0;
-                outRect.right = SystemUtils.dp2px(MainActivity.this, 2.5F);
+                outRect.right = SystemUtils.dp2px(MainActivity.this, 2.8F); // 8px
             } else if (parent.getChildAdapterPosition(view) % 3 == 1) {
-                outRect.left = SystemUtils.dp2px(MainActivity.this, 1.5F);
-                outRect.right = SystemUtils.dp2px(MainActivity.this, 1.5F);
+                outRect.left = SystemUtils.dp2px(MainActivity.this, 1.3F); // 4px
+                outRect.right = SystemUtils.dp2px(MainActivity.this, 1.3F); // 4px
             } else if (parent.getChildAdapterPosition(view) % 3 == 2) {
-                outRect.left = SystemUtils.dp2px(MainActivity.this, 2.5F);
+                outRect.left = SystemUtils.dp2px(MainActivity.this, 2.8F); // 8px
                 outRect.right = 0;
             }
         }
@@ -668,15 +675,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int size = mImageList.size();
-            outRect.top = 0;
-            outRect.bottom = SystemUtils.dp2px(MainActivity.this, 4.0F);
-            if (parent.getChildAdapterPosition(view) == size - 1) {
-                outRect.bottom = -1;
-            } else if (parent.getChildAdapterPosition(view) == size - 2) {
-                outRect.bottom = -1;
-            } else if (parent.getChildAdapterPosition(view) == size - 3) {
-                outRect.bottom = -1;
+            outRect.bottom = 0;
+            outRect.top = SystemUtils.dp2px(MainActivity.this, 4.2F); // 12px
+            if (parent.getChildAdapterPosition(view) == 0) {
+                outRect.top = 0;
+            } else if (parent.getChildAdapterPosition(view) == 1) {
+                outRect.top = 0;
+            } else if (parent.getChildAdapterPosition(view) == 2) {
+                outRect.top = 0;
             }
         }
     }

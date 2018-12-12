@@ -1,23 +1,18 @@
 package com.aaron.justlike.activity;
 
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.widget.ProgressBar;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.OnlineImageAdapter;
 import com.aaron.justlike.extend.MyGridLayoutManager;
 import com.aaron.justlike.util.AnimationUtil;
-import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
@@ -25,7 +20,6 @@ import com.kc.unsplash.Unsplash;
 import com.kc.unsplash.api.Order;
 import com.kc.unsplash.models.Photo;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,11 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class OnlineActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -153,7 +143,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                 return mAdapter.isFooterView(position) ? mLayoutManager.getSpanCount() : 1;
             }
         });
-        AnimationUtil.showView(mRecyclerView);
+        AnimationUtil.showViewByAlpha(mRecyclerView, 1000);
         loadUnsplash();
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

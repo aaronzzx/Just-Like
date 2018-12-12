@@ -7,23 +7,20 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.OnlineActivity;
 import com.aaron.justlike.activity.OnlineImageActivity;
+import com.aaron.justlike.util.AnimationUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.kc.unsplash.models.Photo;
 
 import java.util.List;
@@ -95,15 +92,13 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Photo photo = mPhotoList.get(position);
             String authorName = photo.getUser().getName();
             String authorImage = photo.getUser().getProfileImage().getLarge();
-            String forImage = photo.getUrls().getRegular();
-            String forFake = photo.getUrls().getSmall();
+            String urls = photo.getUrls().getRegular();
 
             RequestOptions options = new RequestOptions()
+                    .placeholder(R.drawable.ic_place_holder)
                     .priority(Priority.HIGH);
-
-            DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
-                    .Builder(300)
-                    .setCrossFadeEnabled(true).build();
+            RequestOptions options1 = new RequestOptions()
+                    .priority(Priority.HIGH);
 
             Glide.with(mActivity)
                     .load(authorImage)
@@ -112,9 +107,8 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((ViewHolder) holder).authorName.setText(authorName);
 
             Glide.with(mActivity)
-                    .load(forFake)
-                    .apply(options)
-//                    .transition(DrawableTransitionOptions.with(factory))
+                    .load(urls)
+                    .apply(options1)
                     .listener(new RequestListener<Drawable>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -127,16 +121,13 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                             matrix.setSaturation(0);
                             resource.setColorFilter(new ColorMatrixColorFilter(matrix));
                             ((ViewHolder) holder).fakeView.setImageDrawable(resource);
-                            AlphaAnimation aa = new AlphaAnimation(0, 1);
-                            aa.setDuration(250);
-                            aa.setFillAfter(true);
-                            ((ViewHolder) holder).fakeView.startAnimation(aa);
+                            AnimationUtil.showViewByAlpha(((ViewHolder) holder).fakeView, 250);
                             return false;
                         }
                     })
                     .into(((ViewHolder) holder).fakeView);
             Glide.with(mActivity)
-                    .load(forFake)
+                    .load(urls)
                     .listener(new RequestListener<Drawable>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -146,10 +137,7 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         @Override
                         public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                             ((ViewHolder) holder).imageView.setImageDrawable(resource);
-                            AlphaAnimation aa = new AlphaAnimation(0, 1);
-                            aa.setDuration(2000);
-                            aa.setFillAfter(true);
-                            ((ViewHolder) holder).imageView.startAnimation(aa);
+                            AnimationUtil.showViewByAlpha(((ViewHolder) holder).imageView, 2000);
                             return false;
                         }
                     })

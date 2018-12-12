@@ -13,7 +13,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -22,10 +21,10 @@ import com.aaron.justlike.R;
 
 public class AnimationUtil {
 
-    public static void showView(View view) {
+    public static void showViewByAlpha(View view, long duration) {
         AlphaAnimation aa = new AlphaAnimation(0, 1);
         aa.setFillAfter(true);
-        aa.setDuration(1000);
+        aa.setDuration(duration);
         view.startAnimation(aa);
     }
 

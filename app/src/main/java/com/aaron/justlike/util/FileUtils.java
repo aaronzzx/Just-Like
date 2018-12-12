@@ -6,8 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.ColorMatrix;
-import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
@@ -29,9 +27,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -39,8 +34,6 @@ import java.util.List;
 import androidx.core.content.FileProvider;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
 
 public class FileUtils {
 
@@ -332,11 +325,17 @@ public class FileUtils {
         if (TextUtils.isEmpty(fileName))
             return;
         File file = new File(Environment.getExternalStorageDirectory(), "/JustLike/images" + fileName);
-        if (file.exists())
+        if (file.exists()) {
             file.delete();
-        File file1 = new File(context.getExternalCacheDir(), fileName);
-        if (file1.exists())
+        }
+        File file1 = new File(Environment.getExternalStorageDirectory(), "/JustLike/online" + fileName);
+        if (file1.exists()) {
             file1.delete();
+        }
+        File file2 = new File(context.getExternalCacheDir(), fileName);
+        if (file2.exists()) {
+            file2.delete();
+        }
     }
 
     /**
