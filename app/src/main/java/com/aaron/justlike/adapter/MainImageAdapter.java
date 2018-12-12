@@ -2,25 +2,33 @@ package com.aaron.justlike.adapter;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.MainActivity;
 import com.aaron.justlike.activity.MainImageActivity;
 import com.aaron.justlike.another.Image;
 import com.aaron.justlike.extend.SquareView;
+import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
-import com.aaron.justlike.util.SystemUtils;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -82,10 +90,9 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
                                     String path = mImageList.get(position).getPath();
                                     String fileName = path.substring(path.lastIndexOf("/"));
                                     mImageList.remove(position);
-//                                    MainActivity.getPathList().remove(position);
-                                    notifyDataSetChanged();
+                                    notifyItemRemoved(position);
+                                    notifyItemRangeChanged(position, mImageList.size() - 1, null);
                                     FileUtils.deleteFile(mActivity, fileName);
-//                                    mActivity.addHintOnBackground();
                                 }
                             })
                             .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -101,23 +108,50 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         Image image = mImageList.get(position); // 从集合中找到 Image 对象
         String path = image.getPath();
         RequestOptions options = new RequestOptions()
-                .placeholder(placeHolders[SystemUtils.getRandomNum(9)]);
-//                .dontAnimate()
-//                .override(10)
-//                .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                .centerCrop();
-        DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
-                .Builder(100)
-                .setCrossFadeEnabled(true).build();
+                .placeholder(R.color.colorGrey)
+                .priority(Priority.HIGH);
         Glide.with(mActivity)
                 .load(path)
-//                .thumbnail(0.1F)
                 .apply(options)
-                .transition(DrawableTransitionOptions.with(factory))
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        ColorMatrix matrix = new ColorMatrix();
+                        matrix.setSaturation(0);
+                        resource.setColorFilter(new ColorMatrixColorFilter(matrix));
+                        holder.fakeView.setImageDrawable(resource);
+                        AlphaAnimation aa = new AlphaAnimation(0.5F, 1);
+                        aa.setDuration(250);
+                        aa.setFillAfter(true);
+                        holder.fakeView.startAnimation(aa);
+                        return false;
+                    }
+                })
+                .into(holder.fakeView);
+        Glide.with(mActivity)
+                .load(path)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        holder.squareView.setImageDrawable(resource);
+                        AnimationUtil.showViewByAlpha(holder.fakeView, 600);
+                        return false;
+                    }
+                })
                 .into(holder.squareView);
     }
 
@@ -129,6 +163,7 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
     static class ViewHolder extends RecyclerView.ViewHolder {
         View itemView;
         SquareView squareView;
+        SquareView fakeView;
 
         /**
          * @param view 子项布局的最外层布局，即父布局。
@@ -137,6 +172,7 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
             super(view);
             itemView = view;
             squareView = view.findViewById(R.id.square_view);
+            fakeView = view.findViewById(R.id.fake_view);
         }
     }
 }

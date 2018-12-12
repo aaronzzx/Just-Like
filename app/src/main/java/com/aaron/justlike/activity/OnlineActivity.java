@@ -1,7 +1,6 @@
 package com.aaron.justlike.activity;
 
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -12,7 +11,8 @@ import android.widget.ProgressBar;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.OnlineImageAdapter;
-import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.extend.MyGridLayoutManager;
+import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
@@ -20,7 +20,6 @@ import com.kc.unsplash.Unsplash;
 import com.kc.unsplash.api.Order;
 import com.kc.unsplash.models.Photo;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,21 +30,19 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class OnlineActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String CLIENT_ID = "936a1449161e2845eff4da43b160cea25e234a32188cc16c981e997590c65086";
+    private static final String CLIENT_ID = "18db24a3d59a1b2633897fa63f3f49455c2cbfa8a22e5b8520141cb2660fa816";
     private static final Unsplash unsplash = new Unsplash(CLIENT_ID);
     private RecyclerView mRecyclerView;
-    private GridLayoutManager mLayoutManager;
+    private MyGridLayoutManager mLayoutManager;
     private OnlineImageAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefresh;
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
     private ProgressBar mProgressBar;
+    private ProgressBar mFooterProgress;
     private boolean canScrollVertical;
     private int mLoadNum = 1; // 1 代表加载 Unsplash 最新的图像
     private List<Photo> mPhotoList = new ArrayList<>();
@@ -110,8 +107,8 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
      */
     public void scrollToTop() {
         int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
-        if (firstItem >= 15) {
-            mRecyclerView.scrollToPosition(9);
+        if (firstItem >= 30) {
+            mRecyclerView.scrollToPosition(22);
         }
         mRecyclerView.smoothScrollToPosition(0);
     }
@@ -130,14 +127,23 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
             actionBar.setHomeAsUpIndicator(R.mipmap.ic_back);
         }
         mProgressBar = findViewById(R.id.progress_bar);
+        mFooterProgress = findViewById(R.id.footer_progress);
         mSwipeRefresh.setEnabled(false);
         mRecyclerView = findViewById(R.id.recycler_view);
 
-        mLayoutManager = new GridLayoutManager(this, 2);
+        mLayoutManager = new MyGridLayoutManager(this, 2);
+        mLayoutManager.setScrollEnabled(false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mAdapter = new OnlineImageAdapter(this, mPhotoList);
         mRecyclerView.setAdapter(mAdapter);
+        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return mAdapter.isFooterView(position) ? mLayoutManager.getSpanCount() : 1;
+            }
+        });
+        AnimationUtil.showViewByAlpha(mRecyclerView, 1000);
         loadUnsplash();
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -146,6 +152,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     canScrollVertical = mRecyclerView.canScrollVertically(1);
                     if (!canScrollVertical) {
+                        mFooterProgress.setVisibility(View.VISIBLE);
                         loadUnsplash();
                     }
                 }
@@ -180,22 +187,24 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
         unsplash.getPhotos(mLoadNum++, 30, Order.LATEST, new Unsplash.OnPhotosLoadedListener() {
             @Override
             public void onComplete(List<Photo> photos) {
-                mProgressBar.setVisibility(View.GONE);
                 mSwipeRefresh.setEnabled(true);
                 mPhotoList.addAll(photos);
-                mAdapter.notifyDataSetChanged();
+                if (mLoadNum == 1) {
+                    mAdapter.notifyDataSetChanged();
+                } else {
+                    mAdapter.notifyItemRangeInserted(mPhotoList.size(), 30);
+                }
+                mLayoutManager.setScrollEnabled(true);
+                mFooterProgress.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.GONE);
                 if (mSwipeRefresh.isRefreshing()) {
                     mSwipeRefresh.setRefreshing(false);
                 }
-                /*if ((mLoadNum - 1) % 2 == 0) {
-                    return;
-                }
-                loadUnsplash();*/
             }
 
             @Override
             public void onError(String error) {
-//                AnimationUtil.hideProgressBar(mProgressBar);
+                mFooterProgress.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.GONE);
                 mSwipeRefresh.setEnabled(true);
                 Snackbar.make(mRecyclerView, "加载失败，请检查网络", Snackbar.LENGTH_LONG)
@@ -203,7 +212,8 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void onClick(View v) {
 //                            AnimationUtil.showProgressBar(mProgressBar);
-                        mProgressBar.setVisibility(View.VISIBLE);
+//                        mProgressBar.setVisibility(View.VISIBLE);
+                        mSwipeRefresh.setRefreshing(true);
                         loadUnsplash();
                     }
                 }).show();

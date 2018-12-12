@@ -53,13 +53,14 @@ public class MyPagerAdapter extends PagerAdapter {
             parent.removeView(photoView);
         }
         RequestOptions options = new RequestOptions()
-                .centerCrop();
+                .override(3000, 3000)
+                .centerInside();
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
                 .Builder(300)
                 .setCrossFadeEnabled(true).build();
         Glide.with(mActivity)
                 .load(path)
-//                .apply(options)
+                .apply(options)
                 .transition(DrawableTransitionOptions.with(factory))
                 .into(photoView);
         photoView.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +72,7 @@ public class MyPagerAdapter extends PagerAdapter {
                     isFullScreen = false;
                 } else {
                     // 进入全屏,自动沉浸
-                    AnimationUtil.setFullScreen(mActivity, toolbar, 100);
+                    AnimationUtil.setFullScreen(mActivity, toolbar, 0);
                     isFullScreen = true;
                 }
             }

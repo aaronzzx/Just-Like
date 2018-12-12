@@ -8,17 +8,14 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
-import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +35,6 @@ import com.jaeger.library.StatusBarUtil;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,8 +92,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 加载存储在程序外部目录的图片
         FileUtils.getLocalCache(this, mImageList, true, type);
         FileUtils.getLocalCache(this, mImageList, false, type);
-        sortForInit();
         mAdapter.notifyDataSetChanged();
+        sortForInit();
         LinearLayout parentOfToolbar = findViewById(R.id.activity_main_linear_layout);
         AppBarLayout.LayoutParams layoutParams = (AppBarLayout.LayoutParams) parentOfToolbar.getLayoutParams();
         if (mImageList.size() < 19) {
@@ -156,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void scrollToTop() {
         int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
         if (firstItem >= 48) {
-            mRecyclerView.scrollToPosition(25);
+            mRecyclerView.scrollToPosition(45);
         }
         mRecyclerView.smoothScrollToPosition(0);
     }
@@ -244,10 +240,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     item.setChecked(false);
                     if (mSortByDate.isChecked()) {
                         FileUtils.sortByDate(mImageList, false);
+                        editor.putInt("mode_sort", 1);
                     } else if (mSortByName.isChecked()) {
                         FileUtils.sortByName(mImageList, false);
+                        editor.putInt("mode_sort", 2);
                     } else {
                         FileUtils.sortBySize(mImageList, false);
+                        editor.putInt("mode_sort", 3);
                     }
                     mAdapter.notifyDataSetChanged();
                     editor.putInt("order_or_reverse", 2);
@@ -256,10 +255,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     item.setChecked(true);
                     if (mSortByDate.isChecked()) {
                         FileUtils.sortByDate(mImageList, true);
+                        editor.putInt("mode_sort", 1);
                     } else if (mSortByName.isChecked()) {
                         FileUtils.sortByName(mImageList, true);
+                        editor.putInt("mode_sort", 2);
                     } else {
                         FileUtils.sortBySize(mImageList, true);
+                        editor.putInt("mode_sort", 3);
                     }
                     mAdapter.notifyDataSetChanged();
                     editor.putInt("order_or_reverse", 1);
@@ -375,7 +377,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        mAdapter.notifyDataSetChanged();
+                                        mAdapter.notifyItemInserted(mImageList.size());
                                     }
                                 });
                                 if (mAsciiNum > 9) {
@@ -395,7 +397,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     LogUtil.d("MainActivity", fileName);
                     mImageList.remove(position);
                     mFileNameList.remove(position);
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter.notifyItemRemoved(position);
+                    mAdapter.notifyItemRangeChanged(position, mImageList.size() - 1);
                     FileUtils.deleteFile(this, "/" + fileName);
                 }
                 break;
@@ -443,9 +446,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void sort() {
         if (mSortByOrder.isChecked()) {
             if (mSortByDate.isChecked()) {
-                FileUtils.sortByName(mImageList, true);
-            } else if (mSortByName.isChecked()) {
                 FileUtils.sortByDate(mImageList, true);
+            } else if (mSortByName.isChecked()) {
+                FileUtils.sortByName(mImageList, true);
             } else {
                 FileUtils.sortBySize(mImageList, true);
             }
@@ -581,8 +584,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                refreshRecyclerFirst();
-                                refreshRecyclerLast();
+                                refreshRecycler();
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -603,14 +605,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    private void refreshRecyclerFirst() {
-        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, 2160);
-        ta.setDuration(250);
-        ta.setFillAfter(true);
-        mRecyclerView.startAnimation(ta);
-    }
-
-    private void refreshRecyclerLast() {
+    private void refreshRecycler() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -629,10 +624,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void run() {
                         mAdapter.notifyDataSetChanged();
                         mSwipeRefresh.setRefreshing(false);
-                        TranslateAnimation ta = new TranslateAnimation(0, 0, 2160, 0);
-                        ta.setDuration(250);
-                        mRecyclerView.startAnimation(ta);
 //                        addHintOnBackground();
+                        AlphaAnimation aa = new AlphaAnimation(0, 1);
+                        aa.setDuration(1000);
+                        aa.setFillAfter(true);
+                        mRecyclerView.startAnimation(aa);
                     }
                 });
             }
@@ -664,12 +660,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) % 3 == 0) {
                 outRect.left = 0;
-                outRect.right = SystemUtils.dp2px(MainActivity.this, 2.5F);
+                outRect.right = SystemUtils.dp2px(MainActivity.this, 2.8F); // 8px
             } else if (parent.getChildAdapterPosition(view) % 3 == 1) {
-                outRect.left = SystemUtils.dp2px(MainActivity.this, 1.5F);
-                outRect.right = SystemUtils.dp2px(MainActivity.this, 1.5F);
+                outRect.left = SystemUtils.dp2px(MainActivity.this, 1.3F); // 4px
+                outRect.right = SystemUtils.dp2px(MainActivity.this, 1.3F); // 4px
             } else if (parent.getChildAdapterPosition(view) % 3 == 2) {
-                outRect.left = SystemUtils.dp2px(MainActivity.this, 2.5F);
+                outRect.left = SystemUtils.dp2px(MainActivity.this, 2.8F); // 8px
                 outRect.right = 0;
             }
         }
@@ -679,15 +675,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int size = mImageList.size();
-            outRect.top = 0;
-            outRect.bottom = SystemUtils.dp2px(MainActivity.this, 4.0F);
-            if (parent.getChildAdapterPosition(view) == size - 1) {
-                outRect.bottom = -1;
-            } else if (parent.getChildAdapterPosition(view) == size - 2) {
-                outRect.bottom = -1;
-            } else if (parent.getChildAdapterPosition(view) == size - 3) {
-                outRect.bottom = -1;
+            outRect.bottom = 0;
+            outRect.top = SystemUtils.dp2px(MainActivity.this, 4.2F); // 12px
+            if (parent.getChildAdapterPosition(view) == 0) {
+                outRect.top = 0;
+            } else if (parent.getChildAdapterPosition(view) == 1) {
+                outRect.top = 0;
+            } else if (parent.getChildAdapterPosition(view) == 2) {
+                outRect.top = 0;
             }
         }
     }

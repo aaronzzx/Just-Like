@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -23,7 +27,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -33,6 +36,17 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 public class FileUtils {
+
+    public static Bitmap getBitmapFormDrawable(Drawable drawable){
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+        drawable.getIntrinsicHeight(),drawable.getOpacity()!= PixelFormat.OPAQUE
+        ?Bitmap.Config.ARGB_8888:Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0,0,drawable.getIntrinsicWidth(),drawable.getIntrinsicHeight());
+        //设置绘画的边界，此处表示完整绘制
+        drawable.draw(canvas);
+        return bitmap;
+    }
 
     public static void getPhotoStats(String id, String clientId, okhttp3.Callback callback) {
         OkHttpClient client = new OkHttpClient();
@@ -120,6 +134,7 @@ public class FileUtils {
     }
 
     public static void setWallpaper(Context context, String path) {
+        Toast.makeText(context, "改造中", Toast.LENGTH_SHORT).show();
         WallpaperManager manager = WallpaperManager.getInstance(context);
         if (manager != null && path != null) {
             File file = new File(path);
@@ -204,9 +219,13 @@ public class FileUtils {
      */
     public static JSONArray getAllFiles(String dirPath, String type) {
         File file = new File(dirPath);
-        if (!file.exists()) return null;
+        if (!file.exists()) {
+            return null;
+        }
         File[] files = file.listFiles();
-        if (files == null) return null;
+        if (files == null) {
+            return null;
+        }
         JSONArray fileList = new JSONArray();
         // 遍历数组内的文件
         for (File aFile : files) {
@@ -306,11 +325,17 @@ public class FileUtils {
         if (TextUtils.isEmpty(fileName))
             return;
         File file = new File(Environment.getExternalStorageDirectory(), "/JustLike/images" + fileName);
-        if (file.exists())
+        if (file.exists()) {
             file.delete();
-        File file1 = new File(context.getExternalCacheDir(), fileName);
-        if (file1.exists())
+        }
+        File file1 = new File(Environment.getExternalStorageDirectory(), "/JustLike/online" + fileName);
+        if (file1.exists()) {
             file1.delete();
+        }
+        File file2 = new File(context.getExternalCacheDir(), fileName);
+        if (file2.exists()) {
+            file2.delete();
+        }
     }
 
     /**
@@ -400,6 +425,7 @@ public class FileUtils {
              // Image 构造方法，将 Image 对象传入集合并通知适配器更新，
              // 从而达到加载缓存的目的。
             JSONArray typeArray;
+            JSONArray onlineArray = null;
             for (String imageType : type) {
                 if (searchCacheDir) {
                     typeArray = getAllFiles(activity.getExternalCacheDir().getAbsolutePath(),
@@ -407,10 +433,25 @@ public class FileUtils {
                 } else {
                     typeArray = getAllFiles(Environment.getExternalStorageDirectory().getPath() + "/JustLike/images",
                             imageType);
+                    onlineArray = getAllFiles(Environment.getExternalStorageDirectory().getPath() + "/JustLike/online",
+                            imageType);
                 }
                 if (typeArray != null) {
                     for (int i = 0; i < typeArray.length(); i++) {
                         JSONObject jsonObject = typeArray.getJSONObject(i);
+                        String path = jsonObject.getString("path");
+                        String fileName = path.substring(path.lastIndexOf("/") + 1);
+                        MainActivity.getFileNameList().add(fileName);
+                        Image image = new Image(path);
+                        image.setFileName(getImageName(path));
+                        image.setCreateDate(getImageDate(path));
+                        image.setSize(getImageSize(path));
+                        imageList.add(image);
+                    }
+                }
+                if (onlineArray != null) {
+                    for (int i = 0; i < onlineArray.length(); i++) {
+                        JSONObject jsonObject = onlineArray.getJSONObject(i);
                         String path = jsonObject.getString("path");
                         String fileName = path.substring(path.lastIndexOf("/") + 1);
                         MainActivity.getFileNameList().add(fileName);

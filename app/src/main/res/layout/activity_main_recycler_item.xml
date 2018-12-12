@@ -5,6 +5,12 @@
     android:animateLayoutChanges="true">
 
     <com.aaron.justlike.extend.SquareView
+        android:id="@+id/fake_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop" />
+
+    <com.aaron.justlike.extend.SquareView
         android:id="@+id/square_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
