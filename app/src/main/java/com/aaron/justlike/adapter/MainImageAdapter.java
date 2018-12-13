@@ -91,8 +91,8 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
                                     String fileName = path.substring(path.lastIndexOf("/"));
                                     mImageList.remove(position);
                                     notifyItemRemoved(position);
-                                    notifyItemRangeChanged(position, mImageList.size() - 1, null);
-                                    FileUtils.deleteFile(mActivity, fileName);
+                                    notifyItemRangeChanged(0, mImageList.size() - 1);
+                                    FileUtils.deleteFile(fileName);
                                 }
                             })
                             .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -148,7 +148,7 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         holder.squareView.setImageDrawable(resource);
-                        AnimationUtil.showViewByAlpha(holder.fakeView, 600);
+                        AnimationUtil.showViewByAlpha(holder.squareView, 600);
                         return false;
                     }
                 })
