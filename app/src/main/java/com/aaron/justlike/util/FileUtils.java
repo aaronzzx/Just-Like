@@ -22,10 +22,6 @@ import android.widget.Toast;
 import com.aaron.justlike.activity.MainActivity;
 import com.aaron.justlike.another.Image;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -244,46 +240,6 @@ public class FileUtils {
     }
 
     /**
-     * 获取指定目录指定类型的文件，并将其转换成 JSON 数组
-     *
-     * @param dirPath 目录路径
-     * @param type    文件类型
-     * @return        返回 JSON 数组
-     */
-    public static JSONArray getAllFiles(String dirPath, String type) {
-        File file = new File(dirPath);
-        if (!file.exists()) {
-            return null;
-        }
-        File[] files = file.listFiles();
-        if (files == null) {
-            return null;
-        }
-        JSONArray fileList = new JSONArray();
-        // 遍历数组内的文件
-        for (File aFile : files) {
-            // 如果是文件且后缀名为 type 就执行以下操作
-            if (aFile.isFile() && aFile.getName()
-                    .substring(aFile.getName().lastIndexOf(".") + 1)
-                    .toLowerCase().equals(type)) {
-                // 获取文件的绝对路径，并存入 JSON 数组
-                String filePath = aFile.getAbsolutePath();
-                JSONObject fileInfo = new JSONObject();
-                try {
-                    fileInfo.put("path", filePath);
-                    fileList.put(fileInfo);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                // 如果是目录则重复调用此方法直到找到文件
-            } else if (aFile.isDirectory()) {
-                getAllFiles(aFile.getAbsolutePath(), type);
-            }
-        }
-        return fileList; // 返回 JSON 数组
-    }
-
-    /**
      * 获取从用户点击图片资源后返回的 URI ，并直接将文件缓存到应用缓存目录下
      *
      * @param path    相册或文件管理器返回的路径
@@ -385,44 +341,32 @@ public class FileUtils {
     }
 
     /**
-     * 加载保存在应用缓存目录的文件
+     * 加载缓存文件
      */
-    public static void getLocalCache(List<Image> imageList, String... type) {
-        try {
-            for (String imageType : type) {
-                String direction = Environment.getExternalStoragePublicDirectory
-                        (Environment.DIRECTORY_PICTURES).getPath();
-                JSONArray typeArray = getAllFiles(direction + "/JustLike/images", imageType);
-                JSONArray onlineArray = getAllFiles(direction + "/JustLike/online", imageType);
-                if (typeArray != null) {
-                    for (int i = 0; i < typeArray.length(); i++) {
-                        JSONObject jsonObject = typeArray.getJSONObject(i);
-                        String path = jsonObject.getString("path");
-                        String fileName = path.substring(path.lastIndexOf("/") + 1);
-                        MainActivity.getFileNameList().add(fileName);
-                        Image image = new Image(path);
-                        image.setFileName(getImageName(path));
-                        image.setCreateDate(getImageDate(path));
-                        image.setSize(getImageSize(path));
-                        imageList.add(image);
+    public static void getLocalFiles(List<Image> imageList, String path, String... type) {
+        File files = new File(path);
+        if (files.exists()) {
+            File[] fileList = files.listFiles();
+            if (fileList == null) return;
+            for (File file : fileList) {
+                if (file.isFile()) {
+                    for (String fileType : type) {
+                        if (file.getName().substring(file.getName().lastIndexOf(".") + 1)
+                                .toLowerCase().equals(fileType)) {
+                            String filePath = file.getAbsolutePath();
+                            String fileName = filePath.substring(path.lastIndexOf("/") + 1);
+                            MainActivity.getFileNameList().add(fileName);
+                            Image image = new Image(filePath);
+                            image.setFileName(getImageName(filePath));
+                            image.setCreateDate(getImageDate(filePath));
+                            image.setSize(getImageSize(filePath));
+                            imageList.add(image);
+                        }
                     }
-                }
-                if (onlineArray != null) {
-                    for (int i = 0; i < onlineArray.length(); i++) {
-                        JSONObject jsonObject = onlineArray.getJSONObject(i);
-                        String path = jsonObject.getString("path");
-                        String fileName = path.substring(path.lastIndexOf("/") + 1);
-                        MainActivity.getFileNameList().add(fileName);
-                        Image image = new Image(path);
-                        image.setFileName(getImageName(path));
-                        image.setCreateDate(getImageDate(path));
-                        image.setSize(getImageSize(path));
-                        imageList.add(image);
-                    }
+                } else if (file.isDirectory()) {
+                    getLocalFiles(imageList, file.getAbsolutePath(), type);
                 }
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 }

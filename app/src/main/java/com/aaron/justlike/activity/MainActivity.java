@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int REQUEST_CODE_CHOOSE = 10;
     private static final int REQUEST_PERMISSION = 1;
     private static final int DELETE_PHOTO = 2;
+    private static final String PATH = Environment.getExternalStoragePublicDirectory
+            (Environment.DIRECTORY_PICTURES).getPath() + "/JustLike";
+    private static final String[] TYPE = {"jpg", "jpeg", "png", "gif"};
     private static MyGridLayoutManager mLayoutManager;
     private static List<String> mFileNameList = new ArrayList<>(); // 详情页删除图片时的图片名称集合
     private static List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
@@ -71,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MenuItem mSortByName;
     private MenuItem mSortBySize;
     private MenuItem mSortByOrder;
-    private String[] type = {"jpg", "jpeg", "png", "gif"};
 
     public static List<String> getFileNameList() {
         return mFileNameList;
@@ -597,7 +600,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         StatusBarUtil.setTransparentForDrawerLayout(this, mParent); // 修改状态栏
         requestWritePermission(); // 申请存储权限
         // 加载存储在程序外部目录的图片
-        FileUtils.getLocalCache(mImageList, type);
+        FileUtils.getLocalFiles(mImageList, PATH, TYPE);
         mAdapter.notifyDataSetChanged();
         sortForInit();
         LinearLayout parentOfToolbar = findViewById(R.id.activity_main_linear_layout);
@@ -615,7 +618,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 try {
                     mImageList.clear();
                     mFileNameList.clear();
-                    FileUtils.getLocalCache(mImageList, type);
+                    FileUtils.getLocalFiles(mImageList, PATH, TYPE);
                     sort();
                     Thread.sleep(400);
                 } catch (InterruptedException e) {
