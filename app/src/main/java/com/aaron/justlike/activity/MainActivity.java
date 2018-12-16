@@ -87,19 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews(); // 初始化控件
-        StatusBarUtil.setTransparentForDrawerLayout(this, mParent); // 修改状态栏
-        requestWritePermission(); // 申请存储权限
-        // 加载存储在程序外部目录的图片
-        FileUtils.getLocalCache(this, mImageList, true, type);
-        FileUtils.getLocalCache(this, mImageList, false, type);
-        mAdapter.notifyDataSetChanged();
-        sortForInit();
-        LinearLayout parentOfToolbar = findViewById(R.id.activity_main_linear_layout);
-        AppBarLayout.LayoutParams layoutParams = (AppBarLayout.LayoutParams) parentOfToolbar.getLayoutParams();
-        if (mImageList.size() < 19) {
-            layoutParams.setScrollFlags(0);
-        }
-        mScrollFlags = layoutParams.getScrollFlags();
+        initStatus();
     }
 
     @Override
@@ -384,7 +372,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     mAsciiNum = 0;
                                 }
                                 mAsciiNum++;
-                                FileUtils.saveToCache(MainActivity.this, path, mAsciiNum);
+                                FileUtils.saveToCache(path, mAsciiNum);
                             }
                         }
                     }).start();
@@ -399,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mFileNameList.remove(position);
                     mAdapter.notifyItemRemoved(position);
                     mAdapter.notifyItemRangeChanged(position, mImageList.size() - 1);
-                    FileUtils.deleteFile(this, "/" + fileName);
+                    FileUtils.deleteFile("/" + fileName);
                 }
                 break;
         }
@@ -605,6 +593,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    private void initStatus() {
+        StatusBarUtil.setTransparentForDrawerLayout(this, mParent); // 修改状态栏
+        requestWritePermission(); // 申请存储权限
+        // 加载存储在程序外部目录的图片
+        FileUtils.getLocalCache(mImageList, type);
+        mAdapter.notifyDataSetChanged();
+        sortForInit();
+        LinearLayout parentOfToolbar = findViewById(R.id.activity_main_linear_layout);
+        AppBarLayout.LayoutParams layoutParams = (AppBarLayout.LayoutParams) parentOfToolbar.getLayoutParams();
+        if (mImageList.size() < 19) {
+            layoutParams.setScrollFlags(0);
+        }
+        mScrollFlags = layoutParams.getScrollFlags();
+    }
+
     private void refreshRecycler() {
         new Thread(new Runnable() {
             @Override
@@ -612,8 +615,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 try {
                     mImageList.clear();
                     mFileNameList.clear();
-                    FileUtils.getLocalCache(MainActivity.this, mImageList, true, type);
-                    FileUtils.getLocalCache(MainActivity.this, mImageList, false, type);
+                    FileUtils.getLocalCache(mImageList, type);
                     sort();
                     Thread.sleep(400);
                 } catch (InterruptedException e) {

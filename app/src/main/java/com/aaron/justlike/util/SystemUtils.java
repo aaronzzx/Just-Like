@@ -49,7 +49,7 @@ public class SystemUtils {
 
     public static int getRandomNum(int num) {
         Random random = new Random();
-        return random.nextInt(num);
+        return random.nextInt(num) + 1;
     }
 
     public static String getCreateDate(String path) {

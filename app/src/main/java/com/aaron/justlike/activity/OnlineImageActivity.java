@@ -81,15 +81,20 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_online_image);
         initViews();
         loadImageByGlide();
-        Intent intent = new Intent(this, DownloadService.class);
-        startService(intent);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        String dirPath = Environment.getExternalStorageDirectory().getPath() + "/JustLike/online";
+        File mkDir = new File(dirPath);
+        if (!mkDir.exists())
+            //noinspection ResultOfMethodCallIgnored
+            mkDir.mkdirs();
+//        Intent intent = new Intent(this, DownloadService.class);
+//        startService(intent);
+//        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(mConnection);
+//        unbindService(mConnection);
     }
 
     @Override
@@ -181,25 +186,27 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
                 }
                 break;
             case R.id.fab_download:
-                String path = Environment.getExternalStorageDirectory().getPath() + "/JustLike/online/" + mPhoto.getId() + ".JPG";
+                mFloatingActionMenu.close(true);
+                String path = Environment.getExternalStoragePublicDirectory
+                        (Environment.DIRECTORY_PICTURES) + "/JustLike/online/" + mPhoto.getId() + ".JPG";
                 File file = new File(path);
                 if (file.exists()) {
                     Toast.makeText(this, "本地已下载", Toast.LENGTH_SHORT).show();
                 } else {
-                    mFloatingActionMenu.close(true);
                     String url = mPhoto.getLinks().getDownload();
-                    mDownloadBinder.startDownload(url, mPhoto.getId(), NORMAL);
+                    new FileUtils.DownloadUtils(this).downloadImage(url, mPhoto.getId() + ".JPG", NORMAL);
                 }
                 break;
             case R.id.fab_set_wallpaper:
                 mFloatingActionMenu.close(true);
-                String path1 = Environment.getExternalStorageDirectory().getPath() + "/JustLike/online/" + mPhoto.getId() + ".JPG";
+                String path1 = Environment.getExternalStoragePublicDirectory
+                        (Environment.DIRECTORY_PICTURES) + "/JustLike/online/" + mPhoto.getId() + ".JPG";
                 File file1 = new File(path1);
                 if (file1.exists()) {
                     FileUtils.setWallpaper(this, path1);
                 } else {
                     String url1 = mPhoto.getLinks().getDownload();
-                    mDownloadBinder.startDownload(url1, mPhoto.getId(), SET_WALLPAPER);
+                    new FileUtils.DownloadUtils(this).downloadImage(url1, mPhoto.getId() + ".JPG", SET_WALLPAPER);
                 }
                 break;
         }

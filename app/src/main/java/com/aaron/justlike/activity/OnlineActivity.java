@@ -44,7 +44,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     private ProgressBar mProgressBar;
     private ProgressBar mFooterProgress;
     private boolean canScrollVertical;
-    private int mLoadNum = 1; // 1 代表加载 Unsplash 最新的图像
+    private int mLoadNum = 1;
     private List<Photo> mPhotoList = new ArrayList<>();
 
     @Override

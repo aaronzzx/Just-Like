@@ -105,16 +105,9 @@ public class DownloadService extends Service {
     }
 
     private Notification getNotification(String title, String subText, int progress, boolean indeterminate) {
-        NotificationManager manager = getNotificationManager();
-        /*Intent intent = new Intent(Intent.ACTION_VIEW);
-        String path = Environment.getExternalStorageDirectory().getPath() + "/JustLike/online/" + mPhotoId + ".JPG";
-        Uri uri = Uri.parse(path);
-        intent.setDataAndType(uri, "image/*");
-        PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);*/
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.drawable.ic_for_nofitication_round);
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_for_nofitication_large));
-//        builder.setContentIntent(pi);
         builder.setContentTitle(title);
         builder.setContentText(subText);
         builder.setAutoCancel(true);
@@ -123,6 +116,7 @@ public class DownloadService extends Service {
             builder.setProgress(100, progress, indeterminate);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager manager = getNotificationManager();
             NotificationChannel channel = new NotificationChannel(DOWNLOAD_CHANNEL_ID,
                     DOWNLOAD_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             manager.createNotificationChannel(channel);
