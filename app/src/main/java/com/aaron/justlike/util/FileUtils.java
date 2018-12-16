@@ -19,7 +19,6 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.aaron.justlike.activity.MainActivity;
 import com.aaron.justlike.another.Image;
 
 import java.io.File;
@@ -240,6 +239,44 @@ public class FileUtils {
     }
 
     /**
+     * 通过返回的 URI 来获取文件的真实路径
+     *
+     * @param context 上下文
+     * @param uri     相册或文件管理器返回的 URI
+     * @return 返回图片的真实路径
+     */
+    public static String getPath(Context context, Uri uri) {
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = new String[]{MediaStore.Images.Media.DATA};
+            Cursor cursor = context.getContentResolver()
+                    .query(uri, projection, null, null, null);
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    return cursor.getString(cursor
+                            .getColumnIndex(MediaStore.Images.Media.DATA));
+                }
+                cursor.close();
+            }
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+        return null;
+    }
+
+    /**
+     * 删除文件
+     */
+    public static void deleteFile(String path) {
+        if (!TextUtils.isEmpty(path)) {
+            File file = new File(path);
+            if (file.exists()) {
+                //noinspection ResultOfMethodCallIgnored
+                file.delete();
+            }
+        }
+    }
+
+    /**
      * 获取从用户点击图片资源后返回的 URI ，并直接将文件缓存到应用缓存目录下
      *
      * @param path    相册或文件管理器返回的路径
@@ -296,51 +333,6 @@ public class FileUtils {
     }
 
     /**
-     * 删除文件
-     */
-    public static void deleteFile(String fileName) {
-        if (TextUtils.isEmpty(fileName))
-            return;
-        String imagePath = Environment.getExternalStoragePublicDirectory
-                (Environment.DIRECTORY_PICTURES) + "/JustLike/images" + fileName;
-        String onlinePath = Environment.getExternalStoragePublicDirectory
-                (Environment.DIRECTORY_PICTURES) + "/JustLike/online" + fileName;
-        File images = new File(imagePath);
-        if (images.exists()) {
-            images.delete();
-        }
-        File online = new File(onlinePath);
-        if (online.exists()) {
-            online.delete();
-        }
-    }
-
-    /**
-     * 通过返回的 URI 来获取文件的真实路径
-     *
-     * @param  context 上下文
-     * @param  uri     相册或文件管理器返回的 URI
-     * @return         返回图片的真实路径
-     */
-    public static String getPath(Context context, Uri uri) {
-        if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = new String[]{MediaStore.Images.Media.DATA};
-            Cursor cursor = context.getContentResolver()
-                    .query(uri, projection, null, null, null);
-            if (cursor != null) {
-                if (cursor.moveToFirst()) {
-                    return cursor.getString(cursor
-                            .getColumnIndex(MediaStore.Images.Media.DATA));
-                }
-                cursor.close();
-            }
-        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-        return null;
-    }
-
-    /**
      * 加载缓存文件
      */
     public static void getLocalFiles(List<Image> imageList, String path, String... type) {
@@ -354,8 +346,6 @@ public class FileUtils {
                         if (file.getName().substring(file.getName().lastIndexOf(".") + 1)
                                 .toLowerCase().equals(fileType)) {
                             String filePath = file.getAbsolutePath();
-                            String fileName = filePath.substring(path.lastIndexOf("/") + 1);
-                            MainActivity.getFileNameList().add(fileName);
                             Image image = new Image(filePath);
                             image.setFileName(getImageName(filePath));
                             image.setCreateDate(getImageDate(filePath));

@@ -27,7 +27,6 @@ import com.aaron.justlike.another.Image;
 import com.aaron.justlike.extend.GlideEngine;
 import com.aaron.justlike.extend.MyGridLayoutManager;
 import com.aaron.justlike.util.FileUtils;
-import com.aaron.justlike.util.LogUtil;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -75,10 +74,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MenuItem mSortByName;
     private MenuItem mSortBySize;
     private MenuItem mSortByOrder;
-
-    public static List<String> getFileNameList() {
-        return mFileNameList;
-    }
 
     public static List<Image> getImageList() {
         return mImageList;
@@ -384,13 +379,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case DELETE_PHOTO:
                 if (resultCode == Activity.RESULT_OK) {
                     int position = data.getIntExtra("position", 0);
-                    String fileName = data.getStringExtra("fileName");
-                    LogUtil.d("MainActivity", fileName);
+                    String path = data.getStringExtra("path");
                     mImageList.remove(position);
                     mFileNameList.remove(position);
                     mAdapter.notifyItemRemoved(position);
                     mAdapter.notifyItemRangeChanged(position, mImageList.size() - 1);
-                    FileUtils.deleteFile("/" + fileName);
+                    FileUtils.deleteFile(path);
                 }
                 break;
         }
