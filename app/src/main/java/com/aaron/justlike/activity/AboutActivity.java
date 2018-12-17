@@ -30,7 +30,8 @@ public class AboutActivity extends AppCompatActivity {
             "PhotoView 图片浏览缩放控件",
             "A well-designed local image and video selector for Android",
             "Image Cropping Library for Android",
-            "An unofficial Splash API library for Android"};
+            "An unofficial Splash API library for Android",
+            "Android Floating Action Button based on Material Design specification"};
     private List<AboutMessage> mAboutMessageList = new ArrayList<>();
     private List<AboutLibrary> mAboutLibraryList = new ArrayList<>();
 
@@ -39,7 +40,7 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         StatusBarUtil.setColorNoTranslucent(this, getResources().getColor(R.color.colorPrimary));
-        initView();
+        initViews();
     }
 
     /**
@@ -52,7 +53,7 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void initView() {
+    private void initViews() {
         Toolbar toolbar = findViewById(R.id.activity_about_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -111,5 +112,8 @@ public class AboutActivity extends AppCompatActivity {
         AboutLibrary androidUnsplash = new AboutLibrary("AndroidUnsplash(Unofficial)",
                 "KeenenCharles", mLibraryDetails[6]);
         mAboutLibraryList.add(androidUnsplash);
+        AboutLibrary fab = new AboutLibrary("FloatingActionButton",
+                "Clans", mLibraryDetails[7]);
+        mAboutLibraryList.add(fab);
     }
 }

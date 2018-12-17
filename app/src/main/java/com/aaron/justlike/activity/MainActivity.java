@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             (Environment.DIRECTORY_PICTURES).getPath() + "/JustLike";
     private static final String[] TYPE = {"jpg", "jpeg", "png", "gif"};
     private static MyGridLayoutManager mLayoutManager;
-    private static List<String> mFileNameList = new ArrayList<>(); // 详情页删除图片时的图片名称集合
     private static List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
     private int mAsciiNum = 64; // 相当于大写 A
     private int mIsFinish = 0; // 用于判断返回键退出程序
@@ -356,8 +355,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         public void run() {
                             for (String path : selectList) {
                                 String fileName = path.substring(path.lastIndexOf("/") + 1);
-
-                                mFileNameList.add(fileName);
                                 // 通知适配器更新并将文件添加至缓存
                                 mImageList.add(new Image(path));
                                 runOnUiThread(new Runnable() {
@@ -381,7 +378,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     int position = data.getIntExtra("position", 0);
                     String path = data.getStringExtra("path");
                     mImageList.remove(position);
-                    mFileNameList.remove(position);
                     mAdapter.notifyItemRemoved(position);
                     mAdapter.notifyItemRangeChanged(position, mImageList.size() - 1);
                     FileUtils.deleteFile(path);
@@ -532,6 +528,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         });
                         break;
+                    case R.id.nav_download_manager:
+                        mParent.closeDrawers();
+                        mParent.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                            @Override
+                            public void onDrawerClosed(View drawerView) {
+                                startActivity(new Intent(MainActivity.this,
+                                        DownloadManagerActivity.class));
+                                mParent.removeDrawerListener(this);
+                            }
+                        });
+                        break;
                     case R.id.nav_about:
                         mParent.closeDrawers();
                         mParent.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
@@ -611,7 +618,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 try {
                     mImageList.clear();
-                    mFileNameList.clear();
                     FileUtils.getLocalFiles(mImageList, PATH, TYPE);
                     sort();
                     Thread.sleep(400);
@@ -634,7 +640,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }).start();
     }
 
-    public void addHintOnBackground() {
+    private void addHintOnBackground() {
         TextView hint = findViewById(R.id.hint);
         if (mImageList.isEmpty()) {
             AnimationSet as = new AnimationSet(true);

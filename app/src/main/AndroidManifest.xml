@@ -4,7 +4,7 @@
     package="com.aaron.justlike">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -39,12 +39,16 @@
             android:label=""
             android:theme="@style/AppTheme.OnlineActivity" />
         <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
+            android:name=".activity.DownloadManagerActivity"
+            android:label="下载管理"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.AboutActivity"
             android:label="关于"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
         <provider
@@ -60,7 +64,8 @@
         <service
             android:name=".service.DownloadService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
+
     </application>
 
 </manifest>
