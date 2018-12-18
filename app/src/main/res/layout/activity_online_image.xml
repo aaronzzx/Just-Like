@@ -18,9 +18,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="@drawable/toolbar_bg"
-        android:paddingTop="27.5dp"
+        android:paddingTop="25dp"
         android:paddingBottom="10dp"
+        android:background="@drawable/toolbar_bg"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 

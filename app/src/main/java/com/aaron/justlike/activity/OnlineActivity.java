@@ -34,7 +34,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 public class OnlineActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String CLIENT_ID = "18db24a3d59a1b2633897fa63f3f49455c2cbfa8a22e5b8520141cb2660fa816";
-    private static final Unsplash unsplash = new Unsplash(CLIENT_ID);
+    private static final Unsplash UNSPLASH = new Unsplash(CLIENT_ID);
     private RecyclerView mRecyclerView;
     private MyGridLayoutManager mLayoutManager;
     private OnlineImageAdapter mAdapter;
@@ -184,7 +184,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void loadUnsplash() {
-        unsplash.getPhotos(mLoadNum++, 30, Order.LATEST, new Unsplash.OnPhotosLoadedListener() {
+        UNSPLASH.getPhotos(mLoadNum++, 30, Order.LATEST, new Unsplash.OnPhotosLoadedListener() {
             @Override
             public void onComplete(List<Photo> photos) {
                 mSwipeRefresh.setEnabled(true);
