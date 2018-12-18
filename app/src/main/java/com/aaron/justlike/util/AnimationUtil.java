@@ -21,8 +21,8 @@ import com.aaron.justlike.R;
 
 public class AnimationUtil {
 
-    public static void showViewByAlpha(View view, long duration) {
-        AlphaAnimation aa = new AlphaAnimation(0, 1);
+    public static void showViewByAlpha(View view, float fromAlpha, float toAlpha, long duration) {
+        AlphaAnimation aa = new AlphaAnimation(fromAlpha, toAlpha);
         aa.setFillAfter(true);
         aa.setDuration(duration);
         view.startAnimation(aa);

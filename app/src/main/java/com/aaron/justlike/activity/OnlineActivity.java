@@ -143,7 +143,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                 return mAdapter.isFooterView(position) ? mLayoutManager.getSpanCount() : 1;
             }
         });
-        AnimationUtil.showViewByAlpha(mRecyclerView, 1000);
+        AnimationUtil.showViewByAlpha(mRecyclerView, 0, 1, 1000);
         loadUnsplash();
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

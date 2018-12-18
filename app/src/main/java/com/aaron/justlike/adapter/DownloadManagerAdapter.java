@@ -7,12 +7,12 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.another.Image;
+import com.aaron.justlike.util.AnimationUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -70,10 +70,8 @@ public class DownloadManagerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         matrix.setScale(0.7F, 0.7F, 0.7F, 1);
                         resource.setColorFilter(new ColorMatrixColorFilter(matrix));
                         ((ViewHolder) holder).imageView.setImageDrawable(resource);
-                        AlphaAnimation animation = new AlphaAnimation(0.5F, 1);
-                        animation.setDuration(250);
-                        animation.setFillAfter(true);
-                        ((ViewHolder) holder).imageView.startAnimation(animation);
+                        AnimationUtil.showViewByAlpha(((ViewHolder) holder).imageView,
+                                0.5F, 1, 250);
                         return false;
                     }
                 })

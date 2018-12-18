@@ -121,7 +121,7 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                             matrix.setSaturation(0);
                             resource.setColorFilter(new ColorMatrixColorFilter(matrix));
                             ((ViewHolder) holder).fakeView.setImageDrawable(resource);
-                            AnimationUtil.showViewByAlpha(((ViewHolder) holder).fakeView, 250);
+                            AnimationUtil.showViewByAlpha(((ViewHolder) holder).fakeView, 0, 1, 250);
                             return false;
                         }
                     })
@@ -137,7 +137,7 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         @Override
                         public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                             ((ViewHolder) holder).imageView.setImageDrawable(resource);
-                            AnimationUtil.showViewByAlpha(((ViewHolder) holder).imageView, 2000);
+                            AnimationUtil.showViewByAlpha(((ViewHolder) holder).imageView, 0, 1, 2000);
                             return false;
                         }
                     })

@@ -147,7 +147,7 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         holder.squareView.setImageDrawable(resource);
-                        AnimationUtil.showViewByAlpha(holder.squareView, 600);
+                        AnimationUtil.showViewByAlpha(holder.squareView, 0, 1, 600);
                         return false;
                     }
                 })
