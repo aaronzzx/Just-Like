@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
@@ -35,6 +36,7 @@ import androidx.viewpager.widget.ViewPager;
 public class MainImageActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
+    private LinearLayout mBottomBar;
     private Toolbar mToolbar;
     private int mPosition;
 
@@ -162,6 +164,7 @@ public class MainImageActivity extends AppCompatActivity {
         if (bundle != null) {
             mPosition = bundle.getInt("position");
         }
+        mBottomBar = findViewById(R.id.bottom_bar);
         mToolbar = findViewById(R.id.activity_display_image_toolbar);
         setTitle();
         setSupportActionBar(mToolbar);
@@ -172,6 +175,7 @@ public class MainImageActivity extends AppCompatActivity {
             actionBar.setDisplayShowHomeEnabled(true);
         }
         AnimationUtil.exitFullScreen(this, mToolbar, 200);
+        AnimationUtil.setBottomBar(mBottomBar, "show", 200);
 
         mViewPager = findViewById(R.id.activity_display_image_vp);
         mViewPager.setOffscreenPageLimit(4);

@@ -2,6 +2,7 @@ package com.aaron.justlike.adapter;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.MainImageActivity;
@@ -44,6 +45,7 @@ public class MyPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container,int position) {
         final Toolbar toolbar = mActivity.findViewById(R.id.activity_display_image_toolbar);
+        final LinearLayout bottomBar = mActivity.findViewById(R.id.bottom_bar);
         String path = mPathList.get(position).getPath();
         final PhotoView photoView = new PhotoView(mActivity);
         photoView.enable();
@@ -69,10 +71,12 @@ public class MyPagerAdapter extends PagerAdapter {
                 if (isFullScreen) {
                     // 全屏状态下执行此代码块会退出全屏
                     AnimationUtil.exitFullScreen(mActivity, toolbar, 0);
+                    AnimationUtil.setBottomBar(bottomBar, "show", 0);
                     isFullScreen = false;
                 } else {
                     // 进入全屏,自动沉浸
                     AnimationUtil.setFullScreen(mActivity, toolbar, 0);
+                    AnimationUtil.setBottomBar(bottomBar, "hide", 0);
                     isFullScreen = true;
                 }
             }

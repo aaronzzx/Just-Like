@@ -28,6 +28,31 @@ public class AnimationUtil {
         view.startAnimation(aa);
     }
 
+    public static void setBottomBar(ViewGroup group, String type, long startOffset) {
+        AnimationSet as = new AnimationSet(true);
+        as.setFillAfter(true);
+        as.setDuration(250);
+        as.setStartOffset(startOffset);
+        switch (type) {
+            case "hide":
+                AlphaAnimation aa1 = new AlphaAnimation(1, 0);
+                TranslateAnimation ta1 = new TranslateAnimation(0, 0, 0, 150);
+                as.addAnimation(aa1);
+                as.addAnimation(ta1);
+                group.startAnimation(as);
+                group.setVisibility(View.GONE);
+                break;
+            case "show":
+                AlphaAnimation aa2 = new AlphaAnimation(0, 1);
+                TranslateAnimation ta2 = new TranslateAnimation(0, 0, 150, 0);
+                as.addAnimation(aa2);
+                as.addAnimation(ta2);
+                group.startAnimation(as);
+                group.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
     public static void handleBottomBar(ViewGroup group, View view, String type, long startOffset) {
         AnimationSet as = new AnimationSet(true);
         as.setFillAfter(true);

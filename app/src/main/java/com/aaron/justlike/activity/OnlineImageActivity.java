@@ -71,9 +71,6 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
         if (!mkDir.exists())
             //noinspection ResultOfMethodCallIgnored
             mkDir.mkdirs();
-//        Intent intent = new Intent(this, DownloadService.class);
-//        startService(intent);
-//        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     @Override
