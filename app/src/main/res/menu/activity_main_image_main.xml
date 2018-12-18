@@ -1,31 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:title="设置壁纸"
-        android:icon="@mipmap/ic_wallpaper"
-        app:showAsAction="always">
-
-        <menu>
-
-            <item
-                android:id="@+id/action_default_crop"
-                android:title="设置壁纸（适应屏幕）"/>
-
-            <item
-                android:id="@+id/action_free_crop"
-                android:title="设置壁纸（全图）"/>
-
-        </menu>
-
-    </item>
+        android:id="@+id/edit_by_tools"
+        android:title="选择修改工具" />
 
     <item
-        android:id="@+id/action_delete"
-        android:icon="@mipmap/ic_delete"
-        android:title="删除图片"
-        app:showAsAction="always"/>
+        android:id="@+id/open_file_manager"
+        android:title="打开文件管理器" />
 
 </menu>
