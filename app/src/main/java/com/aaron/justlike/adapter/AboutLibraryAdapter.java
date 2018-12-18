@@ -71,6 +71,11 @@ public class AboutLibraryAdapter extends RecyclerView.Adapter<AboutLibraryAdapte
                         androidUnsplash.setData(Uri.parse("https://github.com/KeenenCharles/AndroidUnplash"));
                         mContext.startActivity(androidUnsplash);
                         break;
+                    case 7:
+                        Intent fab = new Intent(Intent.ACTION_VIEW);
+                        fab.setData(Uri.parse("https://github.com/Clans/FloatingActionButton"));
+                        mContext.startActivity(fab);
+                        break;
                 }
             }
         });

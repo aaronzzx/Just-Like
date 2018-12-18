@@ -56,7 +56,7 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.activity_main_recycler_item, parent, false);
         /*
@@ -88,11 +88,10 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
                                 public void onClick(DialogInterface dialog, int which) {
                                     int position = holder.getAdapterPosition();
                                     String path = mImageList.get(position).getPath();
-                                    String fileName = path.substring(path.lastIndexOf("/"));
                                     mImageList.remove(position);
                                     notifyItemRemoved(position);
                                     notifyItemRangeChanged(0, mImageList.size() - 1);
-                                    FileUtils.deleteFile(fileName);
+                                    FileUtils.deleteFile(path);
                                 }
                             })
                             .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -148,7 +147,7 @@ public class MainImageAdapter extends RecyclerView.Adapter<MainImageAdapter.View
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         holder.squareView.setImageDrawable(resource);
-                        AnimationUtil.showViewByAlpha(holder.squareView, 600);
+                        AnimationUtil.showViewByAlpha(holder.squareView, 0, 1, 600);
                         return false;
                     }
                 })

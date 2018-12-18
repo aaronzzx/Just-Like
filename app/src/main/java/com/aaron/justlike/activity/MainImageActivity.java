@@ -118,8 +118,8 @@ public class MainImageActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent();
                                 intent.putExtra("position", mPosition);
-                                String fileName = MainActivity.getFileNameList().get(mPosition);
-                                intent.putExtra("fileName", fileName);
+                                String path = MainActivity.getImageList().get(mPosition).getPath();
+                                intent.putExtra("path", path);
                                 setResult(RESULT_OK, intent);
                                 finish();
                             }
@@ -139,9 +139,13 @@ public class MainImageActivity extends AppCompatActivity {
         switch (requestCode) {
             case UCrop.REQUEST_CROP:
                 if (resultCode == Activity.RESULT_OK) {
-                    Uri resultUri = UCrop.getOutput(data);
-                    FileUtils.setWallpaper(this, FileUtils.getPath(this, resultUri));
-//                    PictureFileUtils.deleteCacheDirFile(this);
+                    Uri resultUri = null;
+                    if (data != null) {
+                        resultUri = UCrop.getOutput(data);
+                    }
+                    if (resultUri != null) {
+                        FileUtils.setWallpaper(this, FileUtils.getPath(this, resultUri));
+                    }
                 } else if (resultCode == UCrop.RESULT_ERROR) {
                     Toast.makeText(this, "设置失败", Toast.LENGTH_SHORT).show();
                 }
@@ -202,7 +206,10 @@ public class MainImageActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         String[] dateArray;
-        String originalDate = exif.getAttribute(ExifInterface.TAG_DATETIME);
+        String originalDate = null;
+        if (exif != null) {
+            originalDate = exif.getAttribute(ExifInterface.TAG_DATETIME);
+        }
         if (!TextUtils.isEmpty(originalDate)) {
             dateArray = originalDate.split(" ");
         } else {
@@ -218,8 +225,10 @@ public class MainImageActivity extends AppCompatActivity {
         File file = new File(getCacheDir(), "Cropped-Wallpaper.JPG");
         try {
             if (file.exists()) {
+                //noinspection ResultOfMethodCallIgnored
                 file.delete();
             }
+            //noinspection ResultOfMethodCallIgnored
             file.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();

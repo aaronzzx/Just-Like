@@ -1,15 +1,12 @@
 package com.aaron.justlike.activity;
 
 import android.annotation.SuppressLint;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.service.DownloadService;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.bm.library.PhotoView;
@@ -47,7 +43,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OnlineImageActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private DownloadService.DownloadBinder mDownloadBinder;
     private static final int NORMAL = 0;
     private static final int SET_WALLPAPER = 1;
 
@@ -64,16 +59,6 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
     private FloatingActionMenu mFloatingActionMenu;
     private FloatingActionButton mFabDownload;
     private FloatingActionButton mFabWallpaper;
-
-    private ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mDownloadBinder = (DownloadService.DownloadBinder) service;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) { }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

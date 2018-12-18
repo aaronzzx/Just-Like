@@ -6,8 +6,8 @@ android {
         applicationId "com.aaron.justlike"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 7
-        versionName "1.5.0"
+        versionCode 8
+        versionName "1.5.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -38,4 +38,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    implementation 'androidx.exifinterface:exifinterface:1.0.0'
 }

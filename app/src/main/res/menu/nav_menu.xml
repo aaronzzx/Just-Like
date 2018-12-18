@@ -27,9 +27,9 @@
             android:icon="@mipmap/ic_account"/>
 
         <item
-            android:id="@+id/nav_collection"
-            android:title="集合"
-            android:icon="@mipmap/ic_collection"/>
+            android:id="@+id/nav_download_manager"
+            android:title="下载管理"
+            android:icon="@mipmap/ic_download" />
 
         <item
             android:id="@+id/nav_settings"

@@ -3,6 +3,7 @@ package com.aaron.justlike.util;
 import android.app.DownloadManager;
 import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -19,12 +20,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.aaron.justlike.activity.MainActivity;
 import com.aaron.justlike.another.Image;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -189,6 +185,33 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Gets the content:// URI from the given corresponding path to a file
+     *
+     * @param context
+     * @param imageFile
+     * @return content Uri
+     */
+    public static Uri getImageContentUri(Context context, File imageFile) {
+        String filePath = imageFile.getAbsolutePath();
+        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[] { MediaStore.Images.Media._ID }, MediaStore.Images.Media.DATA + "=? ",
+                new String[] { filePath }, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+            Uri baseUri = Uri.parse("content://media/external/images/media");
+            return Uri.withAppendedPath(baseUri, "" + id);
+        } else {
+            if (imageFile.exists()) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, filePath);
+                return context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            } else {
+                return null;
+            }
+        }
+    }
+
     public static Uri getUriFromPath(Context context, File file) {
         Uri uri;
         if (Build.VERSION.SDK_INT >= 24) {
@@ -244,43 +267,41 @@ public class FileUtils {
     }
 
     /**
-     * 获取指定目录指定类型的文件，并将其转换成 JSON 数组
+     * 通过返回的 URI 来获取文件的真实路径
      *
-     * @param dirPath 目录路径
-     * @param type    文件类型
-     * @return        返回 JSON 数组
+     * @param context 上下文
+     * @param uri     相册或文件管理器返回的 URI
+     * @return 返回图片的真实路径
      */
-    public static JSONArray getAllFiles(String dirPath, String type) {
-        File file = new File(dirPath);
-        if (!file.exists()) {
-            return null;
-        }
-        File[] files = file.listFiles();
-        if (files == null) {
-            return null;
-        }
-        JSONArray fileList = new JSONArray();
-        // 遍历数组内的文件
-        for (File aFile : files) {
-            // 如果是文件且后缀名为 type 就执行以下操作
-            if (aFile.isFile() && aFile.getName()
-                    .substring(aFile.getName().lastIndexOf(".") + 1)
-                    .toLowerCase().equals(type)) {
-                // 获取文件的绝对路径，并存入 JSON 数组
-                String filePath = aFile.getAbsolutePath();
-                JSONObject fileInfo = new JSONObject();
-                try {
-                    fileInfo.put("path", filePath);
-                    fileList.put(fileInfo);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+    public static String getPath(Context context, Uri uri) {
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = new String[]{MediaStore.Images.Media.DATA};
+            Cursor cursor = context.getContentResolver()
+                    .query(uri, projection, null, null, null);
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    return cursor.getString(cursor
+                            .getColumnIndex(MediaStore.Images.Media.DATA));
                 }
-                // 如果是目录则重复调用此方法直到找到文件
-            } else if (aFile.isDirectory()) {
-                getAllFiles(aFile.getAbsolutePath(), type);
+                cursor.close();
+            }
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+        return null;
+    }
+
+    /**
+     * 删除文件
+     */
+    public static void deleteFile(String path) {
+        if (!TextUtils.isEmpty(path)) {
+            File file = new File(path);
+            if (file.exists()) {
+                //noinspection ResultOfMethodCallIgnored
+                file.delete();
             }
         }
-        return fileList; // 返回 JSON 数组
     }
 
     /**
@@ -340,89 +361,30 @@ public class FileUtils {
     }
 
     /**
-     * 删除文件
+     * 加载缓存文件
      */
-    public static void deleteFile(String fileName) {
-        if (TextUtils.isEmpty(fileName))
-            return;
-        String imagePath = Environment.getExternalStoragePublicDirectory
-                (Environment.DIRECTORY_PICTURES) + "/JustLike/images" + fileName;
-        String onlinePath = Environment.getExternalStoragePublicDirectory
-                (Environment.DIRECTORY_PICTURES) + "/JustLike/online" + fileName;
-        File images = new File(imagePath);
-        if (images.exists()) {
-            images.delete();
-        }
-        File online = new File(onlinePath);
-        if (online.exists()) {
-            online.delete();
-        }
-    }
-
-    /**
-     * 通过返回的 URI 来获取文件的真实路径
-     *
-     * @param  context 上下文
-     * @param  uri     相册或文件管理器返回的 URI
-     * @return         返回图片的真实路径
-     */
-    public static String getPath(Context context, Uri uri) {
-        if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = new String[]{MediaStore.Images.Media.DATA};
-            Cursor cursor = context.getContentResolver()
-                    .query(uri, projection, null, null, null);
-            if (cursor != null) {
-                if (cursor.moveToFirst()) {
-                    return cursor.getString(cursor
-                            .getColumnIndex(MediaStore.Images.Media.DATA));
-                }
-                cursor.close();
-            }
-        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-        return null;
-    }
-
-    /**
-     * 加载保存在应用缓存目录的文件
-     */
-    public static void getLocalCache(List<Image> imageList, String... type) {
-        try {
-            for (String imageType : type) {
-                String direction = Environment.getExternalStoragePublicDirectory
-                        (Environment.DIRECTORY_PICTURES).getPath();
-                JSONArray typeArray = getAllFiles(direction + "/JustLike/images", imageType);
-                JSONArray onlineArray = getAllFiles(direction + "/JustLike/online", imageType);
-                if (typeArray != null) {
-                    for (int i = 0; i < typeArray.length(); i++) {
-                        JSONObject jsonObject = typeArray.getJSONObject(i);
-                        String path = jsonObject.getString("path");
-                        String fileName = path.substring(path.lastIndexOf("/") + 1);
-                        MainActivity.getFileNameList().add(fileName);
-                        Image image = new Image(path);
-                        image.setFileName(getImageName(path));
-                        image.setCreateDate(getImageDate(path));
-                        image.setSize(getImageSize(path));
-                        imageList.add(image);
+    public static void getLocalFiles(List<Image> imageList, String path, String... type) {
+        File files = new File(path);
+        if (files.exists()) {
+            File[] fileList = files.listFiles();
+            if (fileList == null) return;
+            for (File file : fileList) {
+                if (file.isFile()) {
+                    for (String fileType : type) {
+                        if (file.getName().substring(file.getName().lastIndexOf(".") + 1)
+                                .toLowerCase().equals(fileType)) {
+                            String filePath = file.getAbsolutePath();
+                            Image image = new Image(filePath);
+                            image.setFileName(getImageName(filePath));
+                            image.setCreateDate(getImageDate(filePath));
+                            image.setSize(getImageSize(filePath));
+                            imageList.add(image);
+                        }
                     }
-                }
-                if (onlineArray != null) {
-                    for (int i = 0; i < onlineArray.length(); i++) {
-                        JSONObject jsonObject = onlineArray.getJSONObject(i);
-                        String path = jsonObject.getString("path");
-                        String fileName = path.substring(path.lastIndexOf("/") + 1);
-                        MainActivity.getFileNameList().add(fileName);
-                        Image image = new Image(path);
-                        image.setFileName(getImageName(path));
-                        image.setCreateDate(getImageDate(path));
-                        image.setSize(getImageSize(path));
-                        imageList.add(image);
-                    }
+                } else if (file.isDirectory()) {
+                    getLocalFiles(imageList, file.getAbsolutePath(), type);
                 }
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 }

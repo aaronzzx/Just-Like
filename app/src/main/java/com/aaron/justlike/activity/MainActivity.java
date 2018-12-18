@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +27,6 @@ import com.aaron.justlike.another.Image;
 import com.aaron.justlike.extend.GlideEngine;
 import com.aaron.justlike.extend.MyGridLayoutManager;
 import com.aaron.justlike.util.FileUtils;
-import com.aaron.justlike.util.LogUtil;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -54,8 +54,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int REQUEST_CODE_CHOOSE = 10;
     private static final int REQUEST_PERMISSION = 1;
     private static final int DELETE_PHOTO = 2;
+    private static final String PATH = Environment.getExternalStoragePublicDirectory
+            (Environment.DIRECTORY_PICTURES).getPath() + "/JustLike";
+    private static final String[] TYPE = {"jpg", "jpeg", "png", "gif"};
     private static MyGridLayoutManager mLayoutManager;
-    private static List<String> mFileNameList = new ArrayList<>(); // 详情页删除图片时的图片名称集合
     private static List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
     private int mAsciiNum = 64; // 相当于大写 A
     private int mIsFinish = 0; // 用于判断返回键退出程序
@@ -71,11 +73,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MenuItem mSortByName;
     private MenuItem mSortBySize;
     private MenuItem mSortByOrder;
-    private String[] type = {"jpg", "jpeg", "png", "gif"};
-
-    public static List<String> getFileNameList() {
-        return mFileNameList;
-    }
 
     public static List<Image> getImageList() {
         return mImageList;
@@ -358,8 +355,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         public void run() {
                             for (String path : selectList) {
                                 String fileName = path.substring(path.lastIndexOf("/") + 1);
-
-                                mFileNameList.add(fileName);
                                 // 通知适配器更新并将文件添加至缓存
                                 mImageList.add(new Image(path));
                                 runOnUiThread(new Runnable() {
@@ -381,13 +376,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case DELETE_PHOTO:
                 if (resultCode == Activity.RESULT_OK) {
                     int position = data.getIntExtra("position", 0);
-                    String fileName = data.getStringExtra("fileName");
-                    LogUtil.d("MainActivity", fileName);
+                    String path = data.getStringExtra("path");
                     mImageList.remove(position);
-                    mFileNameList.remove(position);
                     mAdapter.notifyItemRemoved(position);
                     mAdapter.notifyItemRangeChanged(position, mImageList.size() - 1);
-                    FileUtils.deleteFile("/" + fileName);
+                    FileUtils.deleteFile(path);
                 }
                 break;
         }
@@ -535,6 +528,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         });
                         break;
+                    case R.id.nav_download_manager:
+                        mParent.closeDrawers();
+                        mParent.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                            @Override
+                            public void onDrawerClosed(View drawerView) {
+                                startActivity(new Intent(MainActivity.this,
+                                        DownloadManagerActivity.class));
+                                mParent.removeDrawerListener(this);
+                            }
+                        });
+                        break;
                     case R.id.nav_about:
                         mParent.closeDrawers();
                         mParent.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
@@ -597,7 +601,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         StatusBarUtil.setTransparentForDrawerLayout(this, mParent); // 修改状态栏
         requestWritePermission(); // 申请存储权限
         // 加载存储在程序外部目录的图片
-        FileUtils.getLocalCache(mImageList, type);
+        FileUtils.getLocalFiles(mImageList, PATH, TYPE);
         mAdapter.notifyDataSetChanged();
         sortForInit();
         LinearLayout parentOfToolbar = findViewById(R.id.activity_main_linear_layout);
@@ -614,8 +618,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 try {
                     mImageList.clear();
-                    mFileNameList.clear();
-                    FileUtils.getLocalCache(mImageList, type);
+                    FileUtils.getLocalFiles(mImageList, PATH, TYPE);
                     sort();
                     Thread.sleep(400);
                 } catch (InterruptedException e) {
@@ -637,7 +640,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }).start();
     }
 
-    public void addHintOnBackground() {
+    private void addHintOnBackground() {
         TextView hint = findViewById(R.id.hint);
         if (mImageList.isEmpty()) {
             AnimationSet as = new AnimationSet(true);
