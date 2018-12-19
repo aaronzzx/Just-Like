@@ -29,7 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class OnlineImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_NORMAL = 0;
     private static final int TYPE_FOOTER = 1;
@@ -43,7 +43,7 @@ public class OnlineImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             R.drawable.place_holder_8, R.drawable.place_holder_9,
             R.drawable.place_holder_10};
 
-    public OnlineImageAdapter(OnlineActivity activity, List<Photo> photoList) {
+    public OnlineAdapter(OnlineActivity activity, List<Photo> photoList) {
         mActivity = activity;
         mPhotoList = photoList;
         mLayoutInflater = LayoutInflater.from(activity);

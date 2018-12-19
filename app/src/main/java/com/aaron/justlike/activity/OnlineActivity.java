@@ -11,7 +11,7 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.adapter.OnlineImageAdapter;
+import com.aaron.justlike.adapter.OnlineAdapter;
 import com.aaron.justlike.extend.MyGridLayoutManager;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.SystemUtils;
@@ -38,7 +38,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     private static final Unsplash UNSPLASH = new Unsplash(CLIENT_ID);
     private RecyclerView mRecyclerView;
     private MyGridLayoutManager mLayoutManager;
-    private OnlineImageAdapter mAdapter;
+    private OnlineAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefresh;
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
@@ -144,7 +144,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
         mLayoutManager.setScrollEnabled(false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());
-        mAdapter = new OnlineImageAdapter(this, mPhotoList);
+        mAdapter = new OnlineAdapter(this, mPhotoList);
         mRecyclerView.setAdapter(mAdapter);
         mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
