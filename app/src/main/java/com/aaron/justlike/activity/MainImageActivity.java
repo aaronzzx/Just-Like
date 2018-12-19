@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.adapter.MyPagerAdapter;
+import com.aaron.justlike.adapter.MainImageAdapter;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
@@ -228,7 +228,7 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
         mViewPager = findViewById(R.id.activity_display_image_vp);
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setPageMargin(50);
-        MyPagerAdapter pagerAdapter = new MyPagerAdapter(this, MainActivity.getImageList());
+        MainImageAdapter pagerAdapter = new MainImageAdapter(this, MainActivity.getImageList());
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setCurrentItem(mPosition);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
