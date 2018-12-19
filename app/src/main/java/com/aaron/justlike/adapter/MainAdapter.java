@@ -80,10 +80,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             public boolean onLongClick(View v) {
                 if (!mBanClick) {
                     new AlertDialog.Builder(mActivity)
-                            .setTitle("Warning")
-                            .setMessage("确定删除图片吗？")
-                            .setCancelable(false)
-                            .setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                            .setTitle("删除图片")
+                            .setMessage("图片将从设备中删除")
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     int position = holder.getAdapterPosition();
