@@ -67,12 +67,12 @@ public class DownloadManagerActivity extends AppCompatActivity {
             case R.id.sort_latest:
                 item.setChecked(true);
                 FileUtils.sortByDate(mImageList, false);
-                mAdapter.notifyItemRangeChanged(0, mImageList.size() - 1);
+                mAdapter.notifyItemRangeChanged(0, mImageList.size());
                 break;
             case R.id.sort_oldest:
                 item.setChecked(true);
                 FileUtils.sortByDate(mImageList, true);
-                mAdapter.notifyItemRangeChanged(0, mImageList.size() - 1);
+                mAdapter.notifyItemRangeChanged(0, mImageList.size());
                 break;
         }
         return super.onOptionsItemSelected(item);

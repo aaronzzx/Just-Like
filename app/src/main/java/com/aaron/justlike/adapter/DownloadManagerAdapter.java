@@ -1,6 +1,7 @@
 package com.aaron.justlike.adapter;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
@@ -17,6 +19,7 @@ import com.aaron.justlike.activity.OnlineImageActivity;
 import com.aaron.justlike.another.Image;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.util.LogUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -126,9 +129,17 @@ public class DownloadManagerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     private void loadImage(final String photoId, final View view) {
+        final ProgressDialog dialog = new ProgressDialog(mActivity);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setTitle("加载网络资源");
+        dialog.setMessage("Loading...");
+        dialog.show();
         UNSPLASH.getPhoto(photoId, new Unsplash.OnPhotoLoadedListener() {
             @Override
             public void onComplete(Photo photo) {
+                dialog.dismiss();
                 Intent intent = new Intent(mActivity, OnlineImageActivity.class);
                 intent.putExtra("photo", photo);
                 mActivity.startActivity(intent);
@@ -136,6 +147,7 @@ public class DownloadManagerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             @Override
             public void onError(String error) {
+                dialog.dismiss();
                 Snackbar.make(view, "加载失败", Snackbar.LENGTH_LONG)
                         .setAction("重试", new View.OnClickListener() {
                             @Override
