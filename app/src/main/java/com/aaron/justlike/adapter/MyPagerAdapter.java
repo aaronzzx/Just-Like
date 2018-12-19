@@ -2,6 +2,7 @@ package com.aaron.justlike.adapter;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.aaron.justlike.R;
@@ -46,6 +47,10 @@ public class MyPagerAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container,int position) {
         final Toolbar toolbar = mActivity.findViewById(R.id.activity_display_image_toolbar);
         final LinearLayout bottomBar = mActivity.findViewById(R.id.bottom_bar);
+        final ImageView share = mActivity.findViewById(R.id.action_share);
+        final ImageView info = mActivity.findViewById(R.id.action_info);
+        final ImageView set_wallpaper = mActivity.findViewById(R.id.action_set_wallpaper);
+        final ImageView delete = mActivity.findViewById(R.id.action_delete);
         String path = mPathList.get(position).getPath();
         final PhotoView photoView = new PhotoView(mActivity);
         photoView.enable();
@@ -71,12 +76,14 @@ public class MyPagerAdapter extends PagerAdapter {
                 if (isFullScreen) {
                     // 全屏状态下执行此代码块会退出全屏
                     AnimationUtil.exitFullScreen(mActivity, toolbar, 0);
-                    AnimationUtil.setBottomBar(bottomBar, "show", 0);
+                    AnimationUtil.setBottomBar(bottomBar, "show", 0, share,
+                            info, set_wallpaper, delete);
                     isFullScreen = false;
                 } else {
                     // 进入全屏,自动沉浸
                     AnimationUtil.setFullScreen(mActivity, toolbar, 0);
-                    AnimationUtil.setBottomBar(bottomBar, "hide", 0);
+                    AnimationUtil.setBottomBar(bottomBar, "hide", 0, share,
+                            info, set_wallpaper, delete);
                     isFullScreen = true;
                 }
             }

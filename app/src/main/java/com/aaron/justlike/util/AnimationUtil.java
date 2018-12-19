@@ -28,7 +28,7 @@ public class AnimationUtil {
         view.startAnimation(aa);
     }
 
-    public static void setBottomBar(ViewGroup group, String type, long startOffset) {
+    public static void setBottomBar(final ViewGroup group, String type, long startOffset, final View... views) {
         AnimationSet as = new AnimationSet(true);
         as.setFillAfter(true);
         as.setDuration(250);
@@ -40,7 +40,27 @@ public class AnimationUtil {
                 as.addAnimation(aa1);
                 as.addAnimation(ta1);
                 group.startAnimation(as);
-                group.setVisibility(View.GONE);
+                as.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        group.setVisibility(View.GONE);
+                        // 隐藏按钮
+                        views[0].setVisibility(View.GONE);
+                        views[1].setVisibility(View.GONE);
+                        views[2].setVisibility(View.GONE);
+                        views[3].setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
                 break;
             case "show":
                 AlphaAnimation aa2 = new AlphaAnimation(0, 1);
@@ -49,6 +69,11 @@ public class AnimationUtil {
                 as.addAnimation(ta2);
                 group.startAnimation(as);
                 group.setVisibility(View.VISIBLE);
+                // 隐藏按钮
+                views[0].setVisibility(View.VISIBLE);
+                views[1].setVisibility(View.VISIBLE);
+                views[2].setVisibility(View.VISIBLE);
+                views[3].setVisibility(View.VISIBLE);
                 break;
         }
     }

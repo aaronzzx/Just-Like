@@ -114,11 +114,11 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
                         .setItems(mDialogItems, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                switch (which) {
-                                    case 0:
+                                switch (mDialogItems[which]) {
+                                    case "适应屏幕":
                                         cropImage("default");
                                         break;
-                                    case 1:
+                                    case "自由裁剪":
                                         cropImage("free");
                                         break;
                                 }
@@ -222,7 +222,8 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
             actionBar.setDisplayShowHomeEnabled(true);
         }
         AnimationUtil.exitFullScreen(this, mToolbar, 200);
-        AnimationUtil.setBottomBar(mBottomBar, "show", 200);
+        AnimationUtil.setBottomBar(mBottomBar, "show", 200, mShare,
+                mInfo, mSetWallpaper, mDelete);
 
         mViewPager = findViewById(R.id.activity_display_image_vp);
         mViewPager.setOffscreenPageLimit(4);

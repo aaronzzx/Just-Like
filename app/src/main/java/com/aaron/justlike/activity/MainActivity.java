@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     FileUtils.sortByDate(mImageList, false);
                 }
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(0, mImageList.size());
                 editor.putInt("mode_sort", 1);
                 editor.apply();
                 break;
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     FileUtils.sortByName(mImageList, false);
                 }
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(0, mImageList.size());
                 editor.putInt("mode_sort", 2);
                 editor.apply();
                 break;
@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     FileUtils.sortBySize(mImageList, false);
                 }
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(0, mImageList.size());
                 editor.putInt("mode_sort", 3);
                 editor.apply();
                 break;
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         FileUtils.sortBySize(mImageList, false);
                         editor.putInt("mode_sort", 3);
                     }
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter.notifyItemRangeChanged(0, mImageList.size());
                     editor.putInt("order_or_reverse", 2);
                     editor.apply();
                 } else {
@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         FileUtils.sortBySize(mImageList, true);
                         editor.putInt("mode_sort", 3);
                     }
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter.notifyItemRangeChanged(0, mImageList.size());
                     editor.putInt("order_or_reverse", 1);
                     editor.apply();
                 }
