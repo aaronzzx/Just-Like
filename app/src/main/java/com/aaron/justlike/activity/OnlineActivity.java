@@ -79,7 +79,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_online_main, menu);
+        getMenuInflater().inflate(R.menu.activity_online_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

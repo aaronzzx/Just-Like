@@ -1,5 +1,6 @@
 package com.aaron.justlike.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -154,7 +156,8 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main_image_main, menu);
+        getMenuInflater().inflate(R.menu.activity_main_image_menu, menu);
+        SystemUtils.setIconEnable(menu, true);
         return super.onCreateOptionsMenu(menu);
     }
 

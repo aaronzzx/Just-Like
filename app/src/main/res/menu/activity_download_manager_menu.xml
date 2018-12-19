@@ -3,25 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/sort"
-        android:title="排序"
         android:icon="@mipmap/ic_sort"
+        android:title="排序"
         app:showAsAction="always">
 
         <menu>
 
-            <group
-                android:checkableBehavior="single">
+            <item
+                android:id="@+id/sort_latest"
+                android:title="最新的"
+                android:icon="@mipmap/ic_latest"/>
 
-                <item
-                    android:id="@+id/sort_latest"
-                    android:title="最新的"/>
-
-                <item
-                    android:id="@+id/sort_oldest"
-                    android:title="最早的"/>
-
-            </group>
+            <item
+                android:id="@+id/sort_oldest"
+                android:title="最早的"
+                android:icon="@mipmap/ic_oldest"/>
 
         </menu>
 
