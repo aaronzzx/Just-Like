@@ -22,6 +22,9 @@ import java.util.Random;
 
 public class SystemUtils {
 
+    /**
+     * 利用反射开启 Toolbar 菜单图标
+     */
     public static void setIconEnable(Menu menu, boolean enable) {
         try {
             @SuppressLint("PrivateApi")
