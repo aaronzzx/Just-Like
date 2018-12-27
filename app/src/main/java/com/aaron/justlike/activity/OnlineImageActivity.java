@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.aaron.justlike.R;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.util.SystemUtils;
 import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -33,7 +34,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.kc.unsplash.models.Photo;
 
 import java.io.File;
-import java.lang.reflect.Method;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -71,9 +71,6 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
         if (!mkDir.exists())
             //noinspection ResultOfMethodCallIgnored
             mkDir.mkdirs();
-//        Intent intent = new Intent(this, DownloadService.class);
-//        startService(intent);
-//        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -97,8 +94,8 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_online_image_main, menu);
-        setIconEnable(menu, true);
+        getMenuInflater().inflate(R.menu.activity_online_image_menu, menu);
+        SystemUtils.setIconEnable(menu, true);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -125,18 +122,6 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void setIconEnable(Menu menu, boolean enable) {
-        try {
-            @SuppressLint("PrivateApi")
-            Class<?> clazz = Class.forName("com.android.internal.view.menu.MenuBuilder");
-            Method m = clazz.getDeclaredMethod("setOptionalIconsVisible", boolean.class);
-            m.setAccessible(true);
-            m.invoke(menu, enable);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**

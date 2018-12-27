@@ -44,14 +44,14 @@
                         android:layout_height="120dp"
                         android:layout_gravity="center"
                         android:layout_marginBottom="10dp"
-                        android:src="@drawable/ic_about_activity"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Just Like"
-                        android:textSize="26sp"
-                        android:textColor="@color/colorPrimary"/>
+                        android:src="@drawable/ic_for_splash"/>
+                    <!--<TextView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="Just Like"-->
+                        <!--android:textSize="26sp"-->
+                        <!--android:textColor="@color/colorPrimary"/>-->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

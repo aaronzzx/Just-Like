@@ -1,5 +1,6 @@
 package com.aaron.justlike.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,10 +14,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.adapter.MyPagerAdapter;
+import com.aaron.justlike.adapter.MainImageAdapter;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
@@ -24,6 +27,7 @@ import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -32,11 +36,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
-public class MainImageActivity extends AppCompatActivity {
+public class MainImageActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
+    private LinearLayout mBottomBar;
+    private ImageView mShare;
+    private ImageView mInfo;
+    private ImageView mSetWallpaper;
+    private ImageView mDelete;
     private Toolbar mToolbar;
     private int mPosition;
+    private String mPath;
+    private String[] mDialogItems = {"适应屏幕", "自由裁剪"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,33 +98,40 @@ public class MainImageActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * 创建菜单
-     */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main_image_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    /**
-     * 创建菜单点击事件
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_default_crop:
-                cropImage("default");
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.action_share:
+                Intent share = new Intent(Intent.ACTION_VIEW);
+                share.setDataAndType(FileUtils
+                        .getImageContentUri(this, new File(mPath)), "image/*");
+                startActivity(share);
                 break;
-            case R.id.action_free_crop:
-                cropImage("free");
+            case R.id.action_info:
+
+                break;
+            case R.id.action_set_wallpaper:
+                new AlertDialog.Builder(this)
+                        .setTitle("设置壁纸")
+                        .setItems(mDialogItems, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (mDialogItems[which]) {
+                                    case "适应屏幕":
+                                        cropImage("default");
+                                        break;
+                                    case "自由裁剪":
+                                        cropImage("free");
+                                        break;
+                                }
+                            }
+                        }).show();
                 break;
             case R.id.action_delete:
                 new AlertDialog.Builder(this)
-                        .setTitle("Warning")
-                        .setMessage("确定删除图片吗？")
-                        .setCancelable(false)
-                        .setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                        .setTitle("删除图片")
+                        .setMessage("图片将从设备中删除")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent();
@@ -129,6 +147,31 @@ public class MainImageActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                             }
                         }).show();
+                break;
+        }
+    }
+
+    /**
+     * 创建菜单
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main_image_menu, menu);
+        SystemUtils.setIconEnable(menu, true);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * 创建菜单点击事件
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.open_file_manager:
+
+                break;
+            case R.id.edit_by_tools:
+
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -163,6 +206,15 @@ public class MainImageActivity extends AppCompatActivity {
             mPosition = bundle.getInt("position");
         }
         mToolbar = findViewById(R.id.activity_display_image_toolbar);
+        mBottomBar = findViewById(R.id.bottom_bar);
+        mShare = findViewById(R.id.action_share);
+        mInfo = findViewById(R.id.action_info);
+        mSetWallpaper = findViewById(R.id.action_set_wallpaper);
+        mDelete = findViewById(R.id.action_delete);
+        mShare.setOnClickListener(this);
+        mInfo.setOnClickListener(this);
+        mSetWallpaper.setOnClickListener(this);
+        mDelete.setOnClickListener(this);
         setTitle();
         setSupportActionBar(mToolbar);
         // 启用标题栏的返回键
@@ -172,11 +224,13 @@ public class MainImageActivity extends AppCompatActivity {
             actionBar.setDisplayShowHomeEnabled(true);
         }
         AnimationUtil.exitFullScreen(this, mToolbar, 200);
+        AnimationUtil.setBottomBar(mBottomBar, "show", 200, mShare,
+                mInfo, mSetWallpaper, mDelete);
 
         mViewPager = findViewById(R.id.activity_display_image_vp);
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setPageMargin(50);
-        MyPagerAdapter pagerAdapter = new MyPagerAdapter(this, MainActivity.getImageList());
+        MainImageAdapter pagerAdapter = new MainImageAdapter(this, MainActivity.getImageList());
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setCurrentItem(mPosition);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -199,7 +253,7 @@ public class MainImageActivity extends AppCompatActivity {
 
     private void setTitle() {
         ExifInterface exif = null;
-        String path = MainActivity.getImageList().get(mPosition).getPath();
+        mPath = MainActivity.getImageList().get(mPosition).getPath();
         try {
             exif = new ExifInterface(MainActivity.getImageList().get(mPosition).getPath());
         } catch (IOException e) {
@@ -213,15 +267,14 @@ public class MainImageActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(originalDate)) {
             dateArray = originalDate.split(" ");
         } else {
-            dateArray = SystemUtils.getLastModified(path, "yyyy-MM-dd HH:mm:ss").split(" ");
+            dateArray = SystemUtils.getLastModified(mPath, "yyyy-MM-dd HH:mm:ss").split(" ");
         }
         mToolbar.setTitle(dateArray[0]);
     }
 
     private void cropImage(String type) {
-        String sourcePath = MainActivity.getImageList().get(mPosition).getPath();
         // 源文件位置
-        Uri sourceUri = FileUtils.getUriFromPath(this, new File(sourcePath));
+        Uri sourceUri = FileUtils.getUriFromPath(this, new File(mPath));
         File file = new File(getCacheDir(), "Cropped-Wallpaper.JPG");
         try {
             if (file.exists()) {

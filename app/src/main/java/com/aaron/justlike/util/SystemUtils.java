@@ -8,17 +8,34 @@ import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
 public class SystemUtils {
+
+    /**
+     * 利用反射开启 Toolbar 菜单图标
+     */
+    public static void setIconEnable(Menu menu, boolean enable) {
+        try {
+            @SuppressLint("PrivateApi")
+            Class<?> clazz = Class.forName("com.android.internal.view.menu.MenuBuilder");
+            Method m = clazz.getDeclaredMethod("setOptionalIconsVisible", boolean.class);
+            m.setAccessible(true);
+            m.invoke(menu, enable);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static boolean isViewVisible(View view) {
         Rect rect = new Rect();

@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.adapter.MainImageAdapter;
+import com.aaron.justlike.adapter.MainAdapter;
 import com.aaron.justlike.another.Image;
 import com.aaron.justlike.extend.GlideEngine;
 import com.aaron.justlike.extend.MyGridLayoutManager;
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Toolbar mToolbar;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefresh;
-    private MainImageAdapter mAdapter; // 声明一个 Image 适配器
+    private MainAdapter mAdapter; // 声明一个 Image 适配器
     private DrawerLayout mParent;
     private NavigationView mNavView;
     private MenuItem mSortByDate;
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     FileUtils.sortByDate(mImageList, false);
                 }
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(0, mImageList.size());
                 editor.putInt("mode_sort", 1);
                 editor.apply();
                 break;
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     FileUtils.sortByName(mImageList, false);
                 }
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(0, mImageList.size());
                 editor.putInt("mode_sort", 2);
                 editor.apply();
                 break;
@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     FileUtils.sortBySize(mImageList, false);
                 }
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(0, mImageList.size());
                 editor.putInt("mode_sort", 3);
                 editor.apply();
                 break;
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         FileUtils.sortBySize(mImageList, false);
                         editor.putInt("mode_sort", 3);
                     }
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter.notifyItemRangeChanged(0, mImageList.size());
                     editor.putInt("order_or_reverse", 2);
                     editor.apply();
                 } else {
@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         FileUtils.sortBySize(mImageList, true);
                         editor.putInt("mode_sort", 3);
                     }
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter.notifyItemRangeChanged(0, mImageList.size());
                     editor.putInt("order_or_reverse", 1);
                     editor.apply();
                 }
@@ -469,7 +469,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 将 RecyclerView 的布局风格改为网格类型,使用自定义的布局管理器，为了能修改滑动状态
         mLayoutManager = new MyGridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new MainImageAdapter(this, mImageList);
+        mAdapter = new MainAdapter(this, mImageList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mRecyclerView.addItemDecoration(new YItemDecoration());
