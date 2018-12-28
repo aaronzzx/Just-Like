@@ -37,6 +37,9 @@ public class SystemUtils {
         }
     }
 
+    /**
+     * 判断 View 是否可见
+     */
     public static boolean isViewVisible(View view) {
         Rect rect = new Rect();
         view.getLocalVisibleRect(rect);
