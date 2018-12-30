@@ -46,6 +46,9 @@ public class SystemUtils {
         return rect.top == 0;
     }
 
+    /**
+     * 获取 App 版本名
+     */
     public static String getVersionName(Context context) {
         PackageManager manager = context.getPackageManager();
         String versionName = null;
