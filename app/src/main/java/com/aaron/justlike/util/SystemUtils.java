@@ -70,6 +70,9 @@ public class SystemUtils {
         return resolutionArray;
     }
 
+    /**
+     * 获取随机数
+     */
     public static int getRandomNum(int num) {
         Random random = new Random();
         return random.nextInt(num) + 1;
