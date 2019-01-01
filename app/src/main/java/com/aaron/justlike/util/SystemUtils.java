@@ -78,6 +78,9 @@ public class SystemUtils {
         return random.nextInt(num) + 1;
     }
 
+    /**
+     * 获取图片生产日期
+     */
     public static String getCreateDate(String path) {
         String date = null;
         try {
