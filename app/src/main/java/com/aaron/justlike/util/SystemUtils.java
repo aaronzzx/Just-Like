@@ -100,6 +100,9 @@ public class SystemUtils {
         return date;
     }
 
+    /**
+     * 获取最后修改日期
+     */
     @SuppressLint("SimpleDateFormat")
     public static String getLastModified(String path, String pattern) {
         long time = new File(path).lastModified();
