@@ -81,6 +81,7 @@ public class SystemUtils {
     /**
      * 获取图片生产日期
      */
+    @SuppressLint("SimpleDateFormat")
     public static String getCreateDate(String path) {
         String date = null;
         try {
@@ -99,6 +100,7 @@ public class SystemUtils {
         return date;
     }
 
+    @SuppressLint("SimpleDateFormat")
     public static String getLastModified(String path, String pattern) {
         long time = new File(path).lastModified();
         SimpleDateFormat formatter = new SimpleDateFormat(pattern);
@@ -106,6 +108,7 @@ public class SystemUtils {
         return formatter.format(d);
     }
 
+    @SuppressLint("SimpleDateFormat")
     public static String getCurrentDate(String pattern) {
         long time = System.currentTimeMillis();
         SimpleDateFormat format = new SimpleDateFormat(pattern);
