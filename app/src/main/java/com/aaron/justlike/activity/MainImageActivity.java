@@ -1,6 +1,5 @@
 package com.aaron.justlike.activity;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,8 +8,6 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -27,7 +24,6 @@ import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -108,7 +104,7 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
                 startActivity(share);
                 break;
             case R.id.action_info:
-
+                // TODO 编写图像信息的逻辑
                 break;
             case R.id.action_set_wallpaper:
                 new AlertDialog.Builder(this)
@@ -152,30 +148,30 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
     }
 
     /**
-     * 创建菜单
+     * TODO 是否显示标题栏菜单：选择修改工具、打开文件管理器
      */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main_image_menu, menu);
-        SystemUtils.setIconEnable(menu, true);
-        return super.onCreateOptionsMenu(menu);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.activity_main_image_menu, menu);
+//        SystemUtils.setIconEnable(menu, true);
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
     /**
-     * 创建菜单点击事件
+     * TODO 编写标题栏菜单的响应逻辑
      */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.open_file_manager:
-
-                break;
-            case R.id.edit_by_tools:
-
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.open_file_manager:
+//
+//                break;
+//            case R.id.edit_by_tools:
+//
+//                break;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

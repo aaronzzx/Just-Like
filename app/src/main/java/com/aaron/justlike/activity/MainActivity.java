@@ -528,6 +528,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         });
                         break;
+                    case R.id.nav_tag:
+                        // TODO 编写侧滑菜单标签项的逻辑
+                        break;
                     case R.id.nav_download_manager:
                         mParent.closeDrawers();
                         mParent.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
@@ -538,6 +541,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 mParent.removeDrawerListener(this);
                             }
                         });
+                        break;
+                    case R.id.nav_settings:
+                        // TODO 编写侧滑菜单设置项的逻辑
                         break;
                     case R.id.nav_about:
                         mParent.closeDrawers();
