@@ -3,7 +3,6 @@ package com.aaron.justlike.activity;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -77,11 +76,14 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
         finish();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_online_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+    /**
+     * 将搜索键显示出来
+     */
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.activity_online_menu, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
     /**
      * 设置可以打开菜单
@@ -95,9 +97,9 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
             case android.R.id.home:
                 onBackPressed();
                 break;
-            case R.id.action_search:
-
-                break;
+//            case R.id.action_search:
+//
+//                break;
         }
         return true;
     }
