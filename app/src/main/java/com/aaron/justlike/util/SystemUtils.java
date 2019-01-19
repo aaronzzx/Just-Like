@@ -37,12 +37,18 @@ public class SystemUtils {
         }
     }
 
+    /**
+     * 判断 View 是否可见
+     */
     public static boolean isViewVisible(View view) {
         Rect rect = new Rect();
         view.getLocalVisibleRect(rect);
         return rect.top == 0;
     }
 
+    /**
+     * 获取 App 版本名
+     */
     public static String getVersionName(Context context) {
         PackageManager manager = context.getPackageManager();
         String versionName = null;
@@ -64,11 +70,18 @@ public class SystemUtils {
         return resolutionArray;
     }
 
+    /**
+     * 获取随机数
+     */
     public static int getRandomNum(int num) {
         Random random = new Random();
         return random.nextInt(num) + 1;
     }
 
+    /**
+     * 获取图片生产日期
+     */
+    @SuppressLint("SimpleDateFormat")
     public static String getCreateDate(String path) {
         String date = null;
         try {
@@ -87,6 +100,10 @@ public class SystemUtils {
         return date;
     }
 
+    /**
+     * 获取最后修改日期
+     */
+    @SuppressLint("SimpleDateFormat")
     public static String getLastModified(String path, String pattern) {
         long time = new File(path).lastModified();
         SimpleDateFormat formatter = new SimpleDateFormat(pattern);
@@ -94,6 +111,7 @@ public class SystemUtils {
         return formatter.format(d);
     }
 
+    @SuppressLint("SimpleDateFormat")
     public static String getCurrentDate(String pattern) {
         long time = System.currentTimeMillis();
         SimpleDateFormat format = new SimpleDateFormat(pattern);
