@@ -1,18 +1,19 @@
 package com.aaron.justlike.activity;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
@@ -42,8 +43,12 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
     private ImageView mDelete;
     private Toolbar mToolbar;
     private int mPosition;
-    private String mPath;
-    private String[] mDialogItems = {"适应屏幕", "自由裁剪"};
+    private static final String[] CROP_ARRAY = {"适应屏幕", "自由裁剪"};
+    private String mImageTime;
+    private String mImageName;
+    private String mImageSize;
+    private String mImageResolution;
+    private String mImagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,26 +105,40 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
             case R.id.action_share:
                 Intent share = new Intent(Intent.ACTION_VIEW);
                 share.setDataAndType(FileUtils
-                        .getImageContentUri(this, new File(mPath)), "image/*");
+                        .getImageContentUri(this, new File(mImagePath)), "image/*");
                 startActivity(share);
                 break;
             case R.id.action_info:
-                // TODO 编写图像信息的逻辑
+                // 设置图片详情的初始化
+                View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_image_info, null);
+                TextView imageTime = dialogView.findViewById(R.id.info_time);
+                TextView imageName = dialogView.findViewById(R.id.info_name);
+                TextView imageSize = dialogView.findViewById(R.id.info_size);
+                TextView imageResolution = dialogView.findViewById(R.id.info_resolution);
+                TextView imagePath = dialogView.findViewById(R.id.info_path);
+                imageTime.setText(mImageTime);
+                imageName.setText(mImageName);
+                imageSize.setText(mImageSize);
+                imageResolution.setText(mImageResolution);
+                imagePath.setText(mImagePath);
+
+                // 显示对话框
+                new AlertDialog.Builder(this)
+                        .setTitle("详情")
+                        .setView(dialogView)
+                        .show();
                 break;
             case R.id.action_set_wallpaper:
                 new AlertDialog.Builder(this)
                         .setTitle("设置壁纸")
-                        .setItems(mDialogItems, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (mDialogItems[which]) {
-                                    case "适应屏幕":
-                                        cropImage("default");
-                                        break;
-                                    case "自由裁剪":
-                                        cropImage("free");
-                                        break;
-                                }
+                        .setItems(CROP_ARRAY, (dialog, which) -> {
+                            switch (CROP_ARRAY[which]) {
+                                case "适应屏幕":
+                                    cropImage("default");
+                                    break;
+                                case "自由裁剪":
+                                    cropImage("free");
+                                    break;
                             }
                         }).show();
                 break;
@@ -127,21 +146,15 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
                 new AlertDialog.Builder(this)
                         .setTitle("删除图片")
                         .setMessage("图片将从设备中删除")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent();
-                                intent.putExtra("position", mPosition);
-                                String path = MainActivity.getImageList().get(mPosition).getPath();
-                                intent.putExtra("path", path);
-                                setResult(RESULT_OK, intent);
-                                finish();
-                            }
+                        .setPositiveButton("确定", (dialog, which) -> {
+                            Intent intent = new Intent();
+                            intent.putExtra("position", mPosition);
+                            String path = MainActivity.getImageList().get(mPosition).getPath();
+                            intent.putExtra("path", path);
+                            setResult(RESULT_OK, intent);
+                            finish();
                         })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
+                        .setNegativeButton("取消", (dialog, which) -> {
                         }).show();
                 break;
         }
@@ -249,7 +262,13 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
 
     private void setTitle() {
         ExifInterface exif = null;
-        mPath = MainActivity.getImageList().get(mPosition).getPath();
+        mImagePath = MainActivity.getImageList().get(mPosition).getPath();
+        mImageName = mImagePath.substring(mImagePath.lastIndexOf("/") + 1);
+        float size = (float) FileUtils.getFileSize(mImagePath) / 1024 / 1024;
+        mImageSize = String.valueOf(size);
+        mImageSize = mImageSize.substring(0, 4) + " MB";
+        int[] resolution = FileUtils.getImageWidthHeight(mImagePath);
+        mImageResolution = String.valueOf(resolution[0]) + " x " + String.valueOf(resolution[1]);
         try {
             exif = new ExifInterface(MainActivity.getImageList().get(mPosition).getPath());
         } catch (IOException e) {
@@ -262,15 +281,17 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
         }
         if (!TextUtils.isEmpty(originalDate)) {
             dateArray = originalDate.split(" ");
+            mImageTime = originalDate;
         } else {
-            dateArray = SystemUtils.getLastModified(mPath, "yyyy-MM-dd HH:mm:ss").split(" ");
+            mImageTime = SystemUtils.getLastModified(mImagePath, "yyyy-MM-dd HH:mm:ss");
+            dateArray = mImageTime.split(" ");
         }
         mToolbar.setTitle(dateArray[0]);
     }
 
     private void cropImage(String type) {
         // 源文件位置
-        Uri sourceUri = FileUtils.getUriFromPath(this, new File(mPath));
+        Uri sourceUri = FileUtils.getUriFromPath(this, new File(mImagePath));
         File file = new File(getCacheDir(), "Cropped-Wallpaper.JPG");
         try {
             if (file.exists()) {
