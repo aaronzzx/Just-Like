@@ -169,28 +169,31 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                 }
             }
         });
-        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
-                View decorView = getWindow().getDecorView();
-                if (SystemUtils.isViewVisible(mToolbar)) {
-                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                } else {
-                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-                }
+        mAppBarLayout.addOnOffsetChangedListener((appBarLayout, i) -> {
+            View decorView = getWindow().getDecorView();
+            if (SystemUtils.isViewVisible(mToolbar)) {
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            } else {
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
             }
         });
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
+        mSwipeRefresh.setOnRefreshListener(() -> {
+            mLayoutManager.setScrollEnabled(false);
+            mAdapter.setBanClick(true);
+            new Thread(() -> {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 mLoadNum = 1;
                 mPhotoList.clear();
                 loadUnsplash();
-            }
+            }).start();
         });
     }
 
@@ -205,12 +208,20 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                 } else {
                     mAdapter.notifyItemRangeInserted(mPhotoList.size(), 30);
                 }
-                mLayoutManager.setScrollEnabled(true);
                 mFooterProgress.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.GONE);
                 if (mSwipeRefresh.isRefreshing()) {
                     mSwipeRefresh.setRefreshing(false);
                 }
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(400);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    mLayoutManager.setScrollEnabled(true);
+                    mAdapter.setBanClick(false);
+                }).start();
             }
 
             @Override

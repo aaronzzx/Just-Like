@@ -33,6 +33,7 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private static final int TYPE_NORMAL = 0;
     private static final int TYPE_FOOTER = 1;
+    private boolean mBanClick = false;
     private LayoutInflater mLayoutInflater;
     private List<Photo> mPhotoList;
     private OnlineActivity mActivity;
@@ -42,6 +43,10 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             R.drawable.place_holder_6, R.drawable.place_holder_7,
             R.drawable.place_holder_8, R.drawable.place_holder_9,
             R.drawable.place_holder_10};
+
+    public void setBanClick(boolean flag) {
+        mBanClick = flag;
+    }
 
     public OnlineAdapter(OnlineActivity activity, List<Photo> photoList) {
         mActivity = activity;
@@ -74,10 +79,12 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = holder.getAdapterPosition();
-                    Intent intent = new Intent(mActivity, OnlineImageActivity.class);
-                    intent.putExtra("photo", mPhotoList.get(position));
-                    mActivity.startActivity(intent);
+                    if (!mBanClick) {
+                        int position = holder.getAdapterPosition();
+                        Intent intent = new Intent(mActivity, OnlineImageActivity.class);
+                        intent.putExtra("photo", mPhotoList.get(position));
+                        mActivity.startActivity(intent);
+                    }
                 }
             });
             return holder;
