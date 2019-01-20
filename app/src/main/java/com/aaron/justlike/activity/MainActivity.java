@@ -1,6 +1,7 @@
 package com.aaron.justlike.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -447,6 +448,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 将控件的初始化代码封装在此方法中，方便调用并使代码简洁。
      */
+    @SuppressLint("InflateParams")
     private void initViews() {
         mAppBarLayout = findViewById(R.id.activity_main_appbar_layout);
         mToolbar = findViewById(R.id.activity_main_toolbar);
@@ -542,9 +544,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         });
                         break;
-                    case R.id.nav_settings:
-                        // TODO 编写侧滑菜单设置项的逻辑
-                        break;
+                    // TODO 编写侧滑菜单设置项的逻辑
+//                    case R.id.nav_settings:
+//                        break;
                     case R.id.nav_about:
                         mParent.closeDrawers();
                         mParent.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
