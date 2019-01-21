@@ -530,8 +530,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         });
                         break;
-                    case R.id.nav_tag:
-                        // TODO 编写侧滑菜单标签项的逻辑
+                    case R.id.nav_collection:
+                        mParent.closeDrawers();
+                        mParent.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                            @Override
+                            public void onDrawerClosed(View drawerView) {
+                                startActivity(new Intent(MainActivity.this,
+                                        CollectionActivity.class));
+                                mParent.removeDrawerListener(this);
+                            }
+                        });
+
                         break;
                     case R.id.nav_download_manager:
                         mParent.closeDrawers();

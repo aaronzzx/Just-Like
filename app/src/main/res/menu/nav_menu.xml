@@ -3,11 +3,12 @@
 
     <group
         android:id="@+id/group_1"
-        android:checkableBehavior="single">
+        android:checkableBehavior="none">
 
         <item
             android:id="@+id/nav_home"
             android:title="主页"
+            android:checked="true"
             android:icon="@mipmap/ic_home_page"/>
 
         <item
@@ -15,14 +16,8 @@
             android:title="在线壁纸"
             android:icon="@mipmap/ic_wallpaper_center"/>
 
-    </group>
-
-    <group
-        android:id="@+id/group_2"
-        android:checkableBehavior="none">
-
         <item
-            android:id="@+id/nav_tag"
+            android:id="@+id/nav_collection"
             android:icon="@mipmap/ic_collection"
             android:title="集合" />
 
@@ -42,5 +37,31 @@
             android:icon="@mipmap/ic_about"/>
 
     </group>
+
+    <!--<group-->
+    <!--android:id="@+id/group_2"-->
+    <!--android:checkableBehavior="none">-->
+
+    <!--<item-->
+    <!--android:id="@+id/nav_collection"-->
+    <!--android:icon="@mipmap/ic_collection"-->
+    <!--android:title="集合" />-->
+
+    <!--<item-->
+    <!--android:id="@+id/nav_download_manager"-->
+    <!--android:title="下载管理"-->
+    <!--android:icon="@mipmap/ic_download" />-->
+
+    <!--<item-->
+    <!--android:id="@+id/nav_settings"-->
+    <!--android:title="设置"-->
+    <!--android:icon="@mipmap/ic_settings"/>-->
+
+    <!--<item-->
+    <!--android:id="@+id/nav_about"-->
+    <!--android:title="关于"-->
+    <!--android:icon="@mipmap/ic_about"/>-->
+
+    <!--</group>-->
 
 </menu>

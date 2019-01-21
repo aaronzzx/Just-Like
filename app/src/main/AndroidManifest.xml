@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name="org.litepal.LitePalApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -40,6 +41,10 @@
             android:label=""
             android:theme="@style/AppTheme.OnlineActivity" />
         <activity
+            android:name=".activity.CollectionActivity"
+            android:label="集合"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".activity.DownloadManagerActivity"
             android:label="下载管理"
             android:theme="@style/AppTheme" />
@@ -61,7 +66,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>
