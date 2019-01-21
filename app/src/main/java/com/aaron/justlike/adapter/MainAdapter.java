@@ -1,6 +1,5 @@
 package com.aaron.justlike.adapter;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
@@ -63,44 +62,32 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
          * 为子项设置点击监听
          */
         final ViewHolder holder = new ViewHolder(view);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!mBanClick) {
-                    int position = holder.getAdapterPosition();
-                    // 将 Image 对象序列化传递给下一个活动，方便下一个活动取值
-                    Intent intent = new Intent(mActivity, MainImageActivity.class);
-                    intent.putExtra("position", position);
-                    mActivity.startActivityForResult(intent, DELETE_PHOTO);
-                }
+        holder.itemView.setOnClickListener(v -> {
+            if (!mBanClick) {
+                int position = holder.getAdapterPosition();
+                // 将 Image 对象序列化传递给下一个活动，方便下一个活动取值
+                Intent intent = new Intent(mActivity, MainImageActivity.class);
+                intent.putExtra("position", position);
+                mActivity.startActivityForResult(intent, DELETE_PHOTO);
             }
         });
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (!mBanClick) {
-                    new AlertDialog.Builder(mActivity)
-                            .setTitle("删除图片")
-                            .setMessage("图片将从设备中删除")
-                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    int position = holder.getAdapterPosition();
-                                    String path = mImageList.get(position).getPath();
-                                    mImageList.remove(position);
-                                    notifyItemRemoved(position);
-                                    notifyItemRangeChanged(0, mImageList.size() - 1);
-                                    FileUtils.deleteFile(path);
-                                }
-                            })
-                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            }).show();
-                }
-                return true;
+        holder.itemView.setOnLongClickListener(v -> {
+            if (!mBanClick) {
+                new AlertDialog.Builder(mActivity)
+                        .setTitle("删除图片")
+                        .setMessage("图片将从设备中删除")
+                        .setPositiveButton("确定", (dialog, which) -> {
+                            int position = holder.getAdapterPosition();
+                            String path = mImageList.get(position).getPath();
+                            mImageList.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(0, mImageList.size() - 1);
+                            FileUtils.deleteFile(path);
+                        })
+                        .setNegativeButton("取消", (dialog, which) -> {
+                        }).show();
             }
+            return true;
         });
         return holder;
     }

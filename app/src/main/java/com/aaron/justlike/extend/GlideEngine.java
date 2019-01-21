@@ -16,7 +16,7 @@ public class GlideEngine implements ImageEngine {
     public void loadThumbnail(Context context, int resize, Drawable placeholder, ImageView imageView, Uri uri) {
         RequestOptions options = new RequestOptions()
                 .centerCrop()
-                .placeholder(placeholder)//这里可自己添加占位图
+                .placeholder(placeholder) //这里可自己添加占位图
                 .override(resize, resize);
         Glide.with(context)
                 .asBitmap()  // some .jpeg files are actually gif
@@ -29,7 +29,7 @@ public class GlideEngine implements ImageEngine {
     public void loadGifThumbnail(Context context, int resize, Drawable placeholder, ImageView imageView, Uri uri) {
         RequestOptions options = new RequestOptions()
                 .centerCrop()
-                .placeholder(placeholder)//这里可自己添加占位图
+                .placeholder(placeholder) //这里可自己添加占位图
                 .override(resize, resize);
         Glide.with(context)
                 .asGif()  // some .jpeg files are actually gif

@@ -577,40 +577,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
         mSwipeRefresh = findViewById(R.id.swipe_refresh);
         mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary);
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mLayoutManager.setScrollEnabled(false);
-                mAdapter.setBanClick(true);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
+        mSwipeRefresh.setOnRefreshListener(() -> {
+            mLayoutManager.setScrollEnabled(false);
+            mAdapter.setBanClick(true);
+            new Thread(() -> {
+                try {
+                    Thread.sleep(600);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(() -> {
+                    refreshRecycler();
+                    new Thread(() -> {
                         try {
-                            Thread.sleep(600);
+                            Thread.sleep(400);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                refreshRecycler();
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            Thread.sleep(400);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
-                                        mLayoutManager.setScrollEnabled(true);
-                                        mAdapter.setBanClick(false);
-                                    }
-                                }).start();
-                            }
-                        });
-                    }
-                }).start();
-            }
+                        mLayoutManager.setScrollEnabled(true);
+                        mAdapter.setBanClick(false);
+                    }).start();
+                });
+            }).start();
         });
     }
 
@@ -630,30 +618,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void refreshRecycler() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mImageList.clear();
-                    FileUtils.getLocalFiles(mImageList, PATH, TYPE);
-                    sort();
-                    Thread.sleep(400);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.notifyDataSetChanged();
-                        mSwipeRefresh.setRefreshing(false);
-//                        addHintOnBackground();
-                        AlphaAnimation aa = new AlphaAnimation(0, 1);
-                        aa.setDuration(1000);
-                        aa.setFillAfter(true);
-                        mRecyclerView.startAnimation(aa);
-                    }
-                });
+        new Thread(() -> {
+            try {
+                mImageList.clear();
+                FileUtils.getLocalFiles(mImageList, PATH, TYPE);
+                sort();
+                Thread.sleep(400);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            runOnUiThread(() -> {
+                mAdapter.notifyDataSetChanged();
+                mSwipeRefresh.setRefreshing(false);
+//                        addHintOnBackground();
+                AlphaAnimation aa = new AlphaAnimation(0, 1);
+                aa.setDuration(1000);
+                aa.setFillAfter(true);
+                mRecyclerView.startAnimation(aa);
+            });
         }).start();
     }
 

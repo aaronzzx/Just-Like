@@ -31,7 +31,7 @@
         android:paddingStart="20dp"
         android:paddingTop="30dp"
         android:paddingEnd="20dp"
-        android:paddingBottom="55dp"
+        android:paddingBottom="65dp"
         android:background="@drawable/online_image_bg"
         android:orientation="horizontal">
 
