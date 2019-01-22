@@ -1,7 +1,6 @@
 package com.aaron.justlike.activity;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -98,26 +97,18 @@ public class CollectionActivity extends AppCompatActivity {
 
     private void initDatabase() {
         mDatabase = LitePal.getDatabase();
-        // 取出集合的名称和元素的数量
+        // 取出集合的名称和元素的数量和封面图
         List<CollectionInfo> collections = LitePal.findAll(CollectionInfo.class);
-        Cursor cursor = null;
         for (CollectionInfo info : collections) {
             Album album = new Album();
             String title = info.getTitle();
             String total = String.valueOf(info.getTotal());
+            String path = info.getPath();
             album.setCollectionTitle(title);
             album.setElementTotal(total);
-            // 取出集合具体元素
-            cursor = mDatabase.query("Collection", new String[]{"path"}, "title = ?",
-                    new String[]{title}, null, null, null);
-            if (cursor.moveToFirst()) {
-                String path = cursor.getString(cursor.getColumnIndex("path"));
-                album.setImagePath(path);
-            }
+            album.setImagePath(path);
+            // 将集合加入 RecyclerView 列表展示
             mCollections.add(album);
-        }
-        if (cursor != null) {
-            cursor.close();
         }
     }
 

@@ -79,6 +79,7 @@ public class CollectionAddActivity extends AppCompatActivity {
                 CollectionInfo info = new CollectionInfo();
                 info.setTitle(mCollectionName);
                 info.setTotal(mOnPaths.size());
+                info.setPath(mOnPaths.get(0));
                 info.save();
 
                 // 存储单个集合里图片的路径
