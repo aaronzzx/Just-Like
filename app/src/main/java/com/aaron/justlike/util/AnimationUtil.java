@@ -1,5 +1,6 @@
 package com.aaron.justlike.util;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -20,6 +21,34 @@ import android.widget.ProgressBar;
 import com.aaron.justlike.R;
 
 public class AnimationUtil {
+
+    public static void setImageSmall(View view) {
+//        ScaleAnimation animation = new ScaleAnimation(1, 0.8F, 1, 0.8F,
+//                Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+//        animation.setFillAfter(true);
+//        animation.setDuration(100);
+//        view.startAnimation(animation);
+        ObjectAnimator scaleX_Animator = ObjectAnimator.ofFloat(view, "scaleX", 1.0F, 0.8F);
+        scaleX_Animator.setDuration(100);
+        scaleX_Animator.start();
+        ObjectAnimator scaleY_Animator = ObjectAnimator.ofFloat(view, "scaleY", 1.0F, 0.8F);
+        scaleY_Animator.setDuration(100);
+        scaleY_Animator.start();
+    }
+
+    public static void setImageLarge(View view) {
+//        ScaleAnimation animation = new ScaleAnimation(0.8F, 1.0F, 0.8F, 1.0F,
+//                Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+//        animation.setFillAfter(true);
+//        animation.setDuration(100);
+//        view.startAnimation(animation);
+        ObjectAnimator scaleX_Animator = ObjectAnimator.ofFloat(view, "scaleX", 0.8F, 1.0F);
+        scaleX_Animator.setDuration(100);
+        scaleX_Animator.start();
+        ObjectAnimator scaleY_Animator = ObjectAnimator.ofFloat(view, "scaleY", 0.8F, 1.0F);
+        scaleY_Animator.setDuration(100);
+        scaleY_Animator.start();
+    }
 
     public static void showViewByAlpha(View view, float fromAlpha, float toAlpha, long duration) {
         AlphaAnimation aa = new AlphaAnimation(fromAlpha, toAlpha);

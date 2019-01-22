@@ -1,6 +1,9 @@
 package com.aaron.justlike.activity;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,6 +13,10 @@ import android.widget.EditText;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.CollectionAdapter;
+import com.aaron.justlike.another.Album;
+import com.aaron.justlike.another.CollectionInfo;
+import com.aaron.justlike.extend.MyGridLayoutManager;
+import com.aaron.justlike.util.SystemUtils;
 
 import org.litepal.LitePal;
 
@@ -26,14 +33,15 @@ public class CollectionActivity extends AppCompatActivity {
 
     private SQLiteDatabase mDatabase;
     private RecyclerView mRecyclerView;
+    private MyGridLayoutManager mLayoutManager;
     private CollectionAdapter mAdapter;
-    private List<String> mCollections = new ArrayList<>();
+    private List<Album> mCollections = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collection);
-        mDatabase = LitePal.getDatabase();
+        initDatabase();
         initView();
     }
 
@@ -57,9 +65,10 @@ public class CollectionActivity extends AppCompatActivity {
                         .setTitle("创建集合")
                         .setPositiveButton("确定", (dialog, which) -> {
                             // 打开图片选择器让用户选择图片添加到集合
-
                             String collectionName = editText.getText().toString();
-                            // TODO 编写创建集合的逻辑
+                            Intent intent = new Intent(this, CollectionAddActivity.class);
+                            intent.putExtra("collectionName", collectionName);
+                            startActivity(intent);
                         })
                         .setNegativeButton("取消", (dialog, which) -> {
 
@@ -70,6 +79,7 @@ public class CollectionActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        // 初始化界面 UI
         Toolbar toolbar = findViewById(R.id.activity_collection_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -77,8 +87,49 @@ public class CollectionActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        // 初始化控件
         mRecyclerView = findViewById(R.id.recycler_view);
+        mLayoutManager = new MyGridLayoutManager(this, 1);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.addItemDecoration(new YItemDecoration());
         mAdapter = new CollectionAdapter(this, mCollections);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void initDatabase() {
+        mDatabase = LitePal.getDatabase();
+        // 取出集合的名称和元素的数量
+        List<CollectionInfo> collections = LitePal.findAll(CollectionInfo.class);
+        Cursor cursor = null;
+        for (CollectionInfo info : collections) {
+            Album album = new Album();
+            String title = info.getTitle();
+            String total = String.valueOf(info.getTotal());
+            album.setCollectionTitle(title);
+            album.setElementTotal(total);
+            // 取出集合具体元素
+            cursor = mDatabase.query("Collection", new String[]{"path"}, "title = ?",
+                    new String[]{title}, null, null, null);
+            if (cursor.moveToFirst()) {
+                String path = cursor.getString(cursor.getColumnIndex("path"));
+                album.setImagePath(path);
+            }
+            mCollections.add(album);
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+    }
+
+    public class YItemDecoration extends RecyclerView.ItemDecoration {
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            outRect.bottom = 0;
+            outRect.top = SystemUtils.dp2px(CollectionActivity.this, 9.9F);
+            if (parent.getChildAdapterPosition(view) == 0) {
+                outRect.top = 0;
+            }
+        }
     }
 }

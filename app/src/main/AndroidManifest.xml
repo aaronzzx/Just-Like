@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".activity.CollectionAddActivity"></activity>
+
         <activity
             android:name=".activity.MainActivity"
             android:theme="@style/AppTheme.Splash">
@@ -43,6 +43,10 @@
         <activity
             android:name=".activity.CollectionActivity"
             android:label="集合"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.CollectionAddActivity"
+            android:label="已选择(0)"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.DownloadManagerActivity"
