@@ -52,17 +52,21 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    // 常量
     private static final int REQUEST_CODE_CHOOSE = 10;
     private static final int REQUEST_PERMISSION = 1;
     private static final int DELETE_PHOTO = 2;
+    private static final String[] TYPE = {"jpg", "jpeg", "png", "gif"};
     private static final String PATH = Environment.getExternalStoragePublicDirectory
             (Environment.DIRECTORY_PICTURES).getPath() + "/JustLike";
-    private static final String[] TYPE = {"jpg", "jpeg", "png", "gif"};
-    private static MyGridLayoutManager mLayoutManager;
-    private static List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
+
     private int mAsciiNum = 64; // 相当于大写 A
     private int mIsFinish = 0; // 用于判断返回键退出程序
     private int mScrollFlags = 0; // AppBar 滑动属性
+    private static List<Image> mImageList = new ArrayList<>(); // 定义存放 Image 实例的 List 集合
+
+    // 控件成员
+    private static MyGridLayoutManager mLayoutManager;
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
     private RecyclerView mRecyclerView;
