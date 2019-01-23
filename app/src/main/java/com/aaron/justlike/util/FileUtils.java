@@ -1,8 +1,12 @@
 package com.aaron.justlike.util;
 
+import android.app.DownloadManager;
 import android.app.WallpaperManager;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -62,12 +66,12 @@ public class FileUtils {
         return bitmap;
     }
 
-    public static void sortByName(List<Image> imageList, final boolean isOrder) {
+    public static void sortByName(List<Image> imageList, final boolean ascendingOrder) {
         if (!imageList.isEmpty()) {
             Collections.sort(imageList, new Comparator<Image>() {
                 @Override
                 public int compare(Image o1, Image o2) {
-                    if (isOrder) {
+                    if (ascendingOrder) {
                         return o1.getFileName().compareTo(o2.getFileName());
                     } else {
                         return o2.getFileName().compareTo(o1.getFileName());
@@ -77,12 +81,12 @@ public class FileUtils {
         }
     }
 
-    public static void sortByDate(List<Image> imageList, final boolean isOrder) {
+    public static void sortByDate(List<Image> imageList, final boolean ascendingOrder) {
         if (!imageList.isEmpty()) {
             Collections.sort(imageList, new Comparator<Image>() {
                 @Override
                 public int compare(Image o1, Image o2) {
-                    if (isOrder) {
+                    if (ascendingOrder) {
                         return o1.getCreateDate().compareTo(o2.getCreateDate());
                     } else {
                         return o2.getCreateDate().compareTo(o1.getCreateDate());
@@ -92,12 +96,12 @@ public class FileUtils {
         }
     }
 
-    public static void sortBySize(List<Image> imageList, final boolean isOrder) {
+    public static void sortBySize(List<Image> imageList, final boolean ascendingOrder) {
         if (!imageList.isEmpty()) {
             Collections.sort(imageList, new Comparator<Image>() {
                 @Override
                 public int compare(Image o1, Image o2) {
-                    if (isOrder) {
+                    if (ascendingOrder) {
                         return Long.compare(o1.getSize(), o2.getSize());
                     } else {
                         return Long.compare(o2.getSize(), o1.getSize());
@@ -285,11 +289,12 @@ public class FileUtils {
     /**
      * 加载缓存文件
      */
-    public static void getLocalFiles(List<Image> imageList, String path, String... type) {
+    @Deprecated
+    public static boolean getLocalFiles(List<Image> imageList, String path, String... type) {
         File files = new File(path);
         if (files.exists()) {
             File[] fileList = files.listFiles();
-            if (fileList == null) return;
+            if (fileList == null) return false;
             for (File file : fileList) {
                 if (file.isFile()) {
                     for (String fileType : type) {
@@ -307,6 +312,101 @@ public class FileUtils {
                     getLocalFiles(imageList, file.getAbsolutePath(), type);
                 }
             }
+            return true;
+        }
+        return false;
+    }
+
+    public static class DownloadUtils {
+
+        // 下载器
+        private DownloadManager downloadManager;
+        // 上下文
+        private Context mContext;
+        // 下载的ID
+        private long downloadId;
+        // photoId
+        private String mPhotoName;
+        // 判断是否需要设置壁纸
+        private int mFabType;
+        //广播监听下载的各个状态
+        private BroadcastReceiver receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                checkStatus();
+            }
+        };
+
+        public DownloadUtils(Context context) {
+            mContext = context;
+        }
+
+        public void downloadImage(String url, String name, int fabType) {
+            mPhotoName = name;
+            mFabType = fabType;
+
+            // 创建下载任务
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+
+            // 在通知栏中显示，默认就是显示的
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            request.setTitle(" " + name);
+
+            // 设置下载的路径
+            request.setDestinationInExternalPublicDir
+                    (Environment.DIRECTORY_PICTURES, "/JustLike/online/" + name);
+            // 设置通知栏点击跳转
+            request.setMimeType("image/jpeg");
+
+            // 获取DownloadManager
+            downloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
+            // 将下载请求加入下载队列，加入下载队列后会给该任务返回一个long型的id，通过该id可以取消任务，重启任务、获取下载的文件等等
+            downloadId = downloadManager.enqueue(request);
+            Toast.makeText(mContext, "开始下载", Toast.LENGTH_SHORT).show();
+
+            // 注册广播接收者，监听下载状态
+            mContext.registerReceiver(receiver,
+                    new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        }
+
+        //检查下载状态
+        private void checkStatus() {
+            DownloadManager.Query query = new DownloadManager.Query();
+            //通过下载的id查找
+            query.setFilterById(downloadId);
+            Cursor c = downloadManager.query(query);
+            if (c.moveToFirst()) {
+                int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
+                switch (status) {
+                    //下载暂停
+                    case DownloadManager.STATUS_PAUSED:
+                        break;
+                    //下载延迟
+                    case DownloadManager.STATUS_PENDING:
+                        break;
+                    //正在下载
+                    case DownloadManager.STATUS_RUNNING:
+                        break;
+                    //下载完成
+                    case DownloadManager.STATUS_SUCCESSFUL:
+                        if (mFabType == 1) {
+                            String path = Environment.getExternalStoragePublicDirectory
+                                    (Environment.DIRECTORY_PICTURES) + "/JustLike/online/" + mPhotoName;
+                            int i = FileUtils.setWallpaper(mContext, path);
+                            if (i == -1) {
+                                Toast.makeText(mContext, "改造失败", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        mContext.unregisterReceiver(receiver);
+                        break;
+                    //下载失败
+                    case DownloadManager.STATUS_FAILED:
+                        Toast.makeText(mContext, "下载失败", Toast.LENGTH_SHORT).show();
+                        mContext.unregisterReceiver(receiver);
+                        break;
+                }
+            }
+            c.close();
         }
     }
 }
