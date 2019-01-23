@@ -8,9 +8,11 @@ public interface IView {
 
     void attachPresenter();
 
-    void showImage(List<Image> imageList);
+    void onShowImage(List<Image> imageList, int sortType, boolean ascendingOrder);
 
-    void showToast(String args);
+    void onShowMessage(String args);
+
+    void onHideRefresh();
 
     void openPreviewActivity();
 

@@ -6,12 +6,14 @@ import java.util.List;
 
 public interface IModel {
 
-    void queryImage(OnQueryListener listener);
+    void queryImage(OnQueryImageListener listener);
 
-    interface OnQueryListener {
+    String[] querySortInfo();
+
+    interface OnQueryImageListener {
 
         void onSuccess(List<Image> list);
 
-        void onFail(String args);
+        void onFailure(String args);
     }
 }

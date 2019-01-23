@@ -15,6 +15,7 @@
 
                 <item
                     android:id="@+id/sort_date"
+                    android:checked="true"
                     android:title="日期"/>
 
                 <item
@@ -28,9 +29,8 @@
             </group>
 
             <item
-                android:id="@+id/sort_order"
-                android:title="升序排列"
-                android:checkable="true"/>
+                android:id="@+id/ascending_order"
+                android:title="升序排列" />
 
         </menu>
 

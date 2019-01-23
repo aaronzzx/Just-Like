@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSortByDate = menu.findItem(R.id.sort_date);
         mSortByName = menu.findItem(R.id.sort_name);
         mSortBySize = menu.findItem(R.id.sort_size);
-        mSortByOrder = menu.findItem(R.id.sort_order);
+        mSortByOrder = menu.findItem(R.id.ascending_order);
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         int mode_sort = preferences.getInt("mode_sort", 0);
         int order_or_reverse = preferences.getInt("order_or_reverse", 0);
@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 editor.putInt("mode_sort", 3);
                 editor.apply();
                 break;
-            case R.id.sort_order:
+            case R.id.ascending_order:
                 if (item.isChecked()) {
                     item.setChecked(false);
                     if (mSortByDate.isChecked()) {
@@ -586,7 +586,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mAdapter.setBanClick(true);
             new Thread(() -> {
                 try {
-                    Thread.sleep(600);
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -594,7 +594,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     refreshRecycler();
                     new Thread(() -> {
                         try {
-                            Thread.sleep(400);
+                            Thread.sleep(1);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -627,18 +627,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mImageList.clear();
                 FileUtils.getLocalFiles(mImageList, PATH, TYPE);
                 sort();
-                Thread.sleep(400);
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             runOnUiThread(() -> {
-                mAdapter.notifyDataSetChanged();
+//                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(0, mImageList.size());
                 mSwipeRefresh.setRefreshing(false);
 //                        addHintOnBackground();
-                AlphaAnimation aa = new AlphaAnimation(0, 1);
+                AlphaAnimation aa = new AlphaAnimation(0.5F, 1);
                 aa.setDuration(1000);
                 aa.setFillAfter(true);
-                mRecyclerView.startAnimation(aa);
+//                mRecyclerView.startAnimation(aa);
             });
         }).start();
     }

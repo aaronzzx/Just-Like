@@ -1,4 +1,4 @@
-package com.aaron.justlike.home;
+package com.aaron.justlike.home.view;
 
 import android.content.Context;
 import android.graphics.ColorMatrix;

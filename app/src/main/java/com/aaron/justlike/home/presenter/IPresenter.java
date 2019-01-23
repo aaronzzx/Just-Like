@@ -4,5 +4,7 @@ public interface IPresenter {
 
     void detachView();
 
-    void requestImage(int sortType, boolean ascendingOrder);
+    void requestImage();
+
+    void setSortType(int sortType, boolean ascendingOrder);
 }

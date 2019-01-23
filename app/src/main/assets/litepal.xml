@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
 
-    <dbname value="ImageStore" />
+    <dbname value="JustLike" />
 
     <version value="1" />
 
     <list>
         <mapping class="com.aaron.justlike.another.Collection" />
         <mapping class="com.aaron.justlike.another.CollectionInfo" />
+        <mapping class="com.aaron.justlike.another.SortInfo" />
     </list>
 
 </litepal>
