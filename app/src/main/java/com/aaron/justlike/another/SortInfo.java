@@ -1,6 +1,8 @@
 package com.aaron.justlike.another;
 
-public class SortInfo {
+import org.litepal.crud.LitePalSupport;
+
+public class SortInfo extends LitePalSupport {
 
     private int id;
     private String sortType;

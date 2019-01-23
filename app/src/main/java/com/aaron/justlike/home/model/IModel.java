@@ -8,6 +8,8 @@ public interface IModel {
 
     void queryImage(OnQueryImageListener listener);
 
+    void insertSortInfo(int sortType, boolean ascendingOrder);
+
     String[] querySortInfo();
 
     interface OnQueryImageListener {

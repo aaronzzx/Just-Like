@@ -41,6 +41,9 @@ public class Main2Activity extends BaseView {
     private LinearLayoutManager mLayoutManager;
     private RecyclerView.Adapter mAdapter;
 
+    private int mSortType;
+    private boolean mIsAscending;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +60,7 @@ public class Main2Activity extends BaseView {
         mSortByName = menu.findItem(R.id.sort_name);
         mSortBySize = menu.findItem(R.id.sort_size);
         mAscendingOrder = menu.findItem(R.id.ascending_order);
+        initMenuItem(mSortType, mIsAscending);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -70,25 +74,31 @@ public class Main2Activity extends BaseView {
                 break;
             case R.id.sort_date:
                 mPresenter.setSortType(BasePresenter.SORT_BY_DATE, ascendingOrder);
+                mSortByDate.setChecked(true);
                 mPresenter.requestImage();
                 break;
             case R.id.sort_name:
                 mPresenter.setSortType(BasePresenter.SORT_BY_NAME, ascendingOrder);
+                mSortByName.setChecked(true);
                 mPresenter.requestImage();
                 break;
             case R.id.sort_size:
                 mPresenter.setSortType(BasePresenter.SORT_BY_SIZE, ascendingOrder);
+                mSortBySize.setChecked(true);
                 mPresenter.requestImage();
                 break;
             case R.id.ascending_order:
                 if (mSortByDate.isChecked()) {
-                    mPresenter.setSortType(BasePresenter.SORT_BY_DATE, ascendingOrder);
+                    mPresenter.setSortType(BasePresenter.SORT_BY_DATE, !ascendingOrder);
+                    mAscendingOrder.setChecked(!ascendingOrder);
 
                 } else if (mSortByName.isChecked()) {
-                    mPresenter.setSortType(BasePresenter.SORT_BY_NAME, ascendingOrder);
+                    mPresenter.setSortType(BasePresenter.SORT_BY_NAME, !ascendingOrder);
+                    mAscendingOrder.setChecked(!ascendingOrder);
 
                 } else {
-                    mPresenter.setSortType(BasePresenter.SORT_BY_SIZE, ascendingOrder);
+                    mPresenter.setSortType(BasePresenter.SORT_BY_SIZE, !ascendingOrder);
+                    mAscendingOrder.setChecked(!ascendingOrder);
                 }
                 mPresenter.requestImage();
                 break;
@@ -111,7 +121,8 @@ public class Main2Activity extends BaseView {
     public void onShowImage(List<Image> imageList, int sortType, boolean ascendingOrder) {
         mAdapter = new HomeAdapter(imageList);
         mRecyclerView.setAdapter(mAdapter);
-        initMenuItem(sortType, ascendingOrder);
+        mSortType = sortType;
+        mIsAscending = ascendingOrder;
     }
 
     @Override

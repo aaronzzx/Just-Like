@@ -25,6 +25,15 @@ public class BaseModel implements IModel {
     }
 
     @Override
+    public void insertSortInfo(int sortType, boolean ascendingOrder) {
+        LitePal.deleteAll(SortInfo.class); // 删除所有记录，保证表中只有一条数据
+        SortInfo sortInfo = new SortInfo();
+        sortInfo.setSortType(String.valueOf(sortType));
+        sortInfo.setAscendingOrder(String.valueOf(ascendingOrder));
+        sortInfo.save();
+    }
+
+    @Override
     public String[] querySortInfo() {
         SortInfo sortInfo = LitePal.findFirst(SortInfo.class);
         if (sortInfo == null) {

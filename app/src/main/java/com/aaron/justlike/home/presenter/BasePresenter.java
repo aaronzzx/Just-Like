@@ -72,7 +72,7 @@ public class BasePresenter implements IPresenter {
     public void setSortType(int sortType, boolean ascendingOrder) {
         mSortType = sortType;
         mAscendingOrder = ascendingOrder;
-        // TODO 待将排序结果存入数据库
+        mModel.insertSortInfo(sortType, ascendingOrder);
     }
 
     private List<Image> sortImageList(List<Image> imageList, int sortType, boolean ascendingOrder) {
