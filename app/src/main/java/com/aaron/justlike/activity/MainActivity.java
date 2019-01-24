@@ -140,8 +140,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 滑动到指定位置
      */
     public void scrollToTop() {
-        int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
-        if (firstItem >= 48) {
+        // 查找当前屏幕内第一个可见的 View
+        View firstVisibleItem = mRecyclerView.getChildAt(0);
+        // 查找当前 View 在 RecyclerView 中处于哪个位置
+        int itemPosition = mRecyclerView.getChildLayoutPosition(firstVisibleItem);
+        if (itemPosition >= 48) {
             mRecyclerView.scrollToPosition(45);
         }
         mRecyclerView.smoothScrollToPosition(0);

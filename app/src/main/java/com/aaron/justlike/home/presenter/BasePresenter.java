@@ -26,17 +26,25 @@ public class BasePresenter implements IPresenter {
     private List<Image> mImageList = new ArrayList<>();
 
     public BasePresenter(IView view) {
+        // 同时持有 IView 和 IModel 引用
         mView = view;
         mModel = new BaseModel();
     }
 
+    /**
+     * 断开与 IView 的连接
+     */
     @Override
     public void detachView() {
         mView = null;
     }
 
+    /**
+     * 请求数据并回调 IView 函数显示图片
+     */
     @Override
     public void requestImage() {
+        // Part 1, 请求排序状态
         if (mSortType == 0) {
             String[] sortArray = mModel.querySortInfo();
             if (sortArray != null) {
@@ -47,6 +55,7 @@ public class BasePresenter implements IPresenter {
                 mAscendingOrder = ASCENDING_ORDER;
             }
         }
+        // Part 2, 向 IModel 请求数据
         mModel.queryImage(new IModel.OnQueryImageListener() {
 
             @Override
@@ -68,6 +77,9 @@ public class BasePresenter implements IPresenter {
         });
     }
 
+    /**
+     * 设置排序类型，设立标志位，并将排序结果插入数据库
+     */
     @Override
     public void setSortType(int sortType, boolean ascendingOrder) {
         mSortType = sortType;
@@ -75,6 +87,11 @@ public class BasePresenter implements IPresenter {
         mModel.insertSortInfo(sortType, ascendingOrder);
     }
 
+    /**
+     * 对 List 进行排序，根据传入参数决定排序类型
+     *
+     * @return 将排序后的 List 返回
+     */
     private List<Image> sortImageList(List<Image> imageList, int sortType, boolean ascendingOrder) {
         switch (sortType) {
             case SORT_BY_DATE:

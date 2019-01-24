@@ -24,10 +24,13 @@ public abstract class BaseView extends AppCompatActivity implements IView {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setTheme(R.style.AppTheme); // 由于设置了启动页，需要在这里将主题改回来
         super.onCreate(savedInstanceState);
-        requestStoragePermission();
+        requestPermission();
     }
 
-    protected void requestStoragePermission() {
+    /**
+     * 请求权限
+     */
+    private void requestPermission() {
         // 判断是否已经获得权限
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

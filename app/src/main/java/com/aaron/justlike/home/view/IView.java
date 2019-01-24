@@ -13,18 +13,4 @@ public interface IView {
     void onShowMessage(String args);
 
     void onHideRefresh();
-
-    void openPreviewActivity();
-
-    void openSelectorActivity();
-
-    void openMainActivity();
-
-    void openOnlineActivity();
-
-    void openCollectionActivity();
-
-    void openDownloadManagerActivity();
-
-    void openAboutActivity();
 }
