@@ -6,6 +6,8 @@ public interface IModel {
 
     void queryImage(OnQueryImageListener listener);
 
+    void deleteImage(String path);
+
     void insertSortInfo(int sortType, boolean ascendingOrder);
 
     String[] querySortInfo();

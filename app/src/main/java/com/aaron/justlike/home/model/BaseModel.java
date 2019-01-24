@@ -20,6 +20,7 @@ public class BaseModel implements IModel {
      * @param listener 回调接口
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void queryImage(OnQueryImageListener listener) {
         List<Image> imageList = getImage();
         if (imageList != null && imageList.size() != 0) {
@@ -27,6 +28,11 @@ public class BaseModel implements IModel {
         } else {
             listener.onFailure("本地没有图片缓存哦");
         }
+    }
+
+    @Override
+    public void deleteImage(String path) {
+        FileUtils.deleteFile(path);
     }
 
     /**

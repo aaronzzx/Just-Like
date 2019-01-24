@@ -2,24 +2,35 @@ package com.aaron.justlike.home.view;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.AboutActivity;
 import com.aaron.justlike.activity.CollectionActivity;
 import com.aaron.justlike.activity.DownloadManagerActivity;
+import com.aaron.justlike.activity.MainImageActivity;
 import com.aaron.justlike.activity.OnlineActivity;
-import com.aaron.justlike.adapter.HomeAdapter;
 import com.aaron.justlike.another.Image;
 import com.aaron.justlike.extend.GlideEngine;
 import com.aaron.justlike.extend.MyGridLayoutManager;
+import com.aaron.justlike.extend.SquareView;
 import com.aaron.justlike.home.presenter.BasePresenter;
 import com.aaron.justlike.home.presenter.IPresenter;
+import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.SystemUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -33,6 +44,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -45,6 +57,7 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
         SwipeRefreshLayout.OnRefreshListener {
 
     private static final int REQUEST_SELECT_IMAGE = 0;
+    private static final int FROM_PREVIEW_ACTIVITY = 1;
     private int mSortType;
     private boolean mIsAscending;
 
@@ -188,8 +201,8 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        // TODO onActivityResult()
         super.onActivityResult(requestCode, resultCode, data);
+        // TODO onActivityResult()
     }
 
     /**
@@ -274,7 +287,7 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mRecyclerView.addItemDecoration(new YItemDecoration());
-        mAdapter = new HomeAdapter<>(mImageList);
+        mAdapter = new HomeAdapter();
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -400,11 +413,94 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
         mParentLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerClosed(View drawerView) {
-                Intent intent = new Intent(Main2Activity.this,
-                        whichActivity);
+                Intent intent = new Intent(Main2Activity.this, whichActivity);
                 startActivity(intent);
                 mParentLayout.removeDrawerListener(this);
             }
         });
+    }
+
+    /**
+     * 缓存视图 ViewHolder 咯
+     */
+    private static class ViewHolder extends RecyclerView.ViewHolder {
+
+        View itemView;
+        SquareView squareView;
+
+        ViewHolder(View view) {
+            super(view);
+            itemView = view;
+            squareView = view.findViewById(R.id.square_view);
+        }
+    }
+
+    /**
+     * 界面适配器咯
+     */
+    private class HomeAdapter extends RecyclerView.Adapter<ViewHolder> {
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(Main2Activity.this)
+                    .inflate(R.layout.activity_main_recycler_item, parent, false);
+            ViewHolder holder = new ViewHolder(view);
+            int position = holder.getAdapterPosition();
+            holder.itemView.setOnClickListener(v -> {
+                // 将 Image 对象序列化传递给下一个活动，方便下一个活动取值
+                Intent intent = new Intent(Main2Activity.this, MainImageActivity.class);
+                intent.putExtra("position", position);
+                startActivityForResult(intent, FROM_PREVIEW_ACTIVITY);
+            });
+            holder.itemView.setOnLongClickListener(v -> {
+                new AlertDialog.Builder(Main2Activity.this)
+                        .setTitle("删除图片")
+                        .setMessage("图片将从设备中删除")
+                        .setPositiveButton("确定", (dialog, which) -> {
+                            String path = mImageList.get(position).getPath();
+                            mImageList.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(0, mImageList.size() - 1);
+                            mPresenter.deleteImage(path);
+                        })
+                        .setNegativeButton("取消", (dialog, which) -> {
+                        }).show();
+                return true;
+            });
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            Image image = mImageList.get(position); // 从集合中找到 Image 对象
+            String path = image.getPath();
+
+            RequestOptions options = new RequestOptions()
+                    .placeholder(R.color.colorGrey);
+            Glide.with(Main2Activity.this)
+                    .load(path)
+                    .apply(options)
+                    .listener(new RequestListener<Drawable>() {
+
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            holder.squareView.setImageDrawable(resource);
+                            AnimationUtil.showViewByAlpha(holder.squareView, 0.5F, 1, 300);
+                            return false;
+                        }
+                    })
+                    .into(holder.squareView);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mImageList.size();
+        }
     }
 }

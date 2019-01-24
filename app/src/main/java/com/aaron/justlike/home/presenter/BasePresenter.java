@@ -77,6 +77,11 @@ public class BasePresenter implements IPresenter<Image> {
         });
     }
 
+    @Override
+    public void deleteImage(String path) {
+        mModel.deleteImage(path);
+    }
+
     /**
      * 设置排序类型，设立标志位，并将排序结果插入数据库
      */
