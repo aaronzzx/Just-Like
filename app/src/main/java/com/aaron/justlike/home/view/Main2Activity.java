@@ -27,6 +27,7 @@ import com.jaeger.library.StatusBarUtil;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -40,11 +41,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class Main2Activity extends BaseView implements View.OnClickListener,
-        NavigationView.OnNavigationItemSelectedListener, AppBarLayout.OnOffsetChangedListener {
+        NavigationView.OnNavigationItemSelectedListener, AppBarLayout.OnOffsetChangedListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
     private static final int REQUEST_SELECT_IMAGE = 0;
+    private int mSortType;
+    private boolean mIsAscending;
 
-    private IPresenter mPresenter;
+    private IPresenter<Image> mPresenter;
 
     private DrawerLayout mParentLayout;
     private NavigationView mNavView;
@@ -60,8 +64,7 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
     private LinearLayoutManager mLayoutManager;
     private RecyclerView.Adapter mAdapter;
 
-    private int mSortType;
-    private boolean mIsAscending;
+    private List<Image> mImageList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +72,7 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
         setContentView(R.layout.activity_main);
         attachPresenter();
         initView();
-        mPresenter.requestImage();
+        mPresenter.requestImage(mImageList, false);
     }
 
     @Override
@@ -173,6 +176,14 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
     }
 
     /**
+     * 下拉刷新监听器回调函数
+     */
+    @Override
+    public void onRefresh() {
+        mPresenter.requestImage(mImageList, true);
+    }
+
+    /**
      * 另一 Activity 回调此 Activity
      */
     @Override
@@ -194,8 +205,9 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
      */
     @Override
     public void onShowImage(List<Image> imageList, int sortType, boolean ascendingOrder) {
-        mAdapter = new HomeAdapter(imageList);
-        mRecyclerView.setAdapter(mAdapter);
+        mImageList.clear();
+        mImageList.addAll(imageList);
+        mAdapter.notifyItemRangeChanged(0, mImageList.size());
         mSortType = sortType;
         mIsAscending = ascendingOrder;
     }
@@ -231,6 +243,7 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
         mFabButton.setOnClickListener(this);
         mNavView.setNavigationItemSelectedListener(this);
         mAppBarLayout.addOnOffsetChangedListener(this);
+        mSwipeRefresh.setOnRefreshListener(this);
 
         // Part 3, init status
         StatusBarUtil.setTransparentForDrawerLayout(this, mParentLayout);
@@ -261,6 +274,8 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mRecyclerView.addItemDecoration(new YItemDecoration());
+        mAdapter = new HomeAdapter<>(mImageList);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     /**
@@ -279,6 +294,10 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
             case BasePresenter.SORT_BY_SIZE:
                 mSortBySize.setChecked(true);
                 mAscendingOrder.setChecked(ascendingOrder);
+                break;
+            default:
+                mSortByDate.setChecked(true);
+                mAscendingOrder.setChecked(true);
                 break;
         }
     }
@@ -299,7 +318,7 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
                 mSortBySize.setChecked(true);
                 break;
         }
-        mPresenter.requestImage();
+        mPresenter.requestImage(mImageList, false);
     }
 
     /**
@@ -308,17 +327,17 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
     private void setAscendingOrder(boolean ascendingOrder) {
         if (mSortByDate.isChecked()) {
             mPresenter.setSortType(BasePresenter.SORT_BY_DATE, ascendingOrder);
-            mAscendingOrder.setChecked(!ascendingOrder);
+            mAscendingOrder.setChecked(ascendingOrder);
 
         } else if (mSortByName.isChecked()) {
             mPresenter.setSortType(BasePresenter.SORT_BY_NAME, ascendingOrder);
-            mAscendingOrder.setChecked(!ascendingOrder);
+            mAscendingOrder.setChecked(ascendingOrder);
 
         } else {
             mPresenter.setSortType(BasePresenter.SORT_BY_SIZE, ascendingOrder);
-            mAscendingOrder.setChecked(!ascendingOrder);
+            mAscendingOrder.setChecked(ascendingOrder);
         }
-        mPresenter.requestImage();
+        mPresenter.requestImage(mImageList, false);
     }
 
     /**
@@ -330,7 +349,7 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
         // 查找当前 View 在 RecyclerView 中处于哪个位置
         int itemPosition = mRecyclerView.getChildLayoutPosition(firstVisibleItem);
         if (itemPosition >= 48) {
-            mRecyclerView.scrollToPosition(45);
+            mRecyclerView.scrollToPosition(42);
         }
         mRecyclerView.smoothScrollToPosition(0);
     }

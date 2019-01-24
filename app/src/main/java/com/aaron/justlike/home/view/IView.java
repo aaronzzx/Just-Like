@@ -1,14 +1,12 @@
 package com.aaron.justlike.home.view;
 
-import com.aaron.justlike.another.Image;
-
 import java.util.List;
 
-public interface IView {
+public interface IView<T> {
 
     void attachPresenter();
 
-    void onShowImage(List<Image> imageList, int sortType, boolean ascendingOrder);
+    void onShowImage(List<T> list, int sortType, boolean ascendingOrder);
 
     void onShowMessage(String args);
 

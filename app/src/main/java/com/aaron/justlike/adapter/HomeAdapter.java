@@ -1,21 +1,18 @@
 package com.aaron.justlike.adapter;
 
-import android.content.Context;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.activity.MainImageActivity;
 import com.aaron.justlike.another.Image;
-import com.aaron.justlike.extend.BaseApplication;
 import com.aaron.justlike.extend.SquareView;
 import com.aaron.justlike.util.AnimationUtil;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
@@ -28,35 +25,71 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
+public class HomeAdapter<T> extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
-    private List<Image> mImageList;
-    private Context mContext;
+    private List<T> mList;
+    private Activity mActivity;
+    private int[] placeHolders = {R.drawable.place_holder_1,
+            R.drawable.place_holder_2, R.drawable.place_holder_3,
+            R.drawable.place_holder_4, R.drawable.place_holder_5,
+            R.drawable.place_holder_6, R.drawable.place_holder_7,
+            R.drawable.place_holder_8, R.drawable.place_holder_9,
+            R.drawable.place_holder_10};
 
-    public HomeAdapter(List<Image> imageList) {
-        mImageList = imageList;
-        mContext = BaseApplication.getContext();
+    public HomeAdapter(List<T> list) {
+        mList = list;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        mActivity = (Activity) parent.getContext();
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.activity_main_recycler_item, parent, false);
         ViewHolder holder = new ViewHolder(view);
+        holder.itemView.setOnClickListener(v -> {
+            int position = holder.getAdapterPosition();
+            // 将 Image 对象序列化传递给下一个活动，方便下一个活动取值
+            Intent intent = new Intent(mActivity, MainImageActivity.class);
+            intent.putExtra("position", position);
+            mActivity.startActivityForResult(intent, 100);
+        });
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Image image = mImageList.get(position); // 从集合中找到 Image 对象
+        Image image = (Image) mList.get(position); // 从集合中找到 Image 对象
         String path = image.getPath();
 
         RequestOptions options = new RequestOptions()
-                .placeholder(R.color.colorGrey)
-                .priority(Priority.HIGH);
+                .placeholder(R.color.colorGrey);
 
-        Glide.with(mContext)
+//        Glide.with(mActivity)
+//                .load(path)
+//                .apply(options)
+//                .listener(new RequestListener<Drawable>() {
+//                    @Override
+//                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+//                        ColorMatrix matrix = new ColorMatrix();
+//                        matrix.setSaturation(0);
+//                        resource.setColorFilter(new ColorMatrixColorFilter(matrix));
+//                        holder.fakeView.setImageDrawable(resource);
+//                        AlphaAnimation aa = new AlphaAnimation(0.5F, 1);
+//                        aa.setDuration(250);
+//                        aa.setFillAfter(true);
+//                        holder.fakeView.startAnimation(aa);
+//                        return false;
+//                    }
+//                })
+//                .into(holder.fakeView);
+
+        Glide.with(mActivity)
                 .load(path)
                 .apply(options)
                 .listener(new RequestListener<Drawable>() {
@@ -67,31 +100,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        ColorMatrix matrix = new ColorMatrix();
-                        matrix.setSaturation(0);
-                        resource.setColorFilter(new ColorMatrixColorFilter(matrix));
-                        holder.fakeView.setImageDrawable(resource);
-                        AlphaAnimation aa = new AlphaAnimation(0.5F, 1);
-                        aa.setDuration(250);
-                        aa.setFillAfter(true);
-                        holder.fakeView.startAnimation(aa);
-                        return false;
-                    }
-                })
-                .into(holder.fakeView);
-
-        Glide.with(mContext)
-                .load(path)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         holder.squareView.setImageDrawable(resource);
-                        AnimationUtil.showViewByAlpha(holder.squareView, 0, 1, 600);
+                        AnimationUtil.showViewByAlpha(holder.squareView, 0.5F, 1, 300);
                         return false;
                     }
                 })
@@ -100,7 +110,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mImageList.size();
+        return mList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

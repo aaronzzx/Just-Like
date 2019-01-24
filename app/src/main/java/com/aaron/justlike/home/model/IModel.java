@@ -1,7 +1,5 @@
 package com.aaron.justlike.home.model;
 
-import com.aaron.justlike.another.Image;
-
 import java.util.List;
 
 public interface IModel {
@@ -12,9 +10,9 @@ public interface IModel {
 
     String[] querySortInfo();
 
-    interface OnQueryImageListener {
+    interface OnQueryImageListener<T> {
 
-        void onSuccess(List<Image> list);
+        void onSuccess(List<T> list);
 
         void onFailure(String args);
     }

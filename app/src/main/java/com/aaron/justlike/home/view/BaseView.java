@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.another.Image;
 import com.aaron.justlike.util.SystemUtils;
 
 import androidx.annotation.NonNull;
@@ -16,7 +17,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-public abstract class BaseView extends AppCompatActivity implements IView {
+public abstract class BaseView extends AppCompatActivity implements IView<Image> {
 
     private static final int REQUEST_PERMISSION = 0;
 

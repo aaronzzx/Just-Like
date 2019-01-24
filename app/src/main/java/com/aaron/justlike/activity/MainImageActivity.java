@@ -185,7 +185,6 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
 //        }
 //        return super.onOptionsItemSelected(item);
 //    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch (requestCode) {
@@ -224,6 +223,7 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
         mInfo.setOnClickListener(this);
         mSetWallpaper.setOnClickListener(this);
         mDelete.setOnClickListener(this);
+        // TODO setTitle()
         setTitle();
         setSupportActionBar(mToolbar);
         // 启用标题栏的返回键
@@ -246,6 +246,7 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 mPosition = mViewPager.getCurrentItem();
+                // TODO setTitle()
                 setTitle();
             }
 

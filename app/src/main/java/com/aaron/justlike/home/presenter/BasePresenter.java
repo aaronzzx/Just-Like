@@ -6,10 +6,9 @@ import com.aaron.justlike.home.model.IModel;
 import com.aaron.justlike.home.view.IView;
 import com.aaron.justlike.util.FileUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class BasePresenter implements IPresenter {
+public class BasePresenter implements IPresenter<Image> {
 
     public static final int SORT_BY_DATE = 1;
     public static final int SORT_BY_NAME = 2;
@@ -20,12 +19,10 @@ public class BasePresenter implements IPresenter {
     private int mSortType;
     private boolean mAscendingOrder;
 
-    private IView mView;
+    private IView<Image> mView;
     private IModel mModel;
 
-    private List<Image> mImageList = new ArrayList<>();
-
-    public BasePresenter(IView view) {
+    public BasePresenter(IView<Image> view) {
         // 同时持有 IView 和 IModel 引用
         mView = view;
         mModel = new BaseModel();
@@ -43,7 +40,7 @@ public class BasePresenter implements IPresenter {
      * 请求数据并回调 IView 函数显示图片
      */
     @Override
-    public void requestImage() {
+    public void requestImage(List<Image> imageList, boolean refreshMode) {
         // Part 1, 请求排序状态
         if (mSortType == 0) {
             String[] sortArray = mModel.querySortInfo();
@@ -56,17 +53,20 @@ public class BasePresenter implements IPresenter {
             }
         }
         // Part 2, 向 IModel 请求数据
-        mModel.queryImage(new IModel.OnQueryImageListener() {
+        mModel.queryImage(new IModel.OnQueryImageListener<Image>() {
 
             @Override
             public void onSuccess(List<Image> list) {
                 mView.onHideRefresh();
-                if (mImageList.containsAll(list)) {
-                    return;
+                if (refreshMode) {
+                    if (imageList.containsAll(list)) {
+                        onFailure("暂时没有新增的图片");
+                        return;
+                    }
                 }
-                mImageList.clear();
-                mImageList.addAll(sortImageList(list, mSortType, mAscendingOrder));
-                mView.onShowImage(mImageList, mSortType, mAscendingOrder);
+                imageList.clear();
+                imageList.addAll(sortImageList(list, mSortType, mAscendingOrder));
+                mView.onShowImage(sortImageList(list, mSortType, mAscendingOrder), mSortType, mAscendingOrder);
             }
 
             @Override

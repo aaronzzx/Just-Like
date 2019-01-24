@@ -25,7 +25,7 @@ public class BaseModel implements IModel {
         if (imageList != null && imageList.size() != 0) {
             listener.onSuccess(imageList);
         } else {
-            listener.onFailure("本地无法查找到数据");
+            listener.onFailure("本地没有图片缓存哦");
         }
     }
 

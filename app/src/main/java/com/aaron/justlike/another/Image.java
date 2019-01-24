@@ -3,13 +3,9 @@ package com.aaron.justlike.another;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.kc.unsplash.models.Photo;
-import com.kc.unsplash.models.Urls;
+import java.util.Objects;
 
-import java.net.URL;
-import java.util.Comparator;
-
-public class Image implements Parcelable{
+public class Image implements Parcelable {
 
     private String mPath; // 用于在文件管理器中选择图片后传回的路径
     private String mFileName;
@@ -80,5 +76,21 @@ public class Image implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mPath);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Image image = (Image) o;
+        return mSize == image.mSize &&
+                Objects.equals(mPath, image.mPath) &&
+                Objects.equals(mFileName, image.mFileName) &&
+                Objects.equals(mCreateDate, image.mCreateDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mPath, mFileName, mCreateDate, mSize);
     }
 }
