@@ -1,15 +1,13 @@
 package com.aaron.justlike.home.entity;
 
-import com.aaron.justlike.another.Image;
-
 import java.util.List;
 
-public class MessageEvent {
+public class PreviewEvent<T> {
 
     private int position;
-    private List<Image> list;
+    private List<T> list;
 
-    public MessageEvent(int position, List<Image> list) {
+    public PreviewEvent(int position, List<T> list) {
         this.position = position;
         this.list = list;
     }
@@ -22,11 +20,11 @@ public class MessageEvent {
         this.position = position;
     }
 
-    public List<Image> getList() {
+    public List<T> getList() {
         return list;
     }
 
-    public void setList(List<Image> list) {
+    public void setList(List<T> list) {
         this.list = list;
     }
 }

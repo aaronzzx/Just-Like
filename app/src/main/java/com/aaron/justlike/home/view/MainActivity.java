@@ -21,7 +21,8 @@ import com.aaron.justlike.another.Image;
 import com.aaron.justlike.extend.GlideEngine;
 import com.aaron.justlike.extend.MyGridLayoutManager;
 import com.aaron.justlike.extend.SquareView;
-import com.aaron.justlike.home.entity.MessageEvent;
+import com.aaron.justlike.home.entity.DeleteEvent;
+import com.aaron.justlike.home.entity.PreviewEvent;
 import com.aaron.justlike.home.presenter.BasePresenter;
 import com.aaron.justlike.home.presenter.IPresenter;
 import com.aaron.justlike.util.SystemUtils;
@@ -36,6 +37,8 @@ import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,12 +54,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class Main2Activity extends BaseView implements View.OnClickListener,
+public class MainActivity extends BaseView implements View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener, AppBarLayout.OnOffsetChangedListener,
         SwipeRefreshLayout.OnRefreshListener {
 
     private static final int REQUEST_SELECT_IMAGE = 0;
-    private static final int FROM_PREVIEW_ACTIVITY = 1;
+
     private int mSortType;
     private boolean mIsAscending;
 
@@ -82,6 +85,7 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        EventBus.getDefault().register(this);
         attachPresenter();
         initView();
         mPresenter.requestImage(mImageList, false);
@@ -90,7 +94,21 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         mPresenter.detachView(); // 断开 Presenter
+    }
+
+    /**
+     * 接收 PreviewActivity 传过来的关于被删除图片的信息，并更新 UI
+     */
+    @Subscribe(threadMode = ThreadMode.POSTING, sticky = true)
+    public void onDeleteEvent(DeleteEvent event) {
+        int position = event.getPosition();
+        String path = event.getPath();
+        mImageList.remove(position);
+        mAdapter.notifyItemRemoved(position);
+        mAdapter.notifyItemRangeChanged(position, mImageList.size() - 1);
+        mPresenter.deleteImage(path);
     }
 
     @Override
@@ -196,12 +214,16 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
     }
 
     /**
-     * 另一 Activity 回调此 Activity
+     * Matisse 选取图片后默认回调
      */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // TODO onActivityResult()
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_SELECT_IMAGE:
+                List<String> selectedList = Matisse.obtainPathResult(data);
+                mPresenter.addImage(mImageList, selectedList);
+                break;
+        }
     }
 
     /**
@@ -412,7 +434,7 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
         mParentLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerClosed(View drawerView) {
-                Intent intent = new Intent(Main2Activity.this, whichActivity);
+                Intent intent = new Intent(MainActivity.this, whichActivity);
                 startActivity(intent);
                 mParentLayout.removeDrawerListener(this);
             }
@@ -442,20 +464,20 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(Main2Activity.this)
+            View view = LayoutInflater.from(MainActivity.this)
                     .inflate(R.layout.activity_main_recycler_item, parent, false);
             ViewHolder holder = new ViewHolder(view);
-            int position = holder.getAdapterPosition();
             // for Image onClick()
             holder.itemView.setOnClickListener(v -> {
-                // 将 Image 对象序列化传递给下一个活动，方便下一个活动取值
-                EventBus.getDefault().post(new MessageEvent(position, mImageList));
-                Intent intent = new Intent(Main2Activity.this, MainImageActivity.class);
+                int position = holder.getAdapterPosition();
+                EventBus.getDefault().postSticky(new PreviewEvent<>(position, mImageList));
+                Intent intent = new Intent(MainActivity.this, MainImageActivity.class);
                 startActivity(intent);
             });
             // for Image onLongClick()
             holder.itemView.setOnLongClickListener(v -> {
-                new AlertDialog.Builder(Main2Activity.this)
+                int position = holder.getAdapterPosition();
+                new AlertDialog.Builder(MainActivity.this)
                         .setTitle("删除图片")
                         .setMessage("图片将从设备中删除")
                         .setPositiveButton("确定", (dialog, which) -> {
@@ -479,7 +501,7 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
 
             RequestOptions options = new RequestOptions()
                     .placeholder(R.color.colorGrey);
-            Glide.with(Main2Activity.this)
+            Glide.with(MainActivity.this)
                     .load(path)
                     .apply(options)
                     .into(new ImageViewTarget<Drawable>(holder.squareView) {

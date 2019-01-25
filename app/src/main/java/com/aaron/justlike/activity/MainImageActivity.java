@@ -7,7 +7,6 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -20,7 +19,8 @@ import android.widget.Toast;
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.MainImageAdapter;
 import com.aaron.justlike.another.Image;
-import com.aaron.justlike.home.entity.MessageEvent;
+import com.aaron.justlike.home.entity.DeleteEvent;
+import com.aaron.justlike.home.entity.PreviewEvent;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
@@ -28,6 +28,7 @@ import com.yalantis.ucrop.UCrop;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
@@ -73,12 +74,13 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
         EventBus.getDefault().unregister(this);
     }
 
-    @Subscribe
-    public void onMessageEvent(MessageEvent event) {
+    /**
+     * 接收从 MainActivity 传过来的值
+     */
+    @Subscribe(threadMode = ThreadMode.POSTING, sticky = true)
+    public void onPreviewEvent(PreviewEvent<Image> event) {
         mPosition = event.getPosition();
         mImageList = event.getList();
-        Log.d("MainImageActivity", "position: " + mPosition);
-        Log.d("MainImageActivity", "mImageList == null: " + (mImageList == null));
     }
 
     public int getCurrentPosition() {
@@ -171,11 +173,14 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
                         .setTitle("删除图片")
                         .setMessage("图片将从设备中删除")
                         .setPositiveButton("确定", (dialog, which) -> {
-                            Intent intent = new Intent();
-                            intent.putExtra("position", mPosition);
-                            String path = MainActivity.getImageList().get(mPosition).getPath();
-                            intent.putExtra("path", path);
-                            setResult(RESULT_OK, intent);
+//                            Intent intent = new Intent();
+//                            intent.putExtra("position", mPosition);
+//                            String path = mImageList.get(mPosition).getPath();
+//                            intent.putExtra("path", path);
+//                            setResult(RESULT_OK, intent);
+
+                            String path = mImageList.get(mPosition).getPath();
+                            EventBus.getDefault().postSticky(new DeleteEvent(mPosition, path));
                             finish();
                         })
                         .setNegativeButton("取消", (dialog, which) -> {
@@ -232,11 +237,6 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
      * 初始化界面
      */
     private void initContent() {
-        // 获取从适配器序列化过来的值
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-//            mPosition = bundle.getInt("position");
-        }
         mToolbar = findViewById(R.id.activity_display_image_toolbar);
         mBottomBar = findViewById(R.id.bottom_bar);
         mShare = findViewById(R.id.action_share);

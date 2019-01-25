@@ -31,6 +31,16 @@ public class BaseModel implements IModel {
     }
 
     @Override
+    public void saveImage(List<String> pathList) {
+        int suffix = 0;
+        for (String path : pathList) {
+            FileUtils.saveToCache(path, suffix);
+            suffix++;
+            if (suffix > 9) suffix = 0;
+        }
+    }
+
+    @Override
     public void deleteImage(String path) {
         FileUtils.deleteFile(path);
     }

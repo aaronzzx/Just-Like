@@ -78,6 +78,15 @@ public class BasePresenter implements IPresenter<Image> {
     }
 
     @Override
+    public void addImage(List<Image> list, List<String> pathList) {
+        for (String path : pathList) {
+            list.add(new Image(path));
+        }
+        mView.onShowImage(list, mSortType, mAscendingOrder);
+        mModel.saveImage(pathList);
+    }
+
+    @Override
     public void deleteImage(String path) {
         mModel.deleteImage(path);
     }
