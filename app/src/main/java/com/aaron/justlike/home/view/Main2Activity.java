@@ -21,22 +21,21 @@ import com.aaron.justlike.another.Image;
 import com.aaron.justlike.extend.GlideEngine;
 import com.aaron.justlike.extend.MyGridLayoutManager;
 import com.aaron.justlike.extend.SquareView;
+import com.aaron.justlike.home.entity.MessageEvent;
 import com.aaron.justlike.home.presenter.BasePresenter;
 import com.aaron.justlike.home.presenter.IPresenter;
-import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.SystemUtils;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.target.ImageViewTarget;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.jaeger.library.StatusBarUtil;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -406,7 +405,7 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
     }
 
     /**
-     * 点击菜单跳转 Activity--- for NavigationView
+     * 点击菜单跳转 Activity --- for NavigationView
      */
     private void startActivityByNav(Class whichActivity) {
         mParentLayout.closeDrawers();
@@ -421,7 +420,7 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
     }
 
     /**
-     * 缓存视图 ViewHolder 咯
+     * 缓存视图 RecyclerView.ViewHolder
      */
     private static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -436,7 +435,7 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
     }
 
     /**
-     * 界面适配器咯
+     * RecyclerView 界面适配器
      */
     private class HomeAdapter extends RecyclerView.Adapter<ViewHolder> {
 
@@ -447,12 +446,14 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
                     .inflate(R.layout.activity_main_recycler_item, parent, false);
             ViewHolder holder = new ViewHolder(view);
             int position = holder.getAdapterPosition();
+            // for Image onClick()
             holder.itemView.setOnClickListener(v -> {
                 // 将 Image 对象序列化传递给下一个活动，方便下一个活动取值
+                EventBus.getDefault().post(new MessageEvent(position, mImageList));
                 Intent intent = new Intent(Main2Activity.this, MainImageActivity.class);
-                intent.putExtra("position", position);
-                startActivityForResult(intent, FROM_PREVIEW_ACTIVITY);
+                startActivity(intent);
             });
+            // for Image onLongClick()
             holder.itemView.setOnLongClickListener(v -> {
                 new AlertDialog.Builder(Main2Activity.this)
                         .setTitle("删除图片")
@@ -481,21 +482,13 @@ public class Main2Activity extends BaseView implements View.OnClickListener,
             Glide.with(Main2Activity.this)
                     .load(path)
                     .apply(options)
-                    .listener(new RequestListener<Drawable>() {
-
+                    .into(new ImageViewTarget<Drawable>(holder.squareView) {
                         @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        protected void setResource(@Nullable Drawable resource) {
                             holder.squareView.setImageDrawable(resource);
-                            AnimationUtil.showViewByAlpha(holder.squareView, 0.5F, 1, 300);
-                            return false;
+//                            AnimationUtil.showViewByAlpha(holder.squareView, 0.5F, 1, 300);
                         }
-                    })
-                    .into(holder.squareView);
+                    });
         }
 
         @Override

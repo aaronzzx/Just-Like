@@ -8,7 +8,7 @@
     <color name="colorBlack">#000000</color>
     <color name="colorRed">#b71c1c</color>
     <color name="colorGreen">#388e3c</color>
-    <color name="colorGrey">#F0F0F0</color>
+    <color name="colorGrey">#DDDCDC</color>
     <color name="colorGreyDark">#0e0e0e</color>
     <color name="transparent">#00ffffff</color>
     <color name="navigationBar">#56000000</color>

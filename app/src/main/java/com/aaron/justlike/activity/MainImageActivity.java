@@ -7,6 +7,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -18,13 +19,19 @@ import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.MainImageAdapter;
+import com.aaron.justlike.another.Image;
+import com.aaron.justlike.home.entity.MessageEvent;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
 import com.yalantis.ucrop.UCrop;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -34,6 +41,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 public class MainImageActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private List<Image> mImageList;
 
     private ViewPager mViewPager;
     private LinearLayout mBottomBar;
@@ -54,7 +63,22 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_image);
+        EventBus.getDefault().register(this);
         initContent();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onMessageEvent(MessageEvent event) {
+        mPosition = event.getPosition();
+        mImageList = event.getList();
+        Log.d("MainImageActivity", "position: " + mPosition);
+        Log.d("MainImageActivity", "mImageList == null: " + (mImageList == null));
     }
 
     public int getCurrentPosition() {
@@ -211,7 +235,7 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
         // 获取从适配器序列化过来的值
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            mPosition = bundle.getInt("position");
+//            mPosition = bundle.getInt("position");
         }
         mToolbar = findViewById(R.id.activity_display_image_toolbar);
         mBottomBar = findViewById(R.id.bottom_bar);
@@ -239,7 +263,7 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
         mViewPager = findViewById(R.id.activity_display_image_vp);
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setPageMargin(50);
-        MainImageAdapter pagerAdapter = new MainImageAdapter(this, MainActivity.getImageList());
+        MainImageAdapter pagerAdapter = new MainImageAdapter(this, mImageList);
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setCurrentItem(mPosition);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -263,7 +287,7 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
 
     private void setTitle() {
         ExifInterface exif = null;
-        mImagePath = MainActivity.getImageList().get(mPosition).getPath();
+        mImagePath = mImageList.get(mPosition).getPath();
         mImageName = mImagePath.substring(mImagePath.lastIndexOf("/") + 1);
         float size = (float) FileUtils.getFileSize(mImagePath) / 1024 / 1024;
         mImageSize = String.valueOf(size);
@@ -271,7 +295,7 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
         int[] resolution = FileUtils.getImageWidthHeight(mImagePath);
         mImageResolution = String.valueOf(resolution[0]) + " x " + String.valueOf(resolution[1]);
         try {
-            exif = new ExifInterface(MainActivity.getImageList().get(mPosition).getPath());
+            exif = new ExifInterface(mImageList.get(mPosition).getPath());
         } catch (IOException e) {
             e.printStackTrace();
         }
