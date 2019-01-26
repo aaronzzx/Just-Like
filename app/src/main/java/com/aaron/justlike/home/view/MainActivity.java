@@ -1,5 +1,6 @@
 package com.aaron.justlike.home.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
@@ -9,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
@@ -99,6 +102,24 @@ public class MainActivity extends BaseView implements View.OnClickListener,
     }
 
     /**
+     * 配合 AppBarLayout 进入伪全屏模式
+     */
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+//        if (!SystemUtils.isViewVisible(mToolbar)) {
+//            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+//                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+//        }
+    }
+
+    /**
      * 接收 PreviewActivity 传过来的关于被删除图片的信息，并更新 UI
      */
     @Subscribe(threadMode = ThreadMode.POSTING, sticky = true)
@@ -180,8 +201,9 @@ public class MainActivity extends BaseView implements View.OnClickListener,
                 startActivityByNav(DownloadManagerActivity.class);
                 break;
             // TODO 编写侧滑菜单设置项的逻辑
-//                    case R.id.nav_settings:
-//                        break;
+//            case R.id.nav_settings:
+//
+//                break;
             case R.id.nav_about:
                 startActivityByNav(AboutActivity.class);
                 break;
@@ -197,10 +219,10 @@ public class MainActivity extends BaseView implements View.OnClickListener,
         // 判断 Toolbar 是否可见
         boolean isVisible = SystemUtils.isViewVisible(mToolbar);
         if (isVisible) {
-            exitFullScreen();
+//            exitFullScreen();
             mFabButton.show();
         } else {
-            enableFullScreen();
+//            enableFullScreen();
             mFabButton.hide();
         }
     }
@@ -220,8 +242,10 @@ public class MainActivity extends BaseView implements View.OnClickListener,
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_SELECT_IMAGE:
-                List<String> selectedList = Matisse.obtainPathResult(data);
-                mPresenter.addImage(mImageList, selectedList);
+                if (resultCode == Activity.RESULT_OK) {
+                    List<String> selectedList = Matisse.obtainPathResult(data);
+                    mPresenter.addImage(mImageList, selectedList);
+                }
                 break;
         }
     }
@@ -280,11 +304,18 @@ public class MainActivity extends BaseView implements View.OnClickListener,
         mSwipeRefresh.setOnRefreshListener(this);
 
         // Part 3, init status
-        StatusBarUtil.setTransparentForDrawerLayout(this, mParentLayout);
+        setStatusBar();
         setSupportActionBar(mToolbar);
         enableHomeAsUp();
         mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary);
         initRecyclerView();
+    }
+
+    private void setStatusBar() {
+        StatusBarUtil.setTranslucentForDrawerLayout(this, mParentLayout, 80);
+        Window window = getWindow();
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
     /**
