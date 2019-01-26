@@ -312,7 +312,7 @@ public class MainActivity extends BaseView implements View.OnClickListener,
     }
 
     private void setStatusBar() {
-        StatusBarUtil.setTranslucentForDrawerLayout(this, mParentLayout, 80);
+        StatusBarUtil.setTranslucentForDrawerLayout(this, mParentLayout, 70);
         Window window = getWindow();
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
