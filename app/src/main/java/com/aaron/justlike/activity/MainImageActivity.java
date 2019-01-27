@@ -251,7 +251,7 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
             actionBar.setDisplayHomeAsUpEnabled(true);
 //            actionBar.setDisplayShowHomeEnabled(true);
         }
-        AnimationUtil.exitFullScreen(this, mToolbar, 200);
+        AnimationUtil.showToolbar(this, mToolbar, 200);
         AnimationUtil.setBottomBar(mBottomBar, "show", 200, mShare,
                 mInfo, mSetWallpaper, mDelete);
 

@@ -31,7 +31,7 @@ public class PreviewPresenter implements IPreviewPresenter {
         String name = FileUtils.getImageName(path);
         String size = FileUtils.getImageSizeByMb(path);
         int[] resolution = FileUtils.getImageWidthHeight(path);
-        String pixel = resolution[0] + " " + resolution[1];
+        String pixel = resolution[0] + " x " + resolution[1];
         return new ImageInfo(time, name, size, pixel, path);
     }
 }

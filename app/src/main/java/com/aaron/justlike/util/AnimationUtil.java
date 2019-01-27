@@ -153,7 +153,7 @@ public class AnimationUtil {
         imageView.animate().setDuration(2000).setInterpolator(new DecelerateInterpolator()).alpha(1.0F).start();
     }
 
-    public static void setFullScreen(Activity activity, View view, long startOffset) {
+    public static void hideToolbar(Activity activity, View view, long startOffset) {
         activity.getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -172,7 +172,7 @@ public class AnimationUtil {
         view.setVisibility(View.GONE);
     }
 
-    public static void exitFullScreen(Activity activity, View view, long startOffset) {
+    public static void showToolbar(Activity activity, View view, long startOffset) {
         activity.getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -182,6 +182,41 @@ public class AnimationUtil {
         AlphaAnimation aa = new AlphaAnimation(0, 1);
         as.addAnimation(aa);
         TranslateAnimation ta = new TranslateAnimation(0, 0, -130, 0);
+        as.addAnimation(ta);
+        as.setStartOffset(startOffset);
+        view.startAnimation(as);
+        view.setVisibility(View.VISIBLE);
+    }
+
+    public static void hideBottomBar(Activity activity, View view, long startOffset) {
+        activity.getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        AnimationSet as = new AnimationSet(true);
+        as.setDuration(250);
+        AlphaAnimation aa = new AlphaAnimation(1, 0);
+        as.addAnimation(aa);
+        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, 130);
+        as.addAnimation(ta);
+        as.setStartOffset(startOffset);
+        view.startAnimation(as);
+        view.setVisibility(View.GONE);
+    }
+
+    public static void showBottomBar(Activity activity, View view, long startOffset) {
+        activity.getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        AnimationSet as = new AnimationSet(true);
+        as.setDuration(250);
+        AlphaAnimation aa = new AlphaAnimation(0, 1);
+        as.addAnimation(aa);
+        TranslateAnimation ta = new TranslateAnimation(0, 0, 130, 0);
         as.addAnimation(ta);
         as.setStartOffset(startOffset);
         view.startAnimation(as);

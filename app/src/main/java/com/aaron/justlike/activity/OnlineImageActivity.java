@@ -148,10 +148,10 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
                 }
                 int flag = mToolbar.getVisibility();
                 if (flag == View.GONE) {
-                    AnimationUtil.exitFullScreen(this, mToolbar, 0);
+                    AnimationUtil.showToolbar(this, mToolbar, 0);
                     AnimationUtil.handleBottomBar(mBottomBar, mFloatingActionMenu, "show", 0);
                 } else {
-                    AnimationUtil.setFullScreen(this, mToolbar, 0);
+                    AnimationUtil.hideToolbar(this, mToolbar, 0);
                     AnimationUtil.handleBottomBar(mBottomBar, mFloatingActionMenu, "hide", 0);
                 }
                 break;
@@ -211,7 +211,7 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
         mFabWallpaper = findViewById(R.id.fab_set_wallpaper);
         mFabDownload.setOnClickListener(this);
         mFabWallpaper.setOnClickListener(this);
-        AnimationUtil.exitFullScreen(this, mToolbar, 200);
+        AnimationUtil.showToolbar(this, mToolbar, 200);
         AnimationUtil.handleBottomBar(mBottomBar, mFloatingActionMenu, "show", 200);
     }
 

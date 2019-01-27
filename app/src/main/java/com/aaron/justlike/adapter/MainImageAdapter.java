@@ -75,13 +75,13 @@ public class MainImageAdapter extends PagerAdapter {
             public void onClick(View v) {
                 if (isFullScreen) {
                     // 全屏状态下执行此代码块会退出全屏
-                    AnimationUtil.exitFullScreen(mActivity, toolbar, 0);
+                    AnimationUtil.showToolbar(mActivity, toolbar, 0);
                     AnimationUtil.setBottomBar(bottomBar, "show", 0, share,
                             info, set_wallpaper, delete);
                     isFullScreen = false;
                 } else {
                     // 进入全屏,自动沉浸
-                    AnimationUtil.setFullScreen(mActivity, toolbar, 0);
+                    AnimationUtil.hideToolbar(mActivity, toolbar, 0);
                     AnimationUtil.setBottomBar(bottomBar, "hide", 0, share,
                             info, set_wallpaper, delete);
                     isFullScreen = true;

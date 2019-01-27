@@ -10,11 +10,11 @@ import java.util.List;
 
 public class MainPresenter implements IMainPresenter<Image> {
 
-    public static final int SORT_BY_DATE = 2;
-    public static final int SORT_BY_NAME = 3;
-    public static final int SORT_BY_SIZE = 4;
-    private static final int NO_SORT_STATUS = 1;
-    private static final boolean ASCENDING_ORDER = true;
+    public static final int SORT_BY_DATE = 1;
+    public static final int SORT_BY_NAME = 2;
+    public static final int SORT_BY_SIZE = 3;
+    public static final boolean ASCENDING_ORDER = true;
+    private static final int NO_SORT_STATUS = 0;
     public static final boolean DESCENDING_ORDER = false;
 
     private int mSortType;

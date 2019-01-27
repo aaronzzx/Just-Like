@@ -63,6 +63,11 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
 
     private Toolbar mToolbar;
     private ViewPager mViewPager;
+    private LinearLayout mBottomBar;
+    private ImageView mShareBtn;
+    private ImageView mSetWallpaperBtn;
+    private ImageView mImageInfoBtn;
+    private ImageView mDeleteBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,22 +179,9 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
                         }).show();
                 break;
             case R.id.action_info:
-                // 设置图片详情的初始化
                 @SuppressLint("InflateParams")
                 View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_image_info, null);
-                TextView imageTime = dialogView.findViewById(R.id.info_time);
-                TextView imageName = dialogView.findViewById(R.id.info_name);
-                TextView imageSize = dialogView.findViewById(R.id.info_size);
-                TextView imagePixel = dialogView.findViewById(R.id.info_resolution);
-                TextView imagePath = dialogView.findViewById(R.id.info_path);
-                String path = mImageList.get(mPosition).getPath();
-                ImageInfo imageInfo = mPresenter.requestImageInfo(path);
-                imageTime.setText(imageInfo.getTime());
-                imageName.setText(imageInfo.getName());
-                imageSize.setText(imageInfo.getSize());
-                imagePixel.setText(imageInfo.getPixel());
-                imagePath.setText(path);
-
+                initImageInfo(dialogView);
                 // 显示对话框
                 new AlertDialog.Builder(this)
                         .setTitle("详情")
@@ -206,7 +198,6 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
                             finish();
                         })
                         .setNegativeButton("取消", (dialog, which) -> {
-
                         }).show();
                 break;
         }
@@ -247,33 +238,25 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         mToolbar.setTitle(title);
     }
 
-    @Override
-    public void animIn() {
-
-    }
-
-    @Override
-    public void animOut() {
-
-    }
-
     private void initView() {
         mToolbar = findViewById(R.id.activity_display_image_toolbar);
         mViewPager = findViewById(R.id.activity_display_image_vp);
         // BottomBar 按钮
-        ImageView share = findViewById(R.id.action_share);
-        ImageView info = findViewById(R.id.action_info);
-        ImageView setWallpaper = findViewById(R.id.action_set_wallpaper);
-        ImageView delete = findViewById(R.id.action_delete);
+        mBottomBar = findViewById(R.id.bottom_bar);
+        mShareBtn = findViewById(R.id.action_share);
+        mSetWallpaperBtn = findViewById(R.id.action_set_wallpaper);
+        mImageInfoBtn = findViewById(R.id.action_info);
+        mDeleteBtn = findViewById(R.id.action_delete);
 
-        share.setOnClickListener(this);
-        info.setOnClickListener(this);
-        setWallpaper.setOnClickListener(this);
-        delete.setOnClickListener(this);
+        mShareBtn.setOnClickListener(this);
+        mSetWallpaperBtn.setOnClickListener(this);
+        mImageInfoBtn.setOnClickListener(this);
+        mDeleteBtn.setOnClickListener(this);
         mViewPager.addOnPageChangeListener(this);
 
         initToolbar();
         initViewPager();
+        animIn(200);
     }
 
     private void initToolbar() {
@@ -318,13 +301,32 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         }
     }
 
+    private void initImageInfo(View dialogView) {
+        TextView imageTime = dialogView.findViewById(R.id.info_time);
+        TextView imageName = dialogView.findViewById(R.id.info_name);
+        TextView imageSize = dialogView.findViewById(R.id.info_size);
+        TextView imagePixel = dialogView.findViewById(R.id.info_resolution);
+        TextView imagePath = dialogView.findViewById(R.id.info_path);
+        String path = mImageList.get(mPosition).getPath();
+        ImageInfo imageInfo = mPresenter.requestImageInfo(path);
+        imageTime.setText(imageInfo.getTime());
+        imageName.setText(imageInfo.getName());
+        imageSize.setText(imageInfo.getSize());
+        imagePixel.setText(imageInfo.getPixel());
+        imagePath.setText(path);
+    }
+
+    private void animIn(long startOffset) {
+        AnimationUtil.showToolbar(this, mToolbar, startOffset);
+        AnimationUtil.showBottomBar(this, mBottomBar, startOffset);
+    }
+
+    private void animOut(long startOffset) {
+        AnimationUtil.hideToolbar(this, mToolbar, startOffset);
+        AnimationUtil.hideBottomBar(this, mBottomBar, startOffset);
+    }
+
     public class PreviewAdapter extends PagerAdapter {
-
-        private boolean isFullScreen;
-
-        private PreviewAdapter() {
-
-        }
 
         @Override
         public int getCount() {
@@ -339,14 +341,8 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         @NonNull
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            final Toolbar toolbar = PreviewActivity.this.findViewById(R.id.activity_display_image_toolbar);
-            final LinearLayout bottomBar = PreviewActivity.this.findViewById(R.id.bottom_bar);
-            final ImageView share = PreviewActivity.this.findViewById(R.id.action_share);
-            final ImageView info = PreviewActivity.this.findViewById(R.id.action_info);
-            final ImageView set_wallpaper = PreviewActivity.this.findViewById(R.id.action_set_wallpaper);
-            final ImageView delete = PreviewActivity.this.findViewById(R.id.action_delete);
             String path = mImageList.get(position).getPath();
-            final PhotoView photoView = new PhotoView(PreviewActivity.this);
+            PhotoView photoView = new PhotoView(PreviewActivity.this);
             photoView.enable();
             photoView.setMaxScale(2.5F);
             ViewGroup parent = (ViewGroup) photoView.getParent();
@@ -365,22 +361,13 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
                     .apply(options)
                     .transition(DrawableTransitionOptions.with(factory))
                     .into(photoView);
-            photoView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isFullScreen) {
-                        // 全屏状态下执行此代码块会退出全屏
-                        AnimationUtil.exitFullScreen(PreviewActivity.this, toolbar, 0);
-                        AnimationUtil.setBottomBar(bottomBar, "show", 0, share,
-                                info, set_wallpaper, delete);
-                        isFullScreen = false;
-                    } else {
-                        // 进入全屏,自动沉浸
-                        AnimationUtil.setFullScreen(PreviewActivity.this, toolbar, 0);
-                        AnimationUtil.setBottomBar(bottomBar, "hide", 0, share,
-                                info, set_wallpaper, delete);
-                        isFullScreen = true;
-                    }
+            photoView.setOnClickListener(v -> {
+                if (mToolbar.getVisibility() == View.GONE) {
+                    // 全屏状态下执行此代码块会退出全屏
+                    animIn(0);
+                } else {
+                    // 进入全屏,自动沉浸
+                    animOut(0);
                 }
             });
             container.addView(photoView);

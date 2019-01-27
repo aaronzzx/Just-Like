@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
@@ -58,13 +59,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MainActivity extends AppCompatActivity implements IMainView<Image>, View.OnClickListener,
-        NavigationView.OnNavigationItemSelectedListener, AppBarLayout.OnOffsetChangedListener,
-        SwipeRefreshLayout.OnRefreshListener {
+        NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final int REQUEST_PERMISSION = 0;
     private static final int REQUEST_SELECT_IMAGE = 1;
@@ -76,11 +75,12 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     private IMainPresenter<Image> mPresenter;
 
     private DrawerLayout mParentLayout;
+    private LinearLayout mParentToolbar;
     private Toolbar mToolbar;
     private MenuItem mSortByDate;
     private MenuItem mSortByName;
     private MenuItem mSortBySize;
-    private MenuItem mAscendingOrder;
+    private MenuItem mSortByAscending;
     private SwipeRefreshLayout mSwipeRefresh;
     private FloatingActionButton mFabButton;
     private RecyclerView mRecyclerView;
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         mSortByDate = menu.findItem(R.id.sort_date);
         mSortByName = menu.findItem(R.id.sort_name);
         mSortBySize = menu.findItem(R.id.sort_size);
-        mAscendingOrder = menu.findItem(R.id.ascending_order);
+        mSortByAscending = menu.findItem(R.id.ascending_order);
         // 初始化 Popup 记忆状态
         initMenuItem(mSortType, mIsAscending);
         return super.onCreateOptionsMenu(menu);
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // 这里判断升序排列选项是否被选中
-        boolean ascendingOrder = mAscendingOrder.isChecked();
+        boolean ascendingOrder = mSortByAscending.isChecked();
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
                 setSort(MainPresenter.SORT_BY_SIZE, ascendingOrder);
                 break;
             case R.id.ascending_order:
-                setAscendingOrder(!ascendingOrder);
+                setSortByAscending(!ascendingOrder);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -229,22 +229,6 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     }
 
     /**
-     * 监听 AppBarLayout 偏移量
-     */
-    @Override
-    public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
-        // 判断 Toolbar 是否可见
-        boolean isVisible = SystemUtils.isViewVisible(mToolbar);
-        if (isVisible) {
-//            exitFullScreen();
-            mFabButton.show();
-        } else {
-//            enableFullScreen();
-            mFabButton.hide();
-        }
-    }
-
-    /**
      * 下拉刷新监听器回调函数
      */
     @Override
@@ -305,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         // Part 1, find id
         mParentLayout = findViewById(R.id.drawer_layout_home_activity_main);
         NavigationView navView = findViewById(R.id.navigation_view_home_activity_main);
-        AppBarLayout appBarLayout = findViewById(R.id.appbar_layout_home_activity_main);
+        mParentToolbar = findViewById(R.id.activity_main_linear_layout);
         mToolbar = findViewById(R.id.toolbar_home_activity_main);
         mSwipeRefresh = findViewById(R.id.swipe_refresh_home_activity_main);
         mFabButton = findViewById(R.id.fab_home_activity_main);
@@ -315,7 +299,6 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         mToolbar.setOnClickListener(this);
         mFabButton.setOnClickListener(this);
         navView.setNavigationItemSelectedListener(this);
-        appBarLayout.addOnOffsetChangedListener(this);
         mSwipeRefresh.setOnRefreshListener(this);
 
         // Part 3, init status
@@ -350,12 +333,27 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
      */
     private void initRecyclerView() {
         // 将 RecyclerView 的布局风格改为网格类型,使用自定义的布局管理器，为了能修改滑动状态
-        LinearLayoutManager layoutManager = new MyGridLayoutManager(this, 3);
+        MyGridLayoutManager layoutManager = new MyGridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mRecyclerView.addItemDecoration(new YItemDecoration());
         mAdapter = new HomeAdapter();
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    mFabButton.hide();
+                } else if (dy < 0) {
+                    mFabButton.show();
+                }
+            }
+        });
+        if (mImageList.size() < 16) {
+            AppBarLayout.LayoutParams layoutParams = (AppBarLayout.LayoutParams) mParentToolbar.getLayoutParams(); // 元素不够禁止隐藏 Toolbar
+            layoutParams.setScrollFlags(0);
+        }
     }
 
     /**
@@ -365,19 +363,19 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         switch (sortType) {
             case MainPresenter.SORT_BY_DATE:
                 mSortByDate.setChecked(true);
-                mAscendingOrder.setChecked(ascendingOrder);
+                mSortByAscending.setChecked(ascendingOrder);
                 break;
             case MainPresenter.SORT_BY_NAME:
                 mSortByName.setChecked(true);
-                mAscendingOrder.setChecked(ascendingOrder);
+                mSortByAscending.setChecked(ascendingOrder);
                 break;
             case MainPresenter.SORT_BY_SIZE:
                 mSortBySize.setChecked(true);
-                mAscendingOrder.setChecked(ascendingOrder);
+                mSortByAscending.setChecked(ascendingOrder);
                 break;
             default:
                 mSortByDate.setChecked(true);
-                mAscendingOrder.setChecked(true);
+                mSortByAscending.setChecked(true);
                 break;
         }
     }
@@ -404,18 +402,18 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     /**
      * 设置 Popup 菜单是否升序状态
      */
-    private void setAscendingOrder(boolean ascendingOrder) {
+    private void setSortByAscending(boolean sortByAscending) {
         if (mSortByDate.isChecked()) {
-            mPresenter.setSortType(MainPresenter.SORT_BY_DATE, ascendingOrder);
-            mAscendingOrder.setChecked(ascendingOrder);
+            mPresenter.setSortType(MainPresenter.SORT_BY_DATE, sortByAscending);
+            mSortByAscending.setChecked(sortByAscending);
 
         } else if (mSortByName.isChecked()) {
-            mPresenter.setSortType(MainPresenter.SORT_BY_NAME, ascendingOrder);
-            mAscendingOrder.setChecked(ascendingOrder);
+            mPresenter.setSortType(MainPresenter.SORT_BY_NAME, sortByAscending);
+            mSortByAscending.setChecked(sortByAscending);
 
         } else {
-            mPresenter.setSortType(MainPresenter.SORT_BY_SIZE, ascendingOrder);
-            mAscendingOrder.setChecked(ascendingOrder);
+            mPresenter.setSortType(MainPresenter.SORT_BY_SIZE, sortByAscending);
+            mSortByAscending.setChecked(sortByAscending);
         }
         mPresenter.requestImage(mImageList, false);
     }
