@@ -1,4 +1,4 @@
-package com.aaron.justlike.home.model;
+package com.aaron.justlike.main.model;
 
 import java.util.List;
 

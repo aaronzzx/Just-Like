@@ -1,8 +1,11 @@
-package com.aaron.justlike.home.view;
+package com.aaron.justlike.main.view;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,16 +21,15 @@ import com.aaron.justlike.R;
 import com.aaron.justlike.activity.AboutActivity;
 import com.aaron.justlike.activity.CollectionActivity;
 import com.aaron.justlike.activity.DownloadManagerActivity;
-import com.aaron.justlike.activity.MainImageActivity;
 import com.aaron.justlike.activity.OnlineActivity;
 import com.aaron.justlike.another.Image;
 import com.aaron.justlike.extend.GlideEngine;
 import com.aaron.justlike.extend.MyGridLayoutManager;
 import com.aaron.justlike.extend.SquareView;
-import com.aaron.justlike.home.entity.DeleteEvent;
-import com.aaron.justlike.home.entity.PreviewEvent;
-import com.aaron.justlike.home.presenter.BasePresenter;
-import com.aaron.justlike.home.presenter.IPresenter;
+import com.aaron.justlike.main.entity.DeleteEvent;
+import com.aaron.justlike.main.entity.PreviewEvent;
+import com.aaron.justlike.main.presenter.IMainPresenter;
+import com.aaron.justlike.main.presenter.MainPresenter;
 import com.aaron.justlike.util.SystemUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -50,27 +52,30 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class MainActivity extends BaseView implements View.OnClickListener,
+public class MainActivity extends AppCompatActivity implements IMainView<Image>, View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener, AppBarLayout.OnOffsetChangedListener,
         SwipeRefreshLayout.OnRefreshListener {
 
     private static final int REQUEST_SELECT_IMAGE = 0;
+    private static final int REQUEST_PERMISSION = 1;
 
     private int mSortType;
     private boolean mIsAscending;
+    private List<Image> mImageList = new ArrayList<>();
 
-    private IPresenter<Image> mPresenter;
+    private IMainPresenter<Image> mPresenter;
 
     private DrawerLayout mParentLayout;
-    private NavigationView mNavView;
-    private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
     private MenuItem mSortByDate;
     private MenuItem mSortByName;
@@ -79,15 +84,14 @@ public class MainActivity extends BaseView implements View.OnClickListener,
     private SwipeRefreshLayout mSwipeRefresh;
     private FloatingActionButton mFabButton;
     private RecyclerView mRecyclerView;
-    private LinearLayoutManager mLayoutManager;
     private RecyclerView.Adapter mAdapter;
-
-    private List<Image> mImageList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme); // 由于设置了启动页，需要在这里将主题改回来
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        requestPermission();
         EventBus.getDefault().register(this);
         attachPresenter();
         initView();
@@ -108,22 +112,11 @@ public class MainActivity extends BaseView implements View.OnClickListener,
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-    }
-
-    /**
-     * 接收 PreviewActivity 传过来的关于被删除图片的信息，并更新 UI
-     */
-    @Subscribe(threadMode = ThreadMode.POSTING, sticky = true)
-    public void onDeleteEvent(DeleteEvent event) {
-        int position = event.getPosition();
-        String path = event.getPath();
-        mImageList.remove(position);
-        mAdapter.notifyItemRemoved(position);
-        mAdapter.notifyItemRangeChanged(position, mImageList.size() - 1);
-        mPresenter.deleteImage(path);
+        if (hasFocus) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
     }
 
     @Override
@@ -149,13 +142,13 @@ public class MainActivity extends BaseView implements View.OnClickListener,
                 mParentLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.sort_date:
-                setSort(BasePresenter.SORT_BY_DATE, ascendingOrder);
+                setSort(MainPresenter.SORT_BY_DATE, ascendingOrder);
                 break;
             case R.id.sort_name:
-                setSort(BasePresenter.SORT_BY_NAME, ascendingOrder);
+                setSort(MainPresenter.SORT_BY_NAME, ascendingOrder);
                 break;
             case R.id.sort_size:
-                setSort(BasePresenter.SORT_BY_SIZE, ascendingOrder);
+                setSort(MainPresenter.SORT_BY_SIZE, ascendingOrder);
                 break;
             case R.id.ascending_order:
                 setAscendingOrder(!ascendingOrder);
@@ -164,13 +157,43 @@ public class MainActivity extends BaseView implements View.OnClickListener,
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Matisse 选取图片后默认回调
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_SELECT_IMAGE:
+                if (resultCode == Activity.RESULT_OK) {
+                    List<String> selectedList = Matisse.obtainPathResult(data);
+                    mPresenter.addImage(mImageList, selectedList);
+                }
+                break;
+        }
+    }
+
+    /**
+     * 请求权限回调
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSION:
+                if (!(grantResults.length > 0 && grantResults[0]
+                        == PackageManager.PERMISSION_GRANTED)) {
+                    finish(); // 如果不授予权限，程序直接退出
+                }
+                break;
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.activity_main_toolbar:
+            case R.id.toolbar_home_activity_main:
                 backToTop();
                 break;
-            case R.id.fab:
+            case R.id.fab_home_activity_main:
                 openImageSelector();
                 break;
         }
@@ -230,18 +253,16 @@ public class MainActivity extends BaseView implements View.OnClickListener,
     }
 
     /**
-     * Matisse 选取图片后默认回调
+     * 接收 PreviewActivity 传过来的关于被删除图片的信息，并更新 UI
      */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_SELECT_IMAGE:
-                if (resultCode == Activity.RESULT_OK) {
-                    List<String> selectedList = Matisse.obtainPathResult(data);
-                    mPresenter.addImage(mImageList, selectedList);
-                }
-                break;
-        }
+    @Subscribe(threadMode = ThreadMode.POSTING, sticky = true)
+    public void onDeleteEvent(DeleteEvent event) {
+        int position = event.getPosition();
+        String path = event.getPath();
+        mImageList.remove(position);
+        mAdapter.notifyItemRemoved(position);
+        mAdapter.notifyItemRangeChanged(position, mImageList.size() - 1);
+        mPresenter.deleteImage(path);
     }
 
     /**
@@ -249,7 +270,7 @@ public class MainActivity extends BaseView implements View.OnClickListener,
      */
     @Override
     public void attachPresenter() {
-        mPresenter = new BasePresenter(this);
+        mPresenter = new MainPresenter(this);
     }
 
     /**
@@ -282,19 +303,19 @@ public class MainActivity extends BaseView implements View.OnClickListener,
 
     private void initView() {
         // Part 1, find id
-        mParentLayout = findViewById(R.id.drawer_layout);
-        mNavView = findViewById(R.id.nav_view);
-        mAppBarLayout = findViewById(R.id.activity_main_appbar_layout);
-        mToolbar = findViewById(R.id.activity_main_toolbar);
-        mSwipeRefresh = findViewById(R.id.swipe_refresh);
-        mFabButton = findViewById(R.id.fab);
-        mRecyclerView = findViewById(R.id.recycler_view);
+        mParentLayout = findViewById(R.id.drawer_layout_home_activity_main);
+        NavigationView navView = findViewById(R.id.navigation_view_home_activity_main);
+        AppBarLayout appBarLayout = findViewById(R.id.appbar_layout_home_activity_main);
+        mToolbar = findViewById(R.id.toolbar_home_activity_main);
+        mSwipeRefresh = findViewById(R.id.swipe_refresh_home_activity_main);
+        mFabButton = findViewById(R.id.fab_home_activity_main);
+        mRecyclerView = findViewById(R.id.rv_home_activity_main);
 
         // Part 2, setClickListener
         mToolbar.setOnClickListener(this);
         mFabButton.setOnClickListener(this);
-        mNavView.setNavigationItemSelectedListener(this);
-        mAppBarLayout.addOnOffsetChangedListener(this);
+        navView.setNavigationItemSelectedListener(this);
+        appBarLayout.addOnOffsetChangedListener(this);
         mSwipeRefresh.setOnRefreshListener(this);
 
         // Part 3, init status
@@ -329,8 +350,8 @@ public class MainActivity extends BaseView implements View.OnClickListener,
      */
     private void initRecyclerView() {
         // 将 RecyclerView 的布局风格改为网格类型,使用自定义的布局管理器，为了能修改滑动状态
-        mLayoutManager = new MyGridLayoutManager(this, 3);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        LinearLayoutManager layoutManager = new MyGridLayoutManager(this, 3);
+        mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mRecyclerView.addItemDecoration(new YItemDecoration());
         mAdapter = new HomeAdapter();
@@ -342,15 +363,15 @@ public class MainActivity extends BaseView implements View.OnClickListener,
      */
     private void initMenuItem(int sortType, boolean ascendingOrder) {
         switch (sortType) {
-            case BasePresenter.SORT_BY_DATE:
+            case MainPresenter.SORT_BY_DATE:
                 mSortByDate.setChecked(true);
                 mAscendingOrder.setChecked(ascendingOrder);
                 break;
-            case BasePresenter.SORT_BY_NAME:
+            case MainPresenter.SORT_BY_NAME:
                 mSortByName.setChecked(true);
                 mAscendingOrder.setChecked(ascendingOrder);
                 break;
-            case BasePresenter.SORT_BY_SIZE:
+            case MainPresenter.SORT_BY_SIZE:
                 mSortBySize.setChecked(true);
                 mAscendingOrder.setChecked(ascendingOrder);
                 break;
@@ -367,13 +388,13 @@ public class MainActivity extends BaseView implements View.OnClickListener,
     private void setSort(int sortType, boolean ascendingOrder) {
         mPresenter.setSortType(sortType, ascendingOrder);
         switch (sortType) {
-            case BasePresenter.SORT_BY_DATE:
+            case MainPresenter.SORT_BY_DATE:
                 mSortByDate.setChecked(true);
                 break;
-            case BasePresenter.SORT_BY_NAME:
+            case MainPresenter.SORT_BY_NAME:
                 mSortByName.setChecked(true);
                 break;
-            case BasePresenter.SORT_BY_SIZE:
+            case MainPresenter.SORT_BY_SIZE:
                 mSortBySize.setChecked(true);
                 break;
         }
@@ -385,15 +406,15 @@ public class MainActivity extends BaseView implements View.OnClickListener,
      */
     private void setAscendingOrder(boolean ascendingOrder) {
         if (mSortByDate.isChecked()) {
-            mPresenter.setSortType(BasePresenter.SORT_BY_DATE, ascendingOrder);
+            mPresenter.setSortType(MainPresenter.SORT_BY_DATE, ascendingOrder);
             mAscendingOrder.setChecked(ascendingOrder);
 
         } else if (mSortByName.isChecked()) {
-            mPresenter.setSortType(BasePresenter.SORT_BY_NAME, ascendingOrder);
+            mPresenter.setSortType(MainPresenter.SORT_BY_NAME, ascendingOrder);
             mAscendingOrder.setChecked(ascendingOrder);
 
         } else {
-            mPresenter.setSortType(BasePresenter.SORT_BY_SIZE, ascendingOrder);
+            mPresenter.setSortType(MainPresenter.SORT_BY_SIZE, ascendingOrder);
             mAscendingOrder.setChecked(ascendingOrder);
         }
         mPresenter.requestImage(mImageList, false);
@@ -429,6 +450,19 @@ public class MainActivity extends BaseView implements View.OnClickListener,
                 .imageEngine(new GlideEngine())
                 .theme(R.style.MatisseTheme)
                 .forResult(REQUEST_SELECT_IMAGE);
+    }
+
+    /**
+     * 请求权限
+     */
+    private void requestPermission() {
+        // 判断是否已经获得权限
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            // 申请读写存储的权限
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSION);
+        }
     }
 
     /**
@@ -496,7 +530,8 @@ public class MainActivity extends BaseView implements View.OnClickListener,
             holder.itemView.setOnClickListener(v -> {
                 int position = holder.getAdapterPosition();
                 EventBus.getDefault().postSticky(new PreviewEvent<>(position, mImageList));
-                Intent intent = new Intent(MainActivity.this, MainImageActivity.class);
+//                Intent intent = new Intent(MainActivity.this, MainImageActivity.class);
+                Intent intent = new Intent(MainActivity.this, PreviewActivity.class);
                 startActivity(intent);
             });
             // for Image onLongClick()
@@ -533,7 +568,6 @@ public class MainActivity extends BaseView implements View.OnClickListener,
                         @Override
                         protected void setResource(@Nullable Drawable resource) {
                             holder.squareView.setImageDrawable(resource);
-//                            AnimationUtil.showViewByAlpha(holder.squareView, 0.5F, 1, 300);
                         }
                     });
         }
@@ -541,6 +575,41 @@ public class MainActivity extends BaseView implements View.OnClickListener,
         @Override
         public int getItemCount() {
             return mImageList.size();
+        }
+    }
+
+    private class XItemDecoration extends RecyclerView.ItemDecoration {
+
+        @Override
+        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent,
+                                   @NonNull RecyclerView.State state) {
+            if (parent.getChildAdapterPosition(view) % 3 == 0) {
+                outRect.left = 0;
+                outRect.right = SystemUtils.dp2px(MainActivity.this, 2.8F); // 8px
+            } else if (parent.getChildAdapterPosition(view) % 3 == 1) {
+                outRect.left = SystemUtils.dp2px(MainActivity.this, 1.3F); // 4px
+                outRect.right = SystemUtils.dp2px(MainActivity.this, 1.3F); // 4px
+            } else if (parent.getChildAdapterPosition(view) % 3 == 2) {
+                outRect.left = SystemUtils.dp2px(MainActivity.this, 2.8F); // 8px
+                outRect.right = 0;
+            }
+        }
+    }
+
+    private class YItemDecoration extends RecyclerView.ItemDecoration {
+
+        @Override
+        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent,
+                                   @NonNull RecyclerView.State state) {
+            outRect.bottom = 0;
+            outRect.top = SystemUtils.dp2px(MainActivity.this, 4.2F); // 12px
+            if (parent.getChildAdapterPosition(view) == 0) {
+                outRect.top = 0;
+            } else if (parent.getChildAdapterPosition(view) == 1) {
+                outRect.top = 0;
+            } else if (parent.getChildAdapterPosition(view) == 2) {
+                outRect.top = 0;
+            }
         }
     }
 }

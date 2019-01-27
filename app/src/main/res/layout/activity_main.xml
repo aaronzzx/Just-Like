@@ -3,24 +3,24 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
+    android:id="@+id/drawer_layout_home_activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:openDrawer="start">
 
     <LinearLayout
-        android:id="@+id/linear_layout"
+        android:id="@+id/ll_home_activity_main"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:orientation="vertical">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/coordinator_layout"
+            android:id="@+id/coordinator_layout_home_activity_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/activity_main_appbar_layout"
+                android:id="@+id/appbar_layout_home_activity_main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -31,7 +31,7 @@
                     app:layout_scrollFlags="scroll|enterAlways|snap">
 
                     <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/activity_main_toolbar"
+                        android:id="@+id/toolbar_home_activity_main"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="25dp"
@@ -43,20 +43,20 @@
             </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swipe_refresh"
+                android:id="@+id/swipe_refresh_home_activity_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view"
+                    android:id="@+id/rv_home_activity_main"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab"
+                android:id="@+id/fab_home_activity_main"
                 app:fabSize="normal"
                 app:borderWidth="0dp"
                 android:layout_width="wrap_content"
@@ -65,23 +65,12 @@
                 android:layout_margin="16dp"
                 android:src="@mipmap/ic_add"/>
 
-            <TextView
-                android:id="@+id/hint"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:text="空空如也"
-                android:textSize="24sp"
-                android:textColor="#9b9b9b"
-                android:layout_gravity="center"
-                android:gravity="center"/>
-
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
+        android:id="@+id/navigation_view_home_activity_main"
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"

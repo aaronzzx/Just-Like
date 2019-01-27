@@ -111,7 +111,7 @@ public class CollectionAddActivity extends AppCompatActivity {
 
         // 连接适配器
         FileUtils.getLocalFiles(mImages, LOAD_PATH, TYPE);
-        mRecyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView = findViewById(R.id.rv_home_activity_main);
         mLayoutManager = new MyGridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());

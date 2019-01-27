@@ -87,7 +87,7 @@ public class CollectionActivity extends AppCompatActivity {
         }
 
         // 初始化控件
-        mRecyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView = findViewById(R.id.rv_home_activity_main);
         mLayoutManager = new MyGridLayoutManager(this, 1);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new YItemDecoration());

@@ -1,4 +1,4 @@
-package com.aaron.justlike.home.entity;
+package com.aaron.justlike.main.entity;
 
 public class DeleteEvent {
 

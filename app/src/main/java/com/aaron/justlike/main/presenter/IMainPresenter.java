@@ -1,8 +1,8 @@
-package com.aaron.justlike.home.presenter;
+package com.aaron.justlike.main.presenter;
 
 import java.util.List;
 
-public interface IPresenter<T> {
+public interface IMainPresenter<T> {
 
     void detachView();
 

@@ -125,7 +125,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initViews() {
-        mSwipeRefresh = findViewById(R.id.swipe_refresh);
+        mSwipeRefresh = findViewById(R.id.swipe_refresh_home_activity_main);
         mSwipeRefresh.setColorSchemeResources(R.color.colorBlack);
         mAppBarLayout = findViewById(R.id.appbar_layout);
         mToolbar = findViewById(R.id.activity_online_toolbar);
@@ -140,7 +140,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
         mProgressBar = findViewById(R.id.progress_bar);
         mFooterProgress = findViewById(R.id.footer_progress);
         mSwipeRefresh.setEnabled(false);
-        mRecyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView = findViewById(R.id.rv_home_activity_main);
 
         mLayoutManager = new MyGridLayoutManager(this, 2);
         mLayoutManager.setScrollEnabled(false);

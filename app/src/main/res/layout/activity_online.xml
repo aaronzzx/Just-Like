@@ -6,7 +6,7 @@
     android:background="#000000">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinator_layout"
+        android:id="@+id/coordinator_layout_home_activity_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#000">
@@ -36,13 +36,13 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresh"
+            android:id="@+id/swipe_refresh_home_activity_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
+                android:id="@+id/rv_home_activity_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

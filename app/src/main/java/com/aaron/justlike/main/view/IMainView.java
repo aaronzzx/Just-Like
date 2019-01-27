@@ -1,8 +1,8 @@
-package com.aaron.justlike.home.view;
+package com.aaron.justlike.main.view;
 
 import java.util.List;
 
-public interface IView<T> {
+public interface IMainView<T> {
 
     void attachPresenter();
 

@@ -1,31 +1,25 @@
 package com.aaron.justlike.activity;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.adapter.AboutLibraryAdapter;
-import com.aaron.justlike.adapter.AboutMessageAdapter;
 import com.aaron.justlike.adapter.DownloadManagerAdapter;
 import com.aaron.justlike.another.Image;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
 import com.jaeger.library.StatusBarUtil;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class DownloadManagerActivity extends AppCompatActivity {
 
@@ -86,7 +80,7 @@ public class DownloadManagerActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         FileUtils.getLocalFiles(mImageList, PATH, "jpg");
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.rv_home_activity_main);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         mAdapter = new DownloadManagerAdapter(this, mImageList);

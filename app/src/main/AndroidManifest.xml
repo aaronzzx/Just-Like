@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name="com.aaron.justlike.extend.BaseApplication"
+        android:name=".extend.BaseApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,8 +18,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
+
         <activity
-            android:name=".home.view.MainActivity"
+            android:name=".main.view.MainActivity"
             android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,34 +28,47 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--<activity-->
+        <!--android:name=".activity.MainImageActivity"-->
+        <!--android:label=""-->
+        <!--android:theme="@style/AppTheme.DisplayActivity" />-->
+
         <activity
-            android:name=".activity.MainImageActivity"
+            android:name=".main.view.PreviewActivity"
             android:label=""
             android:theme="@style/AppTheme.DisplayActivity" />
+
         <activity
             android:name=".activity.OnlineActivity"
             android:label="Online"
             android:theme="@style/AppTheme.OnlineActivity" />
+
         <activity
             android:name=".activity.OnlineImageActivity"
             android:label=""
             android:theme="@style/AppTheme.OnlineActivity" />
+
         <activity
             android:name=".activity.CollectionActivity"
             android:label="集合"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".activity.CollectionAddActivity"
             android:label="已选择(0)"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".activity.DownloadManagerActivity"
             android:label="下载管理"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".activity.AboutActivity"
             android:label="关于"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"

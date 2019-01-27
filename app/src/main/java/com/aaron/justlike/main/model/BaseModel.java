@@ -1,4 +1,4 @@
-package com.aaron.justlike.home.model;
+package com.aaron.justlike.main.model;
 
 import com.aaron.justlike.another.Image;
 import com.aaron.justlike.another.SortInfo;

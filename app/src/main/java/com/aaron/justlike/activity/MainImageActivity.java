@@ -19,8 +19,8 @@ import android.widget.Toast;
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.MainImageAdapter;
 import com.aaron.justlike.another.Image;
-import com.aaron.justlike.home.entity.DeleteEvent;
-import com.aaron.justlike.home.entity.PreviewEvent;
+import com.aaron.justlike.main.entity.DeleteEvent;
+import com.aaron.justlike.main.entity.PreviewEvent;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
@@ -214,6 +214,7 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
 //        }
 //        return super.onOptionsItemSelected(item);
 //    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch (requestCode) {
@@ -254,7 +255,7 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
+//            actionBar.setDisplayShowHomeEnabled(true);
         }
         AnimationUtil.exitFullScreen(this, mToolbar, 200);
         AnimationUtil.setBottomBar(mBottomBar, "show", 200, mShare,

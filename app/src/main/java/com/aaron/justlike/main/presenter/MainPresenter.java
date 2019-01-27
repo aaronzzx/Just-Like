@@ -1,14 +1,14 @@
-package com.aaron.justlike.home.presenter;
+package com.aaron.justlike.main.presenter;
 
 import com.aaron.justlike.another.Image;
-import com.aaron.justlike.home.model.BaseModel;
-import com.aaron.justlike.home.model.IModel;
-import com.aaron.justlike.home.view.IView;
+import com.aaron.justlike.main.model.BaseModel;
+import com.aaron.justlike.main.model.IModel;
+import com.aaron.justlike.main.view.IMainView;
 import com.aaron.justlike.util.FileUtils;
 
 import java.util.List;
 
-public class BasePresenter implements IPresenter<Image> {
+public class MainPresenter implements IMainPresenter<Image> {
 
     public static final int SORT_BY_DATE = 1;
     public static final int SORT_BY_NAME = 2;
@@ -19,17 +19,17 @@ public class BasePresenter implements IPresenter<Image> {
     private int mSortType;
     private boolean mAscendingOrder;
 
-    private IView<Image> mView;
+    private IMainView<Image> mView;
     private IModel mModel;
 
-    public BasePresenter(IView<Image> view) {
-        // 同时持有 IView 和 IModel 引用
+    public MainPresenter(IMainView<Image> view) {
+        // 同时持有 IMainView 和 IModel 引用
         mView = view;
         mModel = new BaseModel();
     }
 
     /**
-     * 断开与 IView 的连接
+     * 断开与 IMainView 的连接
      */
     @Override
     public void detachView() {
@@ -37,7 +37,7 @@ public class BasePresenter implements IPresenter<Image> {
     }
 
     /**
-     * 请求数据并回调 IView 函数显示图片
+     * 请求数据并回调 IMainView 函数显示图片
      */
     @Override
     public void requestImage(List<Image> imageList, boolean refreshMode) {
