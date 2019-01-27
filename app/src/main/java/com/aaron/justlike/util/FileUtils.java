@@ -1,5 +1,6 @@
 package com.aaron.justlike.util;
 
+import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
@@ -27,8 +28,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import androidx.core.content.FileProvider;
@@ -187,9 +190,26 @@ public class FileUtils {
         return String.valueOf(file.lastModified());
     }
 
+    /**
+     * 获取最后修改日期
+     */
+    @SuppressLint("SimpleDateFormat")
+    public static String getLastModified(String path, String pattern) {
+        long time = new File(path).lastModified();
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+        Date d = new Date(time);
+        return formatter.format(d);
+    }
+
     public static long getImageSize(String path) {
         File file = new File(path);
         return file.length();
+    }
+
+    public static String getImageSizeByMb(String path) {
+        float length = (float) getFileSize(path) / 1024 / 1024;
+        String size = String.valueOf(length);
+        return size.substring(0, 4) + " MB";
     }
 
     /**

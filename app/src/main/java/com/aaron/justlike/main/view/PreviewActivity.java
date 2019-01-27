@@ -42,7 +42,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 public class PreviewActivity extends AppCompatActivity implements IPreviewView,
-        ViewPager.OnPageChangeListener {
+        View.OnClickListener, ViewPager.OnPageChangeListener {
 
     private int mPosition;
     private List<Image> mImageList;
@@ -139,8 +139,16 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
     }
 
     @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+        }
+    }
+
+    @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         mPosition = mViewPager.getCurrentItem();
+        mPresenter.requestTitle(mImageList.get(mPosition).getPath());
     }
 
     @Override
@@ -173,6 +181,11 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
     }
 
     @Override
+    public void onShowTitle(String title) {
+        mToolbar.setTitle(title);
+    }
+
+    @Override
     public void animIn() {
 
     }
@@ -188,9 +201,17 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
 
         mViewPager.addOnPageChangeListener(this);
 
-        setSupportActionBar(mToolbar);
-        enableHomeAsUp();
+        mPresenter.requestTitle(mImageList.get(mPosition).getPath());
+        initToolbar();
         initViewPager();
+    }
+
+    private void initToolbar() {
+        setSupportActionBar(mToolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void initViewPager() {
@@ -199,21 +220,6 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         PreviewAdapter adapter = new PreviewAdapter();
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(mPosition);
-    }
-
-    /**
-     * 启用标题栏返回键
-     */
-    private void enableHomeAsUp() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-//            actionBar.setDisplayShowHomeEnabled(true);
-        }
-    }
-
-    private int getCurrentPosition() {
-        return mPosition;
     }
 
     public class PreviewAdapter extends PagerAdapter {
@@ -292,8 +298,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         @Override
         public int getItemPosition(@NonNull Object object) {
             View view = (View) object;
-            int currentPosition = PreviewActivity.this.getCurrentPosition();
-            if (currentPosition == (Integer) view.getTag()) {
+            if (PreviewActivity.this.mPosition == (Integer) view.getTag()) {
                 return POSITION_NONE;
             } else {
                 return POSITION_UNCHANGED;

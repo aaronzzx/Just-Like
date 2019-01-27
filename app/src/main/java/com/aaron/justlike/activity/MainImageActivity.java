@@ -173,12 +173,6 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
                         .setTitle("删除图片")
                         .setMessage("图片将从设备中删除")
                         .setPositiveButton("确定", (dialog, which) -> {
-//                            Intent intent = new Intent();
-//                            intent.putExtra("position", mPosition);
-//                            String path = mImageList.get(mPosition).getPath();
-//                            intent.putExtra("path", path);
-//                            setResult(RESULT_OK, intent);
-
                             String path = mImageList.get(mPosition).getPath();
                             EventBus.getDefault().postSticky(new DeleteEvent(mPosition, path));
                             finish();

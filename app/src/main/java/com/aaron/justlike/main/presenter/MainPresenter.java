@@ -1,19 +1,29 @@
 package com.aaron.justlike.main.presenter;
 
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
+
+import com.aaron.justlike.R;
 import com.aaron.justlike.another.Image;
+import com.aaron.justlike.extend.GlideEngine;
 import com.aaron.justlike.main.model.BaseModel;
 import com.aaron.justlike.main.model.IModel;
 import com.aaron.justlike.main.view.IMainView;
 import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.util.SystemUtils;
+import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
 
 import java.util.List;
 
 public class MainPresenter implements IMainPresenter<Image> {
 
-    public static final int SORT_BY_DATE = 1;
-    public static final int SORT_BY_NAME = 2;
-    public static final int SORT_BY_SIZE = 3;
-    public static final boolean ASCENDING_ORDER = true;
+    public static final int REQUEST_SELECT_IMAGE = 0;
+    public static final int SORT_BY_DATE = 2;
+    public static final int SORT_BY_NAME = 3;
+    public static final int SORT_BY_SIZE = 4;
+    private static final int NO_SORT_STATUS = 1;
+    private static final boolean ASCENDING_ORDER = true;
     public static final boolean DESCENDING_ORDER = false;
 
     private int mSortType;
@@ -42,7 +52,7 @@ public class MainPresenter implements IMainPresenter<Image> {
     @Override
     public void requestImage(List<Image> imageList, boolean refreshMode) {
         // Part 1, 请求排序状态
-        if (mSortType == 0) {
+        if (mSortType == NO_SORT_STATUS) {
             String[] sortArray = mModel.querySortInfo();
             if (sortArray != null) {
                 mSortType = Integer.parseInt(sortArray[0]);
@@ -99,6 +109,25 @@ public class MainPresenter implements IMainPresenter<Image> {
         mSortType = sortType;
         mAscendingOrder = ascendingOrder;
         mModel.insertSortInfo(sortType, ascendingOrder);
+    }
+
+    /**
+     * 打开图片选择器
+     */
+    @Override
+    public void openImageSelector(Activity activity) {
+        Matisse.from(activity)
+                .choose(MimeType.ofImage())
+                .showSingleMediaType(true)
+                .countable(true)
+                .maxSelectable(9)
+//                .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                .gridExpectedSize(SystemUtils.dp2px(activity, 120.0F))
+                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                .thumbnailScale(0.85f)
+                .imageEngine(new GlideEngine())
+                .theme(R.style.MatisseTheme)
+                .forResult(REQUEST_SELECT_IMAGE);
     }
 
     /**

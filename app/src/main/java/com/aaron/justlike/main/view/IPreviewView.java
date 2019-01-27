@@ -6,6 +6,8 @@ public interface IPreviewView {
 
     void onShowImage();
 
+    void onShowTitle(String title);
+
     void animIn();
 
     void animOut();

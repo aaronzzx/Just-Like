@@ -1,5 +1,7 @@
 package com.aaron.justlike.main.presenter;
 
+import android.app.Activity;
+
 import java.util.List;
 
 public interface IMainPresenter<T> {
@@ -13,4 +15,6 @@ public interface IMainPresenter<T> {
     void deleteImage(String path);
 
     void setSortType(int sortType, boolean ascendingOrder);
+
+    void openImageSelector(Activity activity);
 }
