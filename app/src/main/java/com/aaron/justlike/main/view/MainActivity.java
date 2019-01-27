@@ -3,6 +3,7 @@ package com.aaron.justlike.main.view;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -22,6 +23,7 @@ import com.aaron.justlike.activity.CollectionActivity;
 import com.aaron.justlike.activity.DownloadManagerActivity;
 import com.aaron.justlike.activity.OnlineActivity;
 import com.aaron.justlike.another.Image;
+import com.aaron.justlike.extend.GlideEngine;
 import com.aaron.justlike.extend.MyGridLayoutManager;
 import com.aaron.justlike.extend.SquareView;
 import com.aaron.justlike.main.entity.DeleteEvent;
@@ -37,6 +39,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.jaeger.library.StatusBarUtil;
 import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -63,7 +66,8 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         NavigationView.OnNavigationItemSelectedListener, AppBarLayout.OnOffsetChangedListener,
         SwipeRefreshLayout.OnRefreshListener {
 
-    private static final int REQUEST_PERMISSION = 1;
+    private static final int REQUEST_PERMISSION = 0;
+    private static final int REQUEST_SELECT_IMAGE = 1;
 
     private int mSortType;
     private boolean mIsAscending;
@@ -159,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case MainPresenter.REQUEST_SELECT_IMAGE:
+            case REQUEST_SELECT_IMAGE:
                 if (resultCode == Activity.RESULT_OK) {
                     List<String> selectedList = Matisse.obtainPathResult(data);
                     mPresenter.addImage(mImageList, selectedList);
@@ -190,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
                 backToTop();
                 break;
             case R.id.fab_home_activity_main:
-                mPresenter.openImageSelector(this);
+                openImageSelector();
                 break;
         }
     }
@@ -476,6 +480,24 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
                 mParentLayout.removeDrawerListener(this);
             }
         });
+    }
+
+    /**
+     * 打开图片选择器
+     */
+    private void openImageSelector() {
+        Matisse.from(this)
+                .choose(MimeType.ofImage())
+                .showSingleMediaType(true)
+                .countable(true)
+                .maxSelectable(9)
+//                .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                .gridExpectedSize(SystemUtils.dp2px(this, 120.0F))
+                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                .thumbnailScale(0.85f)
+                .imageEngine(new GlideEngine())
+                .theme(R.style.MatisseTheme)
+                .forResult(REQUEST_SELECT_IMAGE);
     }
 
     /**

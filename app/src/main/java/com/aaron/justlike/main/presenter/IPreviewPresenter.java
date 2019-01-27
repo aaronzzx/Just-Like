@@ -8,5 +8,5 @@ public interface IPreviewPresenter {
 
     void requestTitle(String path);
 
-    ImageInfo getImageInfo(String path);
+    ImageInfo requestImageInfo(String path);
 }

@@ -7,57 +7,12 @@ import java.util.Objects;
 
 public class Image implements Parcelable {
 
-    private String mPath; // 用于在文件管理器中选择图片后传回的路径
-    private String mFileName;
-    private String mCreateDate;
-    private long mSize;
-
-    public Image() {
-
-    }
-
-    public Image(String path) {
-        mPath = path;
-    }
-
-    public String getPath() {
-        return mPath;
-    }
-
-    public void setPath(String path) {
-        mPath = path;
-    }
-
-    public String getFileName() {
-        return mFileName;
-    }
-
-    public void setFileName(String fileName) {
-        mFileName = fileName;
-    }
-
-    public String getCreateDate() {
-        return mCreateDate;
-    }
-
-    public void setCreateDate(String createDate) {
-        mCreateDate = createDate;
-    }
-
-    public long getSize() {
-        return mSize;
-    }
-
-    public void setSize(long size) {
-        mSize = size;
-    }
-
     public static final Parcelable.Creator<Image> CREATOR = new Parcelable.Creator<Image>() {
         // 接收到对象后解序列化
         @Override
         public Image createFromParcel(Parcel source) {
             Image image = new Image();
-            image.mPath = source.readString();
+            image.path = source.readString();
             return image;
         }
 
@@ -66,6 +21,51 @@ public class Image implements Parcelable {
             return new Image[size];
         }
     };
+    private String date;
+    private String name;
+    private long size;
+
+    public Image() {
+
+    }
+
+    private String path;
+
+    public Image(String path) {
+        this.path = path;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
+    }
 
     @Override
     public int describeContents() {
@@ -75,7 +75,7 @@ public class Image implements Parcelable {
     // 将数据写出
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mPath);
+        dest.writeString(path);
     }
 
     @Override
@@ -83,14 +83,14 @@ public class Image implements Parcelable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Image image = (Image) o;
-        return mSize == image.mSize &&
-                Objects.equals(mPath, image.mPath) &&
-                Objects.equals(mFileName, image.mFileName) &&
-                Objects.equals(mCreateDate, image.mCreateDate);
+        return size == image.size &&
+                Objects.equals(path, image.path) &&
+                Objects.equals(name, image.name) &&
+                Objects.equals(date, image.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mPath, mFileName, mCreateDate, mSize);
+        return Objects.hash(path, name, date, size);
     }
 }

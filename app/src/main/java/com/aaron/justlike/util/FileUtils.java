@@ -75,9 +75,9 @@ public class FileUtils {
                 @Override
                 public int compare(Image o1, Image o2) {
                     if (ascendingOrder) {
-                        return o1.getFileName().compareTo(o2.getFileName());
+                        return o1.getName().compareTo(o2.getName());
                     } else {
-                        return o2.getFileName().compareTo(o1.getFileName());
+                        return o2.getName().compareTo(o1.getName());
                     }
                 }
             });
@@ -90,9 +90,9 @@ public class FileUtils {
                 @Override
                 public int compare(Image o1, Image o2) {
                     if (ascendingOrder) {
-                        return o1.getCreateDate().compareTo(o2.getCreateDate());
+                        return o1.getDate().compareTo(o2.getDate());
                     } else {
-                        return o2.getCreateDate().compareTo(o1.getCreateDate());
+                        return o2.getDate().compareTo(o1.getDate());
                     }
                 }
             });
@@ -179,7 +179,7 @@ public class FileUtils {
     }
 
     public static String getImageName(String path) {
-        return path.substring(path.lastIndexOf("/"));
+        return path.substring(path.lastIndexOf("/") + 1);
     }
 
     /**
@@ -322,8 +322,8 @@ public class FileUtils {
                                 .toLowerCase().equals(fileType)) {
                             String filePath = file.getAbsolutePath();
                             Image image = new Image(filePath);
-                            image.setFileName(getImageName(filePath));
-                            image.setCreateDate(getImageDate(filePath));
+                            image.setDate(getImageDate(filePath));
+                            image.setName(getImageName(filePath));
                             image.setSize(getImageSize(filePath));
                             imageList.add(image);
                         }

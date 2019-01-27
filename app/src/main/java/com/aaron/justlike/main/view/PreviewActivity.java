@@ -1,25 +1,31 @@
 package com.aaron.justlike.main.view;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.another.Image;
+import com.aaron.justlike.main.entity.DeleteEvent;
+import com.aaron.justlike.main.entity.ImageInfo;
 import com.aaron.justlike.main.entity.PreviewEvent;
 import com.aaron.justlike.main.presenter.IPreviewPresenter;
 import com.aaron.justlike.main.presenter.PreviewPresenter;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.util.SystemUtils;
 import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
@@ -31,11 +37,13 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.PagerAdapter;
@@ -43,6 +51,10 @@ import androidx.viewpager.widget.ViewPager;
 
 public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         View.OnClickListener, ViewPager.OnPageChangeListener {
+
+    private static final String FIT_SCREEN = "适应屏幕";
+    private static final String FREE_CROP = "自由裁剪";
+    private static final String[] CROP_TYPE = {FIT_SCREEN, FREE_CROP};
 
     private int mPosition;
     private List<Image> mImageList;
@@ -141,7 +153,62 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.action_share:
+                Intent share = new Intent(Intent.ACTION_VIEW);
+                Uri shareUri = FileUtils.getImageContentUri(this, new File(mImageList.get(mPosition).getPath()));
+                share.setDataAndType(shareUri, "image/*");
+                startActivity(share);
+                break;
+            case R.id.action_set_wallpaper:
+                new AlertDialog.Builder(this)
+                        .setTitle("设置壁纸")
+                        .setItems(CROP_TYPE, (dialog, which) -> {
+                            switch (CROP_TYPE[which]) {
+                                case FIT_SCREEN:
+                                    openImageCrop(FIT_SCREEN);
+                                    break;
+                                case FREE_CROP:
+                                    openImageCrop(FREE_CROP);
+                                    break;
+                            }
+                        }).show();
+                break;
+            case R.id.action_info:
+                // 设置图片详情的初始化
+                @SuppressLint("InflateParams")
+                View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_image_info, null);
+                TextView imageTime = dialogView.findViewById(R.id.info_time);
+                TextView imageName = dialogView.findViewById(R.id.info_name);
+                TextView imageSize = dialogView.findViewById(R.id.info_size);
+                TextView imagePixel = dialogView.findViewById(R.id.info_resolution);
+                TextView imagePath = dialogView.findViewById(R.id.info_path);
+                String path = mImageList.get(mPosition).getPath();
+                ImageInfo imageInfo = mPresenter.requestImageInfo(path);
+                imageTime.setText(imageInfo.getTime());
+                imageName.setText(imageInfo.getName());
+                imageSize.setText(imageInfo.getSize());
+                imagePixel.setText(imageInfo.getPixel());
+                imagePath.setText(path);
 
+                // 显示对话框
+                new AlertDialog.Builder(this)
+                        .setTitle("详情")
+                        .setView(dialogView)
+                        .show();
+                break;
+            case R.id.action_delete:
+                new AlertDialog.Builder(this)
+                        .setTitle("删除图片")
+                        .setMessage("图片将从设备中删除")
+                        .setPositiveButton("确定", (dialog, which) -> {
+                            EventBus.getDefault().postSticky(new DeleteEvent(mPosition,
+                                    mImageList.get(mPosition).getPath()));
+                            finish();
+                        })
+                        .setNegativeButton("取消", (dialog, which) -> {
+
+                        }).show();
+                break;
         }
     }
 
@@ -176,11 +243,6 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
     }
 
     @Override
-    public void onShowImage() {
-
-    }
-
-    @Override
     public void onShowTitle(String title) {
         mToolbar.setTitle(title);
     }
@@ -198,10 +260,18 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
     private void initView() {
         mToolbar = findViewById(R.id.activity_display_image_toolbar);
         mViewPager = findViewById(R.id.activity_display_image_vp);
+        // BottomBar 按钮
+        ImageView share = findViewById(R.id.action_share);
+        ImageView info = findViewById(R.id.action_info);
+        ImageView setWallpaper = findViewById(R.id.action_set_wallpaper);
+        ImageView delete = findViewById(R.id.action_delete);
 
+        share.setOnClickListener(this);
+        info.setOnClickListener(this);
+        setWallpaper.setOnClickListener(this);
+        delete.setOnClickListener(this);
         mViewPager.addOnPageChangeListener(this);
 
-        mPresenter.requestTitle(mImageList.get(mPosition).getPath());
         initToolbar();
         initViewPager();
     }
@@ -212,21 +282,47 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        mPresenter.requestTitle(mImageList.get(mPosition).getPath());
     }
 
     private void initViewPager() {
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setPageMargin(50);
-        PreviewAdapter adapter = new PreviewAdapter();
-        mViewPager.setAdapter(adapter);
+        mViewPager.setAdapter(new PreviewAdapter());
         mViewPager.setCurrentItem(mPosition);
+    }
+
+    private void openImageCrop(String cropType) {
+        // 源文件位置
+        Uri sourceUri = FileUtils.getUriFromPath(this, new File(mImageList.get(mPosition).getPath()));
+        File file = new File(getCacheDir(), "Wallpaper.JPG");
+        Uri destinationUri = Uri.fromFile(file); // 需要输出的位置
+        // 设置裁剪页面主题
+        UCrop.Options options = new UCrop.Options();
+        options.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        options.setToolbarColor(getResources().getColor(R.color.colorPrimary));
+        options.setActiveWidgetColor(getResources().getColor(R.color.colorPrimary));
+        switch (cropType) {
+            case FIT_SCREEN: // 打开默认裁剪页面
+                int[] widthHeightPixels = SystemUtils.getResolution(getWindowManager());
+                UCrop.of(sourceUri, destinationUri)
+                        .withAspectRatio(widthHeightPixels[0], widthHeightPixels[1])
+                        .withOptions(options)
+                        .start(this);
+                break;
+            case FREE_CROP: // 打开自由裁剪页面
+                UCrop.of(sourceUri, destinationUri)
+                        .withOptions(options)
+                        .start(this);
+                break;
+        }
     }
 
     public class PreviewAdapter extends PagerAdapter {
 
         private boolean isFullScreen;
 
-        public PreviewAdapter() {
+        private PreviewAdapter() {
 
         }
 
@@ -262,7 +358,8 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
                     .centerInside();
             DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
                     .Builder(300)
-                    .setCrossFadeEnabled(true).build();
+                    .setCrossFadeEnabled(true)
+                    .build();
             Glide.with(PreviewActivity.this)
                     .load(path)
                     .apply(options)

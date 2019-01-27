@@ -327,7 +327,7 @@ public class MainImageActivity extends AppCompatActivity implements View.OnClick
         Uri destinationUri = Uri.fromFile(file);
         // 设置裁剪页面主题
         UCrop.Options options = new UCrop.Options();
-        options.setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+        options.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
         options.setToolbarColor(getResources().getColor(R.color.colorPrimary));
         options.setActiveWidgetColor(getResources().getColor(R.color.colorPrimary));
         if (type.equals("default")) {

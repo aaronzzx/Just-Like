@@ -4,8 +4,6 @@ public interface IPreviewView {
 
     void attachPresenter();
 
-    void onShowImage();
-
     void onShowTitle(String title);
 
     void animIn();

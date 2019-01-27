@@ -26,7 +26,7 @@ public class PreviewPresenter implements IPreviewPresenter {
     }
 
     @Override
-    public ImageInfo getImageInfo(String path) {
+    public ImageInfo requestImageInfo(String path) {
         String time = FileUtils.getLastModified(path, "yyyy-MM-dd HH:mm:ss");
         String name = FileUtils.getImageName(path);
         String size = FileUtils.getImageSizeByMb(path);
