@@ -64,10 +64,6 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
     private Toolbar mToolbar;
     private ViewPager mViewPager;
     private LinearLayout mBottomBar;
-    private ImageView mShareBtn;
-    private ImageView mSetWallpaperBtn;
-    private ImageView mImageInfoBtn;
-    private ImageView mDeleteBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -241,17 +237,18 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
     private void initView() {
         mToolbar = findViewById(R.id.activity_display_image_toolbar);
         mViewPager = findViewById(R.id.activity_display_image_vp);
+
         // BottomBar 按钮
         mBottomBar = findViewById(R.id.bottom_bar);
-        mShareBtn = findViewById(R.id.action_share);
-        mSetWallpaperBtn = findViewById(R.id.action_set_wallpaper);
-        mImageInfoBtn = findViewById(R.id.action_info);
-        mDeleteBtn = findViewById(R.id.action_delete);
+        ImageView shareBtn = findViewById(R.id.action_share);
+        ImageView setWallpaperBtn = findViewById(R.id.action_set_wallpaper);
+        ImageView imageInfoBtn = findViewById(R.id.action_info);
+        ImageView deleteBtn = findViewById(R.id.action_delete);
 
-        mShareBtn.setOnClickListener(this);
-        mSetWallpaperBtn.setOnClickListener(this);
-        mImageInfoBtn.setOnClickListener(this);
-        mDeleteBtn.setOnClickListener(this);
+        shareBtn.setOnClickListener(this);
+        setWallpaperBtn.setOnClickListener(this);
+        imageInfoBtn.setOnClickListener(this);
+        deleteBtn.setOnClickListener(this);
         mViewPager.addOnPageChangeListener(this);
 
         initToolbar();

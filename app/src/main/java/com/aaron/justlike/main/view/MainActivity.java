@@ -99,10 +99,28 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        // 元素少于 16 个时禁止 Toolbar 隐藏
+        if (mImageList.size() < 16) {
+            banHideToolbar();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         mPresenter.detachView(); // 断开 Presenter
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mParentLayout.isDrawerOpen(GravityCompat.START)) {
+            mParentLayout.closeDrawer(GravityCompat.START);
+            return;
+        }
+        super.onBackPressed();
     }
 
     /**
@@ -179,9 +197,8 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_PERMISSION:
-                if (!(grantResults.length > 0 && grantResults[0]
-                        == PackageManager.PERMISSION_GRANTED)) {
-                    finish(); // 如果不授予权限，程序直接退出
+                if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    finish();
                 }
                 break;
         }
@@ -350,6 +367,9 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
                 }
             }
         });
+    }
+
+    private void banHideToolbar() {
         if (mImageList.size() < 16) {
             AppBarLayout.LayoutParams layoutParams = (AppBarLayout.LayoutParams) mParentToolbar.getLayoutParams(); // 元素不够禁止隐藏 Toolbar
             layoutParams.setScrollFlags(0);
