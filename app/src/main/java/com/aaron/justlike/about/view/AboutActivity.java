@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.about.adapter.LibraryAdapter;
+import com.aaron.justlike.about.adapter.MessageAdapter;
 import com.aaron.justlike.about.entity.Library;
 import com.aaron.justlike.about.entity.Message;
 import com.aaron.justlike.about.presenter.AboutPresenter;
 import com.aaron.justlike.about.presenter.IAboutPresenter;
-import com.aaron.justlike.adapter.AboutLibraryAdapter;
-import com.aaron.justlike.adapter.AboutMessageAdapter;
 import com.aaron.justlike.util.SystemUtils;
 import com.jaeger.library.StatusBarUtil;
 
@@ -22,7 +22,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class About2Activity extends AppCompatActivity implements IAboutView<Message, Library> {
+public class AboutActivity extends AppCompatActivity implements IAboutView<Message, Library> {
 
     private IAboutPresenter mPresenter;
 
@@ -34,9 +34,13 @@ public class About2Activity extends AppCompatActivity implements IAboutView<Mess
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-        StatusBarUtil.setTranslucent(this, 70);
-        attachPresenter();
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary), 70);
         initView();
+        attachPresenter();
+        mPresenter.requestMessage(AboutPresenter.Element.ICON_ID, AboutPresenter.Element.TITLE);
+        mPresenter.requestLibrary(AboutPresenter.Element.LIBRARY_NAME,
+                AboutPresenter.Element.LIBRARY_AUTHOR,
+                AboutPresenter.Element.LIBRARY_INTRODUCE);
     }
 
     @Override
@@ -96,14 +100,14 @@ public class About2Activity extends AppCompatActivity implements IAboutView<Mess
     private <T> void initMessage(List<T> messageList) {
         LinearLayoutManager messageManager = new LinearLayoutManager(this);
         mRecycleMessage.setLayoutManager(messageManager);
-        AboutMessageAdapter messageAdapter = new AboutMessageAdapter(this, messageList);
+        MessageAdapter messageAdapter = new MessageAdapter<>(this, messageList);
         mRecycleMessage.setAdapter(messageAdapter);
     }
 
     private <T> void initLibrary(List<T> libraryList) {
         LinearLayoutManager libraryManager = new LinearLayoutManager(this);
         mRecycleLibrary.setLayoutManager(libraryManager);
-        AboutLibraryAdapter libraryAdapter = new AboutLibraryAdapter(this, libraryList);
+        LibraryAdapter libraryAdapter = new LibraryAdapter<>(this, libraryList);
         mRecycleLibrary.setAdapter(libraryAdapter);
     }
 }

@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.another.AboutMessage;
+import com.aaron.justlike.about.entity.Message;
 import com.aaron.justlike.util.SystemUtils;
 import com.bumptech.glide.Glide;
 
@@ -21,14 +21,14 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public abstract class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MessageAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Activity mActivity;
-    private List<AboutMessage> mAboutMessageList;
+    private List<T> mList;
 
-    public MessageAdapter(Activity activity, List<AboutMessage> aboutMessageList) {
+    public MessageAdapter(Activity activity, List<T> list) {
         mActivity = activity;
-        mAboutMessageList = aboutMessageList;
+        mList = list;
     }
 
     @NonNull
@@ -77,23 +77,23 @@ public abstract class MessageAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        AboutMessage aboutMessage = mAboutMessageList.get(position);
+        Message message = (Message) mList.get(position);
         Glide.with(mActivity)
-                .load(aboutMessage.getIconId())
-                .into(holder.imageView);
-        holder.text.setText(aboutMessage.getText());
+                .load(message.getIconId())
+                .into(((ViewHolder) holder).icon);
+        ((ViewHolder) holder).title.setText(message.getTitle());
     }
 
     @Override
     public int getItemCount() {
-        return mAboutMessageList.size();
+        return mList.size();
     }
 
     private static class ViewHolder extends RecyclerView.ViewHolder {
 
         View itemView;
-        ImageView imageView;
-        TextView text;
+        ImageView icon;
+        TextView title;
 
         /**
          * @param view 子项布局的最外层布局，即父布局。
@@ -101,8 +101,8 @@ public abstract class MessageAdapter extends RecyclerView.Adapter<RecyclerView.V
         ViewHolder(View view) {
             super(view);
             itemView = view;
-            imageView = view.findViewById(R.id.activity_about_recycler_item_image);
-            text = view.findViewById(R.id.activity_about_recycler_item_text);
+            icon = view.findViewById(R.id.activity_about_recycler_item_image);
+            title = view.findViewById(R.id.activity_about_recycler_item_text);
         }
     }
 }

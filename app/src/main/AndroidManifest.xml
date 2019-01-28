@@ -55,7 +55,7 @@
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name=".activity.AboutActivity"
+            android:name=".about.view.AboutActivity"
             android:label="关于"
             android:theme="@style/AppTheme" />
 

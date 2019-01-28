@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.activity.AboutActivity;
+import com.aaron.justlike.about.view.AboutActivity;
 import com.aaron.justlike.activity.CollectionActivity;
 import com.aaron.justlike.activity.DownloadManagerActivity;
 import com.aaron.justlike.activity.OnlineActivity;

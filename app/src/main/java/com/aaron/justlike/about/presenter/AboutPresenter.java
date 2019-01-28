@@ -1,5 +1,6 @@
 package com.aaron.justlike.about.presenter;
 
+import com.aaron.justlike.R;
 import com.aaron.justlike.about.entity.Library;
 import com.aaron.justlike.about.entity.Message;
 import com.aaron.justlike.about.view.IAboutView;
@@ -50,45 +51,42 @@ public class AboutPresenter implements IAboutPresenter {
 
     public static class Element {
 
-        private static final String INTRODUCE = "介绍";
-        private static final String FEEDBACK = "反馈";
-        private static final String SORCE_CODE = "源码";
-        private static final String GITHUB = "GITHUB";
+        public static final String[] TITLE = {"介绍", "反馈", "源码", "GITHUB"};
 
-        private static final String GLIDE = "Glide";
-        private static final String GLIDE_AUTHOR = "bumptech";
-        private static final String GLIDE_INTRODUCE = "An image loading and caching library " +
-                "for Android focused on smooth scrolling";
+        public static final int[] ICON_ID = {
+                R.drawable.ic_introduce,
+                R.drawable.ic_email,
+                R.drawable.ic_source_code,
+                R.drawable.ic_github};
 
-        private static final String CIRCLEIMAGEVIEW = "CircleImageView";
-        private static final String CIRCLEIMAGEVIEW_AUTHOR = "hdodenhof";
-        private static final String CIRCLEIMAGEVIEW_INTRODUCE = "A circular ImageView for Android";
+        public static final String[] LIBRARY_NAME = {
+                "Glide",
+                "CircleImageView",
+                "StatusBarUtil",
+                "PhotoView",
+                "Matisse",
+                "uCrop",
+                "AndroidUnsplash(Unofficial)",
+                "FloatingActionButton"};
 
-        private static final String STATUSBARUTIL = "StatusBarUtil";
-        private static final String STATUSBARUTIL_AUTHOR = "Jaeger";
-        private static final String STATUSBARUTIL_INTRODUCE = "A util for setting status bar " +
-                "style on Android App";
+        public static final String[] LIBRARY_AUTHOR = {
+                "bumptech",
+                "hdodenhof",
+                "Jaeger",
+                "bm-x",
+                "zhihu",
+                "Yalantis",
+                "KeenenCharles",
+                "Clans"};
 
-        private static final String PHOTOVIEW = "PhotoView";
-        private static final String PHOTOVIEW_AUTHOR = "bm-x";
-        private static final String PHOTOVIEW_INTRODUCE = "PhotoView 图片浏览缩放控件";
-
-        private static final String MATISSE = "Matisse";
-        private static final String MATISSE_AUTHOR = "zhihu";
-        private static final String MATISSE_INTRODUCE = "A well-designed local image and video " +
-                "selector for Android";
-
-        private static final String UCROP = "uCrop";
-        private static final String UCROP_AUTHOR = "Yalantis";
-        private static final String UCROP_INTRODUCE = "Image Cropping Library for Android";
-
-        private static final String ANDROID_UNSPLASH = "AndroidUnsplash(Unofficial)";
-        private static final String ANDROID_UNSPLASH_AUTHOR = "KeenenCharles";
-        private static final String ANDROID_UNSPLASH_INTRODUCE = "An unofficial Splash API library for Android";
-
-        private static final String FLOATINGACTIONBUTTON = "FloatingActionButton";
-        private static final String FLOATINGACTIONBUTTON_AUTHOR = "Clans";
-        private static final String FLOATINGACTIONBUTTON_INTRODUCE = "Android Floating Action " +
-                "Button based on Material Design specification";
+        public static final String[] LIBRARY_INTRODUCE = {
+                "An image loading and caching library for Android focused on smooth scrolling",
+                "A circular ImageView for Android",
+                "A util for setting status bar style on Android App",
+                "PhotoView 图片浏览缩放控件",
+                "A well-designed local image and video selector for Android",
+                "Image Cropping Library for Android",
+                "An unofficial Splash API library for Android",
+                "Android Floating Action Button based on Material Design specification"};
     }
 }
