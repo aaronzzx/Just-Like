@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -18,6 +17,7 @@ import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.another.Image;
+import com.aaron.justlike.main.adapter.PreviewAdapter;
 import com.aaron.justlike.main.entity.DeleteEvent;
 import com.aaron.justlike.main.entity.ImageInfo;
 import com.aaron.justlike.main.entity.PreviewEvent;
@@ -26,11 +26,6 @@ import com.aaron.justlike.main.presenter.PreviewPresenter;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
-import com.bm.library.PhotoView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.yalantis.ucrop.UCrop;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,7 +35,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -50,7 +44,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 public class PreviewActivity extends AppCompatActivity implements IPreviewView,
-        View.OnClickListener, ViewPager.OnPageChangeListener {
+        View.OnClickListener, ViewPager.OnPageChangeListener, PreviewAdapter.Callback {
 
     private static final String FIT_SCREEN = "适应屏幕";
     private static final String FREE_CROP = "自由裁剪";
@@ -199,6 +193,9 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         }
     }
 
+    /**
+     * 页面切换时回调
+     */
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         mPosition = mViewPager.getCurrentItem();
@@ -207,12 +204,21 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
 
     @Override
     public void onPageSelected(int position) {
-        mPosition = position;
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
+    }
 
+    @Override
+    public void onPress() {
+        if (mToolbar.getVisibility() == View.GONE) {
+            // 全屏状态下执行此代码块会退出全屏
+            animIn(0);
+        } else {
+            // 进入全屏,自动沉浸
+            animOut(0);
+        }
     }
 
     /**
@@ -268,7 +274,8 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
     private void initViewPager() {
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setPageMargin(50);
-        mViewPager.setAdapter(new PreviewAdapter());
+        PagerAdapter adapter = new PreviewAdapter<>(mImageList, this);
+        mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(mPosition);
     }
 
@@ -321,70 +328,5 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
     private void animOut(long startOffset) {
         AnimationUtil.hideToolbar(this, mToolbar, startOffset);
         AnimationUtil.hideBottomBar(this, mBottomBar, startOffset);
-    }
-
-    public class PreviewAdapter extends PagerAdapter {
-
-        @Override
-        public int getCount() {
-            return mImageList.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return view == object;
-        }
-
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            String path = mImageList.get(position).getPath();
-            PhotoView photoView = new PhotoView(PreviewActivity.this);
-            photoView.enable();
-            photoView.setMaxScale(2.5F);
-            photoView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            ViewGroup parent = (ViewGroup) photoView.getParent();
-            if (parent != null) {
-                parent.removeView(photoView);
-            }
-            RequestOptions options = new RequestOptions()
-                    .override(3000, 3000)
-                    .centerInside();
-            DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
-                    .Builder(300)
-                    .setCrossFadeEnabled(true)
-                    .build();
-            Glide.with(PreviewActivity.this)
-                    .load(path)
-                    .apply(options)
-                    .transition(DrawableTransitionOptions.with(factory))
-                    .into(photoView);
-            photoView.setOnClickListener(v -> {
-                if (mToolbar.getVisibility() == View.GONE) {
-                    // 全屏状态下执行此代码块会退出全屏
-                    animIn(0);
-                } else {
-                    // 进入全屏,自动沉浸
-                    animOut(0);
-                }
-            });
-            container.addView(photoView);
-            return photoView;
-        }
-
-        @Override
-        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-            container.removeView((View) object);
-        }
-
-        @Override
-        public int getItemPosition(@NonNull Object object) {
-            View view = (View) object;
-            if (PreviewActivity.this.mPosition == (Integer) view.getTag()) {
-                return POSITION_NONE;
-            } else {
-                return POSITION_UNCHANGED;
-            }
-        }
     }
 }
