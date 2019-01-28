@@ -36,7 +36,7 @@ public class BaseModel implements IModel {
         for (String path : pathList) {
             FileUtils.saveToCache(path, suffix);
             suffix++;
-            if (suffix > 9) suffix = 0;
+            if (suffix > 9) suffix = 1;
         }
     }
 

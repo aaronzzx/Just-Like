@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class AboutActivity extends AppCompatActivity {
 
-    private final String[] mLibraryDetails = new String[]{
+    private static final String[] LIBRARY_DETAILS = new String[]{
             "An image loading and caching library for Android focused on smooth scrolling",
             "A circular ImageView for Android",
             "A util for setting status bar style on Android App",
@@ -59,7 +59,6 @@ public class AboutActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
         }
         TextView versionName = findViewById(R.id.activity_about_version);
         versionName.setText("Version " + SystemUtils.getVersionName(this));
@@ -92,28 +91,28 @@ public class AboutActivity extends AppCompatActivity {
 
     private void initAboutLibrary() {
         AboutLibrary glide = new AboutLibrary("Glide",
-                "bumptech", mLibraryDetails[0]);
+                "bumptech", LIBRARY_DETAILS[0]);
         mAboutLibraryList.add(glide);
         AboutLibrary circleImageview = new AboutLibrary("CircleImageView",
-                "hdodenhof", mLibraryDetails[1]);
+                "hdodenhof", LIBRARY_DETAILS[1]);
         mAboutLibraryList.add(circleImageview);
         AboutLibrary statusBarUtil = new AboutLibrary("StatusBarUtil",
-                "Jaeger", mLibraryDetails[2]);
+                "Jaeger", LIBRARY_DETAILS[2]);
         mAboutLibraryList.add(statusBarUtil);
         AboutLibrary photoView = new AboutLibrary("PhotoView",
-                "bm-x", mLibraryDetails[3]);
+                "bm-x", LIBRARY_DETAILS[3]);
         mAboutLibraryList.add(photoView);
         AboutLibrary pictureSelector = new AboutLibrary("Matisse",
-                "zhihu", mLibraryDetails[4]);
+                "zhihu", LIBRARY_DETAILS[4]);
         mAboutLibraryList.add(pictureSelector);
         AboutLibrary uCrop = new AboutLibrary("uCrop",
-                "Yalantis", mLibraryDetails[5]);
+                "Yalantis", LIBRARY_DETAILS[5]);
         mAboutLibraryList.add(uCrop);
         AboutLibrary androidUnsplash = new AboutLibrary("AndroidUnsplash(Unofficial)",
-                "KeenenCharles", mLibraryDetails[6]);
+                "KeenenCharles", LIBRARY_DETAILS[6]);
         mAboutLibraryList.add(androidUnsplash);
         AboutLibrary fab = new AboutLibrary("FloatingActionButton",
-                "Clans", mLibraryDetails[7]);
+                "Clans", LIBRARY_DETAILS[7]);
         mAboutLibraryList.add(fab);
     }
 }
