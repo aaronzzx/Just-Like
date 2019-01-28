@@ -5,6 +5,7 @@ import com.aaron.justlike.download.model.IModel;
 import com.aaron.justlike.download.view.IView;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.util.FileUtils;
+import com.kc.unsplash.models.Photo;
 
 import java.util.List;
 
@@ -31,6 +32,28 @@ public class BasePresenter implements IPresenter {
         mModel.queryImage(list -> {
             List<Image> imageList = sortList(list, isAscending);
             mView.onShowImage(imageList);
+        });
+    }
+
+    @Override
+    public void findImageByOnline(String path) {
+        String fileName = path.substring(path.lastIndexOf("/") + 1);
+        String imageId = fileName.substring(0, fileName.indexOf("."));
+        // 显示加载框
+        mView.onShowProgress();
+        mModel.searchImage(imageId, new IModel.SearchCallback() {
+
+            @Override
+            public void onSuccess(Photo photo) {
+                mView.onHideProgress();
+                mView.onOpenPreview(photo);
+            }
+
+            @Override
+            public void onFailure() {
+                mView.onHideProgress();
+                mView.onShowSnackBar(path);
+            }
         });
     }
 

@@ -5,4 +5,6 @@ public interface IPresenter {
     void detachView();
 
     void requestImage(boolean isAscending);
+
+    void findImageByOnline(String path);
 }
