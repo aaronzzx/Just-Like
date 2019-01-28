@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.another.Image;
+import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.main.adapter.PreviewAdapter;
 import com.aaron.justlike.main.entity.DeleteEvent;
 import com.aaron.justlike.main.entity.ImageInfo;

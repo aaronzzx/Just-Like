@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.another.Album;
+import com.aaron.justlike.entity.Album;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.DataSource;

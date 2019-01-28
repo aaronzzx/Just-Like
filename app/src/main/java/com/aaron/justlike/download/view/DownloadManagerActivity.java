@@ -1,14 +1,14 @@
-package com.aaron.justlike.activity;
+package com.aaron.justlike.download.view;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.DownloadManagerAdapter;
+import com.aaron.justlike.download.presenter.BasePresenter;
+import com.aaron.justlike.download.presenter.IPresenter;
 import com.aaron.justlike.entity.Image;
-import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
 import com.jaeger.library.StatusBarUtil;
 
@@ -21,26 +21,30 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class DownloadManagerActivity extends AppCompatActivity {
+public class DownloadManagerActivity extends AppCompatActivity implements IView<Image> {
+
+    private List<Image> mImageList = new ArrayList<>();
+
+    private IPresenter mPresenter;
 
     private DownloadManagerAdapter mAdapter;
-    private List<Image> mImageList = new ArrayList<>();
-    private static final String PATH = Environment.getExternalStoragePublicDirectory
-            (Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/JustLike/online";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download_manager);
-        StatusBarUtil.setColorNoTranslucent(this, getResources().getColor(R.color.colorPrimary));
-        initViews();
-        // 设置默认排序
-        FileUtils.sortByDate(mImageList, false);
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary), 70);
+        initView();
+        attachPresenter();
+        mPresenter.requestImage(BasePresenter.DESCENDING); // 按最新下载来排序
     }
 
-    /**
-     * 标题栏返回键销毁活动
-     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         finish();
@@ -60,27 +64,45 @@ public class DownloadManagerActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.sort_latest:
                 item.setChecked(true);
-                FileUtils.sortByDate(mImageList, false);
-                mAdapter.notifyItemRangeChanged(0, mImageList.size());
+                mPresenter.requestImage(BasePresenter.DESCENDING);
                 break;
             case R.id.sort_oldest:
                 item.setChecked(true);
-                FileUtils.sortByDate(mImageList, true);
-                mAdapter.notifyItemRangeChanged(0, mImageList.size());
+                mPresenter.requestImage(BasePresenter.ASCENDING);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void initViews() {
+    @Override
+    public void attachPresenter() {
+        mPresenter = new BasePresenter(this);
+    }
+
+    @Override
+    public void onShowImage(List<Image> list) {
+        mImageList.clear();
+        mImageList.addAll(list);
+        mAdapter.notifyItemRangeChanged(0, mImageList.size());
+    }
+
+    private void initView() {
         Toolbar toolbar = findViewById(R.id.activity_download_manager_toolbar);
+        RecyclerView recyclerView = findViewById(R.id.rv_home_activity_main);
+
+        initToolbar(toolbar);
+        initRecyclerView(recyclerView);
+    }
+
+    private void initToolbar(Toolbar toolbar) {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        FileUtils.getLocalFiles(mImageList, PATH, "jpg");
-        RecyclerView recyclerView = findViewById(R.id.rv_home_activity_main);
+    }
+
+    private void initRecyclerView(RecyclerView recyclerView) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         mAdapter = new DownloadManagerAdapter(this, mImageList);

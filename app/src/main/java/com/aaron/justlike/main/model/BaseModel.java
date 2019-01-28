@@ -1,7 +1,7 @@
 package com.aaron.justlike.main.model;
 
-import com.aaron.justlike.another.Image;
-import com.aaron.justlike.another.SortInfo;
+import com.aaron.justlike.entity.Image;
+import com.aaron.justlike.main.entity.SortInfo;
 import com.aaron.justlike.util.FileUtils;
 
 import org.litepal.LitePal;

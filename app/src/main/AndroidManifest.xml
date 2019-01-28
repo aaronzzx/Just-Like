@@ -50,7 +50,7 @@
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name=".activity.DownloadManagerActivity"
+            android:name=".download.view.DownloadManagerActivity"
             android:label="下载管理"
             android:theme="@style/AppTheme" />
 

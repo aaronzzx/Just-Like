@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.another.ISetToolbar;
-import com.aaron.justlike.another.Image;
+import com.aaron.justlike.entity.ISetToolbar;
+import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.extend.SquareView;
 import com.aaron.justlike.util.AnimationUtil;
 import com.bumptech.glide.Glide;

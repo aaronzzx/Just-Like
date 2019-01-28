@@ -1,6 +1,6 @@
 package com.aaron.justlike.main.presenter;
 
-import com.aaron.justlike.another.Image;
+import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.main.model.BaseModel;
 import com.aaron.justlike.main.model.IModel;
 import com.aaron.justlike.main.view.IMainView;

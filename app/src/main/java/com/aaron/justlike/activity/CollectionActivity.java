@@ -12,8 +12,8 @@ import android.widget.EditText;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.CollectionAdapter;
-import com.aaron.justlike.another.Album;
-import com.aaron.justlike.another.CollectionInfo;
+import com.aaron.justlike.entity.Album;
+import com.aaron.justlike.entity.CollectionInfo;
 import com.aaron.justlike.extend.MyGridLayoutManager;
 import com.aaron.justlike.util.SystemUtils;
 

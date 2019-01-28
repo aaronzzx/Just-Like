@@ -12,9 +12,9 @@ import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.CollectionAddAdapter;
-import com.aaron.justlike.another.CollectionInfo;
-import com.aaron.justlike.another.ISetToolbar;
-import com.aaron.justlike.another.Image;
+import com.aaron.justlike.entity.CollectionInfo;
+import com.aaron.justlike.entity.ISetToolbar;
+import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.extend.MyGridLayoutManager;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;

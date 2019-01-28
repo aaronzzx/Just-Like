@@ -6,20 +6,17 @@ import android.content.Intent;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.OnlineImageActivity;
-import com.aaron.justlike.another.Image;
+import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
-import com.aaron.justlike.util.LogUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -34,7 +31,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class DownloadManagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.another.Image;
+import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.extend.SquareView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;

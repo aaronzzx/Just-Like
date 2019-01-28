@@ -1,4 +1,4 @@
-package com.aaron.justlike.another;
+package com.aaron.justlike.main.entity;
 
 import org.litepal.crud.LitePalSupport;
 
