@@ -87,19 +87,12 @@ public class DownloadManagerAdapter<T> extends RecyclerView.Adapter<RecyclerView
         return mList.size();
     }
 
-    public interface Callback {
-
-        void onSearchByLocal(String path);
-
-        void onSearchByOnline(String path);
-    }
-
     private static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private View itemView;
-        private ImageView imageView;
-        private TextView imageId;
-        private ImageView search;
+        View itemView;
+        ImageView imageView;
+        TextView imageId;
+        ImageView search;
 
         ViewHolder(View view) {
             super(view);
@@ -108,5 +101,12 @@ public class DownloadManagerAdapter<T> extends RecyclerView.Adapter<RecyclerView
             imageId = view.findViewById(R.id.image_id);
             search = view.findViewById(R.id.action_search);
         }
+    }
+
+    public interface Callback {
+
+        void onSearchByLocal(String path);
+
+        void onSearchByOnline(String path);
     }
 }
