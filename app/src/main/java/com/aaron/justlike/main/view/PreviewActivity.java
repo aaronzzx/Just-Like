@@ -342,6 +342,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
             PhotoView photoView = new PhotoView(PreviewActivity.this);
             photoView.enable();
             photoView.setMaxScale(2.5F);
+            photoView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             ViewGroup parent = (ViewGroup) photoView.getParent();
             if (parent != null) {
                 parent.removeView(photoView);

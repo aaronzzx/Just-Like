@@ -6,13 +6,10 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -26,15 +23,12 @@ import com.aaron.justlike.activity.OnlineActivity;
 import com.aaron.justlike.another.Image;
 import com.aaron.justlike.extend.GlideEngine;
 import com.aaron.justlike.extend.MyGridLayoutManager;
-import com.aaron.justlike.extend.SquareView;
+import com.aaron.justlike.main.adapter.MainAdapter;
 import com.aaron.justlike.main.entity.DeleteEvent;
 import com.aaron.justlike.main.entity.PreviewEvent;
 import com.aaron.justlike.main.presenter.IMainPresenter;
 import com.aaron.justlike.main.presenter.MainPresenter;
 import com.aaron.justlike.util.SystemUtils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.ImageViewTarget;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -50,9 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -63,7 +55,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MainActivity extends AppCompatActivity implements IMainView<Image>, View.OnClickListener,
-        NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
+        NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener,
+        MainAdapter.Callback<Image> {
 
     private static final int REQUEST_PERMISSION = 0;
     private static final int REQUEST_SELECT_IMAGE = 1;
@@ -266,6 +259,28 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     }
 
     /**
+     * MainAdapter 中发生 onClick 行为，需要回调此方法
+     *
+     * @param position 被点击图片在 List 中的位置
+     * @param list     存放 Image 实例 的 List
+     */
+    @Override
+    public void onPress(int position, List<Image> list) {
+        EventBus.getDefault().postSticky(new PreviewEvent<>(position, list));
+        startActivity(new Intent(this, PreviewActivity.class));
+    }
+
+    /**
+     * MainAdapter 中发生 onLongClick 行为，需要回调此方法
+     *
+     * @param path 被删图片的路径
+     */
+    @Override
+    public void onLongPress(String path) {
+        mPresenter.deleteImage(path);
+    }
+
+    /**
      * 关联 Presenter
      */
     @Override
@@ -353,7 +368,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mRecyclerView.addItemDecoration(new YItemDecoration());
-        mAdapter = new HomeAdapter();
+        mAdapter = new MainAdapter<Image>(mImageList, this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -495,84 +510,6 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
                 .imageEngine(new GlideEngine())
                 .theme(R.style.MatisseTheme)
                 .forResult(REQUEST_SELECT_IMAGE);
-    }
-
-    /**
-     * 缓存视图 RecyclerView.ViewHolder
-     */
-    private static class ViewHolder extends RecyclerView.ViewHolder {
-
-        View itemView;
-        SquareView squareView;
-
-        ViewHolder(View view) {
-            super(view);
-            itemView = view;
-            squareView = view.findViewById(R.id.square_view);
-        }
-    }
-
-    /**
-     * RecyclerView 界面适配器
-     */
-    private class HomeAdapter extends RecyclerView.Adapter<ViewHolder> {
-
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(MainActivity.this)
-                    .inflate(R.layout.activity_main_recycler_item, parent, false);
-            ViewHolder holder = new ViewHolder(view);
-            // for Image onClick()
-            holder.itemView.setOnClickListener(v -> {
-                int position = holder.getAdapterPosition();
-                EventBus.getDefault().postSticky(new PreviewEvent<>(position, mImageList));
-//                Intent intent = new Intent(MainActivity.this, MainImageActivity.class);
-                Intent intent = new Intent(MainActivity.this, PreviewActivity.class);
-                startActivity(intent);
-            });
-            // for Image onLongClick()
-            holder.itemView.setOnLongClickListener(v -> {
-                int position = holder.getAdapterPosition();
-                new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("删除图片")
-                        .setMessage("图片将从设备中删除")
-                        .setPositiveButton("确定", (dialog, which) -> {
-                            String path = mImageList.get(position).getPath();
-                            mImageList.remove(position);
-                            notifyItemRemoved(position);
-                            notifyItemRangeChanged(0, mImageList.size() - 1);
-                            mPresenter.deleteImage(path);
-                        })
-                        .setNegativeButton("取消", (dialog, which) -> {
-                        }).show();
-                return true;
-            });
-            return holder;
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            Image image = mImageList.get(position); // 从集合中找到 Image 对象
-            String path = image.getPath();
-
-            RequestOptions options = new RequestOptions()
-                    .placeholder(R.color.colorGrey);
-            Glide.with(MainActivity.this)
-                    .load(path)
-                    .apply(options)
-                    .into(new ImageViewTarget<Drawable>(holder.squareView) {
-                        @Override
-                        protected void setResource(@Nullable Drawable resource) {
-                            holder.squareView.setImageDrawable(resource);
-                        }
-                    });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mImageList.size();
-        }
     }
 
     private class XItemDecoration extends RecyclerView.ItemDecoration {
