@@ -23,6 +23,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MessageAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final int INTRODUCE = 0;
+    private static final int FEEDBACK = 1;
+    private static final int SOURCE_CODE = 2;
+    private static final int GITHUB = 3;
+
     private Activity mActivity;
     private List<T> mList;
 
@@ -39,33 +44,33 @@ public class MessageAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
         final ViewHolder holder = new ViewHolder(view);
         holder.itemView.setOnClickListener(v -> {
             switch (holder.getAdapterPosition()) {
-                case 0:
+                case INTRODUCE:
                     Intent introduce = new Intent(Intent.ACTION_VIEW);
                     introduce.setData(Uri.parse("https://www.jianshu.com/p/011e616982f4"));
                     mActivity.startActivity(introduce);
                     break;
-                case 1:
-                    int[] resolutionArray = SystemUtils.getResolution(mActivity.getWindowManager());
+                case FEEDBACK:
+                    int[] widthHeightPixels = SystemUtils.getResolution(mActivity.getWindowManager());
                     String subject = "Just Like for Android " + SystemUtils.getVersionName(mActivity) + "\n"
                             + "Feedback(" + Build.BRAND + "-" + Build.MODEL + ")";
                     String text = "请尽可能详细描述您的问题或建议，请不要删除或修改下列设备信息。" + "\n"
                             + "Device: " + Build.BRAND + "-" + Build.MODEL + "\n"
                             + "Android Version: " + Build.VERSION.RELEASE + "(SDK=" + Build.VERSION.SDK_INT + ")" + "\n"
-                            + "Resolution: " + resolutionArray[1] + "*" + resolutionArray[0] + "\n"
+                            + "Resolution: " + widthHeightPixels[1] + "*" + widthHeightPixels[0] + "\n"
                             + "System Language: " + Locale.getDefault().getLanguage() + "(" + Locale.getDefault().getCountry() + ")" + "\n"
                             + "App Version: " + SystemUtils.getVersionName(mActivity);
-                    Intent sendEMail = new Intent(Intent.ACTION_SENDTO);
-                    sendEMail.setData(Uri.parse("mailto:aaronzheng9603@gmail.com"));
-                    sendEMail.putExtra(Intent.EXTRA_SUBJECT, subject);
-                    sendEMail.putExtra(Intent.EXTRA_TEXT, text);
-                    mActivity.startActivity(sendEMail);
+                    Intent sendMail = new Intent(Intent.ACTION_SENDTO);
+                    sendMail.setData(Uri.parse("mailto:aaronzheng9603@gmail.com"));
+                    sendMail.putExtra(Intent.EXTRA_SUBJECT, subject);
+                    sendMail.putExtra(Intent.EXTRA_TEXT, text);
+                    mActivity.startActivity(sendMail);
                     break;
-                case 2:
+                case SOURCE_CODE:
                     Intent sourceCode = new Intent(Intent.ACTION_VIEW);
                     sourceCode.setData(Uri.parse("https://github.com/AaronZheng9603/Just-Like"));
                     mActivity.startActivity(sourceCode);
                     break;
-                case 3:
+                case GITHUB:
                     Intent github = new Intent(Intent.ACTION_VIEW);
                     github.setData(Uri.parse("https://github.com/AaronZheng9603"));
                     mActivity.startActivity(github);
