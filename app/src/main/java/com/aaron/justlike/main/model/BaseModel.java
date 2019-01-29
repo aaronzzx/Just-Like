@@ -9,7 +9,7 @@ import org.litepal.LitePal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseModel implements IModel {
+public class BaseModel implements IModel<Image> {
 
     private static final String PATH = "/storage/emulated/0/Pictures/JustLike";
     private static final String[] TYPE = {"jpg", "jpeg", "png", "gif"};
@@ -31,13 +31,16 @@ public class BaseModel implements IModel {
     }
 
     @Override
-    public void saveImage(List<String> pathList) {
-        int suffix = 0;
+    public void saveImage(List<String> pathList, AddImageCallback<Image> callback) {
+        List<Image> imageList = new ArrayList<>();
+        int suffix = 1;
         for (String path : pathList) {
-            FileUtils.saveToCache(path, suffix);
+            String savedPath = FileUtils.saveToCache(path, suffix);
+            imageList.add(new Image(savedPath));
             suffix++;
             if (suffix > 9) suffix = 1;
         }
+        callback.onSavedImage(imageList);
     }
 
     @Override

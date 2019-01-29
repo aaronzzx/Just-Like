@@ -45,6 +45,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -60,6 +61,10 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
 
     private static final int REQUEST_PERMISSION = 0;
     private static final int REQUEST_SELECT_IMAGE = 1;
+    private static final String DELETE_DIALOG_TITLE = "删除图片";
+    private static final String DELETE_DIALOG_MESSAGE = "图片将从设备删除";
+    private static final String DELETE_DIALOG_POSITIVE_BUTTON = "确定";
+    private static final String DELETE_DIALOG_NEGATIVE_BUTTON = "取消";
 
     private int mSortType;
     private boolean mIsAscending;
@@ -265,11 +270,22 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     /**
      * MainAdapter 中发生 onLongClick 行为，需要回调此方法
      *
-     * @param path 被删图片的路径
+     * @param position 被删图片的索引
      */
     @Override
-    public void onLongPress(String path) {
-        mPresenter.deleteImage(path);
+    public void onLongPress(int position) {
+        new AlertDialog.Builder(this)
+                .setTitle(DELETE_DIALOG_TITLE)
+                .setMessage(DELETE_DIALOG_MESSAGE)
+                .setPositiveButton(DELETE_DIALOG_POSITIVE_BUTTON, (dialog, which) -> {
+                    String path = mImageList.get(position).getPath();
+                    mImageList.remove(position);
+                    mAdapter.notifyItemRemoved(position);
+                    mAdapter.notifyItemRangeChanged(0, mImageList.size() - 1);
+                    mPresenter.deleteImage(path);
+                })
+                .setNegativeButton(DELETE_DIALOG_NEGATIVE_BUTTON, (dialog, which) -> {
+                }).show();
     }
 
     /**
@@ -290,6 +306,19 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         mAdapter.notifyItemRangeChanged(0, mImageList.size());
         mSortType = sortType;
         mIsAscending = ascendingOrder;
+    }
+
+    /**
+     * 回调函数，添加用户所选图片
+     *
+     * @param list 所选图片的集合
+     */
+    @Override
+    public void onShowAddImage(List<Image> list) {
+        mImageList.addAll(0, list);
+        mAdapter.notifyItemRangeInserted(0, list.size());
+        mAdapter.notifyItemRangeChanged(list.size(), mImageList.size() - list.size());
+        mRecyclerView.scrollToPosition(0);
     }
 
     /**

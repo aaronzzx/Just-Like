@@ -10,18 +10,17 @@ import java.util.List;
 
 public class MainPresenter implements IMainPresenter<Image> {
 
+    private static final int NO_SORT_STATUS = 0;
     public static final int SORT_BY_DATE = 1;
     public static final int SORT_BY_NAME = 2;
     public static final int SORT_BY_SIZE = 3;
     public static final boolean ASCENDING_ORDER = true;
-    private static final int NO_SORT_STATUS = 0;
-    public static final boolean DESCENDING_ORDER = false;
 
     private int mSortType;
     private boolean mAscendingOrder;
 
     private IMainView<Image> mView;
-    private IModel mModel;
+    private IModel<Image> mModel;
 
     public MainPresenter(IMainView<Image> view) {
         // 同时持有 IMainView 和 IModel 引用
@@ -55,7 +54,6 @@ public class MainPresenter implements IMainPresenter<Image> {
         }
         // Part 2, 向 IModel 请求数据
         mModel.queryImage(new IModel.OnQueryImageListener<Image>() {
-
             @Override
             public void onSuccess(List<Image> list) {
                 mView.onHideRefresh();
@@ -67,7 +65,7 @@ public class MainPresenter implements IMainPresenter<Image> {
                 }
                 imageList.clear();
                 imageList.addAll(sortImageList(list, mSortType, mAscendingOrder));
-                mView.onShowImage(sortImageList(list, mSortType, mAscendingOrder), mSortType, mAscendingOrder);
+                mView.onShowImage(imageList, mSortType, mAscendingOrder);
             }
 
             @Override
@@ -80,11 +78,7 @@ public class MainPresenter implements IMainPresenter<Image> {
 
     @Override
     public void addImage(List<Image> list, List<String> pathList) {
-        for (String path : pathList) {
-            list.add(new Image(path));
-        }
-        mView.onShowImage(list, mSortType, mAscendingOrder);
-        mModel.saveImage(pathList);
+        mModel.saveImage(pathList, savedList -> mView.onShowAddImage(savedList));
     }
 
     @Override

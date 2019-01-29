@@ -255,7 +255,8 @@ public class FileUtils {
      *
      * @param path    相册或文件管理器返回的路径
      */
-    public static void saveToCache(String path, int num) {
+    public static String saveToCache(String path, int num) {
+        String filePath;
         String originalDate;
         String createDate = SystemUtils.getCreateDate(path);
         if (!TextUtils.isEmpty(createDate)) {
@@ -274,7 +275,7 @@ public class FileUtils {
         String name = "/IMG_" + date + "_" + num;
         String suffix = path.substring(path.lastIndexOf("."));
         String fileName = name + suffix;
-        String filePath = dirPath + fileName;
+        filePath = dirPath + fileName;
         File file = new File(filePath);
         FileInputStream fis = null;
         FileOutputStream fos = null;
@@ -304,6 +305,7 @@ public class FileUtils {
                 e.printStackTrace();
             }
         }
+        return filePath;
     }
 
     /**

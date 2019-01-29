@@ -17,7 +17,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MainAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -48,18 +47,7 @@ public class MainAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder
         // for Image onLongClick()
         holder.itemView.setOnLongClickListener(v -> {
             int position = holder.getAdapterPosition();
-            new AlertDialog.Builder(mContext)
-                    .setTitle("删除图片")
-                    .setMessage("图片将从设备中删除")
-                    .setPositiveButton("确定", (dialog, which) -> {
-                        String path = ((Image) mList.get(position)).getPath();
-                        mList.remove(position);
-                        notifyItemRemoved(position);
-                        notifyItemRangeChanged(0, mList.size() - 1);
-                        mCallback.onLongPress(path);
-                    })
-                    .setNegativeButton("取消", (dialog, which) -> {
-                    }).show();
+            mCallback.onLongPress(position);
             return true;
         });
         return holder;
@@ -88,16 +76,6 @@ public class MainAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return mList.size();
     }
 
-    /**
-     * 发生点击事件时，回调 Activity
-     */
-    public interface Callback<T> {
-
-        void onPress(int position, List<T> list);
-
-        void onLongPress(String path);
-    }
-
     private static class ViewHolder extends RecyclerView.ViewHolder {
 
         View itemView;
@@ -108,5 +86,15 @@ public class MainAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder
             itemView = view;
             squareView = view.findViewById(R.id.square_view);
         }
+    }
+
+    /**
+     * 发生点击事件时，回调 Activity
+     */
+    public interface Callback<T> {
+
+        void onPress(int position, List<T> list);
+
+        void onLongPress(int position);
     }
 }

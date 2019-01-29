@@ -2,11 +2,11 @@ package com.aaron.justlike.main.model;
 
 import java.util.List;
 
-public interface IModel {
+public interface IModel<T> {
 
-    void queryImage(OnQueryImageListener listener);
+    void queryImage(OnQueryImageListener<T> listener);
 
-    void saveImage(List<String> pathList);
+    void saveImage(List<String> pathList, AddImageCallback<T> callback);
 
     void deleteImage(String path);
 
@@ -19,5 +19,10 @@ public interface IModel {
         void onSuccess(List<T> list);
 
         void onFailure(String args);
+    }
+
+    interface AddImageCallback<T> {
+
+        void onSavedImage(List<T> savedList);
     }
 }

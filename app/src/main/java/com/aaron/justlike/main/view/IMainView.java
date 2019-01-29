@@ -8,6 +8,8 @@ public interface IMainView<T> {
 
     void onShowImage(List<T> list, int sortType, boolean ascendingOrder);
 
+    void onShowAddImage(List<T> list);
+
     void onShowMessage(String args);
 
     void onHideRefresh();
