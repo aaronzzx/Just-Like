@@ -88,15 +88,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         attachPresenter();
         initView();
         mPresenter.requestImage(mImageList, false);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // 元素少于 16 个时禁止 Toolbar 隐藏q
-        if (mImageList.size() < 16) {
-            banHideToolbar();
-        }
+        selectHideToolbar(); // 元素少于 16 个时禁止 Toolbar 隐藏
     }
 
     @Override
@@ -383,9 +375,10 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         });
     }
 
-    private void banHideToolbar() {
+    private void selectHideToolbar() {
+        // 元素不够禁止隐藏 Toolbar
         if (mImageList.size() < 16) {
-            AppBarLayout.LayoutParams layoutParams = (AppBarLayout.LayoutParams) mParentToolbar.getLayoutParams(); // 元素不够禁止隐藏 Toolbar
+            AppBarLayout.LayoutParams layoutParams = (AppBarLayout.LayoutParams) mParentToolbar.getLayoutParams();
             layoutParams.setScrollFlags(0);
         }
     }

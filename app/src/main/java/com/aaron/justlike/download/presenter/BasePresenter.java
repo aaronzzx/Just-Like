@@ -25,6 +25,7 @@ public class BasePresenter implements IPresenter {
     @Override
     public void detachView() {
         mView = null;
+        mModel = null;
     }
 
     @Override

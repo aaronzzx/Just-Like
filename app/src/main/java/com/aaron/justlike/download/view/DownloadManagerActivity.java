@@ -33,7 +33,6 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
 
     private static final String PROGRESS_TITLE = "加载资源";
     private static final String PROGRESS_MESSAGE = "Loading...";
-
     private static final String SNACKBAR_TEXT = "加载失败";
     private static final String SNACKBAR_ACTION_TEXT = "重试";
 
@@ -70,6 +69,7 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_download_manager_menu, menu);
+        // 打开 Popup 菜单的图标
         SystemUtils.setIconEnable(menu, true);
         menu.findItem(R.id.sort_latest).setChecked(true);
         return super.onCreateOptionsMenu(menu);
@@ -101,7 +101,7 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
     }
 
     /**
-     * 适配器中点击视图回调，搜索网络资源
+     * 适配器中点击搜索按钮回调，搜索网络资源
      */
     @Override
     public void onSearchByOnline(String path) {
@@ -121,7 +121,7 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
     }
 
     /**
-     * 搜索网络资源的回调
+     * 搜索网络资源的回调，打开在线壁纸的预览窗口
      */
     @Override
     public void onOpenPreview(Photo photo) {
@@ -131,7 +131,7 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
     }
 
     /**
-     * 搜索网络资源的回调
+     * 搜索网络资源的回调，显示 SnackBar 可选择重新搜索
      */
     @Override
     public void onShowSnackBar(String path) {
