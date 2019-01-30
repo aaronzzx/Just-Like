@@ -129,10 +129,9 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
         mSwipeRefresh.setColorSchemeResources(R.color.colorBlack);
         mAppBarLayout = findViewById(R.id.appbar_layout);
         mToolbar = findViewById(R.id.activity_online_toolbar);
-        setSupportActionBar(mToolbar);
         mToolbar.setOnClickListener(this);
+        setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
-        // 让标题栏启用滑动菜单并设置图标
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.mipmap.ic_back);

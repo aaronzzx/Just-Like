@@ -66,4 +66,10 @@
         android:indeterminateTint="#fff"
         android:visibility="gone"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="27.5dp"
+        android:layout_alignParentTop="true"
+        android:background="#45000000" />
+
 </RelativeLayout>

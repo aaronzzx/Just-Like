@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.aaron.justlike.R;
 import com.aaron.justlike.about.view.AboutActivity;
 import com.aaron.justlike.activity.CollectionActivity;
-import com.aaron.justlike.activity.OnlineActivity;
 import com.aaron.justlike.download.view.DownloadManagerActivity;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.extend.GlideEngine;
@@ -28,6 +27,7 @@ import com.aaron.justlike.main.entity.DeleteEvent;
 import com.aaron.justlike.main.entity.PreviewEvent;
 import com.aaron.justlike.main.presenter.IMainPresenter;
 import com.aaron.justlike.main.presenter.MainPresenter;
+import com.aaron.justlike.online.view.Online2Activity;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
                 mParentLayout.closeDrawers();
                 break;
             case R.id.nav_online_wallpaper:
-                startActivityByNav(OnlineActivity.class);
+                startActivityByNav(Online2Activity.class);
                 break;
             case R.id.nav_collection:
                 startActivityByNav(CollectionActivity.class);

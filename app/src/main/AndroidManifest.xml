@@ -16,7 +16,8 @@
 
         <activity
             android:name=".main.view.MainActivity"
-            android:theme="@style/AppTheme.Splash">
+            android:theme="@style/AppTheme.Splash"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,37 +28,50 @@
         <activity
             android:name=".main.view.PreviewActivity"
             android:label=""
-            android:theme="@style/AppTheme.DisplayActivity" />
+            android:theme="@style/AppTheme.DisplayActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.OnlineActivity"
             android:label="Online"
-            android:theme="@style/AppTheme.OnlineActivity" />
+            android:theme="@style/AppTheme.OnlineActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".online.view.Online2Activity"
+            android:label="Online"
+            android:theme="@style/AppTheme.OnlineActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.OnlineImageActivity"
             android:label=""
-            android:theme="@style/AppTheme.OnlineActivity" />
+            android:theme="@style/AppTheme.OnlineActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.CollectionActivity"
             android:label="集合"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.CollectionAddActivity"
             android:label="已选择(0)"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".download.view.DownloadManagerActivity"
             android:label="下载管理"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".about.view.AboutActivity"
             android:label="关于"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
