@@ -61,10 +61,6 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
 
     private static final int REQUEST_PERMISSION = 0;
     private static final int REQUEST_SELECT_IMAGE = 1;
-    private static final String DELETE_DIALOG_TITLE = "删除图片";
-    private static final String DELETE_DIALOG_MESSAGE = "图片将从设备删除";
-    private static final String DELETE_DIALOG_POSITIVE_BUTTON = "确定";
-    private static final String DELETE_DIALOG_NEGATIVE_BUTTON = "取消";
 
     private int mSortType;
     private boolean mIsAscending;
@@ -275,16 +271,16 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     @Override
     public void onLongPress(int position) {
         new AlertDialog.Builder(this)
-                .setTitle(DELETE_DIALOG_TITLE)
-                .setMessage(DELETE_DIALOG_MESSAGE)
-                .setPositiveButton(DELETE_DIALOG_POSITIVE_BUTTON, (dialog, which) -> {
+                .setTitle("删除图片")
+                .setMessage("图片将从设备删除")
+                .setPositiveButton("确定", (dialog, which) -> {
                     String path = mImageList.get(position).getPath();
                     mImageList.remove(position);
                     mAdapter.notifyItemRemoved(position);
                     mAdapter.notifyItemRangeChanged(0, mImageList.size() - 1);
                     mPresenter.deleteImage(path);
                 })
-                .setNegativeButton(DELETE_DIALOG_NEGATIVE_BUTTON, (dialog, which) -> {
+                .setNegativeButton("取消", (dialog, which) -> {
                 }).show();
     }
 
@@ -389,7 +385,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mRecyclerView.addItemDecoration(new YItemDecoration());
-        mAdapter = new MainAdapter<Image>(mImageList, this);
+        mAdapter = new MainAdapter<>(mImageList, this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

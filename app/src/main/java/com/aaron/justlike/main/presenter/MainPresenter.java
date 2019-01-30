@@ -63,9 +63,8 @@ public class MainPresenter implements IMainPresenter<Image> {
                         return;
                     }
                 }
-                imageList.clear();
-                imageList.addAll(sortImageList(list, mSortType, mAscendingOrder));
-                mView.onShowImage(imageList, mSortType, mAscendingOrder);
+                sortImageList(list, mSortType, mAscendingOrder);
+                mView.onShowImage(list, mSortType, mAscendingOrder);
             }
 
             @Override
@@ -98,10 +97,8 @@ public class MainPresenter implements IMainPresenter<Image> {
 
     /**
      * 对 List 进行排序，根据传入参数决定排序类型
-     *
-     * @return 将排序后的 List 返回
      */
-    private List<Image> sortImageList(List<Image> imageList, int sortType, boolean ascendingOrder) {
+    private void sortImageList(List<Image> imageList, int sortType, boolean ascendingOrder) {
         switch (sortType) {
             case SORT_BY_DATE:
                 FileUtils.sortByDate(imageList, ascendingOrder);
@@ -113,6 +110,5 @@ public class MainPresenter implements IMainPresenter<Image> {
                 FileUtils.sortBySize(imageList, ascendingOrder);
                 break;
         }
-        return imageList;
     }
 }
