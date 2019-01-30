@@ -27,7 +27,7 @@ import com.aaron.justlike.main.entity.DeleteEvent;
 import com.aaron.justlike.main.entity.PreviewEvent;
 import com.aaron.justlike.main.presenter.IMainPresenter;
 import com.aaron.justlike.main.presenter.MainPresenter;
-import com.aaron.justlike.online.view.Online2Activity;
+import com.aaron.justlike.online.view.OnlineActivity;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
                 mParentLayout.closeDrawers();
                 break;
             case R.id.nav_online_wallpaper:
-                startActivityByNav(Online2Activity.class);
+                startActivityByNav(OnlineActivity.class);
                 break;
             case R.id.nav_collection:
                 startActivityByNav(CollectionActivity.class);

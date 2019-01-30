@@ -32,13 +32,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.OnlineActivity"
-            android:label="Online"
-            android:theme="@style/AppTheme.OnlineActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".online.view.Online2Activity"
+            android:name=".online.view.OnlineActivity"
             android:label="Online"
             android:theme="@style/AppTheme.OnlineActivity"
             android:screenOrientation="portrait" />

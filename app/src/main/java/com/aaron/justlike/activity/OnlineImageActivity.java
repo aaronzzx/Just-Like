@@ -235,6 +235,7 @@ public class OnlineImageActivity extends AppCompatActivity implements View.OnCli
     }
 
     private RequestListener mListener = new RequestListener() {
+
         @Override
         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
             mProgressBar.setVisibility(View.GONE);

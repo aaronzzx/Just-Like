@@ -1,6 +1,6 @@
 package com.aaron.justlike.online.OnlineAdapter;
 
-import android.content.Intent;
+import android.content.Context;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
@@ -11,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.activity.OnlineImageActivity;
-import com.aaron.justlike.online.view.Online2Activity;
 import com.aaron.justlike.util.AnimationUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -33,25 +31,13 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private static final int TYPE_NORMAL = 0;
     private static final int TYPE_FOOTER = 1;
-    private boolean mBanClick = false;
-    private LayoutInflater mLayoutInflater;
+    private Context mContext;
     private List<Photo> mPhotoList;
-    private Online2Activity mActivity;
-    private int[] placeHolders = {R.drawable.place_holder_1,
-            R.drawable.place_holder_2, R.drawable.place_holder_3,
-            R.drawable.place_holder_4, R.drawable.place_holder_5,
-            R.drawable.place_holder_6, R.drawable.place_holder_7,
-            R.drawable.place_holder_8, R.drawable.place_holder_9,
-            R.drawable.place_holder_10};
+    private Callback<Photo> mCallback;
 
-    public void setBanClick(boolean flag) {
-        mBanClick = flag;
-    }
-
-    public OnlineAdapter(Online2Activity activity, List<Photo> photoList) {
-        mActivity = activity;
+    public OnlineAdapter(List<Photo> photoList, Callback<Photo> callback) {
         mPhotoList = photoList;
-        mLayoutInflater = LayoutInflater.from(activity);
+        mCallback = callback;
     }
 
     public boolean isFooterView(int position) {
@@ -70,22 +56,17 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        mContext = parent.getContext();
+        LayoutInflater layoutInflater = LayoutInflater.from(mContext);
         if (viewType == TYPE_FOOTER) {
-            return new FooterViewHolder(mLayoutInflater.inflate(R.layout.activity_online_footer, parent, false));
+            return new FooterViewHolder(layoutInflater.inflate(R.layout.activity_online_footer, parent, false));
         } else if (viewType == TYPE_NORMAL) {
-            View view = mLayoutInflater.inflate(R.layout.activity_online_recycler_item, parent, false);
+            View view = layoutInflater.inflate(R.layout.activity_online_recycler_item, parent, false);
             // 为子项设置点击监听
             final ViewHolder holder = new ViewHolder(view);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!mBanClick) {
-                        int position = holder.getAdapterPosition();
-                        Intent intent = new Intent(mActivity, OnlineImageActivity.class);
-                        intent.putExtra("photo", mPhotoList.get(position));
-                        mActivity.startActivity(intent);
-                    }
-                }
+            holder.itemView.setOnClickListener(v -> {
+                int position = holder.getAdapterPosition();
+                mCallback.onPress(mPhotoList.get(position));
             });
             return holder;
         }
@@ -107,13 +88,13 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             RequestOptions options1 = new RequestOptions()
                     .priority(Priority.HIGH);
 
-            Glide.with(mActivity)
+            Glide.with(mContext)
                     .load(authorImage)
                     .apply(options)
                     .into(((ViewHolder) holder).authorImage);
             ((ViewHolder) holder).authorName.setText(authorName);
 
-            Glide.with(mActivity)
+            Glide.with(mContext)
                     .load(urls)
                     .apply(options1)
                     .listener(new RequestListener<Drawable>() {
@@ -133,7 +114,8 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         }
                     })
                     .into(((ViewHolder) holder).fakeView);
-            Glide.with(mActivity)
+
+            Glide.with(mContext)
                     .load(urls)
                     .listener(new RequestListener<Drawable>() {
                         @Override
@@ -149,8 +131,6 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         }
                     })
                     .into(((ViewHolder) holder).imageView);
-        } else if (holder instanceof FooterViewHolder) {
-
         }
     }
 
@@ -166,16 +146,14 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    private static class ViewHolder extends RecyclerView.ViewHolder {
+
         View itemView;
         ImageView imageView;
         ImageView fakeView;
         ImageView authorImage;
         TextView authorName;
 
-        /**
-         * @param view 子项布局的最外层布局，即父布局。
-         */
         ViewHolder(View view) {
             super(view);
             itemView = view;
@@ -184,5 +162,10 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             authorImage = view.findViewById(R.id.author_image);
             authorName = view.findViewById(R.id.author_name);
         }
+    }
+
+    public interface Callback<T> {
+
+        void onPress(T t);
     }
 }

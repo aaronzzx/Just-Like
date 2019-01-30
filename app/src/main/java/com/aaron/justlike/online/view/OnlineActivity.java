@@ -1,5 +1,6 @@
 package com.aaron.justlike.online.view;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -7,14 +8,17 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.activity.OnlineImageActivity;
 import com.aaron.justlike.extend.MyGridLayoutManager;
 import com.aaron.justlike.online.OnlineAdapter.OnlineAdapter;
+import com.aaron.justlike.online.entity.PhotoEvent;
 import com.aaron.justlike.online.presenter.IOnlinePresenter;
 import com.aaron.justlike.online.presenter.OnlinePresenter;
 import com.aaron.justlike.util.SystemUtils;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.kc.unsplash.models.Photo;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +31,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class Online2Activity extends AppCompatActivity implements IOnlineView<Photo>,
-        View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class OnlineActivity extends AppCompatActivity implements IOnlineView<Photo>,
+        View.OnClickListener, SwipeRefreshLayout.OnRefreshListener,
+        OnlineAdapter.Callback<Photo> {
 
     private IOnlinePresenter mPresenter;
 
-    private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
     private SwipeRefreshLayout mSwipeRefresh;
     private RecyclerView mRecyclerView;
@@ -47,6 +51,7 @@ public class Online2Activity extends AppCompatActivity implements IOnlineView<Ph
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online);
+        EventBus.getDefault().register(this);
         initView();
         attachPresenter();
         mPresenter.requestImage(false);
@@ -55,6 +60,7 @@ public class Online2Activity extends AppCompatActivity implements IOnlineView<Ph
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         mPresenter.detachView();
     }
 
@@ -82,6 +88,16 @@ public class Online2Activity extends AppCompatActivity implements IOnlineView<Ph
         mPresenter.requestImage(true);
     }
 
+    /**
+     * OnlineAdapter 回调
+     */
+    @Override
+    public void onPress(Photo photo) {
+        EventBus.getDefault().postSticky(new PhotoEvent(photo));
+        Intent intent = new Intent(this, OnlineImageActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void attachPresenter() {
         mPresenter = new OnlinePresenter(this);
@@ -102,18 +118,16 @@ public class Online2Activity extends AppCompatActivity implements IOnlineView<Ph
 
     @Override
     public void onShowMessage(int mode, String args) {
-        Snackbar.make(mToolbar, args, Snackbar.LENGTH_SHORT)
-                .setAction("刷新", v -> {
-                    switch (mode) {
-                        case OnlinePresenter.REQUEST_IMAGE:
-                            mPresenter.requestImage(true);
-                            break;
-                        case OnlinePresenter.LOAD_MORE:
-                            mPresenter.requestLoadMore();
-                            break;
-                    }
-                })
-                .show();
+        Snackbar.make(mToolbar, args, Snackbar.LENGTH_SHORT).setAction("刷新", v -> {
+            switch (mode) {
+                case OnlinePresenter.REQUEST_IMAGE:
+                    mPresenter.requestImage(true);
+                    break;
+                case OnlinePresenter.LOAD_MORE:
+                    mPresenter.requestLoadMore();
+                    break;
+            }
+        }).show();
     }
 
     @Override
@@ -137,7 +151,6 @@ public class Online2Activity extends AppCompatActivity implements IOnlineView<Ph
     }
 
     private void initView() {
-        mAppBarLayout = findViewById(R.id.appbar_layout);
         mToolbar = findViewById(R.id.activity_online_toolbar);
         mSwipeRefresh = findViewById(R.id.swipe_refresh_home_activity_main);
         mRecyclerView = findViewById(R.id.rv_home_activity_main);
@@ -165,7 +178,7 @@ public class Online2Activity extends AppCompatActivity implements IOnlineView<Ph
         mLayoutManager = new MyGridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());
-        mAdapter = new OnlineAdapter(this, mPhotoList);
+        mAdapter = new OnlineAdapter(mPhotoList, this);
         mRecyclerView.setAdapter(mAdapter);
         mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -201,9 +214,9 @@ public class Online2Activity extends AppCompatActivity implements IOnlineView<Ph
         @Override
         public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) % 2 == 0) {
-                outRect.right = SystemUtils.dp2px(Online2Activity.this, 4.0F);
+                outRect.right = SystemUtils.dp2px(OnlineActivity.this, 4.0F);
             } else if (parent.getChildAdapterPosition(view) % 2 == 1) {
-                outRect.left = SystemUtils.dp2px(Online2Activity.this, 4.0F);
+                outRect.left = SystemUtils.dp2px(OnlineActivity.this, 4.0F);
             }
         }
     }
