@@ -5,6 +5,8 @@ import com.aaron.justlike.app.collection.model.CollectionModel;
 import com.aaron.justlike.app.collection.model.ICollectionModel;
 import com.aaron.justlike.app.collection.view.ICollectionView;
 
+import java.util.Collections;
+
 public class CollectionPresenter implements ICollectionPresenter {
 
     private ICollectionView mView;
@@ -26,6 +28,7 @@ public class CollectionPresenter implements ICollectionPresenter {
     public void requestCollection() {
         mModel.queryCollection(list -> {
             if (list != null) {
+                Collections.sort(list, (o1, o2) -> (int) (o2.getCreateAt() - o1.getCreateAt()));
                 mView.onShowImage(list);
             }
         });

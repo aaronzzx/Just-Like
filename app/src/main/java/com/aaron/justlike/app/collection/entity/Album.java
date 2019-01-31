@@ -5,6 +5,15 @@ public class Album {
     private String mCollectionTitle;
     private String mElementTotal;
     private String mImagePath;
+    private long mCreateAt;
+
+    public long getCreateAt() {
+        return mCreateAt;
+    }
+
+    public void setCreateAt(long createAt) {
+        mCreateAt = createAt;
+    }
 
     public String getCollectionTitle() {
         return mCollectionTitle;

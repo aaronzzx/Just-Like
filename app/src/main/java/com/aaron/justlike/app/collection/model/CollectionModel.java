@@ -25,9 +25,11 @@ public class CollectionModel implements ICollectionModel<Album> {
             String title = info.getTitle();
             String total = String.valueOf(info.getTotal());
             String path = info.getPath();
+            long createAt = info.getCreateAt();
             album.setCollectionTitle(title);
             album.setElementTotal(total);
             album.setImagePath(path);
+            album.setCreateAt(createAt);
             albumList.add(album);
         }
         callback.onResponse(albumList);

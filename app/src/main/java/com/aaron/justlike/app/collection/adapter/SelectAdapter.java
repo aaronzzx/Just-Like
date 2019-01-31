@@ -22,7 +22,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CollectionAddAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<Image> mImages; // App 中所有图片的集合
@@ -30,7 +30,7 @@ public class CollectionAddAdapter extends RecyclerView.Adapter<RecyclerView.View
     private ISetToolbar mListener; // 回调 Activity
     private SparseBooleanArray mCheckStates = new SparseBooleanArray(); // 解决 View 复用混乱
 
-    public CollectionAddAdapter(List<Image> images, ISetToolbar listener) {
+    public SelectAdapter(List<Image> images, ISetToolbar listener) {
         mImages = images;
         mListener = listener;
     }

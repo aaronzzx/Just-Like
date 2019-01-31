@@ -8,6 +8,15 @@ public class Collection extends LitePalSupport {
     private String title;
     private int total;
     private String path;
+    private long createAt;
+
+    public long getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(long createAt) {
+        this.createAt = createAt;
+    }
 
     public String getPath() {
         return path;

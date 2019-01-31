@@ -12,11 +12,17 @@ import android.widget.EditText;
 import com.aaron.justlike.R;
 import com.aaron.justlike.app.collection.adapter.CollectionAdapter;
 import com.aaron.justlike.app.collection.entity.Album;
+import com.aaron.justlike.app.collection.entity.Collection;
+import com.aaron.justlike.app.collection.entity.SelectEvent;
 import com.aaron.justlike.app.collection.presenter.CollectionPresenter;
 import com.aaron.justlike.app.collection.presenter.ICollectionPresenter;
 import com.aaron.justlike.custom.MyGridLayoutManager;
 import com.aaron.justlike.util.SystemUtils;
 import com.jaeger.library.StatusBarUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +47,7 @@ public class CollectionActivity extends AppCompatActivity implements ICollection
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collection);
+        EventBus.getDefault().register(this);
         initView();
         mPresenter = new CollectionPresenter();
         mPresenter.attachView(this);
@@ -50,6 +57,7 @@ public class CollectionActivity extends AppCompatActivity implements ICollection
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         mPresenter.detachView();
     }
 
@@ -74,7 +82,7 @@ public class CollectionActivity extends AppCompatActivity implements ICollection
                         .setPositiveButton("确定", (dialog, which) -> {
                             // 打开图片选择器让用户选择图片添加到集合
                             String collectionName = editText.getText().toString();
-                            Intent intent = new Intent(this, CollectionAddActivity.class);
+                            Intent intent = new Intent(this, SelectActivity.class);
                             intent.putExtra("collectionName", collectionName);
                             startActivity(intent);
                         })
@@ -84,6 +92,20 @@ public class CollectionActivity extends AppCompatActivity implements ICollection
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Subscribe(threadMode = ThreadMode.POSTING, sticky = true)
+    public void onSelectEvent(SelectEvent event) {
+        Collection collection = event.getCollection();
+        Album album = new Album();
+        album.setCollectionTitle(collection.getTitle());
+        album.setElementTotal(String.valueOf(collection.getTotal()));
+        album.setImagePath(collection.getPath());
+        album.setCreateAt(collection.getCreateAt());
+        mCollections.add(0, album);
+        mAdapter.notifyItemRangeInserted(0, 1);
+        mAdapter.notifyItemRangeChanged(1, mCollections.size() - 1);
+        mRecyclerView.scrollToPosition(0);
     }
 
     @Override
