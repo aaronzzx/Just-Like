@@ -136,6 +136,32 @@ public class AnimationUtil {
         }
     }
 
+    public static void showBottomBar(View view, long startOffset) {
+        AnimationSet as = new AnimationSet(true);
+        as.setFillAfter(true);
+        as.setDuration(250);
+        as.setStartOffset(startOffset);
+        AlphaAnimation aa = new AlphaAnimation(0, 1);
+        TranslateAnimation ta = new TranslateAnimation(0, 0, 200, 0);
+        as.addAnimation(aa);
+        as.addAnimation(ta);
+        view.startAnimation(as);
+        view.setVisibility(View.VISIBLE);
+    }
+
+    public static void hideBottomBar(View view, long startOffset) {
+        AnimationSet as = new AnimationSet(true);
+        as.setFillAfter(true);
+        as.setDuration(250);
+        as.setStartOffset(startOffset);
+        AlphaAnimation aa = new AlphaAnimation(1, 0);
+        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, 200);
+        as.addAnimation(aa);
+        as.addAnimation(ta);
+        view.startAnimation(as);
+        view.setVisibility(View.GONE);
+    }
+
     public static Bitmap handleImageEffect(Bitmap bm, float saturation) {
         Bitmap bmp = Bitmap.createBitmap(bm.getWidth(), bm.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bmp);

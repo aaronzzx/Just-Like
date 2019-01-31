@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.activity.OnlineImageActivity;
 import com.aaron.justlike.download.adapter.DownloadManagerAdapter;
 import com.aaron.justlike.download.presenter.BasePresenter;
 import com.aaron.justlike.download.presenter.IPresenter;

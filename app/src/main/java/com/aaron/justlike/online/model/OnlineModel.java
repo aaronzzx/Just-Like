@@ -6,7 +6,7 @@ import com.kc.unsplash.models.Photo;
 
 import java.util.List;
 
-public class BaseModel implements IModel<Photo> {
+public class OnlineModel implements IModel<Photo> {
 
     private static final String CLIENT_ID = "18db24a3d59a1b2633897fa63f3f49455c2cbfa8a22e5b8520141cb2660fa816";
     private Unsplash mUnsplash = new Unsplash(CLIENT_ID);

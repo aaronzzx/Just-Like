@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.activity.OnlineImageActivity;
 import com.aaron.justlike.extend.MyGridLayoutManager;
 import com.aaron.justlike.online.OnlineAdapter.OnlineAdapter;
 import com.aaron.justlike.online.entity.PhotoEvent;
@@ -51,7 +50,6 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online);
-        EventBus.getDefault().register(this);
         initView();
         attachPresenter();
         mPresenter.requestImage(false);
@@ -60,7 +58,6 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
         mPresenter.detachView();
     }
 
@@ -94,8 +91,7 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
     @Override
     public void onPress(Photo photo) {
         EventBus.getDefault().postSticky(new PhotoEvent(photo));
-        Intent intent = new Intent(this, OnlineImageActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(this, PreviewActivity.class));
     }
 
     @Override

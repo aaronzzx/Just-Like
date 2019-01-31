@@ -38,7 +38,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.OnlineImageActivity"
+            android:name=".online.view.PreviewActivity"
             android:label=""
             android:theme="@style/AppTheme.OnlineActivity"
             android:screenOrientation="portrait" />

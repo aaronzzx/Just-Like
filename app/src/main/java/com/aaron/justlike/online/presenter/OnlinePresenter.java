@@ -1,7 +1,7 @@
 package com.aaron.justlike.online.presenter;
 
-import com.aaron.justlike.online.model.BaseModel;
 import com.aaron.justlike.online.model.IModel;
+import com.aaron.justlike.online.model.OnlineModel;
 import com.aaron.justlike.online.view.IOnlineView;
 import com.kc.unsplash.models.Photo;
 
@@ -17,7 +17,7 @@ public class OnlinePresenter implements IOnlinePresenter {
 
     public OnlinePresenter(IOnlineView<Photo> view) {
         mView = view;
-        mModel = new BaseModel();
+        mModel = new OnlineModel();
     }
 
     @Override
