@@ -6,9 +6,9 @@
     <version value="1" />
 
     <list>
-        <mapping class="com.aaron.justlike.entity.Collection" />
-        <mapping class="com.aaron.justlike.entity.CollectionInfo" />
-        <mapping class="com.aaron.justlike.main.entity.SortInfo" />
+        <mapping class="com.aaron.justlike.app.collection.entity.Element" />
+        <mapping class="com.aaron.justlike.app.collection.entity.Collection" />
+        <mapping class="com.aaron.justlike.app.main.entity.SortInfo" />
     </list>
 
 </litepal>
