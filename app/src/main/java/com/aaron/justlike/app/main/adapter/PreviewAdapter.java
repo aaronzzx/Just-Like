@@ -3,6 +3,7 @@ package com.aaron.justlike.app.main.adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.aaron.justlike.app.main.entity.Image;
 import com.bm.library.PhotoView;
@@ -45,6 +46,7 @@ public class PreviewAdapter<T> extends PagerAdapter {
         String path = ((Image) mList.get(position)).getPath();
         // 设置 PhotoView
         PhotoView photoView = new PhotoView(context);
+        photoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         photoView.enable();
         photoView.setMaxScale(2.5F);
         ViewGroup parent = (ViewGroup) photoView.getParent();

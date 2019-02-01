@@ -14,12 +14,12 @@ import android.widget.Toast;
 import com.aaron.justlike.R;
 import com.aaron.justlike.app.collection.adapter.SelectAdapter;
 import com.aaron.justlike.app.collection.entity.Collection;
-import com.aaron.justlike.app.collection.entity.ISetToolbar;
 import com.aaron.justlike.app.collection.entity.SelectEvent;
 import com.aaron.justlike.app.main.entity.Image;
 import com.aaron.justlike.custom.MyGridLayoutManager;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
+import com.jaeger.library.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.litepal.LitePal;
@@ -32,7 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class SelectActivity extends AppCompatActivity {
+public class SelectActivity extends AppCompatActivity implements SelectAdapter.Callback {
 
     private static final String TITLE = "已选择";
     private static final String LOAD_PATH = Environment
@@ -47,13 +47,6 @@ public class SelectActivity extends AppCompatActivity {
     private SelectAdapter mAddAdapter;
     private List<Image> mImages = new ArrayList<>();
     private List<String> mPathList;
-    private ISetToolbar mListener = new ISetToolbar() {
-        @Override
-        public void onSetToolbar(List<String> paths) {
-            mPathList = paths;
-            mToolbar.setTitle(TITLE + "(" + paths.size() + ")");
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +93,7 @@ public class SelectActivity extends AppCompatActivity {
                         values.clear();
                     }
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(600);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -110,6 +103,12 @@ public class SelectActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSetToolbar(List<String> paths) {
+        mPathList = paths;
+        mToolbar.setTitle(TITLE + "(" + paths.size() + ")");
     }
 
     private void initView() {
@@ -124,6 +123,7 @@ public class SelectActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary), 70);
 
         // 连接适配器
         FileUtils.getLocalFiles(mImages, LOAD_PATH, TYPE);
@@ -132,7 +132,7 @@ public class SelectActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mRecyclerView.addItemDecoration(new YItemDecoration());
-        mAddAdapter = new SelectAdapter(mImages, mListener);
+        mAddAdapter = new SelectAdapter(mImages, this);
         mRecyclerView.setAdapter(mAddAdapter);
     }
 

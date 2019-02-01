@@ -103,9 +103,9 @@ public class CollectionActivity extends AppCompatActivity implements ICollection
         album.setImagePath(collection.getPath());
         album.setCreateAt(collection.getCreateAt());
         mCollections.add(0, album);
-        mAdapter.notifyItemRangeInserted(0, 1);
-        mAdapter.notifyItemRangeChanged(1, mCollections.size() - 1);
-        mRecyclerView.scrollToPosition(0);
+//        mAdapter.notifyItemRangeInserted(0, 1);
+        mAdapter.notifyItemRangeChanged(0, mCollections.size());
+//        mRecyclerView.scrollToPosition(0);
     }
 
     @Override

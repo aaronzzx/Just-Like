@@ -84,7 +84,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_fab_date" />
+                android:src="@drawable/ic_date" />
 
             <TextView
                 android:id="@+id/image_downloads"

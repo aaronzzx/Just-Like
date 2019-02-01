@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <size
-        android:width="20dp"
-        android:height="20dp" />
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/colorPrimary" />
+        </shape>
+    </item>
 
-    <solid android:color="@color/colorPrimary" />
+    <item
+        android:drawable="@drawable/ic_check_white_18dp"
+        android:gravity="center" />
 
-    <stroke
-        android:width="2dp"
-        android:color="#fff" />
-
-</shape>
+</layer-list>

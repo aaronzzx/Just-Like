@@ -31,6 +31,9 @@ public class OnlinePresenter implements IOnlinePresenter {
         mModel.findImage(refreshMode, new IModel.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
+                if (mView == null) {
+                    return;
+                }
                 mView.onHideProgress();
                 mView.onHideRefresh();
                 mView.onShowImage(list);
@@ -38,6 +41,9 @@ public class OnlinePresenter implements IOnlinePresenter {
 
             @Override
             public void onFailure() {
+                if (mView == null) {
+                    return;
+                }
                 mView.onHideProgress();
                 mView.onHideRefresh();
                 mView.onShowMessage(REQUEST_IMAGE, "加载失败");
@@ -51,12 +57,18 @@ public class OnlinePresenter implements IOnlinePresenter {
         mModel.findImage(false, new IModel.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
+                if (mView == null) {
+                    return;
+                }
                 mView.onHideLoading();
                 mView.onShowMore(list);
             }
 
             @Override
             public void onFailure() {
+                if (mView == null) {
+                    return;
+                }
                 mView.onHideLoading();
                 mView.onShowMessage(LOAD_MORE, "加载失败");
             }

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.app.collection.entity.ISetToolbar;
 import com.aaron.justlike.app.main.entity.Image;
 import com.aaron.justlike.custom.SquareView;
 import com.aaron.justlike.util.AnimationUtil;
@@ -27,10 +26,10 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private Context mContext;
     private List<Image> mImages; // App 中所有图片的集合
     private List<String> mOnPaths = new LinkedList<>(); // 用户选择的图片的集合，回调 Activity
-    private ISetToolbar mListener; // 回调 Activity
+    private Callback mListener; // 回调 Activity
     private SparseBooleanArray mCheckStates = new SparseBooleanArray(); // 解决 View 复用混乱
 
-    public SelectAdapter(List<Image> images, ISetToolbar listener) {
+    public SelectAdapter(List<Image> images, Callback listener) {
         mImages = images;
         mListener = listener;
     }
@@ -119,5 +118,10 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             squareView = itemView.findViewById(R.id.square_view);
             checkBox = itemView.findViewById(R.id.checkbox);
         }
+    }
+
+    public interface Callback {
+
+        void onSetToolbar(List<String> paths);
     }
 }
