@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.app.about.view.AboutActivity;
-import com.aaron.justlike.app.collection.view.CollectionActivity;
 import com.aaron.justlike.app.download.view.DownloadManagerActivity;
 import com.aaron.justlike.app.main.adapter.MainAdapter;
 import com.aaron.justlike.app.main.entity.DeleteEvent;
@@ -213,9 +212,9 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
             case R.id.nav_online_wallpaper:
                 startActivityByNav(OnlineActivity.class);
                 break;
-            case R.id.nav_collection:
-                startActivityByNav(CollectionActivity.class);
-                break;
+//            case R.id.nav_collection:
+//                startActivityByNav(CollectionActivity.class);
+//                break;
             case R.id.nav_download_manager:
                 startActivityByNav(DownloadManagerActivity.class);
                 break;
