@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        // 解注册
         EventBus.getDefault().unregister(this);
         mPresenter.detachView(); // 断开 Presenter
     }
