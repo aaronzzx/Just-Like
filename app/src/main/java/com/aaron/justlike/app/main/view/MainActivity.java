@@ -122,6 +122,9 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         }
     }
 
+    /**
+     * 创建选项菜单
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
