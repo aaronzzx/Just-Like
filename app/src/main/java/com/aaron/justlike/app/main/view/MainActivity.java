@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         EventBus.getDefault().register(this);
         attachPresenter();
         initView();
-        mPresenter.requestImage(mImageList, false);
+        mPresenter.requestImage(mImageList, false); // 请求图片
         selectHideToolbar(); // 元素少于 16 个时禁止 Toolbar 隐藏
     }
 
