@@ -99,6 +99,9 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         mPresenter.detachView(); // 断开 Presenter
     }
 
+    /**
+     * 返回键
+     */
     @Override
     public void onBackPressed() {
         if (mParentLayout.isDrawerOpen(GravityCompat.START)) {
