@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     @Override
     public void onBackPressed() {
         if (mParentLayout.isDrawerOpen(GravityCompat.START)) {
+            // 关闭侧滑菜单
             mParentLayout.closeDrawer(GravityCompat.START);
             return;
         }
