@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         setTheme(R.style.AppTheme); // 由于设置了启动页，需要在这里将主题改回来
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        requestPermission();
+        requestPermission(); // 请求权限
         EventBus.getDefault().register(this);
         attachPresenter();
         initView();
