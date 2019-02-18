@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         requestPermission(); // 请求权限
-        EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this); // 注册 EventBus
         attachPresenter();
         initView();
         mPresenter.requestImage(mImageList, false); // 请求图片
