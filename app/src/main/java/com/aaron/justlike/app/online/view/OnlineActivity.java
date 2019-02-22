@@ -13,9 +13,9 @@ import com.aaron.justlike.app.online.entity.PhotoEvent;
 import com.aaron.justlike.app.online.presenter.IOnlinePresenter;
 import com.aaron.justlike.app.online.presenter.OnlinePresenter;
 import com.aaron.justlike.custom.MyGridLayoutManager;
+import com.aaron.justlike.http.entity.Photo;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.snackbar.Snackbar;
-import com.kc.unsplash.models.Photo;
 
 import org.greenrobot.eventbus.EventBus;
 

@@ -1,9 +1,10 @@
 package com.aaron.justlike.app.download.model;
 
 import com.aaron.justlike.app.main.entity.Image;
+import com.aaron.justlike.http.PhotoCallback;
+import com.aaron.justlike.http.Unsplash;
+import com.aaron.justlike.http.entity.Photo;
 import com.aaron.justlike.util.FileUtils;
-import com.kc.unsplash.Unsplash;
-import com.kc.unsplash.models.Photo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +12,11 @@ import java.util.List;
 public class BaseModel implements IModel<Image> {
 
     private static final String PATH = "/storage/emulated/0/Pictures/JustLike/online";
-    private static final String CLIENT_ID = "18db24a3d59a1b2633897fa63f3f49455c2cbfa8a22" +
-            "e5b8520141cb2660fa816";
-    private static final Unsplash UNSPLASH = new Unsplash(CLIENT_ID);
+    private Unsplash mUnsplash;
+
+    public BaseModel() {
+        mUnsplash = Unsplash.getInstance();
+    }
 
     @Override
     public void queryImage(QueryCallback<Image> callback) {
@@ -24,14 +27,14 @@ public class BaseModel implements IModel<Image> {
 
     @Override
     public void searchImage(String imageId, SearchCallback callback) {
-        UNSPLASH.getPhoto(imageId, new Unsplash.OnPhotoLoadedListener() {
+        mUnsplash.getPhoto(imageId, new PhotoCallback() {
             @Override
-            public void onComplete(Photo photo) {
+            public void onSuccess(Photo photo) {
                 callback.onSuccess(photo);
             }
 
             @Override
-            public void onError(String error) {
+            public void onFailure(String error) {
                 callback.onFailure();
             }
         });

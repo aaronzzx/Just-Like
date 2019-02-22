@@ -1,7 +1,7 @@
 package com.aaron.justlike.app.online.presenter;
 
 import com.aaron.justlike.app.online.view.IPreviewView;
-import com.kc.unsplash.models.Photo;
+import com.aaron.justlike.http.entity.Photo;
 
 public interface IPreviewPresenter {
 

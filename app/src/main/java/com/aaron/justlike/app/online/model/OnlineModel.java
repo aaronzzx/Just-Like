@@ -1,31 +1,35 @@
 package com.aaron.justlike.app.online.model;
 
-import com.kc.unsplash.Unsplash;
-import com.kc.unsplash.api.Order;
-import com.kc.unsplash.models.Photo;
+import com.aaron.justlike.http.Order;
+import com.aaron.justlike.http.PhotosCallback;
+import com.aaron.justlike.http.Unsplash;
+import com.aaron.justlike.http.entity.Photo;
 
 import java.util.List;
 
 public class OnlineModel implements IModel<Photo> {
 
-    private static final String CLIENT_ID = "18db24a3d59a1b2633897fa63f3f49455c2cbfa8a22e5b8520141cb2660fa816";
-    private Unsplash mUnsplash = new Unsplash(CLIENT_ID);
+    private Unsplash mUnsplash;
 
     private int mPage = 1;
+
+    public OnlineModel() {
+        mUnsplash = Unsplash.getInstance();
+    }
 
     @Override
     public void findImage(boolean refreshMode, Callback<Photo> callback) {
         if (refreshMode) {
             mPage = 1;
         }
-        mUnsplash.getPhotos(mPage, 30, Order.LATEST, new Unsplash.OnPhotosLoadedListener() {
+        mUnsplash.getPhotos(mPage, 30, Order.LATEST, new PhotosCallback() {
             @Override
-            public void onComplete(List<Photo> photos) {
+            public void onSuccess(List<Photo> photos) {
                 callback.onSuccess(photos);
             }
 
             @Override
-            public void onError(String error) {
+            public void onFailure(String error) {
                 callback.onFailure();
             }
         });

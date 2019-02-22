@@ -1,6 +1,6 @@
 package com.aaron.justlike.app.download.model;
 
-import com.kc.unsplash.models.Photo;
+import com.aaron.justlike.http.entity.Photo;
 
 import java.util.List;
 

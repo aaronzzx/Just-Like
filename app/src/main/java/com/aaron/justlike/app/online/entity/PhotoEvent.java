@@ -1,6 +1,6 @@
 package com.aaron.justlike.app.online.entity;
 
-import com.kc.unsplash.models.Photo;
+import com.aaron.justlike.http.entity.Photo;
 
 public class PhotoEvent {
 
