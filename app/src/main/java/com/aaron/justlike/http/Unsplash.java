@@ -3,7 +3,6 @@ package com.aaron.justlike.http;
 import com.aaron.justlike.http.entity.Photo;
 import com.aaron.justlike.http.interfaces.PhotoCallback;
 import com.aaron.justlike.http.interfaces.PhotoService;
-import com.aaron.justlike.http.interfaces.PhotosCallback;
 
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class Unsplash {
         mPhotoService = retrofit.create(PhotoService.class);
     }
 
-    public void getPhotos(int page, int perPage, Order order, PhotosCallback callback) {
+    public void getPhotos(int page, int perPage, Order order, PhotoCallback<List<Photo>> callback) {
         mPhotoService.getPhotos(page, perPage, order.getOrder())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -51,7 +50,7 @@ public class Unsplash {
                 });
     }
 
-    public void getPhoto(String id, PhotoCallback callback) {
+    public void getPhoto(String id, PhotoCallback<Photo> callback) {
         mPhotoService.getPhoto(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

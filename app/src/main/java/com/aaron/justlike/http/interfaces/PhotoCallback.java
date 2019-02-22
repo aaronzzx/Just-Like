@@ -1,10 +1,8 @@
 package com.aaron.justlike.http.interfaces;
 
-import com.aaron.justlike.http.entity.Photo;
+public interface PhotoCallback<T> {
 
-public interface PhotoCallback {
-
-    void onSuccess(Photo photo);
+    void onSuccess(T t);
 
     void onFailure(String error);
 }

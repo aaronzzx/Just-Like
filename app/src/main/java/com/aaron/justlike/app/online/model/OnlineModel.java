@@ -3,7 +3,7 @@ package com.aaron.justlike.app.online.model;
 import com.aaron.justlike.http.Order;
 import com.aaron.justlike.http.Unsplash;
 import com.aaron.justlike.http.entity.Photo;
-import com.aaron.justlike.http.interfaces.PhotosCallback;
+import com.aaron.justlike.http.interfaces.PhotoCallback;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class OnlineModel implements IModel<Photo> {
         if (refreshMode) {
             mPage = 1;
         }
-        mUnsplash.getPhotos(mPage, 30, Order.LATEST, new PhotosCallback() {
+        mUnsplash.getPhotos(mPage, 30, Order.LATEST, new PhotoCallback<List<Photo>>() {
             @Override
             public void onSuccess(List<Photo> photos) {
                 callback.onSuccess(photos);

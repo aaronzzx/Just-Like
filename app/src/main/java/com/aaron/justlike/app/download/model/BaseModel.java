@@ -27,7 +27,7 @@ public class BaseModel implements IModel<Image> {
 
     @Override
     public void searchImage(String imageId, SearchCallback callback) {
-        mUnsplash.getPhoto(imageId, new PhotoCallback() {
+        mUnsplash.getPhoto(imageId, new PhotoCallback<Photo>() {
             @Override
             public void onSuccess(Photo photo) {
                 callback.onSuccess(photo);
