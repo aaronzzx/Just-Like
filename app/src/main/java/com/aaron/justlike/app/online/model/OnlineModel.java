@@ -1,9 +1,9 @@
 package com.aaron.justlike.app.online.model;
 
 import com.aaron.justlike.http.Order;
-import com.aaron.justlike.http.PhotosCallback;
 import com.aaron.justlike.http.Unsplash;
 import com.aaron.justlike.http.entity.Photo;
+import com.aaron.justlike.http.interfaces.PhotosCallback;
 
 import java.util.List;
 

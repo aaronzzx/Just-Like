@@ -1,4 +1,4 @@
-package com.aaron.justlike.http;
+package com.aaron.justlike.http.interfaces;
 
 import com.aaron.justlike.http.entity.Photo;
 

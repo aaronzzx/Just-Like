@@ -1,12 +1,13 @@
 package com.aaron.justlike.http;
 
 import com.aaron.justlike.http.entity.Photo;
+import com.aaron.justlike.http.interfaces.PhotoCallback;
+import com.aaron.justlike.http.interfaces.PhotoService;
+import com.aaron.justlike.http.interfaces.PhotosCallback;
 
 import java.util.List;
 
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -37,12 +38,7 @@ public class Unsplash {
         mPhotoService.getPhotos(page, perPage, order.getOrder())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Photo>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
+                .subscribe(new ObserverImpl<List<Photo>>() {
                     @Override
                     public void onNext(List<Photo> photos) {
                         callback.onSuccess(photos);
@@ -52,11 +48,6 @@ public class Unsplash {
                     public void onError(Throwable e) {
                         callback.onFailure(e.getMessage());
                     }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
                 });
     }
 
@@ -64,12 +55,7 @@ public class Unsplash {
         mPhotoService.getPhoto(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Photo>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
+                .subscribe(new ObserverImpl<Photo>() {
                     @Override
                     public void onNext(Photo photo) {
                         callback.onSuccess(photo);
@@ -78,11 +64,6 @@ public class Unsplash {
                     @Override
                     public void onError(Throwable e) {
                         callback.onFailure(e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-
                     }
                 });
     }

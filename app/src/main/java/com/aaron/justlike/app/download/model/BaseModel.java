@@ -1,9 +1,9 @@
 package com.aaron.justlike.app.download.model;
 
 import com.aaron.justlike.app.main.entity.Image;
-import com.aaron.justlike.http.PhotoCallback;
 import com.aaron.justlike.http.Unsplash;
 import com.aaron.justlike.http.entity.Photo;
+import com.aaron.justlike.http.interfaces.PhotoCallback;
 import com.aaron.justlike.util.FileUtils;
 
 import java.util.ArrayList;
