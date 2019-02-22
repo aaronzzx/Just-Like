@@ -54,7 +54,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class MainActivity extends AppcompatActivity implements IMainView<Image>, View.OnClickListener,
+public class MainActivity extends AppCompatActivity implements IMainView<Image>, View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener,
         MainAdapter.Callback<Image> {
 
