@@ -65,19 +65,39 @@ public class LibraryAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
                     mContext.startActivity(uCrop);
                     break;
                 case 6:
-                    Intent androidUnsplash = new Intent(Intent.ACTION_VIEW);
-                    androidUnsplash.setData(Uri.parse("https://github.com/KeenenCharles/AndroidUnplash"));
-                    mContext.startActivity(androidUnsplash);
-                    break;
-                case 7:
                     Intent fab = new Intent(Intent.ACTION_VIEW);
                     fab.setData(Uri.parse("https://github.com/Clans/FloatingActionButton"));
                     mContext.startActivity(fab);
                     break;
-                case 8:
+                case 7:
                     Intent eventBus = new Intent(Intent.ACTION_VIEW);
                     eventBus.setData(Uri.parse("https://github.com/greenrobot/EventBus"));
                     mContext.startActivity(eventBus);
+                    break;
+                case 8:
+                    Intent gson = new Intent(Intent.ACTION_VIEW);
+                    gson.setData(Uri.parse("https://github.com/google/gson"));
+                    mContext.startActivity(gson);
+                    break;
+                case 9:
+                    Intent okHttp = new Intent(Intent.ACTION_VIEW);
+                    okHttp.setData(Uri.parse("https://github.com/square/okhttp"));
+                    mContext.startActivity(okHttp);
+                    break;
+                case 10:
+                    Intent retrofit = new Intent(Intent.ACTION_VIEW);
+                    retrofit.setData(Uri.parse("https://github.com/square/retrofit"));
+                    mContext.startActivity(retrofit);
+                    break;
+                case 11:
+                    Intent rxJava = new Intent(Intent.ACTION_VIEW);
+                    rxJava.setData(Uri.parse("https://github.com/ReactiveX/RxJava"));
+                    mContext.startActivity(rxJava);
+                    break;
+                case 12:
+                    Intent rxAndroid = new Intent(Intent.ACTION_VIEW);
+                    rxAndroid.setData(Uri.parse("https://github.com/ReactiveX/RxAndroid"));
+                    mContext.startActivity(rxAndroid);
                     break;
             }
         });
