@@ -68,10 +68,10 @@ public class Unsplash {
     }
 
     public static Unsplash getInstance() {
-        return Singleton.instance;
+        return Holder.instance;
     }
 
-    private static class Singleton {
+    private static class Holder {
 
         private static final Unsplash instance = new Unsplash();
     }

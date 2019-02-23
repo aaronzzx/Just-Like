@@ -1,5 +1,7 @@
 package com.aaron.justlike.app.download.model;
 
+import android.util.Log;
+
 import com.aaron.justlike.app.main.entity.Image;
 import com.aaron.justlike.http.Unsplash;
 import com.aaron.justlike.http.entity.Photo;
@@ -11,11 +13,13 @@ import java.util.List;
 
 public class BaseModel implements IModel<Image> {
 
+    private static final String TAG = "BaseModel";
     private static final String PATH = "/storage/emulated/0/Pictures/JustLike/online";
     private Unsplash mUnsplash;
 
     public BaseModel() {
         mUnsplash = Unsplash.getInstance();
+        Log.d(TAG, "Unsplash: " + mUnsplash);
     }
 
     @Override

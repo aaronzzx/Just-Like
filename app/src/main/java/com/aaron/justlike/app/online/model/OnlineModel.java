@@ -1,5 +1,7 @@
 package com.aaron.justlike.app.online.model;
 
+import android.util.Log;
+
 import com.aaron.justlike.http.Order;
 import com.aaron.justlike.http.Unsplash;
 import com.aaron.justlike.http.entity.Photo;
@@ -9,12 +11,14 @@ import java.util.List;
 
 public class OnlineModel implements IModel<Photo> {
 
+    private static final String TAG = "OnlineModel";
     private Unsplash mUnsplash;
 
     private int mPage = 1;
 
     public OnlineModel() {
         mUnsplash = Unsplash.getInstance();
+        Log.d(TAG, "Unsplash: " + mUnsplash);
     }
 
     @Override
