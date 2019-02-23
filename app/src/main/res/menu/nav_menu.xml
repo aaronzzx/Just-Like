@@ -16,10 +16,10 @@
             android:title="在线壁纸"
             android:icon="@mipmap/ic_wallpaper_center"/>
 
-        <item
-            android:id="@+id/nav_collection"
-            android:icon="@mipmap/ic_collection"
-            android:title="集合" />
+        <!--<item-->
+        <!--android:id="@+id/nav_collection"-->
+        <!--android:icon="@mipmap/ic_collection"-->
+        <!--android:title="集合" />-->
 
         <item
             android:id="@+id/nav_download_manager"
