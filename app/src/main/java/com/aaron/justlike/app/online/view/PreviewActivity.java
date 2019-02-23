@@ -19,6 +19,7 @@ import com.aaron.justlike.R;
 import com.aaron.justlike.app.online.entity.PhotoEvent;
 import com.aaron.justlike.app.online.presenter.IPreviewPresenter;
 import com.aaron.justlike.app.online.presenter.PreviewPresenter;
+import com.aaron.justlike.http.entity.Photo;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
@@ -32,7 +33,6 @@ import com.bumptech.glide.request.target.Target;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.snackbar.Snackbar;
-import com.kc.unsplash.models.Photo;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

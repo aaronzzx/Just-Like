@@ -13,11 +13,11 @@ import com.aaron.justlike.app.download.presenter.IPresenter;
 import com.aaron.justlike.app.main.entity.Image;
 import com.aaron.justlike.app.online.entity.PhotoEvent;
 import com.aaron.justlike.app.online.view.PreviewActivity;
+import com.aaron.justlike.http.entity.Photo;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.snackbar.Snackbar;
 import com.jaeger.library.StatusBarUtil;
-import com.kc.unsplash.models.Photo;
 
 import org.greenrobot.eventbus.EventBus;
 

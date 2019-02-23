@@ -66,9 +66,13 @@ public class AboutPresenter implements IAboutPresenter {
                 "PhotoView",
                 "Matisse",
                 "uCrop",
-                "AndroidUnsplash(Unofficial)",
                 "FloatingActionButton",
-                "EventBus"};
+                "EventBus",
+                "Gson",
+                "OkHttp",
+                "Retrofit",
+                "RxJava",
+                "RxAndroid"};
 
         public static final String[] LIBRARY_AUTHOR = {
                 "bumptech",
@@ -77,9 +81,13 @@ public class AboutPresenter implements IAboutPresenter {
                 "bm-x",
                 "zhihu",
                 "Yalantis",
-                "KeenenCharles",
                 "Clans",
-                "greenrobot"};
+                "greenrobot",
+                "Google",
+                "square",
+                "square",
+                "ReactiveX",
+                "ReactiveX"};
 
         public static final String[] LIBRARY_INTRODUCE = {
                 "An image loading and caching library for Android focused on smooth scrolling",
@@ -88,10 +96,12 @@ public class AboutPresenter implements IAboutPresenter {
                 "PhotoView 图片浏览缩放控件",
                 "A well-designed local image and video selector for Android",
                 "Image Cropping Library for Android",
-                "An unofficial Splash API library for Android",
                 "Android Floating Action Button based on Material Design specification",
-                "Event bus for Android and Java that simplifies communication between" +
-                        " Activities, Fragments, Threads, Services, etc. Less code," +
-                        " better quality. "};
+                "Event bus for Android and Java that simplifies communication between Activities, Fragments, Threads, Services, etc. Less code, better quality. ",
+                "A Java serialization/deserialization library to convert Java Objects into JSON and back",
+                "An HTTP+HTTP/2 client for Android and Java applications.",
+                "Type-safe HTTP client for Android and Java by Square, Inc.",
+                "RxJava – Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.",
+                "RxJava bindings for Android"};
     }
 }

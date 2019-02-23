@@ -3,8 +3,8 @@ package com.aaron.justlike.app.online.presenter;
 import com.aaron.justlike.app.online.model.IPreviewModel;
 import com.aaron.justlike.app.online.model.PreviewModel;
 import com.aaron.justlike.app.online.view.IPreviewView;
+import com.aaron.justlike.http.entity.Photo;
 import com.aaron.justlike.util.DownloadUtil;
-import com.kc.unsplash.models.Photo;
 
 import java.io.File;
 

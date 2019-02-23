@@ -4,8 +4,8 @@ import com.aaron.justlike.app.download.model.BaseModel;
 import com.aaron.justlike.app.download.model.IModel;
 import com.aaron.justlike.app.download.view.IView;
 import com.aaron.justlike.app.main.entity.Image;
+import com.aaron.justlike.http.entity.Photo;
 import com.aaron.justlike.util.FileUtils;
-import com.kc.unsplash.models.Photo;
 
 import java.util.List;
 

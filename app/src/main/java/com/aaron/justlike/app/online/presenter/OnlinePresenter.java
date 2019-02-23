@@ -3,7 +3,7 @@ package com.aaron.justlike.app.online.presenter;
 import com.aaron.justlike.app.online.model.IModel;
 import com.aaron.justlike.app.online.model.OnlineModel;
 import com.aaron.justlike.app.online.view.IOnlineView;
-import com.kc.unsplash.models.Photo;
+import com.aaron.justlike.http.entity.Photo;
 
 import java.util.List;
 
