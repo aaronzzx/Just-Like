@@ -23,9 +23,9 @@ public class MainAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private Context mContext;
     private List<T> mList;
-    private Callback<T> mCallback;
+    private ClickCallback<T> mCallback;
 
-    public MainAdapter(List<T> list, Callback<T> callback) {
+    public MainAdapter(List<T> list, ClickCallback<T> callback) {
         mList = list;
         mCallback = callback;
     }
@@ -91,7 +91,7 @@ public class MainAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder
     /**
      * 发生点击事件时，回调 Activity
      */
-    public interface Callback<T> {
+    public interface ClickCallback<T> {
 
         void onPress(int position, List<T> list);
 

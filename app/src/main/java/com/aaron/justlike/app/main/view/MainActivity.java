@@ -63,7 +63,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
  */
 public class MainActivity extends AppCompatActivity implements IMainView<Image>, View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener,
-        MainAdapter.Callback<Image> {
+        MainAdapter.ClickCallback<Image> {
 
     private static final int REQUEST_PERMISSION = 0;
     private static final int REQUEST_SELECT_IMAGE = 1;
@@ -360,7 +360,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         mFabButton = findViewById(R.id.fab_home_activity_main);
         mRecyclerView = findViewById(R.id.rv_home_activity_main);
 
-        // Part 2, setClickListener
+        // Part 2, set Listener
         toolbar.setOnClickListener(this);
         mFabButton.setOnClickListener(this);
         navView.setNavigationItemSelectedListener(this);
