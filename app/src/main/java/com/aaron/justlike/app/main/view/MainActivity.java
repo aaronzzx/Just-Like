@@ -54,6 +54,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+/**
+ * Just Like 程序的主界面
+ *
+ * @author Aaron
+ * @version V1.6.0
+ * @since 2019.02.27 Wednesday
+ */
 public class MainActivity extends AppCompatActivity implements IMainView<Image>, View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener,
         MainAdapter.Callback<Image> {
@@ -91,6 +98,9 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         selectHideToolbar(); // 元素少于 16 个时禁止 Toolbar 隐藏
     }
 
+    /**
+     * 释放资源
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
