@@ -517,12 +517,12 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     /**
      * 点击菜单跳转 Activity --- for NavigationView
      */
-    private void startActivityByNav(Class whichActivity) {
+    private void startActivityByNav(Class targetActivity) {
         mParentLayout.closeDrawers();
         mParentLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerClosed(View drawerView) {
-                Intent intent = new Intent(MainActivity.this, whichActivity);
+                Intent intent = new Intent(MainActivity.this, targetActivity);
                 startActivity(intent);
                 mParentLayout.removeDrawerListener(this);
             }
