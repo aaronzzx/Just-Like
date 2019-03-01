@@ -3,6 +3,8 @@ package com.aaron.justlike.custom;
 import android.app.Application;
 import android.content.Context;
 
+import com.squareup.leakcanary.LeakCanary;
+
 import org.litepal.LitePal;
 
 public class BaseApplication extends Application {
@@ -16,7 +18,11 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
         sContext = getApplicationContext();
+        LeakCanary.install(this);
         LitePal.initialize(sContext);
     }
 }
