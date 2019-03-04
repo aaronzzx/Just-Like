@@ -15,10 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.app.GridFragment;
 import com.aaron.justlike.app.about.view.AboutActivity;
 import com.aaron.justlike.app.collection.view.CollectionActivity;
 import com.aaron.justlike.app.download.view.DownloadManagerActivity;
-import com.aaron.justlike.app.main.GridFragment;
 import com.aaron.justlike.app.main.entity.Image;
 import com.aaron.justlike.app.main.presenter.IMainPresenter;
 import com.aaron.justlike.app.main.presenter.MainPresenter;
