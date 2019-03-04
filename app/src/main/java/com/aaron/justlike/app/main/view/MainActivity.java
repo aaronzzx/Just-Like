@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,16 +16,14 @@ import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.app.about.view.AboutActivity;
+import com.aaron.justlike.app.collection.view.CollectionActivity;
 import com.aaron.justlike.app.download.view.DownloadManagerActivity;
-import com.aaron.justlike.app.main.adapter.MainAdapter;
-import com.aaron.justlike.app.main.entity.DeleteEvent;
+import com.aaron.justlike.app.main.GridFragment;
 import com.aaron.justlike.app.main.entity.Image;
-import com.aaron.justlike.app.main.entity.PreviewEvent;
 import com.aaron.justlike.app.main.presenter.IMainPresenter;
 import com.aaron.justlike.app.main.presenter.MainPresenter;
 import com.aaron.justlike.app.online.view.OnlineActivity;
 import com.aaron.justlike.custom.GlideEngine;
-import com.aaron.justlike.custom.MyGridLayoutManager;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -35,28 +32,21 @@ import com.jaeger.library.StatusBarUtil;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MainActivity extends AppCompatActivity implements IMainView<Image>, View.OnClickListener,
-        NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener,
-        MainAdapter.Callback<Image> {
+        NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener, GridFragment.Callback {
 
     private static final int REQUEST_PERMISSION = 0;
     private static final int REQUEST_SELECT_IMAGE = 1;
@@ -75,8 +65,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     private MenuItem mSortByAscending;
     private SwipeRefreshLayout mSwipeRefresh;
     private FloatingActionButton mFabButton;
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private GridFragment mGridFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         requestPermission();
-        EventBus.getDefault().register(this);
         attachPresenter();
         initView();
         mPresenter.requestImage(mImageList, false);
@@ -94,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
         mPresenter.detachView(); // 断开 Presenter
     }
 
@@ -192,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_home_activity_main:
-                backToTop();
+                mGridFragment.backToTop();
                 break;
             case R.id.fab_home_activity_main:
                 openImageSelector();
@@ -212,9 +199,9 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
             case R.id.nav_online_wallpaper:
                 startActivityByNav(OnlineActivity.class);
                 break;
-//            case R.id.nav_collection:
-//                startActivityByNav(CollectionActivity.class);
-//                break;
+            case R.id.nav_collection:
+                startActivityByNav(CollectionActivity.class);
+                break;
             case R.id.nav_download_manager:
                 startActivityByNav(DownloadManagerActivity.class);
                 break;
@@ -237,50 +224,19 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         mPresenter.requestImage(mImageList, true);
     }
 
-    /**
-     * 接收 PreviewActivity 传过来的关于被删除图片的信息，并更新 UI
-     */
-    @Subscribe(threadMode = ThreadMode.POSTING, sticky = true)
-    public void onDeleteEvent(DeleteEvent event) {
-        int position = event.getPosition();
-        String path = event.getPath();
-        mImageList.remove(position);
-        mAdapter.notifyItemRemoved(position);
-        mAdapter.notifyItemRangeChanged(position, mImageList.size() - 1);
+    @Override
+    public void onDelete(String path) {
         mPresenter.deleteImage(path);
     }
 
-    /**
-     * MainAdapter 中发生 onClick 行为，需要回调此方法
-     *
-     * @param position 被点击图片在 List 中的位置
-     * @param list     存放 Image 实例 的 List
-     */
     @Override
-    public void onPress(int position, List<Image> list) {
-        EventBus.getDefault().postSticky(new PreviewEvent<>(position, list));
-        startActivity(new Intent(this, PreviewActivity.class));
+    public void onHide() {
+        mFabButton.hide();
     }
 
-    /**
-     * MainAdapter 中发生 onLongClick 行为，需要回调此方法
-     *
-     * @param position 被删图片的索引
-     */
     @Override
-    public void onLongPress(int position) {
-        new AlertDialog.Builder(this)
-                .setTitle("删除图片")
-                .setMessage("图片将从设备删除")
-                .setPositiveButton("确定", (dialog, which) -> {
-                    String path = mImageList.get(position).getPath();
-                    mImageList.remove(position);
-                    mAdapter.notifyItemRemoved(position);
-                    mAdapter.notifyItemRangeChanged(0, mImageList.size() - 1);
-                    mPresenter.deleteImage(path);
-                })
-                .setNegativeButton("取消", (dialog, which) -> {
-                }).show();
+    public void onShow() {
+        mFabButton.show();
     }
 
     /**
@@ -298,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     public void onShowImage(List<Image> imageList, int sortType, boolean ascendingOrder) {
         mImageList.clear();
         mImageList.addAll(imageList);
-        mAdapter.notifyItemRangeChanged(0, mImageList.size());
+        mGridFragment.update(imageList);
         mSortType = sortType;
         mIsAscending = ascendingOrder;
     }
@@ -311,9 +267,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     @Override
     public void onShowAddImage(List<Image> list) {
         mImageList.addAll(0, list);
-        mAdapter.notifyItemRangeInserted(0, list.size());
-        mAdapter.notifyItemRangeChanged(list.size(), mImageList.size() - list.size());
-        mRecyclerView.scrollToPosition(0);
+        mGridFragment.update(list);
     }
 
     /**
@@ -340,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         Toolbar toolbar = findViewById(R.id.toolbar_home_activity_main);
         mSwipeRefresh = findViewById(R.id.swipe_refresh_home_activity_main);
         mFabButton = findViewById(R.id.fab_home_activity_main);
-        mRecyclerView = findViewById(R.id.rv_home_activity_main);
+        mGridFragment = (GridFragment) getSupportFragmentManager().findFragmentById(R.id.grid_fragment);
 
         // Part 2, setClickListener
         toolbar.setOnClickListener(this);
@@ -353,7 +307,6 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         setSupportActionBar(toolbar);
         enableHomeAsUp();
         mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary);
-        initRecyclerView();
     }
 
     private void setStatusBar() {
@@ -372,31 +325,6 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.mipmap.ic_drawer_menu);
         }
-    }
-
-    /**
-     * 配置 RecyclerView 初始状态，使用自定义 LayoutManager 为了能控制滑动状态，
-     * 并添加 RecyclerView 元素间距
-     */
-    private void initRecyclerView() {
-        // 将 RecyclerView 的布局风格改为网格类型,使用自定义的布局管理器，为了能修改滑动状态
-        MyGridLayoutManager layoutManager = new MyGridLayoutManager(this, 3);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.addItemDecoration(new XItemDecoration());
-        mRecyclerView.addItemDecoration(new YItemDecoration());
-        mAdapter = new MainAdapter<>(mImageList, this);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) {
-                    mFabButton.hide();
-                } else if (dy < 0) {
-                    mFabButton.show();
-                }
-            }
-        });
     }
 
     private void selectHideToolbar() {
@@ -470,20 +398,6 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     }
 
     /**
-     * 单击 Toolbar 回顶部
-     */
-    public void backToTop() {
-        // 查找当前屏幕内第一个可见的 View
-        View firstVisibleItem = mRecyclerView.getChildAt(0);
-        // 查找当前 View 在 RecyclerView 中处于哪个位置
-        int itemPosition = mRecyclerView.getChildLayoutPosition(firstVisibleItem);
-        if (itemPosition >= 48) {
-            mRecyclerView.scrollToPosition(42);
-        }
-        mRecyclerView.smoothScrollToPosition(0);
-    }
-
-    /**
      * 请求权限
      */
     private void requestPermission() {
@@ -527,40 +441,5 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
                 .imageEngine(new GlideEngine())
                 .theme(R.style.MatisseTheme)
                 .forResult(REQUEST_SELECT_IMAGE);
-    }
-
-    private class XItemDecoration extends RecyclerView.ItemDecoration {
-
-        @Override
-        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent,
-                                   @NonNull RecyclerView.State state) {
-            if (parent.getChildAdapterPosition(view) % 3 == 0) {
-                outRect.left = 0;
-                outRect.right = SystemUtils.dp2px(MainActivity.this, 2.8F); // 8px
-            } else if (parent.getChildAdapterPosition(view) % 3 == 1) {
-                outRect.left = SystemUtils.dp2px(MainActivity.this, 1.3F); // 4px
-                outRect.right = SystemUtils.dp2px(MainActivity.this, 1.3F); // 4px
-            } else if (parent.getChildAdapterPosition(view) % 3 == 2) {
-                outRect.left = SystemUtils.dp2px(MainActivity.this, 2.8F); // 8px
-                outRect.right = 0;
-            }
-        }
-    }
-
-    private class YItemDecoration extends RecyclerView.ItemDecoration {
-
-        @Override
-        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent,
-                                   @NonNull RecyclerView.State state) {
-            outRect.bottom = 0;
-            outRect.top = SystemUtils.dp2px(MainActivity.this, 4.2F); // 12px
-            if (parent.getChildAdapterPosition(view) == 0) {
-                outRect.top = 0;
-            } else if (parent.getChildAdapterPosition(view) == 1) {
-                outRect.top = 0;
-            } else if (parent.getChildAdapterPosition(view) == 2) {
-                outRect.top = 0;
-            }
-        }
     }
 }

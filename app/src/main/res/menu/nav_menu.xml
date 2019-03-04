@@ -7,24 +7,24 @@
 
         <item
             android:id="@+id/nav_home"
-            android:title="主页"
             android:checked="true"
-            android:icon="@mipmap/ic_home_page"/>
+            android:icon="@mipmap/ic_home_page"
+            android:title="主页" />
 
         <item
             android:id="@+id/nav_online_wallpaper"
-            android:title="在线壁纸"
-            android:icon="@mipmap/ic_wallpaper_center"/>
+            android:icon="@mipmap/ic_wallpaper_center"
+            android:title="在线壁纸" />
 
-        <!--<item-->
-        <!--android:id="@+id/nav_collection"-->
-        <!--android:icon="@mipmap/ic_collection"-->
-        <!--android:title="集合" />-->
+        <item
+            android:id="@+id/nav_collection"
+            android:icon="@mipmap/ic_collection"
+            android:title="集合" />
 
         <item
             android:id="@+id/nav_download_manager"
-            android:title="下载管理"
-            android:icon="@mipmap/ic_download" />
+            android:icon="@mipmap/ic_download"
+            android:title="下载管理" />
 
         <!--<item-->
         <!--android:id="@+id/nav_settings"-->
@@ -33,8 +33,8 @@
 
         <item
             android:id="@+id/nav_about"
-            android:title="关于"
-            android:icon="@mipmap/ic_about"/>
+            android:icon="@mipmap/ic_about"
+            android:title="关于" />
 
     </group>
 

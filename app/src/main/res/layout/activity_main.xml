@@ -48,8 +48,9 @@
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_home_activity_main"
+                <fragment
+                    android:id="@+id/grid_fragment"
+                    android:name="com.aaron.justlike.app.main.GridFragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
