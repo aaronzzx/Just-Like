@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.app.collection.entity.DeletEvent;
 import com.aaron.justlike.app.main.adapter.MainAdapter;
 import com.aaron.justlike.app.main.entity.DeleteEvent;
 import com.aaron.justlike.app.main.entity.Image;
@@ -64,10 +65,22 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
     }
 
     /**
-     * 接收 ElementActivity 传过来的关于被删除图片的信息，并更新 UI
+     * 接收 main 模块 PreviewActivity 传过来的关于被删除图片的信息，并更新 UI
      */
     @Subscribe(threadMode = ThreadMode.POSTING, sticky = true)
     public void onDeleteEvent(DeleteEvent event) {
+        int position = event.getPosition();
+        String path = event.getPath();
+        mImageList.remove(position);
+        mAdapter.notifyDataSetChanged();
+        ((GridFragment.Callback) mContext).onDelete(path);
+    }
+
+    /**
+     * 接收 collection 模块 PreviewActivity 传过来的关于被删除图片的信息，并更新 UI
+     */
+    @Subscribe(threadMode = ThreadMode.POSTING, sticky = true)
+    public void onDeletEvent(DeletEvent event) {
         int position = event.getPosition();
         String path = event.getPath();
         mImageList.remove(position);

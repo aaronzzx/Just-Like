@@ -1,9 +1,7 @@
 package com.aaron.justlike.app.collection.view;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.app.GridFragment;
@@ -19,8 +17,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class ElementActivity extends AppCompatActivity implements View.OnClickListener,
-        GridFragment.Callback, IElementView<Image> {
+public class ElementActivity extends AppCompatActivity implements GridFragment.Callback,
+        IElementView<Image> {
 
     private IElementPresenter<Image> mPresenter;
 
@@ -57,17 +55,8 @@ public class ElementActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.toolbar:
-
-                break;
-        }
-    }
-
-    @Override
     public void onDelete(String path) {
-
+        mPresenter.deleteImage(mTitle, path);
     }
 
     @Override
@@ -78,16 +67,12 @@ public class ElementActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initView() {
-        // get theme name
+        // get title
         mTitle = getIntent().getStringExtra("title");
-        Log.d("ElementActivity", "mTitle: " + mTitle);
 
         // find id
         mToolbar = findViewById(R.id.toolbar);
         mGridFragment = (GridFragment) getSupportFragmentManager().findFragmentById(R.id.grid_fragment);
-
-        // set listener
-        mToolbar.setOnClickListener(this);
 
         // init status
         initToolbar();

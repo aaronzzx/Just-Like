@@ -24,6 +24,7 @@ public class Image implements Parcelable {
     private String date;
     private String name;
     private long size;
+    private int eventFlag;
 
     public Image() {
 
@@ -65,6 +66,14 @@ public class Image implements Parcelable {
 
     public void setSize(long size) {
         this.size = size;
+    }
+
+    public int getEventFlag() {
+        return eventFlag;
+    }
+
+    public void setEventFlag(int eventFlag) {
+        this.eventFlag = eventFlag;
     }
 
     @Override

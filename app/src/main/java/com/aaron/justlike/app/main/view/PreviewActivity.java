@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.app.collection.entity.DeletEvent;
 import com.aaron.justlike.app.main.adapter.PreviewAdapter;
 import com.aaron.justlike.app.main.entity.DeleteEvent;
 import com.aaron.justlike.app.main.entity.Image;
@@ -46,11 +47,15 @@ import androidx.viewpager.widget.ViewPager;
 public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         View.OnClickListener, ViewPager.OnPageChangeListener, PreviewAdapter.Callback {
 
+    public static final int DELETE_EVENT = 0;
+    public static final int DELET_EVENT = 1;
+
     private static final String FIT_SCREEN = "适应屏幕";
     private static final String FREE_CROP = "自由裁剪";
     private static final String[] CROP_TYPE = {FIT_SCREEN, FREE_CROP};
 
     private int mPosition;
+    private int mEventFlag;
     private List<Image> mImageList;
 
     private IPreviewPresenter mPresenter;
@@ -183,8 +188,13 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
                         .setTitle("删除图片")
                         .setMessage("图片将从设备中删除")
                         .setPositiveButton("确定", (dialog, which) -> {
-                            EventBus.getDefault().postSticky(new DeleteEvent(mPosition,
-                                    mImageList.get(mPosition).getPath()));
+                            if (mEventFlag == DELETE_EVENT) {
+                                EventBus.getDefault().postSticky(new DeleteEvent(mPosition,
+                                        mImageList.get(mPosition).getPath()));
+                            } else {
+                                EventBus.getDefault().postSticky(new DeletEvent(mPosition,
+                                        mImageList.get(mPosition).getPath()));
+                            }
                             finish();
                         })
                         .setNegativeButton("取消", (dialog, which) -> {
@@ -228,6 +238,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
     public void onPreviewEvent(PreviewEvent<Image> event) {
         mPosition = event.getPosition();
         mImageList = event.getList();
+        mEventFlag = mImageList.get(0).getEventFlag();
     }
 
     @Override
@@ -241,6 +252,8 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
     }
 
     private void initView() {
+        mEventFlag = getIntent().getIntExtra("eventFlag", 2);
+
         mToolbar = findViewById(R.id.activity_display_image_toolbar);
         mViewPager = findViewById(R.id.activity_display_image_vp);
 
