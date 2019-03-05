@@ -106,7 +106,7 @@ public class SelectActivity extends AppCompatActivity implements SelectAdapter.C
     }
 
     @Override
-    public void onSetToolbar(List<String> paths) {
+    public void onSetTitle(List<String> paths) {
         mPathList = paths;
         mToolbar.setTitle(TITLE + "(" + paths.size() + ")");
     }

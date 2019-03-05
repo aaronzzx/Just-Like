@@ -166,7 +166,7 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.mipmap.ic_back);
+//            actionBar.setHomeAsUpIndicator(R.mipmap.ic_back);
         }
     }
 

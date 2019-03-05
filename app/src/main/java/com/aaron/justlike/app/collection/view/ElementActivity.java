@@ -1,6 +1,7 @@
 package com.aaron.justlike.app.collection.view;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.aaron.justlike.R;
@@ -49,10 +50,19 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_element_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+                break;
+            case R.id.add:
+
                 break;
         }
         return super.onOptionsItemSelected(item);

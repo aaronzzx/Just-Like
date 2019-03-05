@@ -28,7 +28,7 @@ public class CollectionPresenter implements ICollectionPresenter {
     @Override
     public void requestCollection(List<Album> albums) {
         mModel.queryCollection(list -> {
-            if (list != null && !albums.containsAll(list)) {
+            if (albums.size() != list.size() || !albums.containsAll(list)) {
                 Collections.sort(list, (o1, o2) -> (int) (o2.getCreateAt() - o1.getCreateAt()));
                 mView.onShowImage(list);
             }

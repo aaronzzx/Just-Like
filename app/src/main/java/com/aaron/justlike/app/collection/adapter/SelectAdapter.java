@@ -103,7 +103,7 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             mOnPaths.add(mImages.get(holder.getAdapterPosition()).getPath());
         }
         // 回调 Activity,进行创建集合的下一步工作
-        mListener.onSetToolbar(mOnPaths);
+        mListener.onSetTitle(mOnPaths);
     }
 
     private static class ViewHolder extends RecyclerView.ViewHolder {
@@ -122,6 +122,6 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public interface Callback {
 
-        void onSetToolbar(List<String> paths);
+        void onSetTitle(List<String> paths);
     }
 }
