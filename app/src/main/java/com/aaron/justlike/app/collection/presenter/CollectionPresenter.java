@@ -6,6 +6,7 @@ import com.aaron.justlike.app.collection.model.ICollectionModel;
 import com.aaron.justlike.app.collection.view.ICollectionView;
 
 import java.util.Collections;
+import java.util.List;
 
 public class CollectionPresenter implements ICollectionPresenter {
 
@@ -25,9 +26,9 @@ public class CollectionPresenter implements ICollectionPresenter {
     }
 
     @Override
-    public void requestCollection() {
+    public void requestCollection(List<Album> albums) {
         mModel.queryCollection(list -> {
-            if (list != null) {
+            if (list != null && !albums.containsAll(list)) {
                 Collections.sort(list, (o1, o2) -> (int) (o2.getCreateAt() - o1.getCreateAt()));
                 mView.onShowImage(list);
             }

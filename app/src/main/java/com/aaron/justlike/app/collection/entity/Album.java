@@ -1,5 +1,7 @@
 package com.aaron.justlike.app.collection.entity;
 
+import java.util.Objects;
+
 public class Album {
 
     private String mCollectionTitle;
@@ -37,5 +39,21 @@ public class Album {
 
     public void setImagePath(String imagePath) {
         mImagePath = imagePath;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Album album = (Album) o;
+        return mCreateAt == album.mCreateAt &&
+                Objects.equals(mCollectionTitle, album.mCollectionTitle) &&
+                Objects.equals(mElementTotal, album.mElementTotal) &&
+                Objects.equals(mImagePath, album.mImagePath);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mCollectionTitle, mElementTotal, mImagePath, mCreateAt);
     }
 }

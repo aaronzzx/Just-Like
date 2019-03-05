@@ -1,6 +1,9 @@
 package com.aaron.justlike.app.collection.presenter;
 
+import com.aaron.justlike.app.collection.entity.Album;
 import com.aaron.justlike.app.collection.view.ICollectionView;
+
+import java.util.List;
 
 public interface ICollectionPresenter {
 
@@ -8,5 +11,5 @@ public interface ICollectionPresenter {
 
     void detachView();
 
-    void requestCollection();
+    void requestCollection(List<Album> list);
 }

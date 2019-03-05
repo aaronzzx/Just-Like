@@ -5,10 +5,13 @@ import android.view.MenuItem;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.app.GridFragment;
+import com.aaron.justlike.app.collection.entity.UpdateEvent;
 import com.aaron.justlike.app.collection.presenter.ElementPresenter;
 import com.aaron.justlike.app.collection.presenter.IElementPresenter;
 import com.aaron.justlike.app.main.entity.Image;
 import com.jaeger.library.StatusBarUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +45,7 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.detachView();
+        EventBus.getDefault().post(new UpdateEvent());
     }
 
     @Override

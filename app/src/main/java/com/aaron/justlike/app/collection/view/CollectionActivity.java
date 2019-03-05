@@ -14,6 +14,7 @@ import com.aaron.justlike.app.collection.adapter.CollectionAdapter;
 import com.aaron.justlike.app.collection.entity.Album;
 import com.aaron.justlike.app.collection.entity.Collection;
 import com.aaron.justlike.app.collection.entity.SelectEvent;
+import com.aaron.justlike.app.collection.entity.UpdateEvent;
 import com.aaron.justlike.app.collection.presenter.CollectionPresenter;
 import com.aaron.justlike.app.collection.presenter.ICollectionPresenter;
 import com.aaron.justlike.custom.MyGridLayoutManager;
@@ -52,7 +53,7 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
         initView();
         mPresenter = new CollectionPresenter();
         mPresenter.attachView(this);
-        mPresenter.requestCollection();
+        mPresenter.requestCollection(mCollections);
     }
 
     @Override
@@ -107,6 +108,11 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
 //        mAdapter.notifyItemRangeInserted(0, 1);
         mAdapter.notifyItemRangeChanged(0, mCollections.size());
 //        mRecyclerView.scrollToPosition(0);
+    }
+
+    @Subscribe(threadMode = ThreadMode.POSTING)
+    public void onUpdateEvent(UpdateEvent event) {
+        mPresenter.requestCollection(mCollections);
     }
 
     @Override
