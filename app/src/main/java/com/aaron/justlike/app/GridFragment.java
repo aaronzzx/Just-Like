@@ -64,7 +64,7 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
     }
 
     /**
-     * 接收 ThemeActivity 传过来的关于被删除图片的信息，并更新 UI
+     * 接收 ElementActivity 传过来的关于被删除图片的信息，并更新 UI
      */
     @Subscribe(threadMode = ThreadMode.POSTING, sticky = true)
     public void onDeleteEvent(DeleteEvent event) {

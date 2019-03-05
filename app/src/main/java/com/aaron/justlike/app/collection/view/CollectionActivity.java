@@ -34,7 +34,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CollectionActivity extends AppCompatActivity implements ICollectionView {
+public class CollectionActivity extends AppCompatActivity implements CollectionAdapter.OnPressCallback,
+        ICollectionView {
 
     private ICollectionPresenter mPresenter;
 
@@ -109,6 +110,13 @@ public class CollectionActivity extends AppCompatActivity implements ICollection
     }
 
     @Override
+    public void onPress(int position) {
+        Intent intent = new Intent(this, ElementActivity.class);
+        intent.putExtra("title", mCollections.get(position).getCollectionTitle());
+        startActivity(intent);
+    }
+
+    @Override
     public <E> void onShowImage(List<E> list) {
         mCollections.clear();
         for (E e : list) {
@@ -142,7 +150,7 @@ public class CollectionActivity extends AppCompatActivity implements ICollection
         mLayoutManager = new MyGridLayoutManager(this, 1);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new YItemDecoration());
-        mAdapter = new CollectionAdapter(mCollections);
+        mAdapter = new CollectionAdapter(this, mCollections);
         mRecyclerView.setAdapter(mAdapter);
     }
 

@@ -55,8 +55,8 @@
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name=".app.collection.view.ThemeActivity"
-            android:label=""
+            android:name=".app.collection.view.ElementActivity"
+            android:label="元素"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 

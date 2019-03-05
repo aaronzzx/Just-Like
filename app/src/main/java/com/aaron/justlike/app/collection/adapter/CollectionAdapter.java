@@ -30,9 +30,11 @@ public class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private Context mContext;
     private List<Album> mAlbums;
+    private OnPressCallback mCallback;
 
-    public CollectionAdapter(List<Album> albums) {
+    public CollectionAdapter(OnPressCallback callback, List<Album> albums) {
         mAlbums = albums;
+        mCallback = callback;
     }
 
     @NonNull
@@ -42,6 +44,9 @@ public class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         View view = LayoutInflater.from(mContext)
                 .inflate(R.layout.activity_collection_recycler_item, parent, false);
         ViewHolder holder = new ViewHolder(view);
+        holder.itemView.setOnClickListener(v -> {
+            mCallback.onPress(holder.getAdapterPosition());
+        });
         return holder;
     }
 
@@ -101,5 +106,10 @@ public class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             imageTotal = itemView.findViewById(R.id.collection_image_total);
             imageTitle = itemView.findViewById(R.id.collection_image_title);
         }
+    }
+
+    public interface OnPressCallback {
+
+        void onPress(int position);
     }
 }
