@@ -1,5 +1,6 @@
 package com.aaron.justlike.app.collection.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -62,7 +63,13 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
                 onBackPressed();
                 break;
             case R.id.add:
-
+                ArrayList<String> selectedList = new ArrayList<>();
+                for (Image image : mImageList) {
+                    selectedList.add(image.getPath());
+                }
+                Intent intent = new Intent(this, SelectActivity.class);
+                intent.putStringArrayListExtra("selectedList", selectedList);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -47,6 +47,7 @@ public class SelectActivity extends AppCompatActivity implements SelectAdapter.C
     private SelectAdapter mAddAdapter;
     private List<Image> mImages = new ArrayList<>();
     private List<String> mPathList;
+    private List<String> mSelectedList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +113,9 @@ public class SelectActivity extends AppCompatActivity implements SelectAdapter.C
     }
 
     private void initView() {
+        // get value
+        mSelectedList = getIntent().getStringArrayListExtra("selectedList");
+
         // 获取用户输入的集合创建名
         mCollectionName = getIntent().getStringExtra("collectionName");
         mDatabase = LitePal.getDatabase();
@@ -133,6 +137,7 @@ public class SelectActivity extends AppCompatActivity implements SelectAdapter.C
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mRecyclerView.addItemDecoration(new YItemDecoration());
         mAddAdapter = new SelectAdapter(mImages, this);
+        mAddAdapter.receiveSelected(mSelectedList);
         mRecyclerView.setAdapter(mAddAdapter);
     }
 

@@ -1,6 +1,7 @@
 package com.aaron.justlike.app.collection.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,12 +27,18 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private Context mContext;
     private List<Image> mImages; // App 中所有图片的集合
     private List<String> mOnPaths = new LinkedList<>(); // 用户选择的图片的集合，回调 Activity
-    private Callback mListener; // 回调 Activity
+    private List<String> mSelectedList;
+    private Callback mCallback; // 回调 Activity
     private SparseBooleanArray mCheckStates = new SparseBooleanArray(); // 解决 View 复用混乱
+    private SparseBooleanArray mEnableStates = new SparseBooleanArray();
 
-    public SelectAdapter(List<Image> images, Callback listener) {
+    public SelectAdapter(List<Image> images, Callback callback) {
         mImages = images;
-        mListener = listener;
+        mCallback = callback;
+    }
+
+    public void receiveSelected(List<String> selectedList) {
+        mSelectedList = selectedList;
     }
 
     @NonNull
@@ -41,16 +48,33 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         View view = LayoutInflater.from(mContext)
                 .inflate(R.layout.activity_collection_add_recycler_item, parent, false);
         ViewHolder holder = new ViewHolder(view);
+        // 将之前已选的图片标记为不可选
+        if (mSelectedList != null) {
+            holder.checkBox.post(() -> {
+                int position = holder.getAdapterPosition();
+                String path = mImages.get(position).getPath();
+                for (String selected : mSelectedList) {
+                    if (path.equals(selected)) {
+                        mEnableStates.put(position, false);
+                        holder.checkBox.setEnabled(false);
+                        holder.itemView.setClickable(false);
+                        holder.squareView.setScaleX(0.8F);
+                        holder.squareView.setScaleY(0.8F);
+                    }
+                }
+            });
+        }
         // 选取图片
-        holder.itemView.setOnClickListener(v
-                -> handleImageClick(holder));
+        holder.itemView.setOnClickListener(v -> handleImageClick(holder));
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         // 加载视图
+        ViewHolder viewHolder = (ViewHolder) holder;
         String path = mImages.get(position).getPath();
+
         RequestOptions options = new RequestOptions()
                 .placeholder(R.color.colorGrey)
                 .priority(Priority.HIGH);
@@ -60,27 +84,8 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 .into(((ViewHolder) holder).squareView);
 
         // 解决 View 复用混乱
-        ((ViewHolder) holder).checkBox.setTag(position);
-        ((ViewHolder) holder).checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            int pos = (int) buttonView.getTag();
-            if (isChecked) {
-                mCheckStates.put(pos, true);
-                // 重绘图片缩放状态
-                // 加此 if 判断语句是为了避免图片二次缩放，因为在 onCreateViewHolder()
-                // 方法中已经使用属性动画对点击图片进行缩放，再次缩放会造成图片过小
-                if (((ViewHolder) holder).squareView.getScaleX() == 1.0F
-                        && ((ViewHolder) holder).squareView.getScaleY() == 1.0F) {
-                    ((ViewHolder) holder).squareView.setScaleX(0.8F);
-                    ((ViewHolder) holder).squareView.setScaleY(0.8F);
-                }
-            } else {
-                mCheckStates.delete(pos);
-                // 重绘图片缩放状态
-                ((ViewHolder) holder).squareView.setScaleX(1.0F);
-                ((ViewHolder) holder).squareView.setScaleY(1.0F);
-            }
-        });
-        ((ViewHolder) holder).checkBox.setChecked(mCheckStates.get(position, false));
+        selectBefore(viewHolder, position);
+        selectRightNow(viewHolder, position);
     }
 
     @Override
@@ -103,7 +108,46 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             mOnPaths.add(mImages.get(holder.getAdapterPosition()).getPath());
         }
         // 回调 Activity,进行创建集合的下一步工作
-        mListener.onSetTitle(mOnPaths);
+        mCallback.onSetTitle(mOnPaths);
+    }
+
+    private void selectBefore(ViewHolder viewHolder, int position) {
+        if (!mEnableStates.get(position, true)) {
+            viewHolder.checkBox.setEnabled(false);
+            viewHolder.itemView.setClickable(false);
+            viewHolder.squareView.setScaleX(0.8F);
+            viewHolder.squareView.setScaleY(0.8F);
+        } else {
+            viewHolder.checkBox.setEnabled(true);
+            viewHolder.itemView.setClickable(true);
+            viewHolder.squareView.setScaleX(1.0F);
+            viewHolder.squareView.setScaleY(1.0F);
+        }
+    }
+
+    private void selectRightNow(ViewHolder viewHolder, int position) {
+        viewHolder.checkBox.setTag(position);
+        viewHolder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Log.d("SelectAdapter", "-----selectRightNow()-----");
+            int pos = (int) buttonView.getTag();
+            if (isChecked) {
+                mCheckStates.put(pos, true);
+                // 重绘图片缩放状态
+                // 加此 if 判断语句是为了避免图片二次缩放，因为在 onCreateViewHolder()
+                // 方法中已经使用属性动画对点击图片进行缩放，再次缩放会造成图片过小
+                if (viewHolder.squareView.getScaleX() == 1.0F
+                        && viewHolder.squareView.getScaleY() == 1.0F) {
+                    viewHolder.squareView.setScaleX(0.8F);
+                    viewHolder.squareView.setScaleY(0.8F);
+                }
+            } else {
+                mCheckStates.delete(pos);
+                // 重绘图片缩放状态
+                viewHolder.squareView.setScaleX(1.0F);
+                viewHolder.squareView.setScaleY(1.0F);
+            }
+        });
+        viewHolder.checkBox.setChecked(mCheckStates.get(position, false));
     }
 
     private static class ViewHolder extends RecyclerView.ViewHolder {
