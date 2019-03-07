@@ -214,11 +214,9 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
         }
 
         default void onHide() {
-
         }
 
         default void onShow() {
-
         }
     }
 }
