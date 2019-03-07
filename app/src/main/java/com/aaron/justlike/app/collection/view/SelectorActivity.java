@@ -69,9 +69,11 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
     }
 
     @Override
-    public void onPress(String path) {
-        mWorker.response.add(path);
-        mToolbar.setTitle("已选择(" + mWorker.response.size() + ")");
+    public void onPress(List<String> response) {
+//        mWorker.response.add(path);
+        mWorker.response.clear();
+        mWorker.response.addAll(response);
+        mToolbar.setTitle("已选择（" + mWorker.response.size() + "）");
     }
 
     private void initView() {
@@ -86,6 +88,7 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
         // init toolbar and status bar
+        mToolbar.setTitle("已选择（0）");
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

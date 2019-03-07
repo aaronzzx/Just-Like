@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Context mContext;
     private List<Image> mImages; // App 中所有图片的集合
     private List<String> mSelectedList;
+    private List<String> mResponse = new ArrayList<>();
     private Callback mCallback; // 回调 Activity
     // 解决 View 复用混乱
     private SparseBooleanArray mCheckStates = new SparseBooleanArray();
@@ -48,8 +50,8 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ViewHolder holder = new ViewHolder(view);
         // 选取图片
         holder.itemView.setOnClickListener(v -> {
-            String path = handleImageClick(holder);
-            mCallback.onPress(path);
+            handleImageClick(holder);
+            mCallback.onPress(mResponse);
         });
         return holder;
     }
@@ -78,7 +80,7 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return mImages.size();
     }
 
-    private String handleImageClick(ViewHolder holder) {
+    private void handleImageClick(ViewHolder holder) {
         String path = mImages.get(holder.getAdapterPosition()).getPath();
         if (holder.checkBox.isChecked()) {
             // 图片被选中状态下执行
@@ -86,14 +88,15 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             AnimationUtil.setImageLarge(holder.squareView);
             // 将被取消选中的图片移除回调集合
 //            mOnPaths.remove(path);
+            mResponse.remove(path);
         } else {
             // 图片没被选中状态下执行
             holder.checkBox.setChecked(true);
             AnimationUtil.setImageSmall(holder.squareView);
             // 将选中的图片路径添加进回调集合
 //            mOnPaths.add(path);
+            mResponse.add(path);
         }
-        return path;
     }
 
     private void selectBefore(ViewHolder viewHolder, int position) {
@@ -163,6 +166,6 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public interface Callback {
 
-        void onPress(String path);
+        void onPress(List<String> response);
     }
 }

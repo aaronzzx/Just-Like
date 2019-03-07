@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import com.aaron.justlike.R;
 import com.aaron.justlike.app.GridFragment;
 import com.aaron.justlike.app.collection.adapter.ImageSelector;
+import com.aaron.justlike.app.collection.entity.Collection;
 import com.aaron.justlike.app.collection.entity.Element;
 import com.aaron.justlike.app.collection.entity.UpdateEvent;
 import com.aaron.justlike.app.collection.presenter.ElementPresenter;
@@ -96,6 +97,11 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
         mGridFragment.update(list);
     }
 
+    public void showAddImage(List<Image> list) {
+        mImageList.addAll(list);
+        mGridFragment.update(list);
+    }
+
     @Override
     public void onResponse(List<String> response) {
         List<Image> imageList = new ArrayList<>();
@@ -106,9 +112,19 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
                 element.setPath(path);
                 element.setCreateAt(System.currentTimeMillis());
                 element.save();
-                imageList.add(new Image(path));
+
+                Collection info = new Collection();
+                info.setTitle(mTitle);
+                info.setTotal(mImageList.size());
+                info.setPath(mImageList.get(mImageList.size() - 1).getPath());
+                info.setCreateAt(System.currentTimeMillis());
+                info.save();
+
+                Image image = new Image(path);
+                imageList.add(image);
+                mImageList.add(image);
             }
-            runOnUiThread(() -> onShowImage(imageList));
+            runOnUiThread(() -> showAddImage(imageList));
         });
     }
 
