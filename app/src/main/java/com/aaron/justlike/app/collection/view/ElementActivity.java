@@ -1,12 +1,13 @@
 package com.aaron.justlike.app.collection.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.app.GridFragment;
+import com.aaron.justlike.app.collection.adapter.ImageSelector;
+import com.aaron.justlike.app.collection.entity.Element;
 import com.aaron.justlike.app.collection.entity.UpdateEvent;
 import com.aaron.justlike.app.collection.presenter.ElementPresenter;
 import com.aaron.justlike.app.collection.presenter.IElementPresenter;
@@ -17,21 +18,24 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class ElementActivity extends AppCompatActivity implements GridFragment.Callback,
-        IElementView<Image> {
+        IElementView<Image>, ImageSelector.ImageCallback {
 
     private IElementPresenter<Image> mPresenter;
+    private ExecutorService mService;
 
-    private List<Image> mImageList = new ArrayList<>();
     private GridFragment mGridFragment;
     private Toolbar mToolbar;
 
     private String mTitle;
+    private List<Image> mImageList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +71,14 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
                 for (Image image : mImageList) {
                     selectedList.add(image.getPath());
                 }
-                Intent intent = new Intent(this, SelectActivity.class);
-                intent.putStringArrayListExtra("selectedList", selectedList);
-                startActivity(intent);
+//                Intent intent = new Intent(this, SelectActivity.class);
+//                intent.putStringArrayListExtra("selectedList", selectedList);
+//                startActivity(intent);
+                ImageSelector.getInstance(this)
+                        .setFilePath("/storage/emulated/0/Pictures/JustLike")
+                        .setSelectedImage(selectedList)
+                        .setCallback(this)
+                        .start();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -87,7 +96,26 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
         mGridFragment.update(list);
     }
 
+    @Override
+    public void onResponse(List<String> response) {
+        List<Image> imageList = new ArrayList<>();
+        mService.execute(() -> {
+            for (String path : response) {
+                Element element = new Element();
+                element.setTitle(mTitle);
+                element.setPath(path);
+                element.setCreateAt(System.currentTimeMillis());
+                element.save();
+                imageList.add(new Image(path));
+            }
+            runOnUiThread(() -> onShowImage(imageList));
+        });
+    }
+
     private void initView() {
+        // open thread pool
+        mService = Executors.newSingleThreadExecutor();
+
         // get title
         mTitle = getIntent().getStringExtra("title");
 

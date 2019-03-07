@@ -149,7 +149,7 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
     private void initView() {
         mToolbar = findViewById(R.id.activity_online_toolbar);
         mSwipeRefresh = findViewById(R.id.swipe_refresh_home_activity_main);
-        mRecyclerView = findViewById(R.id.rv_home_activity_main);
+        mRecyclerView = findViewById(R.id.recycler_view);
         mProgressBar = findViewById(R.id.progress_bar);
         mFooterProgress = findViewById(R.id.footer_progress);
 

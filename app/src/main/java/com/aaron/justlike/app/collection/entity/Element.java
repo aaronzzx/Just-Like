@@ -7,6 +7,7 @@ public class Element extends LitePalSupport {
     private int id;
     private String title;
     private String path;
+    private long createAt;
 
     public int getId() {
         return id;
@@ -30,5 +31,13 @@ public class Element extends LitePalSupport {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public long getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(long createAt) {
+        this.createAt = createAt;
     }
 }

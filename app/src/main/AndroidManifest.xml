@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-
+        <activity android:name=".app.collection.view.SelectorActivity"></activity>
         <activity
             android:name=".app.main.view.MainActivity"
             android:screenOrientation="portrait"
@@ -29,55 +29,46 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".app.main.view.PreviewActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.DisplayActivity" />
-
         <activity
             android:name=".app.online.view.OnlineActivity"
             android:label="Online"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.OnlineActivity" />
-
         <activity
             android:name=".app.online.view.PreviewActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.OnlineActivity" />
-
         <activity
             android:name=".app.collection.view.CollectionActivity"
             android:label="集合"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".app.collection.view.ElementActivity"
             android:label="元素"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".app.collection.view.SelectActivity"
             android:label="已选择(0)"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".app.download.view.DownloadManagerActivity"
             android:label="下载管理"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".app.about.view.AboutActivity"
             android:label="关于"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
@@ -92,7 +83,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

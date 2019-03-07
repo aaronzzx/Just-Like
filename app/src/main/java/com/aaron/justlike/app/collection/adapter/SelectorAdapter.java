@@ -15,28 +15,27 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.request.RequestOptions;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<Image> mImages; // App 中所有图片的集合
-    private List<String> mOnPaths = new LinkedList<>(); // 用户选择的图片的集合，回调 Activity
     private List<String> mSelectedList;
     private Callback mCallback; // 回调 Activity
-    private SparseBooleanArray mCheckStates = new SparseBooleanArray(); // 解决 View 复用混乱
+    // 解决 View 复用混乱
+    private SparseBooleanArray mCheckStates = new SparseBooleanArray();
     private SparseBooleanArray mEnableStates = new SparseBooleanArray();
 
-    public SelectAdapter(List<Image> images, Callback callback) {
+    public SelectorAdapter(List<Image> images, Callback callback) {
         mImages = images;
         mCallback = callback;
     }
 
-    public void receiveSelected(List<String> selectedList) {
+    public void setSelectedImage(List<String> selectedList) {
         mSelectedList = selectedList;
     }
 
@@ -48,7 +47,10 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 .inflate(R.layout.activity_collection_add_recycler_item, parent, false);
         ViewHolder holder = new ViewHolder(view);
         // 选取图片
-        holder.itemView.setOnClickListener(v -> handleImageClick(holder));
+        holder.itemView.setOnClickListener(v -> {
+            String path = handleImageClick(holder);
+            mCallback.onPress(path);
+        });
         return holder;
     }
 
@@ -64,7 +66,7 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         Glide.with(mContext)
                 .load(path)
                 .apply(options)
-                .into(((ViewHolder) holder).squareView);
+                .into(viewHolder.squareView);
 
         // 解决 View 复用混乱
         selectBefore(viewHolder, position);
@@ -76,22 +78,22 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return mImages.size();
     }
 
-    private void handleImageClick(ViewHolder holder) {
+    private String handleImageClick(ViewHolder holder) {
+        String path = mImages.get(holder.getAdapterPosition()).getPath();
         if (holder.checkBox.isChecked()) {
             // 图片被选中状态下执行
             holder.checkBox.setChecked(false);
             AnimationUtil.setImageLarge(holder.squareView);
             // 将被取消选中的图片移除回调集合
-            mOnPaths.remove(mImages.get(holder.getAdapterPosition()).getPath());
+//            mOnPaths.remove(path);
         } else {
             // 图片没被选中状态下执行
             holder.checkBox.setChecked(true);
             AnimationUtil.setImageSmall(holder.squareView);
             // 将选中的图片路径添加进回调集合
-            mOnPaths.add(mImages.get(holder.getAdapterPosition()).getPath());
+//            mOnPaths.add(path);
         }
-        // 回调 Activity,进行创建集合的下一步工作
-        mCallback.onSetTitle(mOnPaths);
+        return path;
     }
 
     private void selectBefore(ViewHolder viewHolder, int position) {
@@ -161,6 +163,6 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public interface Callback {
 
-        void onSetTitle(List<String> paths);
+        void onPress(String path);
     }
 }

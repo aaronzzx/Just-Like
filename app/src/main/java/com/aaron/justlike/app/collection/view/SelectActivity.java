@@ -66,7 +66,7 @@ public class SelectActivity extends AppCompatActivity implements SelectAdapter.C
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 break;
             case R.id.done:
                 if (mPathList == null) {
@@ -121,7 +121,7 @@ public class SelectActivity extends AppCompatActivity implements SelectAdapter.C
         mDatabase = LitePal.getDatabase();
 
         // 初始化界面元素
-        mToolbar = findViewById(R.id.activity_collection_add_toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -131,7 +131,7 @@ public class SelectActivity extends AppCompatActivity implements SelectAdapter.C
 
         // 连接适配器
         FileUtils.getLocalFiles(mImages, LOAD_PATH, TYPE);
-        mRecyclerView = findViewById(R.id.rv_home_activity_main);
+        mRecyclerView = findViewById(R.id.recycler_view);
         mLayoutManager = new MyGridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());

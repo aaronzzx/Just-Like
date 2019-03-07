@@ -8,6 +8,7 @@ import com.aaron.justlike.app.main.view.PreviewActivity;
 import org.litepal.LitePal;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -24,6 +25,7 @@ public class ElementModel implements IElementModel<Image> {
     public void queryImage(String title, Callback<Image> callback) {
         mExecutorService.execute(() -> {
             List<Element> elements = LitePal.where("title = ?", title).find(Element.class);
+            Collections.sort(elements, (o1, o2) -> (int) (o2.getCreateAt() - o1.getCreateAt()));
             List<Image> imageList = new ArrayList<>();
             for (Element element : elements) {
                 Image image = new Image(element.getPath());

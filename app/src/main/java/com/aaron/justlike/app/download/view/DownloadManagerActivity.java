@@ -161,7 +161,7 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
 
     private void initView() {
         mToolbar = findViewById(R.id.activity_download_manager_toolbar);
-        RecyclerView recyclerView = findViewById(R.id.rv_home_activity_main);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
         initToolbar(mToolbar);
         initRecyclerView(recyclerView);

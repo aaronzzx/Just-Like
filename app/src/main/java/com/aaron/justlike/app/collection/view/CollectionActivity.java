@@ -89,7 +89,6 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
                             startActivity(intent);
                         })
                         .setNegativeButton("取消", (dialog, which) -> {
-
                         }).show();
                 break;
         }
@@ -133,7 +132,7 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
     }
 
     private void initView() {
-        mRecyclerView = findViewById(R.id.rv_home_activity_main);
+        mRecyclerView = findViewById(R.id.recycler_view);
 
         setStatusBar();
         initToolbar();
