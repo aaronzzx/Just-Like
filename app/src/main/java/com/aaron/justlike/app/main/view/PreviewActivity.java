@@ -186,7 +186,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
             case R.id.action_delete:
                 new AlertDialog.Builder(this)
                         .setTitle("删除图片")
-                        .setMessage("图片将从设备中删除")
+                        .setMessage("图片将会被删除，无法撤销")
                         .setPositiveButton("确定", (dialog, which) -> {
                             if (mEventFlag == DELETE_EVENT) {
                                 EventBus.getDefault().postSticky(new DeleteEvent(mPosition,

@@ -13,6 +13,7 @@ import com.aaron.justlike.app.collection.entity.UpdateEvent;
 import com.aaron.justlike.app.collection.presenter.ElementPresenter;
 import com.aaron.justlike.app.collection.presenter.IElementPresenter;
 import com.aaron.justlike.app.main.entity.Image;
+import com.aaron.justlike.util.FileUtils;
 import com.jaeger.library.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -99,6 +100,7 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
 
     public void showAddImage(List<Image> list) {
         mImageList.addAll(list);
+        FileUtils.sortByDate(list, false);
         mGridFragment.update(list);
     }
 
@@ -106,6 +108,12 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
     public void onResponse(List<String> response) {
         List<Image> imageList = new ArrayList<>();
         mService.execute(() -> {
+            Collection info = new Collection();
+            info.setTotal(mImageList.size() + response.size());
+            info.setPath(response.get(response.size() - 1));
+            info.setCreateAt(System.currentTimeMillis());
+            info.updateAll("title = ?", mTitle);
+
             for (String path : response) {
                 Element element = new Element();
                 element.setTitle(mTitle);
@@ -113,14 +121,8 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
                 element.setCreateAt(System.currentTimeMillis());
                 element.save();
 
-                Collection info = new Collection();
-                info.setTitle(mTitle);
-                info.setTotal(mImageList.size());
-                info.setPath(mImageList.get(mImageList.size() - 1).getPath());
-                info.setCreateAt(System.currentTimeMillis());
-                info.save();
-
                 Image image = new Image(path);
+                image.setDate(String.valueOf(System.currentTimeMillis()));
                 imageList.add(image);
                 mImageList.add(image);
             }

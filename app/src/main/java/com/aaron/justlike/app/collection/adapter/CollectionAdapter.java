@@ -44,8 +44,11 @@ public class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         View view = LayoutInflater.from(mContext)
                 .inflate(R.layout.activity_collection_recycler_item, parent, false);
         ViewHolder holder = new ViewHolder(view);
-        holder.itemView.setOnClickListener(v -> {
-            mCallback.onPress(holder.getAdapterPosition());
+
+        holder.itemView.setOnClickListener(v -> mCallback.onPress(holder.getAdapterPosition()));
+        holder.itemView.setOnLongClickListener(v -> {
+            mCallback.onLongPress(holder.getAdapterPosition());
+            return true;
         });
         return holder;
     }
@@ -111,5 +114,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public interface OnPressCallback {
 
         void onPress(int position);
+
+        void onLongPress(int position);
     }
 }

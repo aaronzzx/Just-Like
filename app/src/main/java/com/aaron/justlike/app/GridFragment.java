@@ -110,7 +110,7 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
     public void onLongPress(int position) {
         new AlertDialog.Builder(mContext)
                 .setTitle("删除图片")
-                .setMessage("图片将从设备删除")
+                .setMessage("图片将会被删除，无法撤销")
                 .setPositiveButton("确定", (dialog, which) -> {
                     String path = mImageList.get(position).getPath();
                     mImageList.remove(position);

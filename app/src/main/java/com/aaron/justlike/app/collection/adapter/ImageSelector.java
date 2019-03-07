@@ -29,8 +29,9 @@ public class ImageSelector {
         return mTitle;
     }
 
-    public void setTitle(String title) {
+    public ImageSelector setTitle(String title) {
         mTitle = title;
+        return Holder.INSTANCE;
     }
 
     public ImageSelector setFilePath(String path) {

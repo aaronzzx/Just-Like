@@ -1,5 +1,6 @@
 package com.aaron.justlike.app.collection.view;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -11,8 +12,10 @@ import android.widget.EditText;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.app.collection.adapter.CollectionAdapter;
+import com.aaron.justlike.app.collection.adapter.ImageSelector;
 import com.aaron.justlike.app.collection.entity.Album;
 import com.aaron.justlike.app.collection.entity.Collection;
+import com.aaron.justlike.app.collection.entity.Element;
 import com.aaron.justlike.app.collection.entity.SelectEvent;
 import com.aaron.justlike.app.collection.entity.UpdateEvent;
 import com.aaron.justlike.app.collection.presenter.CollectionPresenter;
@@ -36,13 +39,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class CollectionActivity extends AppCompatActivity implements CollectionAdapter.OnPressCallback,
-        ICollectionView {
+        ICollectionView, ImageSelector.ImageCallback {
 
     private ICollectionPresenter mPresenter;
 
+    private ProgressDialog mDialog;
     private RecyclerView mRecyclerView;
     private MyGridLayoutManager mLayoutManager;
     private CollectionAdapter mAdapter;
+
     private List<Album> mCollections = new ArrayList<>();
 
     @Override
@@ -83,10 +88,12 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
                         .setTitle("创建集合")
                         .setPositiveButton("确定", (dialog, which) -> {
                             // 打开图片选择器让用户选择图片添加到集合
-                            String collectionName = editText.getText().toString();
-                            Intent intent = new Intent(this, SelectActivity.class);
-                            intent.putExtra("collectionName", collectionName);
-                            startActivity(intent);
+                            String title = editText.getText().toString();
+                            ImageSelector.getInstance(this)
+                                    .setTitle(title)
+                                    .setFilePath("/storage/emulated/0/Pictures/JustLike")
+                                    .setCallback(this)
+                                    .start();
                         })
                         .setNegativeButton("取消", (dialog, which) -> {
                         }).show();
@@ -119,6 +126,51 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
         Intent intent = new Intent(this, ElementActivity.class);
         intent.putExtra("title", mCollections.get(position).getCollectionTitle());
         startActivity(intent);
+    }
+
+    @Override
+    public void onLongPress(int position) {
+        new AlertDialog.Builder(this)
+                .setTitle("删除集合")
+                .setMessage("请慎重！集合的所有信息将被清除")
+                .setPositiveButton("确定", (dialog, which) -> {
+                    mCollections.remove(position);
+                    mAdapter.notifyDataSetChanged();
+                })
+                .setNegativeButton("取消", (dialog, which) -> {
+                }).show();
+    }
+
+    @Override
+    public void onResponse(List<String> response, String title) {
+        showProgress();
+
+        Collection info = new Collection();
+        info.setTitle(title);
+        info.setTotal(response.size());
+        info.setPath(response.get(response.size() - 1));
+        info.setCreateAt(System.currentTimeMillis());
+        info.save();
+
+        for (String path : response) {
+            Element element = new Element();
+            element.setTitle(title);
+            element.setPath(path);
+            element.setCreateAt(System.currentTimeMillis());
+            element.save();
+        }
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(600);
+                runOnUiThread(() -> {
+                    hideProgress();
+                    mPresenter.requestCollection(mCollections);
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     @Override
@@ -158,6 +210,20 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
         mRecyclerView.addItemDecoration(new YItemDecoration());
         mAdapter = new CollectionAdapter(this, mCollections);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void showProgress() {
+        mDialog = new ProgressDialog(this);
+        mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mDialog.setCancelable(false);
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.setTitle("创建集合");
+        mDialog.setMessage("Loading...");
+        mDialog.show();
+    }
+
+    private void hideProgress() {
+        mDialog.dismiss();
     }
 
     private class YItemDecoration extends RecyclerView.ItemDecoration {
