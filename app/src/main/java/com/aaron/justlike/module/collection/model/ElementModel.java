@@ -75,7 +75,7 @@ public class ElementModel implements IElementModel<Image> {
                 count--;
                 Collection collection = new Collection();
                 collection.setTotal(count);
-                collection.setPath(elements.get(0).getPath());
+                collection.setPath(elements.get(elements.size() - 1).getPath());
                 collection.updateAll("title = ?", title);
             } else {
                 LitePal.getDatabase().delete("Collection", "title = ?", new String[]{title});

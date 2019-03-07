@@ -55,11 +55,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".module.collection.view.SelectActivity"
-            android:label="已选择(0)"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".module.download.view.DownloadManagerActivity"
             android:label="下载管理"
             android:screenOrientation="portrait"
