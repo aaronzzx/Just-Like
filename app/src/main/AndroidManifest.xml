@@ -18,9 +18,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".app.collection.view.SelectorActivity"></activity>
+        <activity android:name=".custom.image_selector.SelectorActivity"></activity>
         <activity
-            android:name=".app.main.view.MainActivity"
+            android:name=".module.main.view.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Splash">
             <intent-filter>
@@ -30,42 +30,42 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".app.main.view.PreviewActivity"
+            android:name=".module.main.view.PreviewActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.DisplayActivity" />
         <activity
-            android:name=".app.online.view.OnlineActivity"
+            android:name=".module.online.view.OnlineActivity"
             android:label="Online"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.OnlineActivity" />
         <activity
-            android:name=".app.online.view.PreviewActivity"
+            android:name=".module.online.view.PreviewActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.OnlineActivity" />
         <activity
-            android:name=".app.collection.view.CollectionActivity"
+            android:name=".module.collection.view.CollectionActivity"
             android:label="集合"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".app.collection.view.ElementActivity"
+            android:name=".module.collection.view.ElementActivity"
             android:label="元素"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".app.collection.view.SelectActivity"
+            android:name=".module.collection.view.SelectActivity"
             android:label="已选择(0)"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".app.download.view.DownloadManagerActivity"
+            android:name=".module.download.view.DownloadManagerActivity"
             android:label="下载管理"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".app.about.view.AboutActivity"
+            android:name=".module.about.view.AboutActivity"
             android:label="关于"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
