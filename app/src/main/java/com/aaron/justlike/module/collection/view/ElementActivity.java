@@ -79,7 +79,7 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
     }
 
     @Override
-    public void onDelete(String path) {
+    public void onDelet(String path) {
         mPresenter.deleteImage(mTitle, path);
     }
 

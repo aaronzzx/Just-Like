@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -47,8 +48,8 @@ import androidx.viewpager.widget.ViewPager;
 public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         View.OnClickListener, ViewPager.OnPageChangeListener, PreviewAdapter.Callback {
 
-    public static final int DELETE_EVENT = 0;
-    public static final int DELET_EVENT = 1;
+    public static final int DELETE_EVENT = 1;
+    public static final int DELET_EVENT = 2;
 
     private static final String FIT_SCREEN = "适应屏幕";
     private static final String FREE_CROP = "自由裁剪";
@@ -189,9 +190,11 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
                         .setMessage("图片将会被删除，无法撤销")
                         .setPositiveButton("确定", (dialog, which) -> {
                             if (mEventFlag == DELETE_EVENT) {
+                                // 回传 MainActivity
                                 EventBus.getDefault().postSticky(new DeleteEvent(mPosition,
                                         mImageList.get(mPosition).getPath()));
-                            } else {
+                            } else if (mEventFlag == DELET_EVENT) {
+                                // 回传 ElementActivity
                                 EventBus.getDefault().postSticky(new DeletEvent(mPosition,
                                         mImageList.get(mPosition).getPath()));
                             }
@@ -239,6 +242,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         mPosition = event.getPosition();
         mImageList = event.getList();
         mEventFlag = mImageList.get(0).getEventFlag();
+        Log.d("PreviewActivity", "mEventFlag: " + mEventFlag);
     }
 
     @Override
@@ -252,8 +256,6 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
     }
 
     private void initView() {
-        mEventFlag = getIntent().getIntExtra("eventFlag", 2);
-
         mToolbar = findViewById(R.id.activity_display_image_toolbar);
         mViewPager = findViewById(R.id.activity_display_image_vp);
 

@@ -86,7 +86,7 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
         String path = event.getPath();
         mImageList.remove(position);
         mAdapter.notifyDataSetChanged();
-        ((GridFragment.Callback) mContext).onDelete(path);
+        ((GridFragment.Callback) mContext).onDelet(path);
     }
 
     /**
@@ -116,7 +116,7 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
                     mImageList.remove(position);
                     mAdapter.notifyItemRemoved(position);
                     mAdapter.notifyItemRangeChanged(0, mImageList.size() - 1);
-                    ((GridFragment.Callback) mContext).onDelete(path);
+                    ((GridFragment.Callback) mContext).onDelet(path);
                 })
                 .setNegativeButton("取消", (dialog, which) -> {
                 }).show();
@@ -207,7 +207,11 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
 
     public interface Callback {
 
-        void onDelete(String path);
+        default void onDelete(String path) {
+        }
+
+        default void onDelet(String path) {
+        }
 
         default void onHide() {
 

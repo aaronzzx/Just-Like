@@ -2,6 +2,7 @@ package com.aaron.justlike.module.main.model;
 
 import com.aaron.justlike.module.main.entity.Image;
 import com.aaron.justlike.module.main.entity.SortInfo;
+import com.aaron.justlike.module.main.view.PreviewActivity;
 import com.aaron.justlike.util.FileUtils;
 
 import org.litepal.LitePal;
@@ -81,7 +82,12 @@ public class BaseModel implements IModel<Image> {
         List<Image> imageList = new ArrayList<>();
         boolean success = FileUtils.getLocalFiles(imageList, PATH, TYPE);
         if (success) {
-            return imageList;
+            List<Image> newList = new ArrayList<>();
+            for (Image image : imageList) {
+                image.setEventFlag(PreviewActivity.DELETE_EVENT);
+                newList.add(image);
+            }
+            return newList;
         }
         return null;
     }
