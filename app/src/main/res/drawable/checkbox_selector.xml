@@ -3,6 +3,8 @@
 
     <item android:drawable="@drawable/checkbox_true" android:state_checked="true" />
 
+    <item android:drawable="@drawable/checkbox_unclicked" android:state_enabled="false" />
+
     <item android:drawable="@drawable/checkbox_false" />
 
 </selector>

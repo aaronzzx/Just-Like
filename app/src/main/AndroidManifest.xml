@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.aaron.justlike">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name=".custom.BaseApplication"
         android:allowBackup="false"
@@ -13,60 +18,52 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-
+        <activity android:name=".custom.image_selector.SelectorActivity"></activity>
         <activity
-            android:name=".app.main.view.MainActivity"
-            android:theme="@style/AppTheme.Splash"
-            android:screenOrientation="portrait">
+            android:name=".module.main.view.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".app.main.view.PreviewActivity"
+            android:name=".module.main.view.PreviewActivity"
             android:label=""
-            android:theme="@style/AppTheme.DisplayActivity"
-            android:screenOrientation="portrait" />
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.DisplayActivity" />
         <activity
-            android:name=".app.online.view.OnlineActivity"
+            android:name=".module.online.view.OnlineActivity"
             android:label="Online"
-            android:theme="@style/AppTheme.OnlineActivity"
-            android:screenOrientation="portrait" />
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.OnlineActivity" />
         <activity
-            android:name=".app.online.view.PreviewActivity"
+            android:name=".module.online.view.PreviewActivity"
             android:label=""
-            android:theme="@style/AppTheme.OnlineActivity"
-            android:screenOrientation="portrait" />
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.OnlineActivity" />
         <activity
-            android:name=".app.collection.view.CollectionActivity"
+            android:name=".module.collection.view.CollectionActivity"
             android:label="集合"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait" />
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-            android:name=".app.collection.view.SelectActivity"
-            android:label="已选择(0)"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait" />
-
+            android:name=".module.collection.view.ElementActivity"
+            android:label="元素"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-            android:name=".app.download.view.DownloadManagerActivity"
+            android:name=".module.download.view.DownloadManagerActivity"
             android:label="下载管理"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait" />
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-            android:name=".app.about.view.AboutActivity"
+            android:name=".module.about.view.AboutActivity"
             android:label="关于"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait" />
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
@@ -77,18 +74,10 @@
             android:authorities="com.aaron.justlike.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
-
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-
         </provider>
-
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.SET_WALLPAPER" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>
