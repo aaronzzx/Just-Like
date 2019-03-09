@@ -18,6 +18,10 @@ public class ImageSelector {
 
     }
 
+    public static ImageSelector getInstance() {
+        return Holder.INSTANCE;
+    }
+
     public static ImageSelector getInstance(Context context) {
         mWeakReference = new WeakReference<>(context);
         return Holder.INSTANCE;

@@ -24,7 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class ElementActivity extends AppCompatActivity implements GridFragment.Callback,
-        IElementView<Image>, ImageSelector.ImageCallback {
+        IElementView<Image> {
 
     private IElementPresenter<Image> mPresenter;
 
@@ -49,6 +49,8 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
         super.onDestroy();
         mPresenter.detachView();
         EventBus.getDefault().post(new UpdateEvent());
+        ImageSelector.getInstance()
+                .setCallback(null);
     }
 
     @Override
@@ -71,7 +73,12 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
                 ImageSelector.getInstance(getApplicationContext())
                         .setFilePath("/storage/emulated/0/Pictures/JustLike")
                         .setSelectedImage(selectedList)
-                        .setCallback(this)
+                        .setCallback(new ImageSelector.ImageCallback() {
+                            @Override
+                            public void onResponse(List<String> response) {
+                                mPresenter.saveImage(mTitle, mImageList.size(), response);
+                            }
+                        })
                         .start();
                 break;
         }
@@ -95,11 +102,6 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
         mImageList.addAll(list);
         FileUtils.sortByDate(list, false);
         runOnUiThread(() -> mGridFragment.updateForAdd(list));
-    }
-
-    @Override
-    public void onResponse(List<String> response) {
-        mPresenter.saveImage(mTitle, mImageList.size(), response);
     }
 
     private void initView() {

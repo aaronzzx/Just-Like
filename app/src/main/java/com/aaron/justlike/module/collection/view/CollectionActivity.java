@@ -40,7 +40,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class CollectionActivity extends AppCompatActivity implements CollectionAdapter.OnPressCallback,
-        ICollectionView, ImageSelector.ImageCallback {
+        ICollectionView {
 
     private ICollectionPresenter mPresenter;
 
@@ -67,6 +67,8 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         mPresenter.detachView();
+        ImageSelector.getInstance()
+                .setCallback(null);
     }
 
     @Override
@@ -94,11 +96,21 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
                                     .setTitle(title)
                                     .setFilePath("/storage/emulated/0/Pictures/JustLike")
                                     .setSelectedImage(null)
-                                    .setCallback(this)
+                                    .setCallback(new ImageSelector.ImageCallback() {
+                                        @Override
+                                        public void onResponse(List<String> response, String title) {
+                                            showProgress();
+                                            int i = mPresenter.saveCollection(response, title);
+                                            if (i == 1) {
+                                                mPresenter.requestCollection(mCollections);
+                                            }
+                                        }
+                                    })
                                     .start();
                         })
                         .setNegativeButton("取消", (dialog, which) -> {
-                        }).show();
+                        })
+                        .show();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -144,15 +156,6 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
                 })
                 .setNegativeButton("取消", (dialog, which) -> {
                 }).show();
-    }
-
-    @Override
-    public void onResponse(List<String> response, String title) {
-        showProgress();
-        int i = mPresenter.saveCollection(response, title);
-        if (i == 1) {
-            mPresenter.requestCollection(mCollections);
-        }
     }
 
     @Override
