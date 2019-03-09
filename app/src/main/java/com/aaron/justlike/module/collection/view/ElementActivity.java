@@ -87,14 +87,14 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
     public void onShowImage(List<Image> list) {
         mImageList.clear();
         mImageList.addAll(list);
-        mGridFragment.update(list);
+        mGridFragment.updateForAdd(list);
     }
 
     @Override
     public void onShowAddImage(List<Image> list) {
         mImageList.addAll(list);
         FileUtils.sortByDate(list, false);
-        runOnUiThread(() -> mGridFragment.update(list));
+        runOnUiThread(() -> mGridFragment.updateForAdd(list));
     }
 
     @Override

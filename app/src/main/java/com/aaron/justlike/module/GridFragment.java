@@ -126,12 +126,21 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
      * 由 Activity 调用
      */
     @MainThread
-    public void update(List<Image> list) {
+    public void updateForAdd(List<Image> list) {
 //        mImageList.clear();
         mImageList.addAll(0, list);
 //        mAdapter.notifyDataSetChanged();
         mAdapter.notifyItemRangeInserted(0, list.size());
         mAdapter.notifyItemRangeChanged(list.size(), mImageList.size() - list.size());
+        mRecyclerView.scrollToPosition(0);
+    }
+
+    public void update(List<Image> list) {
+        mImageList.clear();
+        mImageList.addAll(0, list);
+        mAdapter.notifyDataSetChanged();
+//        mAdapter.notifyItemRangeInserted(0, list.size());
+//        mAdapter.notifyItemRangeChanged(list.size(), mImageList.size() - list.size());
         mRecyclerView.scrollToPosition(0);
     }
 

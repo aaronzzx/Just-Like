@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     @Override
     public void onShowAddImage(List<Image> list) {
         mImageList.addAll(0, list);
-        mGridFragment.update(list);
+        mGridFragment.updateForAdd(list);
     }
 
     /**

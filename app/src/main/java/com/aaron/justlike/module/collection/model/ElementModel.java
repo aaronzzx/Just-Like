@@ -64,11 +64,11 @@ public class ElementModel implements IElementModel<Image> {
     @Override
     public void deleteImage(String title, String path) {
         mExecutorService.execute(() -> {
-            // update element
+            // updateForAdd element
             LitePal.getDatabase().delete("Element", "path = ?", new String[]{path});
             List<Element> elements = LitePal.where("title = ?", title).find(Element.class);
 
-            // update collection
+            // updateForAdd collection
             List<Collection> collections = LitePal.where("title = ?", title).find(Collection.class);
             int count = collections.get(0).getTotal();
             if (count > 1) {
