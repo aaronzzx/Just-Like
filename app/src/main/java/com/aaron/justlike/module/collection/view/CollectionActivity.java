@@ -90,7 +90,7 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
                         .setPositiveButton("确定", (dialog, which) -> {
                             // 打开图片选择器让用户选择图片添加到集合
                             String title = editText.getText().toString();
-                            ImageSelector.getInstance(this)
+                            ImageSelector.getInstance(getApplicationContext())
                                     .setTitle(title)
                                     .setFilePath("/storage/emulated/0/Pictures/JustLike")
                                     .setSelectedImage(null)

@@ -68,7 +68,7 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
                 for (Image image : mImageList) {
                     selectedList.add(image.getPath());
                 }
-                ImageSelector.getInstance(this)
+                ImageSelector.getInstance(getApplicationContext())
                         .setFilePath("/storage/emulated/0/Pictures/JustLike")
                         .setSelectedImage(selectedList)
                         .setCallback(this)

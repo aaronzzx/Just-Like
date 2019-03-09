@@ -11,10 +11,12 @@ import android.view.ViewGroup;
 import com.aaron.justlike.R;
 import com.aaron.justlike.custom.MyGridLayoutManager;
 import com.aaron.justlike.module.collection.entity.DeletEvent;
+import com.aaron.justlike.module.collection.view.ElementActivity;
 import com.aaron.justlike.module.main.adapter.MainAdapter;
 import com.aaron.justlike.module.main.entity.DeleteEvent;
 import com.aaron.justlike.module.main.entity.Image;
 import com.aaron.justlike.module.main.entity.PreviewEvent;
+import com.aaron.justlike.module.main.view.MainActivity;
 import com.aaron.justlike.module.main.view.PreviewActivity;
 import com.aaron.justlike.util.SystemUtils;
 
@@ -116,7 +118,11 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
                     mImageList.remove(position);
                     mAdapter.notifyItemRemoved(position);
                     mAdapter.notifyItemRangeChanged(0, mImageList.size() - 1);
-                    ((GridFragment.Callback) mContext).onDelet(path);
+                    if (getActivity() instanceof MainActivity) {
+                        ((GridFragment.Callback) mContext).onDelete(path);
+                    } else if (getActivity() instanceof ElementActivity) {
+                        ((GridFragment.Callback) mContext).onDelet(path);
+                    }
                 })
                 .setNegativeButton("取消", (dialog, which) -> {
                 }).show();
