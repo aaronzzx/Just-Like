@@ -31,7 +31,6 @@ android {
                 'src/main/res/layouts/about',
                 'src/main/res/layouts/others',
                 'src/main/res/resource',
-                'src/main/res/layouts',
                 'src/main/res'
             ]
         }
