@@ -10,7 +10,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.widget.Toast;
 
-import com.aaron.justlike.custom.BaseApplication;
+import com.aaron.justlike.base.BaseApplication;
 
 public class DownloadUtil {
 

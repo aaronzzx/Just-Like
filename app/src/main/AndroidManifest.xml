@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".custom.BaseApplication"
+        android:name=".base.BaseApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,9 +18,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".custom.image_selector.SelectorActivity"></activity>
+        <activity android:name=".ui.image_selector.SelectorActivity"></activity>
         <activity
-            android:name=".module.main.view.MainActivity"
+            android:name=".mvp_view.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Splash">
             <intent-filter>
@@ -30,37 +30,37 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".module.main.view.PreviewActivity"
+            android:name=".mvp_view.main.preview.PreviewActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.DisplayActivity" />
         <activity
-            android:name=".module.online.view.OnlineActivity"
+            android:name=".mvp_view.online.OnlineActivity"
             android:label="Online"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.OnlineActivity" />
         <activity
-            android:name=".module.online.view.PreviewActivity"
+            android:name=".mvp_view.online.preview.PreviewActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.OnlineActivity" />
         <activity
-            android:name=".module.collection.view.CollectionActivity"
+            android:name=".mvp_view.collection.CollectionActivity"
             android:label="集合"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".module.collection.view.ElementActivity"
+            android:name=".mvp_view.collection.element.ElementActivity"
             android:label="元素"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".module.download.view.DownloadManagerActivity"
+            android:name=".mvp_view.download.DownloadManagerActivity"
             android:label="下载管理"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".module.about.view.AboutActivity"
+            android:name=".mvp_view.about.AboutActivity"
             android:label="关于"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />

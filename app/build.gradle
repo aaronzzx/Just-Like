@@ -20,6 +20,22 @@ android {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
+
+    sourceSets {
+        main {
+            res.srcDirs = [
+                'src/main/res/layouts/main',
+                'src/main/res/layouts/online',
+                'src/main/res/layouts/collection',
+                'src/main/res/layouts/download',
+                'src/main/res/layouts/about',
+                'src/main/res/layouts/others',
+                'src/main/res/resource',
+                'src/main/res/layouts',
+                'src/main/res'
+            ]
+        }
+    }
 }
 
 dependencies {

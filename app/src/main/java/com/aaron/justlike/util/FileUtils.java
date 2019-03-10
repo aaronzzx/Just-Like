@@ -22,8 +22,8 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.aaron.justlike.module.main.entity.Image;
-import com.aaron.justlike.module.main.view.PreviewActivity;
+import com.aaron.justlike.entity.Image;
+import com.aaron.justlike.mvp_view.main.preview.PreviewActivity;
 
 import java.io.File;
 import java.io.FileInputStream;

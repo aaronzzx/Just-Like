@@ -302,7 +302,7 @@ public class AnimationUtil {
      * @param img
      */
     public static void showProgressImage(final ImageView img) {
-        img.setImageResource(R.mipmap.ic_done_circle);
+        img.setImageResource(R.drawable.ic_done_circle);
         img.setVisibility(View.VISIBLE);
         AlphaAnimation aa = new AlphaAnimation(0, 1);
         aa.setDuration(300);

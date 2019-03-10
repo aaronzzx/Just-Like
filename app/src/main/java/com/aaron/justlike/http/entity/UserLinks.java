@@ -17,7 +17,7 @@ public class UserLinks implements Parcelable {
     private String self;
     @SerializedName("html")
     private String html;
-    @SerializedName("download")
+    @SerializedName("")
     private String download;
     @SerializedName("download_location")
     private String downloadLocation;
