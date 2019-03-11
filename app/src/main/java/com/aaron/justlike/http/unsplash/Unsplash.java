@@ -1,8 +1,8 @@
-package com.aaron.justlike.http;
+package com.aaron.justlike.http.unsplash;
 
-import com.aaron.justlike.http.entity.Photo;
-import com.aaron.justlike.http.interfaces.PhotoCallback;
-import com.aaron.justlike.http.interfaces.PhotoService;
+import com.aaron.justlike.http.unsplash.entity.Photo;
+import com.aaron.justlike.http.unsplash.interfaces.PhotoCallback;
+import com.aaron.justlike.http.unsplash.interfaces.PhotoService;
 
 import java.util.List;
 

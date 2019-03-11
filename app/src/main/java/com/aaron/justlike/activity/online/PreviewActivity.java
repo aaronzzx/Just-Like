@@ -1,4 +1,4 @@
-package com.aaron.justlike.mvp_view.online.preview;
+package com.aaron.justlike.activity.online;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,9 +17,10 @@ import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.entity.PhotoEvent;
-import com.aaron.justlike.http.entity.Photo;
+import com.aaron.justlike.http.unsplash.entity.Photo;
 import com.aaron.justlike.mvp_presenter.online.preview.IPreviewPresenter;
 import com.aaron.justlike.mvp_presenter.online.preview.PreviewPresenter;
+import com.aaron.justlike.mvp_view.online.IPreviewView;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;

@@ -1,4 +1,4 @@
-package com.aaron.justlike.mvp_view.online;
+package com.aaron.justlike.activity.online;
 
 import android.content.Intent;
 import android.graphics.Rect;
@@ -10,10 +10,10 @@ import android.widget.ProgressBar;
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.online.OnlineAdapter;
 import com.aaron.justlike.entity.PhotoEvent;
-import com.aaron.justlike.http.entity.Photo;
+import com.aaron.justlike.http.unsplash.entity.Photo;
 import com.aaron.justlike.mvp_presenter.online.IOnlinePresenter;
 import com.aaron.justlike.mvp_presenter.online.OnlinePresenter;
-import com.aaron.justlike.mvp_view.online.preview.PreviewActivity;
+import com.aaron.justlike.mvp_view.online.IOnlineView;
 import com.aaron.justlike.ui.MyGridLayoutManager;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.snackbar.Snackbar;

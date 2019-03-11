@@ -1,6 +1,6 @@
 package com.aaron.justlike.mvp_presenter.online;
 
-import com.aaron.justlike.http.entity.Photo;
+import com.aaron.justlike.http.unsplash.entity.Photo;
 import com.aaron.justlike.mvp_model.online.IModel;
 import com.aaron.justlike.mvp_model.online.OnlineModel;
 import com.aaron.justlike.mvp_view.online.IOnlineView;

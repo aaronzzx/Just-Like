@@ -1,9 +1,9 @@
 package com.aaron.justlike.mvp_presenter.online.preview;
 
-import com.aaron.justlike.http.entity.Photo;
+import com.aaron.justlike.http.unsplash.entity.Photo;
 import com.aaron.justlike.mvp_model.online.preview.IPreviewModel;
 import com.aaron.justlike.mvp_model.online.preview.PreviewModel;
-import com.aaron.justlike.mvp_view.online.preview.IPreviewView;
+import com.aaron.justlike.mvp_view.online.IPreviewView;
 import com.aaron.justlike.util.DownloadUtil;
 
 import java.io.File;

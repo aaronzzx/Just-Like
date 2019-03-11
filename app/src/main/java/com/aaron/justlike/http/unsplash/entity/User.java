@@ -1,4 +1,4 @@
-package com.aaron.justlike.http.entity;
+package com.aaron.justlike.http.unsplash.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;

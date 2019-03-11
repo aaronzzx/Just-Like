@@ -1,4 +1,4 @@
-package com.aaron.justlike.http;
+package com.aaron.justlike.http.unsplash;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;

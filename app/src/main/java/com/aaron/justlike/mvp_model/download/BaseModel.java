@@ -3,9 +3,9 @@ package com.aaron.justlike.mvp_model.download;
 import android.util.Log;
 
 import com.aaron.justlike.entity.Image;
-import com.aaron.justlike.http.Unsplash;
-import com.aaron.justlike.http.entity.Photo;
-import com.aaron.justlike.http.interfaces.PhotoCallback;
+import com.aaron.justlike.http.unsplash.Unsplash;
+import com.aaron.justlike.http.unsplash.entity.Photo;
+import com.aaron.justlike.http.unsplash.interfaces.PhotoCallback;
 import com.aaron.justlike.util.FileUtils;
 
 import java.util.ArrayList;

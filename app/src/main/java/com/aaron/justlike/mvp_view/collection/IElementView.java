@@ -1,4 +1,4 @@
-package com.aaron.justlike.mvp_view.collection.element;
+package com.aaron.justlike.mvp_view.collection;
 
 import java.util.List;
 

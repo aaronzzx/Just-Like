@@ -2,10 +2,10 @@ package com.aaron.justlike.mvp_model.online;
 
 import android.util.Log;
 
-import com.aaron.justlike.http.Order;
-import com.aaron.justlike.http.Unsplash;
-import com.aaron.justlike.http.entity.Photo;
-import com.aaron.justlike.http.interfaces.PhotoCallback;
+import com.aaron.justlike.http.unsplash.Order;
+import com.aaron.justlike.http.unsplash.Unsplash;
+import com.aaron.justlike.http.unsplash.entity.Photo;
+import com.aaron.justlike.http.unsplash.interfaces.PhotoCallback;
 
 import java.util.List;
 

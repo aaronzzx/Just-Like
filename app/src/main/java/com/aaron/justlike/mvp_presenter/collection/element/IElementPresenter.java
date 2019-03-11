@@ -1,6 +1,6 @@
 package com.aaron.justlike.mvp_presenter.collection.element;
 
-import com.aaron.justlike.mvp_view.collection.element.IElementView;
+import com.aaron.justlike.mvp_view.collection.IElementView;
 
 import java.util.List;
 

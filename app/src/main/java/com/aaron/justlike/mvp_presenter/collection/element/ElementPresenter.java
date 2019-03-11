@@ -3,7 +3,7 @@ package com.aaron.justlike.mvp_presenter.collection.element;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.mvp_model.collection.element.ElementModel;
 import com.aaron.justlike.mvp_model.collection.element.IElementModel;
-import com.aaron.justlike.mvp_view.collection.element.IElementView;
+import com.aaron.justlike.mvp_view.collection.IElementView;
 
 import java.util.List;
 

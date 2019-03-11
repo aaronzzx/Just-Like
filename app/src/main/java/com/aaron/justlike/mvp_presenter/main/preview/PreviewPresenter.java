@@ -1,7 +1,7 @@
 package com.aaron.justlike.mvp_presenter.main.preview;
 
 import com.aaron.justlike.entity.ImageInfo;
-import com.aaron.justlike.mvp_view.main.preview.IPreviewView;
+import com.aaron.justlike.mvp_view.main.IPreviewView;
 import com.aaron.justlike.util.FileUtils;
 
 public class PreviewPresenter implements IPreviewPresenter {

@@ -1,4 +1,4 @@
-package com.aaron.justlike.mvp_view.collection.element;
+package com.aaron.justlike.activity.collection;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,6 +10,7 @@ import com.aaron.justlike.entity.UpdateEvent;
 import com.aaron.justlike.fragment.GridFragment;
 import com.aaron.justlike.mvp_presenter.collection.element.ElementPresenter;
 import com.aaron.justlike.mvp_presenter.collection.element.IElementPresenter;
+import com.aaron.justlike.mvp_view.collection.IElementView;
 import com.aaron.justlike.ui.image_selector.ImageSelector;
 import com.aaron.justlike.util.FileUtils;
 import com.jaeger.library.StatusBarUtil;

@@ -20,7 +20,7 @@
         tools:replace="android:allowBackup">
         <activity android:name=".ui.image_selector.SelectorActivity"></activity>
         <activity
-            android:name=".mvp_view.main.MainActivity"
+            android:name=".activity.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Splash">
             <intent-filter>
@@ -30,37 +30,37 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".mvp_view.main.preview.PreviewActivity"
+            android:name=".activity.main.PreviewActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.DisplayActivity" />
         <activity
-            android:name=".mvp_view.online.OnlineActivity"
+            android:name=".activity.online.OnlineActivity"
             android:label="Online"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.OnlineActivity" />
         <activity
-            android:name=".mvp_view.online.preview.PreviewActivity"
+            android:name=".activity.online.PreviewActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.OnlineActivity" />
         <activity
-            android:name=".mvp_view.collection.CollectionActivity"
+            android:name=".activity.collection.CollectionActivity"
             android:label="集合"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".mvp_view.collection.element.ElementActivity"
+            android:name=".activity.collection.ElementActivity"
             android:label="元素"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".mvp_view.download.DownloadManagerActivity"
+            android:name=".activity.download.DownloadManagerActivity"
             android:label="下载管理"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".mvp_view.about.AboutActivity"
+            android:name=".activity.about.AboutActivity"
             android:label="关于"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />

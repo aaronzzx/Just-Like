@@ -1,4 +1,4 @@
-package com.aaron.justlike.mvp_view.collection;
+package com.aaron.justlike.activity.collection;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -19,7 +19,7 @@ import com.aaron.justlike.entity.SelectEvent;
 import com.aaron.justlike.entity.UpdateEvent;
 import com.aaron.justlike.mvp_presenter.collection.CollectionPresenter;
 import com.aaron.justlike.mvp_presenter.collection.ICollectionPresenter;
-import com.aaron.justlike.mvp_view.collection.element.ElementActivity;
+import com.aaron.justlike.mvp_view.collection.ICollectionView;
 import com.aaron.justlike.ui.MyGridLayoutManager;
 import com.aaron.justlike.ui.image_selector.ImageSelector;
 import com.aaron.justlike.util.SystemUtils;

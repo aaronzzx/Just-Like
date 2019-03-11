@@ -1,4 +1,4 @@
-package com.aaron.justlike.mvp_view.main.preview;
+package com.aaron.justlike.activity.main;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -25,6 +25,7 @@ import com.aaron.justlike.entity.ImageInfo;
 import com.aaron.justlike.entity.PreviewEvent;
 import com.aaron.justlike.mvp_presenter.main.preview.IPreviewPresenter;
 import com.aaron.justlike.mvp_presenter.main.preview.PreviewPresenter;
+import com.aaron.justlike.mvp_view.main.IPreviewView;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;

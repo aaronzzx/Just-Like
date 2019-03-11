@@ -14,9 +14,9 @@ import com.aaron.justlike.entity.DeletEvent;
 import com.aaron.justlike.entity.DeleteEvent;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.entity.PreviewEvent;
-import com.aaron.justlike.mvp_view.collection.element.ElementActivity;
-import com.aaron.justlike.mvp_view.main.MainActivity;
-import com.aaron.justlike.mvp_view.main.preview.PreviewActivity;
+import com.aaron.justlike.activity.collection.ElementActivity;
+import com.aaron.justlike.activity.main.MainActivity;
+import com.aaron.justlike.activity.main.PreviewActivity;
 import com.aaron.justlike.ui.MyGridLayoutManager;
 import com.aaron.justlike.util.SystemUtils;
 

@@ -3,7 +3,7 @@ package com.aaron.justlike.mvp_model.collection.element;
 import com.aaron.justlike.entity.Collection;
 import com.aaron.justlike.entity.Element;
 import com.aaron.justlike.entity.Image;
-import com.aaron.justlike.mvp_view.main.preview.PreviewActivity;
+import com.aaron.justlike.activity.main.PreviewActivity;
 
 import org.litepal.LitePal;
 

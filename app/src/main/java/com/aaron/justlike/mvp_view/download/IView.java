@@ -1,6 +1,6 @@
 package com.aaron.justlike.mvp_view.download;
 
-import com.aaron.justlike.http.entity.Photo;
+import com.aaron.justlike.http.unsplash.entity.Photo;
 
 import java.util.List;
 

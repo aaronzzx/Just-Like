@@ -1,4 +1,4 @@
-package com.aaron.justlike.mvp_view.online.preview;
+package com.aaron.justlike.mvp_view.online;
 
 public interface IPreviewView {
 

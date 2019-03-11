@@ -1,4 +1,4 @@
-package com.aaron.justlike.mvp_view.main;
+package com.aaron.justlike.activity.main;
 
 import android.Manifest;
 import android.app.Activity;
@@ -19,10 +19,11 @@ import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.fragment.GridFragment;
 import com.aaron.justlike.mvp_presenter.main.IMainPresenter;
 import com.aaron.justlike.mvp_presenter.main.MainPresenter;
-import com.aaron.justlike.mvp_view.about.AboutActivity;
-import com.aaron.justlike.mvp_view.collection.CollectionActivity;
-import com.aaron.justlike.mvp_view.download.DownloadManagerActivity;
-import com.aaron.justlike.mvp_view.online.OnlineActivity;
+import com.aaron.justlike.activity.about.AboutActivity;
+import com.aaron.justlike.activity.collection.CollectionActivity;
+import com.aaron.justlike.activity.download.DownloadManagerActivity;
+import com.aaron.justlike.mvp_view.main.IMainView;
+import com.aaron.justlike.activity.online.OnlineActivity;
 import com.aaron.justlike.ui.GlideEngine;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.appbar.AppBarLayout;

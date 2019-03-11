@@ -1,4 +1,4 @@
-package com.aaron.justlike.http.interfaces;
+package com.aaron.justlike.http.unsplash.interfaces;
 
 public interface PhotoCallback<T> {
 
