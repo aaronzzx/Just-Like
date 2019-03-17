@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".ui.image_selector.SelectorActivity"></activity>
+
         <activity
             android:name=".activity.main.MainActivity"
             android:screenOrientation="portrait"
@@ -64,6 +64,7 @@
             android:label="关于"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <activity android:name=".ui.image_selector.SelectorActivity" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"

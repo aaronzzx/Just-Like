@@ -30,9 +30,8 @@ public class MainAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mCallback = callback;
     }
 
-
-    @Override
     @NonNull
+    @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         mContext = parent.getContext();
         View view = LayoutInflater.from(mContext).inflate(R.layout.activity_main_recycler_item,

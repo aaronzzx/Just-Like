@@ -7,14 +7,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.activity.online.PreviewActivity;
 import com.aaron.justlike.adapter.download.DownloadManagerAdapter;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.entity.PhotoEvent;
 import com.aaron.justlike.http.unsplash.entity.Photo;
-import com.aaron.justlike.mvp_presenter.download.BasePresenter;
-import com.aaron.justlike.mvp_presenter.download.IPresenter;
-import com.aaron.justlike.activity.online.PreviewActivity;
-import com.aaron.justlike.mvp_view.download.IView;
+import com.aaron.justlike.mvp.presenter.download.BasePresenter;
+import com.aaron.justlike.mvp.presenter.download.IPresenter;
+import com.aaron.justlike.mvp.view.download.IView;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.snackbar.Snackbar;

@@ -9,9 +9,9 @@ import com.aaron.justlike.adapter.about.AboutLibraryAdapter;
 import com.aaron.justlike.adapter.about.AboutMessageAdapter;
 import com.aaron.justlike.entity.Library;
 import com.aaron.justlike.entity.Message;
-import com.aaron.justlike.mvp_presenter.about.AboutPresenter;
-import com.aaron.justlike.mvp_presenter.about.IAboutPresenter;
-import com.aaron.justlike.mvp_view.about.IAboutView;
+import com.aaron.justlike.mvp.presenter.about.AboutPresenter;
+import com.aaron.justlike.mvp.presenter.about.IAboutPresenter;
+import com.aaron.justlike.mvp.view.about.IAboutView;
 import com.aaron.justlike.util.SystemUtils;
 import com.jaeger.library.StatusBarUtil;
 
