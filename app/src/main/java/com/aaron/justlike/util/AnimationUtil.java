@@ -191,9 +191,10 @@ public class AnimationUtil {
         as.setDuration(250);
         AlphaAnimation aa = new AlphaAnimation(1, 0);
         as.addAnimation(aa);
-        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -130);
+        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -200);
         as.addAnimation(ta);
         as.setStartOffset(startOffset);
+        view.clearAnimation();
         view.startAnimation(as);
         view.setVisibility(View.GONE);
     }
@@ -203,6 +204,9 @@ public class AnimationUtil {
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+//        LayoutAnimationController lac = AnimationUtils.loadLayoutAnimation(activity, R.anim.layout_topbar_translate_down);
+//        ViewGroup group = (ViewGroup) view;
+//        group.setLayoutAnimation(lac);
         AnimationSet as = new AnimationSet(true);
         as.setDuration(250);
         AlphaAnimation aa = new AlphaAnimation(0, 1);
@@ -222,13 +226,17 @@ public class AnimationUtil {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+//        LayoutAnimationController lac = AnimationUtils.loadLayoutAnimation(activity, R.anim.layout_bottombar_translate_down);
+//        ViewGroup group = (ViewGroup) view;
+//        group.setLayoutAnimation(lac);
         AnimationSet as = new AnimationSet(true);
         as.setDuration(250);
         AlphaAnimation aa = new AlphaAnimation(1, 0);
         as.addAnimation(aa);
-        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, 130);
+        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, 200);
         as.addAnimation(ta);
         as.setStartOffset(startOffset);
+        view.clearAnimation();
         view.startAnimation(as);
         view.setVisibility(View.GONE);
     }
@@ -238,6 +246,9 @@ public class AnimationUtil {
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+//        LayoutAnimationController lac = AnimationUtils.loadLayoutAnimation(activity, R.anim.layout_bottombar_translate_up);
+//        ViewGroup group = (ViewGroup) view;
+//        group.setLayoutAnimation(lac);
         AnimationSet as = new AnimationSet(true);
         as.setDuration(250);
         AlphaAnimation aa = new AlphaAnimation(0, 1);

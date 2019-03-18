@@ -46,7 +46,7 @@ public class PreviewPresenter implements IPreviewPresenter {
 
     @Override
     public void requestMode(Photo photo, int mode) {
-        String urls = photo.getLinks().getDownload();
+        String urls = photo.getUrls().getRaw();
         String photoId = photo.getId() + ".JPG";
         mModel.startDownload(urls, photoId, mode, new IPreviewModel.Callback() {
             @Override

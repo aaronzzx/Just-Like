@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layoutAnimation="@anim/layout_bottombar_translate_up">
 
         <ImageView
             android:id="@+id/action_share"

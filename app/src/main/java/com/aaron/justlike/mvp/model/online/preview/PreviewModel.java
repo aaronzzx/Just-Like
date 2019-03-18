@@ -1,5 +1,7 @@
 package com.aaron.justlike.mvp.model.online.preview;
 
+import android.util.Log;
+
 import com.aaron.justlike.util.DownloadUtil;
 
 import java.io.File;
@@ -21,6 +23,7 @@ public class PreviewModel implements IPreviewModel {
                 return;
             }
         }
+        Log.d("JustLike", "urls: " + urls);
         new DownloadUtil().downloadImage(urls, name, type);
     }
 }

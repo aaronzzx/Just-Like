@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -64,12 +65,13 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
 
     private Toolbar mToolbar;
     private ViewPager mViewPager;
+    private FrameLayout mTopBar;
     private LinearLayout mBottomBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_image);
+        setContentView(R.layout.activity_preview);
         EventBus.getDefault().register(this);
         attachPresenter();
         initView();
@@ -226,7 +228,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
 
     @Override
     public void onPress() {
-        if (mToolbar.getVisibility() == View.GONE) {
+        if (mTopBar.getVisibility() == View.GONE) {
             // 全屏状态下执行此代码块会退出全屏
             animIn(0);
         } else {
@@ -258,6 +260,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
 
     private void initView() {
         mToolbar = findViewById(R.id.activity_display_image_toolbar);
+        mTopBar = findViewById(R.id.top_bar);
         mViewPager = findViewById(R.id.activity_display_image_vp);
 
         // BottomBar 按钮
@@ -275,7 +278,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
 
         initToolbar();
         initViewPager();
-        animIn(200);
+//        animIn(200);
     }
 
     private void initToolbar() {
@@ -337,12 +340,12 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
     }
 
     private void animIn(long startOffset) {
-        AnimationUtil.showToolbar(this, mToolbar, startOffset);
+        AnimationUtil.showToolbar(this, mTopBar, startOffset);
         AnimationUtil.showBottomBar(this, mBottomBar, startOffset);
     }
 
     private void animOut(long startOffset) {
-        AnimationUtil.hideToolbar(this, mToolbar, startOffset);
+        AnimationUtil.hideToolbar(this, mTopBar, startOffset);
         AnimationUtil.hideBottomBar(this, mBottomBar, startOffset);
     }
 }
