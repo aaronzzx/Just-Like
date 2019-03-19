@@ -1,14 +1,14 @@
 <resources>
 
     <!-- Customize splash image here. -->
-    <style name="AppTheme.Splash">
+    <style name="DefaultTheme.Splash">
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@drawable/for_splash</item>
     </style>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="DefaultTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
@@ -16,32 +16,114 @@
         <item name="android:navigationBarColor">#000000</item>
     </style>
 
-    <!-- Customize MainImageActivity here. -->
-    <style name="AppTheme.DisplayActivity" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="WhiteTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorGrey</item>
-        <item name="colorPrimaryDark">@color/colorGreyDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorPrimaryWhite</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryWhite</item>
+        <item name="colorAccent">@color/colorAccentWhite</item>
+        <item name="android:navigationBarColor">#000000</item>
+    </style>
+
+    <style name="BlackTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryBlack</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryBlack</item>
+        <item name="colorAccent">@color/colorAccentBlack</item>
+        <item name="android:navigationBarColor">#000000</item>
+    </style>
+
+    <style name="GreyTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryGrey</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryGrey</item>
+        <item name="colorAccent">@color/colorAccentGrey</item>
+        <item name="android:navigationBarColor">#000000</item>
+    </style>
+
+    <style name="GreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryGreen</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryGreen</item>
+        <item name="colorAccent">@color/colorAccentGreen</item>
+        <item name="android:navigationBarColor">#000000</item>
+    </style>
+
+    <style name="RedTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryRed</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryRed</item>
+        <item name="colorAccent">@color/colorAccentRed</item>
+        <item name="android:navigationBarColor">#000000</item>
+    </style>
+
+    <style name="PinkTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryPink</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryPink</item>
+        <item name="colorAccent">@color/colorAccentPink</item>
+        <item name="android:navigationBarColor">#000000</item>
+    </style>
+
+    <style name="BlueTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryBlue</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryBlue</item>
+        <item name="colorAccent">@color/colorAccentBlue</item>
+        <item name="android:navigationBarColor">#000000</item>
+    </style>
+
+    <style name="PurpleTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryPurple</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryPurple</item>
+        <item name="colorAccent">@color/colorAccentPurple</item>
+        <item name="android:navigationBarColor">#000000</item>
+    </style>
+
+    <style name="BrownTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryBrown</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryBrown</item>
+        <item name="colorAccent">@color/colorAccentBrown</item>
+        <item name="android:navigationBarColor">#000000</item>
+    </style>
+
+    <!-- Customize PreviewActivity here. -->
+    <style name="PreviewTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryBlack</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryBlack</item>
+        <item name="colorAccent">@color/colorPrimaryBlack</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:navigationBarColor">@color/transparent</item>
     </style>
 
-    <style name="AppTheme.OnlineActivity" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="OnlineTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#000</item>
-        <item name="colorPrimaryDark">#000</item>
-        <item name="colorAccent">@color/snackBar</item>
-        <item name="android:navigationBarColor">#000</item>
+        <item name="colorPrimary">@color/colorPrimaryBlack</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryBlack</item>
+        <item name="colorAccent">@color/colorPrimaryWhite</item>
+        <item name="android:navigationBarColor">#FF000000</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
-    <style name="MatisseTheme" parent="Matisse.Zhihu">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="bottomToolbar.apply.textColor">@color/colorPrimary</item>
-        <item name="preview.bottomToolbar.apply.textColor">@color/colorPrimary</item>
-        <item name="item.checkCircle.backgroundColor">@color/colorPrimary</item>
-        <item name="android:navigationBarColor">#000000</item>
+    <style name="SelectorTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryBlack</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryBlack</item>
+        <item name="colorAccent">@color/colorPrimaryWhite</item>
+        <item name="android:navigationBarColor">#FF000000</item>
+    </style>
+
+    <style name="MatisseBlackTheme" parent="Matisse.Zhihu">
+        <item name="colorPrimary">@color/colorPrimaryBlack</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryBlack</item>
+        <item name="bottomToolbar.bg">@color/colorPrimaryWhite</item>
+        <item name="bottomToolbar.preview.textColor">@color/colorPrimaryBlack</item>
+        <item name="bottomToolbar.apply.textColor">@color/colorPrimaryBlack</item>
+        <item name="preview.bottomToolbar.apply.textColor">@color/colorPrimaryWhite</item>
+        <item name="item.checkCircle.backgroundColor">@color/colorPrimaryBlack</item>
+        <item name="android:navigationBarColor">#FF000000</item>
     </style>
 
 </resources>

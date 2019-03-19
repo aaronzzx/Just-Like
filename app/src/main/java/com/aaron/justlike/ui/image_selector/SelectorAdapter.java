@@ -63,7 +63,7 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         String path = mImages.get(position).getPath();
 
         RequestOptions options = new RequestOptions()
-                .placeholder(R.color.colorGrey)
+                .placeholder(R.color.colorBlue)
                 .priority(Priority.HIGH);
         Glide.with(mContext)
                 .load(path)

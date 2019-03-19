@@ -7,13 +7,13 @@ import android.widget.TextView;
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.about.AboutLibraryAdapter;
 import com.aaron.justlike.adapter.about.AboutMessageAdapter;
+import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.Library;
 import com.aaron.justlike.entity.Message;
 import com.aaron.justlike.mvp.presenter.about.AboutPresenter;
 import com.aaron.justlike.mvp.presenter.about.IAboutPresenter;
 import com.aaron.justlike.mvp.view.about.IAboutView;
 import com.aaron.justlike.util.SystemUtils;
-import com.jaeger.library.StatusBarUtil;
 
 import java.util.List;
 
@@ -33,9 +33,10 @@ public class AboutActivity extends AppCompatActivity implements IAboutView<Messa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ThemeManager.getInstance().setTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary), 70);
+//        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary), 70);
         initView();
         attachPresenter();
         mPresenter.requestMessage(AboutPresenter.Element.ICON_ID, AboutPresenter.Element.TITLE);

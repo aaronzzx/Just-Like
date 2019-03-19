@@ -34,9 +34,9 @@
                         android:id="@+id/toolbar_home_activity_main"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="27.5dp"
-                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+                        android:paddingTop="25dp"
+                        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
                 </LinearLayout>
 
@@ -72,9 +72,11 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view_home_activity_main"
-        android:layout_width="280dp"
+        android:layout_width="304dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        app:itemTextColor="@color/colorGreyDark"
+        app:itemIconTint="@color/colorGrey"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu" />
 

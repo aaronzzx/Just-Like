@@ -67,7 +67,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         // 加载集合的封面图
         RequestOptions options = new RequestOptions()
-                .placeholder(R.color.colorGrey)
+                .placeholder(R.color.colorBlue)
                 .priority(Priority.HIGH);
         Glide.with(mContext)
                 .load(path)

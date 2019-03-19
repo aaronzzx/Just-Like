@@ -8,10 +8,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
-import com.jaeger.library.StatusBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +34,7 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ThemeManager.getInstance().setTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selector);
         mImageSelector = ImageSelector.getInstance(this);
@@ -92,7 +93,7 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary), 70);
+//        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary), 70);
 
         // init recyclerview
         LinearLayoutManager layoutManager = new GridLayoutManager(this, 3);

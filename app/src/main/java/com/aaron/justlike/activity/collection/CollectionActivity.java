@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.collection.CollectionAdapter;
+import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.Album;
 import com.aaron.justlike.entity.Collection;
 import com.aaron.justlike.entity.SelectEvent;
@@ -54,6 +55,7 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        ThemeManager.getInstance().setTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collection);
         EventBus.getDefault().register(this);
@@ -190,13 +192,13 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
         mDialog.setTitle("创建集合");
         mDialog.setMessage("Loading...");
 
-        setStatusBar();
+//        setStatusBar();
         initToolbar();
         initRecyclerView();
     }
 
     private void setStatusBar() {
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary), 70);
+        StatusBarUtil.setTransparent(this);
     }
 
     private void initToolbar() {

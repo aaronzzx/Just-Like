@@ -1,11 +1,11 @@
-package com.aaron.justlike.base;
+package com.aaron.justlike;
 
 import android.app.Application;
 import android.content.Context;
 
 import org.litepal.LitePal;
 
-public class BaseApplication extends Application {
+public class JustLike extends Application {
 
     private static Context sContext;
 

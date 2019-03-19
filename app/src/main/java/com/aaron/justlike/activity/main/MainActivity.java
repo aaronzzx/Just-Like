@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +21,8 @@ import com.aaron.justlike.activity.about.AboutActivity;
 import com.aaron.justlike.activity.collection.CollectionActivity;
 import com.aaron.justlike.activity.download.DownloadManagerActivity;
 import com.aaron.justlike.activity.online.OnlineActivity;
+import com.aaron.justlike.activity.theme.ThemeActivity;
+import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.fragment.GridFragment;
 import com.aaron.justlike.mvp.presenter.main.IMainPresenter;
@@ -42,6 +46,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -52,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     private static final int REQUEST_PERMISSION = 0;
     private static final int REQUEST_SELECT_IMAGE = 1;
 
+    private int mColorPrimary;
     private int mSortType;
     private boolean mIsAscending;
     private List<Image> mImageList = new ArrayList<>();
@@ -60,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
 
     private DrawerLayout mParentLayout;
     private LinearLayout mParentToolbar;
+    private Toolbar mToolbar;
+    private ActionBar mActionBar;
     private MenuItem mSortByDate;
     private MenuItem mSortByName;
     private MenuItem mSortBySize;
@@ -68,9 +76,12 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     private FloatingActionButton mFabButton;
     private GridFragment mGridFragment;
 
+    private Drawable mIconDrawer;
+    private Drawable mIconSort;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme); // 由于设置了启动页，需要在这里将主题改回来
+        ThemeManager.getInstance().setTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         requestPermission();
@@ -102,16 +113,34 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         Window window = getWindow();
+        View decorView = window.getDecorView();
         if (hasFocus) {
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+            if (theme != null && theme == ThemeManager.Theme.WHITE) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                } else {
+                    StatusBarUtil.setTranslucentForDrawerLayout(this, mParentLayout, 70);
+                }
+                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
+                mActionBar.setHomeAsUpIndicator(mIconDrawer);
+            } else {
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            }
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
+        if (ThemeManager.getInstance().getCurrentTheme() != null
+                && ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
+            menu.findItem(R.id.sort).setIcon(mIconSort);
+        }
         // 实例化 Popup 子菜单
         mSortByDate = menu.findItem(R.id.sort_date);
         mSortByName = menu.findItem(R.id.sort_name);
@@ -210,6 +239,9 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
 //            case R.id.nav_settings:
 //
 //                break;
+            case R.id.nav_theme:
+                startActivityByNav(ThemeActivity.class);
+                break;
             case R.id.nav_about:
                 startActivityByNav(AboutActivity.class);
                 break;
@@ -294,28 +326,86 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         mParentLayout = findViewById(R.id.drawer_layout_home_activity_main);
         NavigationView navView = findViewById(R.id.navigation_view_home_activity_main);
         mParentToolbar = findViewById(R.id.activity_main_linear_layout);
-        Toolbar toolbar = findViewById(R.id.toolbar_home_activity_main);
+        mToolbar = findViewById(R.id.toolbar_home_activity_main);
         mSwipeRefresh = findViewById(R.id.swipe_refresh_home_activity_main);
         mFabButton = findViewById(R.id.fab_home_activity_main);
         mGridFragment = (GridFragment) getSupportFragmentManager().findFragmentById(R.id.grid_fragment);
 
         // Part 2, setClickListener
-        toolbar.setOnClickListener(this);
+        mToolbar.setOnClickListener(this);
         mFabButton.setOnClickListener(this);
         navView.setNavigationItemSelectedListener(this);
         mSwipeRefresh.setOnRefreshListener(this);
 
         // Part 3, init status
+        initIcon();
+        initColor();
         setStatusBar();
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
         enableHomeAsUp();
-        mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary);
+        mSwipeRefresh.setColorSchemeResources(mColorPrimary);
+    }
+
+    private void initIcon() {
+        if (ThemeManager.getInstance().getCurrentTheme() != null
+                && ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
+            mIconDrawer = getResources().getDrawable(R.drawable.ic_drawer_menu);
+            mIconSort = getResources().getDrawable(R.drawable.ic_sort);
+            DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorGreyText));
+            DrawableCompat.setTint(mIconSort, getResources().getColor(R.color.colorGreyText));
+        } else {
+            mIconDrawer = getResources().getDrawable(R.drawable.ic_drawer_menu);
+            mIconSort = getResources().getDrawable(R.drawable.ic_sort);
+            DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorPrimaryWhite));
+            DrawableCompat.setTint(mIconSort, getResources().getColor(R.color.colorPrimaryWhite));
+        }
+    }
+
+    private void initColor() {
+        ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+        if (theme == null) {
+            mColorPrimary = R.color.colorPrimary;
+            return;
+        }
+        switch (theme) {
+            case DEFAULT:
+                mColorPrimary = R.color.colorPrimary;
+                break;
+            case WHITE:
+                mColorPrimary = R.color.colorPrimaryBlack;
+                break;
+            case BLACK:
+                mColorPrimary = R.color.colorPrimaryBlack;
+                break;
+            case GREY:
+                mColorPrimary = R.color.colorPrimaryGrey;
+                break;
+            case GREEN:
+                mColorPrimary = R.color.colorPrimaryGreen;
+                break;
+            case RED:
+                mColorPrimary = R.color.colorPrimaryRed;
+                break;
+            case PINK:
+                mColorPrimary = R.color.colorPrimaryPink;
+                break;
+            case BLUE:
+                mColorPrimary = R.color.colorPrimaryBlue;
+                break;
+            case PURPLE:
+                mColorPrimary = R.color.colorPrimaryPurple;
+                break;
+            case BROWN:
+                mColorPrimary = R.color.colorPrimaryBrown;
+                break;
+        }
     }
 
     private void setStatusBar() {
-        StatusBarUtil.setTranslucentForDrawerLayout(this, mParentLayout, 70);
+//        StatusBarUtil.setTransparentForDrawerLayout(this, mParentLayout);
         Window window = getWindow();
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        View decorView = window.getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
@@ -323,10 +413,10 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
      * 启用 HomeAsUp 按钮
      */
     private void enableHomeAsUp() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_drawer_menu);
+        mActionBar = getSupportActionBar();
+        if (mActionBar != null) {
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+            mActionBar.setHomeAsUpIndicator(R.drawable.ic_drawer_menu);
         }
     }
 
@@ -443,7 +533,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                 .thumbnailScale(0.85f)
                 .imageEngine(new GlideEngine())
-                .theme(R.style.MatisseTheme)
+                .theme(R.style.MatisseBlackTheme)
                 .forResult(REQUEST_SELECT_IMAGE);
     }
 }

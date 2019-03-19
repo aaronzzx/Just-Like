@@ -9,20 +9,19 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".base.BaseApplication"
+        android:name=".JustLike"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/DefaultTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-
         <activity
             android:name=".activity.main.MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Splash">
+            android:theme="@style/DefaultTheme.Splash"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,42 +32,40 @@
             android:name=".activity.main.PreviewActivity"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.DisplayActivity" />
+            android:theme="@style/PreviewTheme" />
         <activity
             android:name=".activity.online.OnlineActivity"
             android:label="Online"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.OnlineActivity" />
+            android:theme="@style/OnlineTheme" />
         <activity
             android:name=".activity.online.PreviewActivity"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.OnlineActivity" />
+            android:theme="@style/OnlineTheme" />
         <activity
             android:name=".activity.collection.CollectionActivity"
             android:label="集合"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.collection.ElementActivity"
             android:label="元素"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.download.DownloadManagerActivity"
             android:label="下载管理"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.theme.ThemeActivity"
+            android:label="主题" />
         <activity
             android:name=".activity.about.AboutActivity"
             android:label="关于"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.image_selector.SelectorActivity" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

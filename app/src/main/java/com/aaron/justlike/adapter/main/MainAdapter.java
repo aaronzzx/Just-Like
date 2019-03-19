@@ -59,7 +59,7 @@ public class MainAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder
         String path = image.getPath();
 
         RequestOptions options = new RequestOptions()
-                .placeholder(R.color.colorGrey);
+                .placeholder(R.color.colorBlue);
         Glide.with(mContext)
                 .load(path)
                 .apply(options)

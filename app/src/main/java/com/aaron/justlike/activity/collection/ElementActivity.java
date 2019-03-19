@@ -5,6 +5,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.entity.UpdateEvent;
 import com.aaron.justlike.fragment.GridFragment;
@@ -37,6 +38,7 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ThemeManager.getInstance().setTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_element);
         initView();
@@ -121,7 +123,7 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
 
         // init status
         initToolbar();
-        setStatusBar();
+//        setStatusBar();
     }
 
     private void initToolbar() {

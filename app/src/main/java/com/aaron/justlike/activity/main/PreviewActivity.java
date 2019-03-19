@@ -70,6 +70,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        ThemeManager.getInstance().setTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preview);
         EventBus.getDefault().register(this);
@@ -312,9 +313,9 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         Uri destinationUri = Uri.fromFile(file); // 需要输出的位置
         // 设置裁剪页面主题
         UCrop.Options options = new UCrop.Options();
-        options.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-        options.setToolbarColor(getResources().getColor(R.color.colorPrimary));
-        options.setActiveWidgetColor(getResources().getColor(R.color.colorPrimary));
+        options.setStatusBarColor(getResources().getColor(R.color.colorPrimaryBlack));
+        options.setToolbarColor(getResources().getColor(R.color.colorPrimaryBlack));
+        options.setActiveWidgetColor(getResources().getColor(R.color.colorAccentBlack));
         switch (cropType) {
             case FIT_SCREEN: // 打开默认裁剪页面
                 int[] widthHeightPixels = SystemUtils.getResolution(getWindowManager());

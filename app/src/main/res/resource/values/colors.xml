@@ -1,15 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Main Theme -->
     <color name="colorPrimary">#4b6fca</color>
-    <color name="colorPrimaryDark">#365193</color>
+    <color name="colorPrimaryDark">#4b6fca</color>
     <color name="colorAccent">#4b6fca</color>
+
+    <!-- White Theme -->
+    <color name="colorPrimaryWhite">#FFFFFF</color>
+    <color name="colorPrimaryDarkWhite">#FFFFFF</color>
+    <color name="colorAccentWhite">#242424</color>
+
+    <!-- Black Theme -->
+    <color name="colorPrimaryBlack">#000000</color>
+    <color name="colorPrimaryDarkBlack">#000000</color>
+    <color name="colorAccentBlack">#000000</color>
+
+    <!-- Grey Theme -->
+    <color name="colorPrimaryGrey">#8A8A8A</color>
+    <color name="colorPrimaryDarkGrey">#8A8A8A</color>
+    <color name="colorAccentGrey">#8A8A8A</color>
+
+    <!-- Green Theme -->
+    <color name="colorPrimaryGreen">#4CAF50</color>
+    <color name="colorPrimaryDarkGreen">#4CAF50</color>
+    <color name="colorAccentGreen">#4CAF50</color>
+
+    <!-- Red Theme -->
+    <color name="colorPrimaryRed">#F44336</color>
+    <color name="colorPrimaryDarkRed">#F44336</color>
+    <color name="colorAccentRed">#F44336</color>
+
+    <!-- Pink Theme -->
+    <color name="colorPrimaryPink">#FFCDD2</color>
+    <color name="colorPrimaryDarkPink">#FFCDD2</color>
+    <color name="colorAccentPink">#FFCDD2</color>
+
+    <!-- Blue Theme -->
+    <color name="colorPrimaryBlue">#2196F3</color>
+    <color name="colorPrimaryDarkBlue">#DE2196F3</color>
+    <color name="colorAccentBlue">#DE2196F3</color>
+
+    <!-- Purple Theme -->
+    <color name="colorPrimaryPurple">#DE9C27B0</color>
+    <color name="colorPrimaryDarkPurple">#9C27B0</color>
+    <color name="colorAccentPurple">#9C27B0</color>
+
+    <!-- Brown Theme -->
+    <color name="colorPrimaryBrown">#582D25</color>
+    <color name="colorPrimaryDarkBrown">#582D25</color>
+    <color name="colorAccentBrown">#582D25</color>
+
     <color name="snackBar">#628fff</color>
     <color name="alphaBlack">#00000000</color>
     <color name="colorBlack">#000000</color>
     <color name="colorRed">#b71c1c</color>
     <color name="colorGreen">#388e3c</color>
-    <color name="colorGrey">#E6ECFC</color>
-    <color name="colorGreyDark">#0e0e0e</color>
+    <color name="colorBlue">#E6ECFC</color>
+    <color name="colorGrey">#6B6B6B</color>
+    <color name="colorGreyText">#494949</color>
+    <color name="colorGreyDark">#1A1A1A</color>
     <color name="transparent">#00ffffff</color>
     <color name="navigationBar">#56000000</color>
     <color name="toolbarTop">#96000000</color>

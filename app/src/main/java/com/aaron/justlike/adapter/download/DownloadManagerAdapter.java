@@ -65,7 +65,7 @@ public class DownloadManagerAdapter<T> extends RecyclerView.Adapter<RecyclerView
         ((ViewHolder) holder).imageId.setText(photoId);
 
         RequestOptions options = new RequestOptions()
-                .placeholder(R.color.colorGrey);
+                .placeholder(R.color.colorBlue);
         Glide.with(mContext)
                 .load(((Image) mList.get(position)).getPath())
                 .apply(options)

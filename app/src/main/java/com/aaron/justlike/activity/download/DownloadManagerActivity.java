@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.online.PreviewActivity;
 import com.aaron.justlike.adapter.download.DownloadManagerAdapter;
+import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.entity.PhotoEvent;
 import com.aaron.justlike.http.unsplash.entity.Photo;
@@ -18,7 +19,6 @@ import com.aaron.justlike.mvp.view.download.IView;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.snackbar.Snackbar;
-import com.jaeger.library.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -50,9 +50,10 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ThemeManager.getInstance().setTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download_manager);
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary), 70);
+//        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary), 70);
         initView();
         attachPresenter();
         mPresenter.requestImage(BasePresenter.DESCENDING); // 按最新下载来排序

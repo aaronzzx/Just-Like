@@ -24,14 +24,15 @@ android {
     sourceSets {
         main {
             res.srcDirs = [
-                'src/main/res/layouts/main',
-                'src/main/res/layouts/online',
-                'src/main/res/layouts/collection',
-                'src/main/res/layouts/download',
-                'src/main/res/layouts/about',
-                'src/main/res/layouts/others',
-                'src/main/res/resource',
-                'src/main/res'
+                    'src/main/res/layouts/main',
+                    'src/main/res/layouts/online',
+                    'src/main/res/layouts/collection',
+                    'src/main/res/layouts/download',
+                    'src/main/res/layouts/theme',
+                    'src/main/res/layouts/about',
+                    'src/main/res/layouts/others',
+                    'src/main/res/resource',
+                    'src/main/res'
             ]
         }
     }

@@ -10,7 +10,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.widget.Toast;
 
-import com.aaron.justlike.base.BaseApplication;
+import com.aaron.justlike.JustLike;
 
 public class DownloadUtil {
 
@@ -37,7 +37,7 @@ public class DownloadUtil {
     };
 
     public DownloadUtil() {
-        mContext = BaseApplication.getContext();
+        mContext = JustLike.getContext();
     }
 
     public void downloadImage(String url, String name, int fabType) {
