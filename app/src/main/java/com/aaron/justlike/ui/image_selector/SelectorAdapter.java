@@ -147,7 +147,12 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolder.squareView.setScaleY(1.0F);
             }
         });
-        viewHolder.checkBox.setChecked(mCheckStates.get(position, false));
+        boolean flag = mCheckStates.get(position, false);
+        if (flag) {
+            viewHolder.squareView.setScaleX(0.8F);
+            viewHolder.squareView.setScaleY(0.8F);
+        }
+        viewHolder.checkBox.setChecked(flag);
     }
 
     private static class ViewHolder extends RecyclerView.ViewHolder {
