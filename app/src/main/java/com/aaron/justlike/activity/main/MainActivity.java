@@ -423,6 +423,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
             public void onDrawerClosed(View drawerView) {
                 Intent intent = new Intent(MainActivity.this, whichActivity);
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 mParentLayout.removeDrawerListener(this);
             }
         });

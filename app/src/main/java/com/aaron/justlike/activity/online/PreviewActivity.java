@@ -121,8 +121,14 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
      */
     @Override
     public boolean onSupportNavigateUp() {
-        finish();
+        onBackPressed();
         return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override

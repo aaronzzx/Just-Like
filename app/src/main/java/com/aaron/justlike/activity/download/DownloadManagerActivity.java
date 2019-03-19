@@ -66,8 +66,14 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
 
     @Override
     public boolean onSupportNavigateUp() {
-        finish();
+        onBackPressed();
         return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override
@@ -132,6 +138,7 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
         EventBus.getDefault().postSticky(new PhotoEvent(photo));
         Intent intent = new Intent(this, PreviewActivity.class);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     /**

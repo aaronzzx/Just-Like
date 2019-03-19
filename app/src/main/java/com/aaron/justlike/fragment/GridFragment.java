@@ -1,5 +1,6 @@
 package com.aaron.justlike.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -9,14 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.activity.collection.ElementActivity;
+import com.aaron.justlike.activity.main.MainActivity;
+import com.aaron.justlike.activity.main.PreviewActivity;
 import com.aaron.justlike.adapter.main.MainAdapter;
 import com.aaron.justlike.entity.DeletEvent;
 import com.aaron.justlike.entity.DeleteEvent;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.entity.PreviewEvent;
-import com.aaron.justlike.activity.collection.ElementActivity;
-import com.aaron.justlike.activity.main.MainActivity;
-import com.aaron.justlike.activity.main.PreviewActivity;
 import com.aaron.justlike.ui.MyGridLayoutManager;
 import com.aaron.justlike.util.SystemUtils;
 
@@ -95,12 +96,13 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
      * Adapter 中发生 onClick 行为，需要回调此方法
      *
      * @param position 被点击图片在 List 中的位置
-     * @param list     存放 Image 实例 的 List
+     * @param list     存放 Image 实例的 List
      */
     @Override
     public void onPress(int position, List<Image> list) {
         EventBus.getDefault().postSticky(new PreviewEvent<>(position, list));
         startActivity(new Intent(mContext, PreviewActivity.class));
+        ((Activity) mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     /**

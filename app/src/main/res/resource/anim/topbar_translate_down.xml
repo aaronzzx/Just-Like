@@ -4,7 +4,7 @@
     android:startOffset="100">
 
     <translate
-        android:fromYDelta="-100%p"
+        android:fromYDelta="-40%p"
         android:toYDelta="0" />
 
     <alpha

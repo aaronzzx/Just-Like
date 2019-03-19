@@ -82,7 +82,7 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 break;
             case R.id.add: // 添加集合
                 View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_create_collection, null);
@@ -117,6 +117,12 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
     @Subscribe(threadMode = ThreadMode.POSTING, sticky = true)
     public void onSelectEvent(SelectEvent event) {
         Collection collection = event.getCollection();
@@ -141,6 +147,7 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
         Intent intent = new Intent(this, ElementActivity.class);
         intent.putExtra("title", mCollections.get(position).getCollectionTitle());
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override

@@ -66,10 +66,16 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override
@@ -93,6 +99,7 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
     public void onPress(Photo photo) {
         EventBus.getDefault().postSticky(new PhotoEvent(photo));
         startActivity(new Intent(this, PreviewActivity.class));
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override

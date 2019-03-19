@@ -93,6 +93,12 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         return super.onSupportNavigateUp();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
     /**
      * 使用透明状态栏
      */
@@ -202,6 +208,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
                                         mImageList.get(mPosition).getPath()));
                             }
                             finish();
+                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         })
                         .setNegativeButton("取消", (dialog, which) -> {
                         }).show();

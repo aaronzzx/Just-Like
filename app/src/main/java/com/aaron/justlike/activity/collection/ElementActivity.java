@@ -87,6 +87,12 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    @Override
     public void onDelet(String path) {
         mPresenter.deleteImage(mTitle, path);
     }
