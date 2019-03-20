@@ -16,7 +16,8 @@
         android:id="@+id/nav_head_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:tint="#4D000000" />
 
     <TextView
         android:id="@+id/head_name"
