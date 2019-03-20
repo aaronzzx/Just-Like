@@ -4,9 +4,8 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="270dp"
-    app:cardBackgroundColor="#000"
     app:cardCornerRadius="5dp"
-    android:layout_marginBottom="8dp"
+    android:layout_marginBottom="5dp"
     android:animateLayoutChanges="true">
 
     <RelativeLayout
@@ -14,13 +13,13 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/fake_view"
+            android:id="@+id/image_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"/>
 
         <ImageView
-            android:id="@+id/image_view"
+            android:id="@+id/place_holder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"/>

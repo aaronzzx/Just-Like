@@ -3,6 +3,7 @@ package com.aaron.justlike.activity.main;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.main.PreviewAdapter;
+import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.DeletEvent;
 import com.aaron.justlike.entity.DeleteEvent;
 import com.aaron.justlike.entity.Image;
@@ -57,6 +59,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
     private static final String FREE_CROP = "自由裁剪";
     private static final String[] CROP_TYPE = {FIT_SCREEN, FREE_CROP};
 
+    private int mColorPrimary;
     private int mPosition;
     private int mEventFlag;
     private List<Image> mImageList;
@@ -284,9 +287,51 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         deleteBtn.setOnClickListener(this);
         mViewPager.addOnPageChangeListener(this);
 
+        initUcropTheme();
         initToolbar();
         initViewPager();
 //        animIn(200);
+    }
+
+    private void initUcropTheme() {
+        Resources resources = getResources();
+        ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+        if (theme == null) {
+            mColorPrimary = resources.getColor(R.color.colorPrimary);
+            return;
+        }
+        switch (theme) {
+            case DEFAULT:
+                mColorPrimary = resources.getColor(R.color.colorPrimary);
+                break;
+            case WHITE:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryBlack);
+                break;
+            case BLACK:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryBlack);
+                break;
+            case GREY:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryGrey);
+                break;
+            case GREEN:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryGreen);
+                break;
+            case RED:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryRed);
+                break;
+            case PINK:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryPink);
+                break;
+            case BLUE:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryBlue);
+                break;
+            case PURPLE:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryPurple);
+                break;
+            case BROWN:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryBrown);
+                break;
+        }
     }
 
     private void initToolbar() {
@@ -313,9 +358,9 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         Uri destinationUri = Uri.fromFile(file); // 需要输出的位置
         // 设置裁剪页面主题
         UCrop.Options options = new UCrop.Options();
-        options.setStatusBarColor(getResources().getColor(R.color.colorPrimaryBlack));
-        options.setToolbarColor(getResources().getColor(R.color.colorPrimaryBlack));
-        options.setActiveWidgetColor(getResources().getColor(R.color.colorAccentBlack));
+        options.setStatusBarColor(mColorPrimary);
+        options.setToolbarColor(mColorPrimary);
+        options.setActiveWidgetColor(mColorPrimary);
         switch (cropType) {
             case FIT_SCREEN: // 打开默认裁剪页面
                 int[] widthHeightPixels = SystemUtils.getResolution(getWindowManager());

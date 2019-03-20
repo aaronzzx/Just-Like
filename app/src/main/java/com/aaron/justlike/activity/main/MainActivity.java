@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,7 +31,6 @@ import com.aaron.justlike.mvp.presenter.main.MainPresenter;
 import com.aaron.justlike.mvp.view.main.IMainView;
 import com.aaron.justlike.ui.GlideEngine;
 import com.aaron.justlike.util.SystemUtils;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.jaeger.library.StatusBarUtil;
@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     private static final int REQUEST_PERMISSION = 0;
     private static final int REQUEST_SELECT_IMAGE = 1;
 
+    private int mMatisseTheme;
     private int mColorPrimary;
     private int mSortType;
     private boolean mIsAscending;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
 
     private Drawable mIconDrawer;
     private Drawable mIconSort;
+    private Drawable mIconAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         attachPresenter();
         initView();
         mPresenter.requestImage(mImageList, false);
-        selectHideToolbar(); // 元素少于 16 个时禁止 Toolbar 隐藏
     }
 
     @Override
@@ -338,81 +339,87 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         mSwipeRefresh.setOnRefreshListener(this);
 
         // Part 3, init status
-        initIcon();
-        initColor();
-        setStatusBar();
-        setSupportActionBar(mToolbar);
-        enableHomeAsUp();
+        initIconColor();
+        initTheme();
+        initToolbar();
         mSwipeRefresh.setColorSchemeResources(mColorPrimary);
     }
 
-    private void initIcon() {
+    private void initIconColor() {
+        mIconDrawer = getResources().getDrawable(R.drawable.ic_drawer_menu);
+        mIconSort = getResources().getDrawable(R.drawable.ic_sort);
+        mIconAdd = getResources().getDrawable(R.drawable.ic_add_fab);
         if (ThemeManager.getInstance().getCurrentTheme() != null
                 && ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
-            mIconDrawer = getResources().getDrawable(R.drawable.ic_drawer_menu);
-            mIconSort = getResources().getDrawable(R.drawable.ic_sort);
             DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorGreyText));
             DrawableCompat.setTint(mIconSort, getResources().getColor(R.color.colorGreyText));
+            DrawableCompat.setTint(mIconAdd, getResources().getColor(R.color.colorGreyText));
+            mFabButton.setBackgroundTintList(getColorStateListTest());
         } else {
-            mIconDrawer = getResources().getDrawable(R.drawable.ic_drawer_menu);
-            mIconSort = getResources().getDrawable(R.drawable.ic_sort);
             DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(mIconSort, getResources().getColor(R.color.colorPrimaryWhite));
+            DrawableCompat.setTint(mIconAdd, getResources().getColor(R.color.colorPrimaryWhite));
         }
+        mFabButton.setImageDrawable(mIconAdd);
     }
 
-    private void initColor() {
+    private void initTheme() {
         ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
         if (theme == null) {
             mColorPrimary = R.color.colorPrimary;
+            mMatisseTheme = R.style.MatisseDefaultTheme;
             return;
         }
         switch (theme) {
             case DEFAULT:
                 mColorPrimary = R.color.colorPrimary;
+                mMatisseTheme = R.style.MatisseDefaultTheme;
                 break;
             case WHITE:
                 mColorPrimary = R.color.colorPrimaryBlack;
+                mMatisseTheme = R.style.MatisseBlackTheme;
                 break;
             case BLACK:
                 mColorPrimary = R.color.colorPrimaryBlack;
+                mMatisseTheme = R.style.MatisseBlackTheme;
                 break;
             case GREY:
                 mColorPrimary = R.color.colorPrimaryGrey;
+                mMatisseTheme = R.style.MatisseGreyTheme;
                 break;
             case GREEN:
                 mColorPrimary = R.color.colorPrimaryGreen;
+                mMatisseTheme = R.style.MatisseGreenTheme;
                 break;
             case RED:
                 mColorPrimary = R.color.colorPrimaryRed;
+                mMatisseTheme = R.style.MatisseRedTheme;
                 break;
             case PINK:
                 mColorPrimary = R.color.colorPrimaryPink;
+                mMatisseTheme = R.style.MatissePinkTheme;
                 break;
             case BLUE:
                 mColorPrimary = R.color.colorPrimaryBlue;
+                mMatisseTheme = R.style.MatisseBlueTheme;
                 break;
             case PURPLE:
                 mColorPrimary = R.color.colorPrimaryPurple;
+                mMatisseTheme = R.style.MatissePurpleTheme;
                 break;
             case BROWN:
                 mColorPrimary = R.color.colorPrimaryBrown;
+                mMatisseTheme = R.style.MatisseBrownTheme;
                 break;
         }
     }
 
-    private void setStatusBar() {
-//        StatusBarUtil.setTransparentForDrawerLayout(this, mParentLayout);
+    private void initToolbar() {
         Window window = getWindow();
         View decorView = window.getDecorView();
         decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-    }
-
-    /**
-     * 启用 HomeAsUp 按钮
-     */
-    private void enableHomeAsUp() {
+        setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
@@ -420,12 +427,16 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         }
     }
 
-    private void selectHideToolbar() {
-        // 元素不够禁止隐藏 Toolbar
-        if (mImageList.size() < 16) {
-            AppBarLayout.LayoutParams layoutParams = (AppBarLayout.LayoutParams) mParentToolbar.getLayoutParams();
-            layoutParams.setScrollFlags(0);
-        }
+    private ColorStateList getColorStateListTest() {
+        int[][] states = new int[][]{
+                new int[]{android.R.attr.state_enabled}, // enabled
+                new int[]{-android.R.attr.state_enabled}, // disabled
+                new int[]{-android.R.attr.state_checked}, // unchecked
+                new int[]{android.R.attr.state_pressed} // pressed
+        };
+        int color = getResources().getColor(R.color.colorPrimaryWhite);
+        int[] colors = new int[]{color, color, color, color};
+        return new ColorStateList(states, colors);
     }
 
     /**
@@ -533,7 +544,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                 .thumbnailScale(0.85f)
                 .imageEngine(new GlideEngine())
-                .theme(R.style.MatisseBlackTheme)
+                .theme(mMatisseTheme)
                 .forResult(REQUEST_SELECT_IMAGE);
     }
 }

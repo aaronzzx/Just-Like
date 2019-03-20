@@ -1,10 +1,13 @@
 package com.aaron.justlike.ui.image_selector;
 
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
@@ -20,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +35,11 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
     private ImageSelector.ImageCallback mCallback;
 
     private Toolbar mToolbar;
+    private ActionBar mActionBar;
+    private RecyclerView mRecyclerView;
+
+    private Drawable mIconBack;
+    private Drawable mIconDone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +52,33 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
     }
 
     @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        Window window = getWindow();
+        View decorView = window.getDecorView();
+        if (hasFocus) {
+            ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+            if (theme != null && theme == ThemeManager.Theme.WHITE) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                } else {
+                    window.setStatusBarColor(getResources().getColor(R.color.status_bar_background));
+                }
+                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
+                mActionBar.setHomeAsUpIndicator(mIconBack);
+            }
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_collection_add_menu, menu);
+        getMenuInflater().inflate(R.menu.activity_selector_menu, menu);
+        if (ThemeManager.getInstance().getCurrentTheme() != null
+                && ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
+            menu.findItem(R.id.done).setIcon(mIconDone);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -84,25 +118,48 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
 
         // find id
         mToolbar = findViewById(R.id.toolbar);
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView = findViewById(R.id.recycler_view);
 
-        // init toolbar and status bar
+        initIconColor();
+        initToolbar();
+        initRecyclerView();
+    }
+
+    private void initIconColor() {
+        if (ThemeManager.getInstance().getCurrentTheme() != null
+                && ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
+            mIconBack = getResources().getDrawable(R.drawable.ic_back);
+            mIconDone = getResources().getDrawable(R.drawable.ic_done);
+            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorGreyText));
+            DrawableCompat.setTint(mIconDone, getResources().getColor(R.color.colorGreyText));
+        } else {
+            mIconDone = getResources().getDrawable(R.drawable.ic_done);
+            DrawableCompat.setTint(mIconDone, getResources().getColor(R.color.colorPrimaryWhite));
+        }
+    }
+
+    private void initToolbar() {
+        Window window = getWindow();
+        View decorView = window.getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         mToolbar.setTitle("已选择（0）");
         setSupportActionBar(mToolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar = getSupportActionBar();
+        if (mActionBar != null) {
+            mActionBar.setDisplayHomeAsUpEnabled(true);
         }
-//        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary), 70);
+    }
 
-        // init recyclerview
+    private void initRecyclerView() {
         LinearLayoutManager layoutManager = new GridLayoutManager(this, 3);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new XItemDecoration());
-        recyclerView.addItemDecoration(new YItemDecoration());
-        RecyclerView.Adapter adapter = new SelectorAdapter(mWorker.imageList, this);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.addItemDecoration(new XItemDecoration());
+        mRecyclerView.addItemDecoration(new YItemDecoration());
+        ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+        RecyclerView.Adapter adapter = new SelectorAdapter(mWorker.imageList, theme, this);
         ((SelectorAdapter) adapter).setSelectedImage(mImageSelector.getSelectedImage());
-        recyclerView.setAdapter(adapter);
+        mRecyclerView.setAdapter(adapter);
     }
 
     private static class Worker {

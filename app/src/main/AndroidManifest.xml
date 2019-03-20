@@ -36,13 +36,11 @@
         <activity
             android:name=".activity.online.OnlineActivity"
             android:label="Online"
-            android:screenOrientation="portrait"
-            android:theme="@style/OnlineTheme" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.online.PreviewActivity"
             android:label=""
-            android:screenOrientation="portrait"
-            android:theme="@style/OnlineTheme" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.collection.CollectionActivity"
             android:label="集合"

@@ -1,6 +1,8 @@
 package com.aaron.justlike.ui.image_selector;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.ui.SquareView;
 import com.aaron.justlike.util.AnimationUtil;
@@ -28,12 +31,16 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private List<String> mSelectedList;
     private List<String> mResponse = new ArrayList<>();
     private Callback mCallback; // 回调 Activity
+
+    private ThemeManager.Theme mTheme;
+
     // 解决 View 复用混乱
     private SparseBooleanArray mCheckStates = new SparseBooleanArray();
     private SparseBooleanArray mEnableStates = new SparseBooleanArray();
 
-    public SelectorAdapter(List<Image> images, Callback callback) {
+    public SelectorAdapter(List<Image> images, ThemeManager.Theme theme, Callback callback) {
         mImages = images;
+        mTheme = theme;
         mCallback = callback;
     }
 
@@ -46,8 +53,8 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         mContext = parent.getContext();
         View view = LayoutInflater.from(mContext)
-                .inflate(R.layout.activity_collection_add_recycler_item, parent, false);
-        ViewHolder holder = new ViewHolder(view);
+                .inflate(R.layout.activity_selector_recycler_item, parent, false);
+        ViewHolder holder = new ViewHolder(view, mTheme);
         // 选取图片
         holder.itemView.setOnClickListener(v -> {
             handleImageClick(holder);
@@ -104,13 +111,7 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (mSelectedList != null) {
             for (String selected : mSelectedList) {
                 String path = mImages.get(position).getPath();
-                if (path.equals(selected)) {
-                    mEnableStates.put(position, false);
-                    viewHolder.checkBox.setEnabled(false);
-                    viewHolder.itemView.setClickable(false);
-                    viewHolder.squareView.setScaleX(0.8F);
-                    viewHolder.squareView.setScaleY(0.8F);
-                }
+                if (path.equals(selected)) mEnableStates.put(position, false);
             }
         }
         if (!mEnableStates.get(position, true)) {
@@ -130,6 +131,7 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         viewHolder.checkBox.setTag(position);
         viewHolder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             int pos = (int) buttonView.getTag();
+            if (!buttonView.isEnabled()) return;
             if (isChecked) {
                 mCheckStates.put(pos, true);
                 // 重绘图片缩放状态
@@ -161,11 +163,60 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         SquareView squareView;
         CheckBox checkBox;
 
-        ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView, ThemeManager.Theme theme) {
             super(itemView);
             this.itemView = itemView;
             squareView = itemView.findViewById(R.id.square_view);
             checkBox = itemView.findViewById(R.id.checkbox);
+            setCheckBox(theme);
+        }
+
+        private void setCheckBox(ThemeManager.Theme theme) {
+            if (theme == null) return;
+            Drawable normal = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_false);
+            Drawable unClicked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_unclicked);
+            Drawable checked = null;
+            switch (theme) {
+                case DEFAULT:
+                    checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true);
+                    break;
+                case WHITE:
+                    checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_black);
+                    break;
+                case BLACK:
+                    checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_black);
+                    break;
+                case GREY:
+                    checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_black);
+                    break;
+                case GREEN:
+                    checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_green);
+                    break;
+                case RED:
+                    checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_red);
+                    break;
+                case PINK:
+                    checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_pink);
+                    break;
+                case BLUE:
+                    checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_blue);
+                    break;
+                case PURPLE:
+                    checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_purple);
+                    break;
+                case BROWN:
+                    checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_brown);
+                    break;
+            }
+            checkBox.setButtonDrawable(getSelector(normal, unClicked, checked));
+        }
+
+        private StateListDrawable getSelector(Drawable normal, Drawable unClicked, Drawable checked) {
+            StateListDrawable stateListDrawable = new StateListDrawable();
+            stateListDrawable.addState(new int[]{android.R.attr.state_checked}, checked);
+            stateListDrawable.addState(new int[]{-android.R.attr.state_enabled}, unClicked);
+            stateListDrawable.addState(new int[]{}, normal);
+            return stateListDrawable;
         }
     }
 

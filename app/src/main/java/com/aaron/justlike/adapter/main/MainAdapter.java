@@ -58,11 +58,9 @@ public class MainAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Image image = (Image) mList.get(position); // 从集合中找到 Image 对象
         String path = image.getPath();
 
-        RequestOptions options = new RequestOptions()
-                .placeholder(R.color.colorBlue);
         Glide.with(mContext)
                 .load(path)
-                .apply(options)
+                .apply(new RequestOptions().placeholder(R.color.colorBlue))
                 .into(new ImageViewTarget<Drawable>(((ViewHolder) holder).squareView) {
                     @Override
                     protected void setResource(@Nullable Drawable resource) {

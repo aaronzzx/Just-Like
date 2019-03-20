@@ -40,10 +40,12 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Context mContext;
     private List<Drawable> mList;
     private Callback mCallback;
+    private int mCurrentCheck;
 
-    public ThemeAdapter(List<Drawable> list, Callback callback) {
+    public ThemeAdapter(List<Drawable> list, Callback callback, int currentCheck) {
         mList = list;
         mCallback = callback;
+        mCurrentCheck = currentCheck;
     }
 
     @NonNull
@@ -56,13 +58,17 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         holder.itemView.setOnClickListener(v -> {
             int position = holder.getAdapterPosition();
-            mCallback.onPress(position);
+            mCallback.onPress(position, mCurrentCheck);
+            holder.checkbox.setVisibility(View.VISIBLE);
         });
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
+        // init current check
+        if (position == mCurrentCheck) ((ViewHolder) holder).checkbox.setVisibility(View.VISIBLE);
+
         initThemeName((ViewHolder) holder, position);
 
         initThemeColor((ViewHolder) holder, position);
@@ -197,6 +203,6 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public interface Callback {
 
-        void onPress(int position);
+        void onPress(int newCheck, int oldCheck);
     }
 }

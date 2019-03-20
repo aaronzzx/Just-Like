@@ -3,12 +3,15 @@ package com.aaron.justlike.activity.collection;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 
 import com.aaron.justlike.R;
@@ -24,7 +27,6 @@ import com.aaron.justlike.mvp.view.collection.ICollectionView;
 import com.aaron.justlike.ui.MyGridLayoutManager;
 import com.aaron.justlike.ui.image_selector.ImageSelector;
 import com.aaron.justlike.util.SystemUtils;
-import com.jaeger.library.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,6 +41,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class CollectionActivity extends AppCompatActivity implements CollectionAdapter.OnPressCallback,
@@ -46,6 +49,10 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
 
     private ICollectionPresenter mPresenter;
 
+    private Toolbar mToolbar;
+    private ActionBar mActionBar;
+    private Drawable mIconBack;
+    private Drawable mIconAdd;
     private ProgressDialog mDialog;
     private RecyclerView mRecyclerView;
     private MyGridLayoutManager mLayoutManager;
@@ -75,8 +82,33 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
     }
 
     @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        Window window = getWindow();
+        View decorView = window.getDecorView();
+        if (hasFocus) {
+            ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+            if (theme != null && theme == ThemeManager.Theme.WHITE) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                } else {
+                    window.setStatusBarColor(getResources().getColor(R.color.status_bar_background));
+                }
+                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
+                mActionBar.setHomeAsUpIndicator(mIconBack);
+            }
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_collection_menu, menu);
+        if (ThemeManager.getInstance().getCurrentTheme() != null
+                && ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
+            menu.findItem(R.id.add_collection).setIcon(mIconAdd);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -86,7 +118,7 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
             case android.R.id.home:
                 onBackPressed();
                 break;
-            case R.id.add: // 添加集合
+            case R.id.add_collection: // 添加集合
                 View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_create_collection, null);
                 EditText editText = dialogView.findViewById(R.id.input_collection_name);
                 new AlertDialog.Builder(this)
@@ -183,6 +215,7 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
     }
 
     private void initView() {
+        mToolbar = findViewById(R.id.activity_collection_toolbar);
         mRecyclerView = findViewById(R.id.recycler_view);
 
         mDialog = new ProgressDialog(this);
@@ -192,21 +225,33 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
         mDialog.setTitle("创建集合");
         mDialog.setMessage("Loading...");
 
-//        setStatusBar();
+        initIconColor();
         initToolbar();
         initRecyclerView();
     }
 
-    private void setStatusBar() {
-        StatusBarUtil.setTransparent(this);
+    private void initIconColor() {
+        if (ThemeManager.getInstance().getCurrentTheme() != null
+                && ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
+            mIconBack = getResources().getDrawable(R.drawable.ic_back);
+            mIconAdd = getResources().getDrawable(R.drawable.ic_add);
+            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorGreyText));
+            DrawableCompat.setTint(mIconAdd, getResources().getColor(R.color.colorGreyText));
+        } else {
+            mIconAdd = getResources().getDrawable(R.drawable.ic_add);
+            DrawableCompat.setTint(mIconAdd, getResources().getColor(R.color.colorPrimaryWhite));
+        }
     }
 
     private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.activity_collection_toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        Window window = getWindow();
+        View decorView = window.getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        setSupportActionBar(mToolbar);
+        mActionBar = getSupportActionBar();
+        if (mActionBar != null) {
+            mActionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
 

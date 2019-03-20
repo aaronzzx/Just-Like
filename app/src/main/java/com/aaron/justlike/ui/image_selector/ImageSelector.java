@@ -19,7 +19,7 @@ public class ImageSelector {
     }
 
     public static ImageSelector getInstance() {
-        return Holder.INSTANCE;
+        return new ImageSelector();
     }
 
     public static ImageSelector getInstance(Context context) {

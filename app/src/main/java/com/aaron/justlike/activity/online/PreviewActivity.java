@@ -65,7 +65,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_online_image);
+        setContentView(R.layout.activity_online_preview);
         EventBus.getDefault().register(this);
         initView();
         mPresenter = new PreviewPresenter();

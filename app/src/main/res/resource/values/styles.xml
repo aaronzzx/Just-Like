@@ -115,14 +115,102 @@
         <item name="android:navigationBarColor">#FF000000</item>
     </style>
 
+    <style name="MatisseDefaultTheme" parent="Matisse.Zhihu">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="bottomToolbar.bg">@color/colorPrimaryWhite</item>
+        <!--<item name="bottomToolbar.preview.textColor">@color/colorPrimary</item>-->
+        <item name="bottomToolbar.apply.textColor">@color/colorPrimary</item>
+        <item name="preview.bottomToolbar.apply.textColor">@color/colorPrimaryWhite</item>
+        <item name="item.checkCircle.backgroundColor">@color/colorPrimary</item>
+        <item name="android:navigationBarColor">#FF000000</item>
+    </style>
+
     <style name="MatisseBlackTheme" parent="Matisse.Zhihu">
         <item name="colorPrimary">@color/colorPrimaryBlack</item>
         <item name="colorPrimaryDark">@color/colorPrimaryBlack</item>
         <item name="bottomToolbar.bg">@color/colorPrimaryWhite</item>
-        <item name="bottomToolbar.preview.textColor">@color/colorPrimaryBlack</item>
+        <!--<item name="bottomToolbar.preview.textColor">@color/colorPrimaryBlack</item>-->
         <item name="bottomToolbar.apply.textColor">@color/colorPrimaryBlack</item>
         <item name="preview.bottomToolbar.apply.textColor">@color/colorPrimaryWhite</item>
         <item name="item.checkCircle.backgroundColor">@color/colorPrimaryBlack</item>
+        <item name="android:navigationBarColor">#FF000000</item>
+    </style>
+
+    <style name="MatisseGreyTheme" parent="Matisse.Zhihu">
+        <item name="colorPrimary">@color/colorPrimaryGrey</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryGrey</item>
+        <item name="bottomToolbar.bg">@color/colorPrimaryWhite</item>
+        <!--<item name="bottomToolbar.preview.textColor">@color/colorPrimaryGrey</item>-->
+        <item name="bottomToolbar.apply.textColor">@color/colorPrimaryGrey</item>
+        <item name="preview.bottomToolbar.apply.textColor">@color/colorPrimaryWhite</item>
+        <item name="item.checkCircle.backgroundColor">@color/colorPrimaryGrey</item>
+        <item name="android:navigationBarColor">#FF000000</item>
+    </style>
+
+    <style name="MatisseGreenTheme" parent="Matisse.Zhihu">
+        <item name="colorPrimary">@color/colorPrimaryGreen</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryGreen</item>
+        <item name="bottomToolbar.bg">@color/colorPrimaryWhite</item>
+        <!--<item name="bottomToolbar.preview.textColor">@color/colorPrimaryGreen</item>-->
+        <item name="bottomToolbar.apply.textColor">@color/colorPrimaryGreen</item>
+        <item name="preview.bottomToolbar.apply.textColor">@color/colorPrimaryWhite</item>
+        <item name="item.checkCircle.backgroundColor">@color/colorPrimaryGreen</item>
+        <item name="android:navigationBarColor">#FF000000</item>
+    </style>
+
+    <style name="MatisseRedTheme" parent="Matisse.Zhihu">
+        <item name="colorPrimary">@color/colorPrimaryRed</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryRed</item>
+        <item name="bottomToolbar.bg">@color/colorPrimaryWhite</item>
+        <!--<item name="bottomToolbar.preview.textColor">@color/colorPrimaryRed</item>-->
+        <item name="bottomToolbar.apply.textColor">@color/colorPrimaryRed</item>
+        <item name="preview.bottomToolbar.apply.textColor">@color/colorPrimaryWhite</item>
+        <item name="item.checkCircle.backgroundColor">@color/colorPrimaryRed</item>
+        <item name="android:navigationBarColor">#FF000000</item>
+    </style>
+
+    <style name="MatissePinkTheme" parent="Matisse.Zhihu">
+        <item name="colorPrimary">@color/colorPrimaryPink</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryPink</item>
+        <item name="bottomToolbar.bg">@color/colorPrimaryWhite</item>
+        <!--<item name="bottomToolbar.preview.textColor">@color/colorPrimaryPink</item>-->
+        <item name="bottomToolbar.apply.textColor">@color/colorPrimaryPink</item>
+        <item name="preview.bottomToolbar.apply.textColor">@color/colorPrimaryWhite</item>
+        <item name="item.checkCircle.backgroundColor">@color/colorPrimaryPink</item>
+        <item name="android:navigationBarColor">#FF000000</item>
+    </style>
+
+    <style name="MatisseBlueTheme" parent="Matisse.Zhihu">
+        <item name="colorPrimary">@color/colorPrimaryBlue</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryBlue</item>
+        <item name="bottomToolbar.bg">@color/colorPrimaryWhite</item>
+        <!--<item name="bottomToolbar.preview.textColor">@color/colorPrimaryBlue</item>-->
+        <item name="bottomToolbar.apply.textColor">@color/colorPrimaryBlue</item>
+        <item name="preview.bottomToolbar.apply.textColor">@color/colorPrimaryWhite</item>
+        <item name="item.checkCircle.backgroundColor">@color/colorPrimaryBlue</item>
+        <item name="android:navigationBarColor">#FF000000</item>
+    </style>
+
+    <style name="MatissePurpleTheme" parent="Matisse.Zhihu">
+        <item name="colorPrimary">@color/colorPrimaryPurple</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryPurple</item>
+        <item name="bottomToolbar.bg">@color/colorPrimaryWhite</item>
+        <!--<item name="bottomToolbar.preview.textColor">@color/colorPrimaryPurple</item>-->
+        <item name="bottomToolbar.apply.textColor">@color/colorPrimaryPurple</item>
+        <item name="preview.bottomToolbar.apply.textColor">@color/colorPrimaryWhite</item>
+        <item name="item.checkCircle.backgroundColor">@color/colorPrimaryPurple</item>
+        <item name="android:navigationBarColor">#FF000000</item>
+    </style>
+
+    <style name="MatisseBrownTheme" parent="Matisse.Zhihu">
+        <item name="colorPrimary">@color/colorPrimaryBrown</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryBrown</item>
+        <item name="bottomToolbar.bg">@color/colorPrimaryWhite</item>
+        <!--<item name="bottomToolbar.preview.textColor">@color/colorPrimaryBrown</item>-->
+        <item name="bottomToolbar.apply.textColor">@color/colorPrimaryBrown</item>
+        <item name="preview.bottomToolbar.apply.textColor">@color/colorPrimaryWhite</item>
+        <item name="item.checkCircle.backgroundColor">@color/colorPrimaryBrown</item>
         <item name="android:navigationBarColor">#FF000000</item>
     </style>
 

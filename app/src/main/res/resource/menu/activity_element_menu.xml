@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/add"
+        android:id="@+id/add_element"
         android:icon="@drawable/ic_add"
         android:title="添加图片"
         app:showAsAction="always" />

@@ -1,14 +1,20 @@
 package com.aaron.justlike.activity.online;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ProgressBar;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.online.OnlineAdapter;
+import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.PhotoEvent;
 import com.aaron.justlike.http.unsplash.entity.Photo;
 import com.aaron.justlike.mvp.presenter.online.IOnlinePresenter;
@@ -27,6 +33,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -37,18 +44,25 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
 
     private IOnlinePresenter mPresenter;
 
+    private ThemeManager.Theme mCurrentTheme;
+    private int mColorPrimary;
+
     private Toolbar mToolbar;
+    private ActionBar mActionBar;
+    private Drawable mIconBack;
     private SwipeRefreshLayout mSwipeRefresh;
     private RecyclerView mRecyclerView;
     private MyGridLayoutManager mLayoutManager;
     private OnlineAdapter mAdapter;
     private ProgressBar mProgressBar;
-    private ProgressBar mFooterProgress;
+    private ViewGroup mFooterProgress;
 
     private List<Photo> mPhotoList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ThemeManager.getInstance().setTheme(this);
+        mCurrentTheme = ThemeManager.getInstance().getCurrentTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online);
         initView();
@@ -60,6 +74,27 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.detachView();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        Window window = getWindow();
+        View decorView = window.getDecorView();
+        if (hasFocus) {
+            ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+            if (theme != null && theme == ThemeManager.Theme.WHITE) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                } else {
+                    window.setStatusBarColor(getResources().getColor(R.color.status_bar_background));
+                }
+                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
+                mActionBar.setHomeAsUpIndicator(mIconBack);
+            }
+        }
     }
 
     @Override
@@ -122,7 +157,12 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
 
     @Override
     public void onShowMessage(int mode, String args) {
-        Snackbar.make(mToolbar, args, Snackbar.LENGTH_SHORT).setAction("刷新", v -> {
+        Snackbar snackbar = Snackbar.make(mToolbar, args, Snackbar.LENGTH_SHORT);
+        if (mCurrentTheme != null && (mCurrentTheme == ThemeManager.Theme.WHITE
+                || mCurrentTheme == ThemeManager.Theme.BLACK)) {
+            snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimaryWhite));
+        }
+        snackbar.setAction("刷新", v -> {
             switch (mode) {
                 case OnlinePresenter.REQUEST_IMAGE:
                     mPresenter.requestImage(true);
@@ -164,17 +204,71 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
         mToolbar.setOnClickListener(this);
         mSwipeRefresh.setOnRefreshListener(this);
 
+        initIconColor();
+        initTheme();
         initToolbar();
-        mSwipeRefresh.setColorSchemeResources(R.color.colorBlack);
         initRecyclerView();
+        mSwipeRefresh.setColorSchemeColors(mColorPrimary);
+    }
+
+    private void initIconColor() {
+        if (ThemeManager.getInstance().getCurrentTheme() != null
+                && ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
+            mIconBack = getResources().getDrawable(R.drawable.ic_back);
+            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorGreyText));
+        }
+    }
+
+    private void initTheme() {
+        Resources resources = getResources();
+        ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+        if (theme == null) {
+            mColorPrimary = resources.getColor(R.color.colorPrimary);
+            return;
+        }
+        switch (theme) {
+            case DEFAULT:
+                mColorPrimary = resources.getColor(R.color.colorPrimary);
+                break;
+            case WHITE:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryBlack);
+                break;
+            case BLACK:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryBlack);
+                break;
+            case GREY:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryGrey);
+                break;
+            case GREEN:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryGreen);
+                break;
+            case RED:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryRed);
+                break;
+            case PINK:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryRed);
+                break;
+            case BLUE:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryBlue);
+                break;
+            case PURPLE:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryPurple);
+                break;
+            case BROWN:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryBrown);
+                break;
+        }
     }
 
     private void initToolbar() {
+        Window window = getWindow();
+        View decorView = window.getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         setSupportActionBar(mToolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-//            actionBar.setHomeAsUpIndicator(R.mipmap.ic_back);
+        mActionBar = getSupportActionBar();
+        if (mActionBar != null) {
+            mActionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
 
@@ -218,9 +312,9 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
         @Override
         public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) % 2 == 0) {
-                outRect.right = SystemUtils.dp2px(OnlineActivity.this, 4.0F);
+                outRect.right = SystemUtils.dp2px(OnlineActivity.this, 2.5F);
             } else if (parent.getChildAdapterPosition(view) % 2 == 1) {
-                outRect.left = SystemUtils.dp2px(OnlineActivity.this, 4.0F);
+                outRect.left = SystemUtils.dp2px(OnlineActivity.this, 2.5F);
             }
         }
     }

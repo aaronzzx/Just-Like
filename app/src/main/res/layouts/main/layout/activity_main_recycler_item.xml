@@ -6,7 +6,7 @@
     android:animateLayoutChanges="true">
 
     <com.aaron.justlike.ui.SquareView
-        android:id="@+id/fake_view"
+        android:id="@+id/place_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop" />

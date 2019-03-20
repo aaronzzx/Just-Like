@@ -1,8 +1,9 @@
 package com.aaron.justlike.adapter.online;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,8 @@ import android.widget.TextView;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.http.unsplash.entity.Photo;
-import com.aaron.justlike.util.AnimationUtil;
+import com.aaron.justlike.ui.ViewWrapper;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
@@ -81,57 +81,44 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             String authorName = photo.getUser().getName();
             String authorImage = photo.getUser().getProfileImage().getLarge();
             String urls = photo.getUrls().getRegular();
+            String color = photo.getColor();
+            Drawable placeHolder = new ColorDrawable(Color.parseColor(color));
+            ((ViewHolder) holder).placeHolder.setImageDrawable(placeHolder);
 
-            RequestOptions options = new RequestOptions()
-                    .placeholder(R.drawable.ic_place_holder)
-                    .priority(Priority.HIGH);
-            RequestOptions options1 = new RequestOptions()
-                    .priority(Priority.HIGH);
-
+            // load author image
             Glide.with(mContext)
                     .load(authorImage)
-                    .apply(options)
+                    .apply(new RequestOptions().placeholder(R.drawable.ic_place_holder))
                     .into(((ViewHolder) holder).authorImage);
+
+            // set author name
             ((ViewHolder) holder).authorName.setText(authorName);
 
-            Glide.with(mContext)
-                    .load(urls)
-                    .apply(options1)
-                    .listener(new RequestListener<Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            ColorMatrix matrix = new ColorMatrix();
-                            matrix.setSaturation(0);
-                            resource.setColorFilter(new ColorMatrixColorFilter(matrix));
-                            ((ViewHolder) holder).fakeView.setImageDrawable(resource);
-                            AnimationUtil.showViewByAlpha(((ViewHolder) holder).fakeView, 0, 1, 250);
-                            return false;
-                        }
-                    })
-                    .into(((ViewHolder) holder).fakeView);
-
-            Glide.with(mContext)
-                    .load(urls)
-                    .listener(new RequestListener<Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            ((ViewHolder) holder).imageView.setImageDrawable(resource);
-                            AnimationUtil.showViewByAlpha(((ViewHolder) holder).imageView, 0, 1, 2000);
-                            return false;
-                        }
-                    })
-                    .into(((ViewHolder) holder).imageView);
+            loadImage((ViewHolder) holder, urls);
         }
+    }
+
+    private void loadImage(ViewHolder holder, String urls) {
+        Glide.with(mContext)
+                .load(urls)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        holder.placeHolder.animate().setDuration(300).alpha(0).start();
+                        holder.imageView.setImageDrawable(resource);
+                        ViewWrapper viewWrapper = new ViewWrapper(holder.imageView);
+                        ObjectAnimator.ofFloat(viewWrapper, "saturation", 0, 1)
+                                .setDuration(2000)
+                                .start();
+                        return false;
+                    }
+                })
+                .into(holder.imageView);
     }
 
     @Override
@@ -141,7 +128,7 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public static class FooterViewHolder extends RecyclerView.ViewHolder {
 
-        public FooterViewHolder(View itemView) {
+        FooterViewHolder(View itemView) {
             super(itemView);
         }
     }
@@ -150,7 +137,7 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         View itemView;
         ImageView imageView;
-        ImageView fakeView;
+        ImageView placeHolder;
         ImageView authorImage;
         TextView authorName;
 
@@ -158,7 +145,7 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             super(view);
             itemView = view;
             imageView = view.findViewById(R.id.image_view);
-            fakeView = view.findViewById(R.id.fake_view);
+            placeHolder = view.findViewById(R.id.place_holder);
             authorImage = view.findViewById(R.id.author_image);
             authorName = view.findViewById(R.id.author_name);
         }

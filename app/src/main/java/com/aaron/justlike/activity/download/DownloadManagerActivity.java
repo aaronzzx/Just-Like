@@ -2,9 +2,13 @@ package com.aaron.justlike.activity.download;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.online.PreviewActivity;
@@ -29,6 +33,7 @@ import java.util.List;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,6 +51,8 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
 
     private ProgressDialog mDialog;
     private Toolbar mToolbar;
+    private ActionBar mActionBar;
+    private Drawable mIconBack;
     private DownloadManagerAdapter mAdapter;
 
     @Override
@@ -53,7 +60,6 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
         ThemeManager.getInstance().setTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download_manager);
-//        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary), 70);
         initView();
         attachPresenter();
         mPresenter.requestImage(BasePresenter.DESCENDING); // 按最新下载来排序
@@ -63,6 +69,27 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.detachView();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        Window window = getWindow();
+        View decorView = window.getDecorView();
+        if (hasFocus) {
+            ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+            if (theme != null && theme == ThemeManager.Theme.WHITE) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                } else {
+                    window.setStatusBarColor(getResources().getColor(R.color.status_bar_background));
+                }
+                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
+                mActionBar.setHomeAsUpIndicator(mIconBack);
+            }
+        }
     }
 
     @Override
@@ -172,15 +199,28 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
         mToolbar = findViewById(R.id.activity_download_manager_toolbar);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
+        initIconColor();
         initToolbar(mToolbar);
         initRecyclerView(recyclerView);
     }
 
+    private void initIconColor() {
+        if (ThemeManager.getInstance().getCurrentTheme() != null
+                && ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
+            mIconBack = getResources().getDrawable(R.drawable.ic_back);
+            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorGreyText));
+        }
+    }
+
     private void initToolbar(Toolbar toolbar) {
+        Window window = getWindow();
+        View decorView = window.getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar = getSupportActionBar();
+        if (mActionBar != null) {
+            mActionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
 
