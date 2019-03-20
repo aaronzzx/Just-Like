@@ -35,7 +35,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static final int PINK = 6;
     public static final int BLUE = 7;
     public static final int PURPLE = 8;
-    public static final int BROWN = 9;
+    public static final int ORANGE = 9;
 
     private Context mContext;
     private List<Drawable> mList;
@@ -121,34 +121,34 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         // 初始化主题名称
         switch (position) {
             case DEFAULT:
-                themeName = "默认";
+                themeName = "JUST LIKE";
                 break;
             case WHITE:
-                themeName = "白色";
+                themeName = "WHITE";
                 break;
             case BLACK:
-                themeName = "黑色";
+                themeName = "BLACK";
                 break;
             case GREY:
-                themeName = "灰色";
+                themeName = "GREY";
                 break;
             case GREEN:
-                themeName = "绿色";
+                themeName = "GREEN";
                 break;
             case RED:
-                themeName = "红色";
+                themeName = "RED";
                 break;
             case PINK:
-                themeName = "粉色";
+                themeName = "PINK";
                 break;
             case BLUE:
-                themeName = "蓝色";
+                themeName = "BLUE";
                 break;
             case PURPLE:
-                themeName = "紫色";
+                themeName = "PURPLE";
                 break;
-            case BROWN:
-                themeName = "棕色";
+            case ORANGE:
+                themeName = "ORANGE";
                 break;
         }
         holder.themeName.setText(themeName);
@@ -194,9 +194,9 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 holder.background
                         .setImageDrawable(new ColorDrawable(mContext.getResources().getColor(R.color.colorPrimaryPurple)));
                 break;
-            case BROWN:
+            case ORANGE:
                 holder.background
-                        .setImageDrawable(new ColorDrawable(mContext.getResources().getColor(R.color.colorPrimaryBrown)));
+                        .setImageDrawable(new ColorDrawable(mContext.getResources().getColor(R.color.colorPrimaryOrange)));
                 break;
         }
     }

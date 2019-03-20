@@ -68,14 +68,14 @@ public class ThemeManager {
             case PURPLE:
                 context.setTheme(R.style.PurpleTheme);
                 break;
-            case BROWN:
-                context.setTheme(R.style.BrownTheme);
+            case ORANGE:
+                context.setTheme(R.style.OrangeTheme);
                 break;
         }
     }
 
     public enum Theme {
 
-        DEFAULT, WHITE, BLACK, GREY, GREEN, RED, PINK, BLUE, PURPLE, BROWN
+        DEFAULT, WHITE, BLACK, GREY, GREEN, RED, PINK, BLUE, PURPLE, ORANGE
     }
 }

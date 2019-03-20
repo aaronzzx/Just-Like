@@ -16,39 +16,39 @@
     <color name="colorAccentBlack">#FF000000</color>
 
     <!-- Grey Theme -->
-    <color name="colorPrimaryGrey">#8A8A8A</color>
-    <color name="colorPrimaryDarkGrey">#8A8A8A</color>
-    <color name="colorAccentGrey">#8A8A8A</color>
+    <color name="colorPrimaryGrey">#607d8b</color>
+    <color name="colorPrimaryDarkGrey">#607d8b</color>
+    <color name="colorAccentGrey">#607d8b</color>
 
     <!-- Green Theme -->
-    <color name="colorPrimaryGreen">#4CAF50</color>
-    <color name="colorPrimaryDarkGreen">#4CAF50</color>
-    <color name="colorAccentGreen">#4CAF50</color>
+    <color name="colorPrimaryGreen">#0f9d58</color>
+    <color name="colorPrimaryDarkGreen">#0f9d58</color>
+    <color name="colorAccentGreen">#0f9d58</color>
 
     <!-- Red Theme -->
-    <color name="colorPrimaryRed">#F44336</color>
-    <color name="colorPrimaryDarkRed">#F44336</color>
-    <color name="colorAccentRed">#F44336</color>
+    <color name="colorPrimaryRed">#db4437</color>
+    <color name="colorPrimaryDarkRed">#db4437</color>
+    <color name="colorAccentRed">#db4437</color>
 
     <!-- Pink Theme -->
-    <color name="colorPrimaryPink">#FFCDD2</color>
-    <color name="colorPrimaryDarkPink">#FFCDD2</color>
-    <color name="colorAccentPink">#FFCDD2</color>
+    <color name="colorPrimaryPink">#fb7299</color>
+    <color name="colorPrimaryDarkPink">#fb7299</color>
+    <color name="colorAccentPink">#fb7299</color>
 
     <!-- Blue Theme -->
-    <color name="colorPrimaryBlue">#2196F3</color>
-    <color name="colorPrimaryDarkBlue">#2196F3</color>
-    <color name="colorAccentBlue">#2196F3</color>
+    <color name="colorPrimaryBlue">#2196f3</color>
+    <color name="colorPrimaryDarkBlue">#2196f3</color>
+    <color name="colorAccentBlue">#2196f3</color>
 
     <!-- Purple Theme -->
-    <color name="colorPrimaryPurple">#9C27B0</color>
-    <color name="colorPrimaryDarkPurple">#9C27B0</color>
-    <color name="colorAccentPurple">#9C27B0</color>
+    <color name="colorPrimaryPurple">#673ab7</color>
+    <color name="colorPrimaryDarkPurple">#673ab7</color>
+    <color name="colorAccentPurple">#673ab7</color>
 
     <!-- Brown Theme -->
-    <color name="colorPrimaryBrown">#582D25</color>
-    <color name="colorPrimaryDarkBrown">#582D25</color>
-    <color name="colorAccentBrown">#582D25</color>
+    <color name="colorPrimaryOrange">#ff8600</color>
+    <color name="colorPrimaryDarkOrange">#ff8600</color>
+    <color name="colorAccentOrange">#ff8600</color>
 
     <color name="snackBar">#628fff</color>
     <color name="status_bar_background">#33000000</color>

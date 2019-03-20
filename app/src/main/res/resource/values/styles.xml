@@ -80,11 +80,11 @@
         <item name="android:navigationBarColor">#000000</item>
     </style>
 
-    <style name="BrownTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="OrangeTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimaryBrown</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryBrown</item>
-        <item name="colorAccent">@color/colorAccentBrown</item>
+        <item name="colorPrimary">@color/colorPrimaryOrange</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryOrange</item>
+        <item name="colorAccent">@color/colorAccentOrange</item>
         <item name="android:navigationBarColor">#000000</item>
     </style>
 
@@ -204,13 +204,13 @@
     </style>
 
     <style name="MatisseBrownTheme" parent="Matisse.Zhihu">
-        <item name="colorPrimary">@color/colorPrimaryBrown</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryBrown</item>
+        <item name="colorPrimary">@color/colorPrimaryOrange</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryOrange</item>
         <item name="bottomToolbar.bg">@color/colorPrimaryWhite</item>
         <!--<item name="bottomToolbar.preview.textColor">@color/colorPrimaryBrown</item>-->
-        <item name="bottomToolbar.apply.textColor">@color/colorPrimaryBrown</item>
+        <item name="bottomToolbar.apply.textColor">@color/colorPrimaryOrange</item>
         <item name="preview.bottomToolbar.apply.textColor">@color/colorPrimaryWhite</item>
-        <item name="item.checkCircle.backgroundColor">@color/colorPrimaryBrown</item>
+        <item name="item.checkCircle.backgroundColor">@color/colorPrimaryOrange</item>
         <item name="android:navigationBarColor">#FF000000</item>
     </style>
 

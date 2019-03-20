@@ -16,8 +16,7 @@
         android:id="@+id/nav_head_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_head_background1" />
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/head_name"

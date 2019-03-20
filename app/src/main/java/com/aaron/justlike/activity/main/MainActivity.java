@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     private IMainPresenter<Image> mPresenter;
 
     private DrawerLayout mParentLayout;
-    private LinearLayout mParentToolbar;
     private Toolbar mToolbar;
     private ActionBar mActionBar;
     private MenuItem mSortByDate;
@@ -76,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     private SwipeRefreshLayout mSwipeRefresh;
     private FloatingActionButton mFabButton;
     private GridFragment mGridFragment;
+    private ImageView mNavHeaderImage;
 
     private Drawable mIconDrawer;
     private Drawable mIconSort;
@@ -325,12 +325,13 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     private void initView() {
         // Part 1, find id
         mParentLayout = findViewById(R.id.drawer_layout_home_activity_main);
-        NavigationView navView = findViewById(R.id.navigation_view_home_activity_main);
-        mParentToolbar = findViewById(R.id.activity_main_linear_layout);
+        NavigationView navView = findViewById(R.id.navigation_view);
+        View headerView = navView.getHeaderView(0);
         mToolbar = findViewById(R.id.toolbar_home_activity_main);
         mSwipeRefresh = findViewById(R.id.swipe_refresh_home_activity_main);
         mFabButton = findViewById(R.id.fab_home_activity_main);
         mGridFragment = (GridFragment) getSupportFragmentManager().findFragmentById(R.id.grid_fragment);
+        mNavHeaderImage = headerView.findViewById(R.id.nav_head_image);
 
         // Part 2, setClickListener
         mToolbar.setOnClickListener(this);
@@ -368,53 +369,65 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         if (theme == null) {
             mColorPrimary = R.color.colorPrimary;
             mMatisseTheme = R.style.MatisseDefaultTheme;
+            mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_default));
             return;
         }
         switch (theme) {
             case DEFAULT:
                 mColorPrimary = R.color.colorPrimary;
                 mMatisseTheme = R.style.MatisseDefaultTheme;
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_default));
                 break;
             case WHITE:
                 mColorPrimary = R.color.colorPrimaryBlack;
                 mMatisseTheme = R.style.MatisseBlackTheme;
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
                 break;
             case BLACK:
                 mColorPrimary = R.color.colorPrimaryBlack;
                 mMatisseTheme = R.style.MatisseBlackTheme;
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_black));
                 break;
             case GREY:
                 mColorPrimary = R.color.colorPrimaryGrey;
                 mMatisseTheme = R.style.MatisseGreyTheme;
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_grey));
                 break;
             case GREEN:
                 mColorPrimary = R.color.colorPrimaryGreen;
                 mMatisseTheme = R.style.MatisseGreenTheme;
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_green));
                 break;
             case RED:
                 mColorPrimary = R.color.colorPrimaryRed;
                 mMatisseTheme = R.style.MatisseRedTheme;
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_red));
                 break;
             case PINK:
                 mColorPrimary = R.color.colorPrimaryPink;
                 mMatisseTheme = R.style.MatissePinkTheme;
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_pink));
                 break;
             case BLUE:
                 mColorPrimary = R.color.colorPrimaryBlue;
                 mMatisseTheme = R.style.MatisseBlueTheme;
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_blue));
                 break;
             case PURPLE:
                 mColorPrimary = R.color.colorPrimaryPurple;
                 mMatisseTheme = R.style.MatissePurpleTheme;
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_purple));
                 break;
-            case BROWN:
-                mColorPrimary = R.color.colorPrimaryBrown;
+            case ORANGE:
+                mColorPrimary = R.color.colorPrimaryOrange;
                 mMatisseTheme = R.style.MatisseBrownTheme;
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_orange));
                 break;
         }
     }
 
     private void initToolbar() {
+        StatusBarUtil.setTransparentForDrawerLayout(this, mParentLayout);
         Window window = getWindow();
         View decorView = window.getDecorView();
         decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE

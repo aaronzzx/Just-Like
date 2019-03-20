@@ -141,16 +141,16 @@ public class ThemeActivity extends AppCompatActivity implements ThemeAdapter.Cal
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         List<Drawable> imageList = new ArrayList<>();
-        imageList.add(getResources().getDrawable(R.drawable._default));
-        imageList.add(getResources().getDrawable(R.drawable.white));
-        imageList.add(getResources().getDrawable(R.drawable.black));
-        imageList.add(getResources().getDrawable(R.drawable.grey));
-        imageList.add(getResources().getDrawable(R.drawable.green));
-        imageList.add(getResources().getDrawable(R.drawable.red));
-        imageList.add(getResources().getDrawable(R.drawable.pink));
-        imageList.add(getResources().getDrawable(R.drawable.blue));
-        imageList.add(getResources().getDrawable(R.drawable.purple));
-        imageList.add(getResources().getDrawable(R.drawable.brown));
+        imageList.add(getResources().getDrawable(R.drawable.theme_default));
+        imageList.add(getResources().getDrawable(R.drawable.theme_white));
+        imageList.add(getResources().getDrawable(R.drawable.theme_black));
+        imageList.add(getResources().getDrawable(R.drawable.theme_grey));
+        imageList.add(getResources().getDrawable(R.drawable.theme_green));
+        imageList.add(getResources().getDrawable(R.drawable.theme_red));
+        imageList.add(getResources().getDrawable(R.drawable.theme_pink));
+        imageList.add(getResources().getDrawable(R.drawable.theme_blue));
+        imageList.add(getResources().getDrawable(R.drawable.theme_purple));
+        imageList.add(getResources().getDrawable(R.drawable.theme_orange));
         int currentCheck = getSharedPreferences(PREFERENCES_THEME_CHECK, MODE_PRIVATE).getInt(CURRENT_CHECK, 0);
         RecyclerView.Adapter adapter = new ThemeAdapter(imageList, this, currentCheck);
         recyclerView.setAdapter(adapter);
@@ -186,8 +186,8 @@ public class ThemeActivity extends AppCompatActivity implements ThemeAdapter.Cal
             case ThemeAdapter.PURPLE:
                 editor.putString(CURRENT_THEME, "PURPLE");
                 break;
-            case ThemeAdapter.BROWN:
-                editor.putString(CURRENT_THEME, "BROWN");
+            case ThemeAdapter.ORANGE:
+                editor.putString(CURRENT_THEME, "ORANGE");
                 break;
         }
         return editor.commit();

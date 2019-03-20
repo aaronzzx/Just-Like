@@ -254,8 +254,8 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
             case PURPLE:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryPurple);
                 break;
-            case BROWN:
-                mColorPrimary = resources.getColor(R.color.colorPrimaryBrown);
+            case ORANGE:
+                mColorPrimary = resources.getColor(R.color.colorPrimaryOrange);
                 break;
         }
     }

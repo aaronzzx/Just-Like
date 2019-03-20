@@ -6,7 +6,8 @@
     android:id="@+id/drawer_layout_home_activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:openDrawer="start">
+    tools:openDrawer="start"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:id="@+id/ll_home_activity_main"
@@ -70,11 +71,11 @@
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigation_view_home_activity_main"
+        android:id="@+id/navigation_view"
         android:layout_width="304dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:itemTextColor="@color/colorGreyDark"
+        app:itemTextColor="@color/colorGreyText"
         app:itemIconTint="@color/colorGrey"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu" />

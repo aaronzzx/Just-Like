@@ -204,7 +204,7 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case PURPLE:
                     checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_purple);
                     break;
-                case BROWN:
+                case ORANGE:
                     checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_brown);
                     break;
             }
