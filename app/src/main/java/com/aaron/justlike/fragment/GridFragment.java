@@ -127,7 +127,8 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
                     }
                 })
                 .setNegativeButton("取消", (dialog, which) -> {
-                }).show();
+                })
+                .show();
     }
 
     /**

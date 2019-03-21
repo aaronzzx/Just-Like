@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     public void onShowImage(List<Image> imageList, int sortType, boolean ascendingOrder) {
         mImageList.clear();
         mImageList.addAll(imageList);
-        mGridFragment.update(imageList);
+        runOnUiThread(() -> mGridFragment.update(imageList));
         mSortType = sortType;
         mIsAscending = ascendingOrder;
     }
@@ -301,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     @Override
     public void onShowAddImage(List<Image> list) {
         mImageList.addAll(0, list);
-        mGridFragment.updateForAdd(list);
+        runOnUiThread(() -> mGridFragment.updateForAdd(list));
     }
 
     /**

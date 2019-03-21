@@ -31,6 +31,10 @@ public class CollectionModel implements ICollectionModel<Album> {
                 return;
             }
             for (Collection info : collections) {
+                if (info.getTotal() == 0) {
+                    deleteCollection(info.getTitle());
+                    continue;
+                }
                 Album album = new Album();
                 String title = info.getTitle();
                 String total = String.valueOf(info.getTotal());
