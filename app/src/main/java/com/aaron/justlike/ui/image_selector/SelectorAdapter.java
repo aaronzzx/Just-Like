@@ -177,17 +177,17 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Drawable unClicked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_unclicked);
             Drawable checked = null;
             switch (theme) {
-                case DEFAULT:
+                case JUST_LIKE:
                     checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true);
                     break;
                 case WHITE:
-                    checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_black);
+                    checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_white);
                     break;
                 case BLACK:
                     checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_black);
                     break;
                 case GREY:
-                    checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_black);
+                    checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_grey);
                     break;
                 case GREEN:
                     checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_green);

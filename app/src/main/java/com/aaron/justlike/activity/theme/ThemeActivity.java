@@ -141,7 +141,6 @@ public class ThemeActivity extends AppCompatActivity implements ThemeAdapter.Cal
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         List<Drawable> imageList = new ArrayList<>();
-        imageList.add(getResources().getDrawable(R.drawable.theme_default));
         imageList.add(getResources().getDrawable(R.drawable.theme_white));
         imageList.add(getResources().getDrawable(R.drawable.theme_black));
         imageList.add(getResources().getDrawable(R.drawable.theme_grey));
@@ -151,6 +150,7 @@ public class ThemeActivity extends AppCompatActivity implements ThemeAdapter.Cal
         imageList.add(getResources().getDrawable(R.drawable.theme_blue));
         imageList.add(getResources().getDrawable(R.drawable.theme_purple));
         imageList.add(getResources().getDrawable(R.drawable.theme_orange));
+        imageList.add(getResources().getDrawable(R.drawable.theme_just_like));
         int currentCheck = getSharedPreferences(PREFERENCES_THEME_CHECK, MODE_PRIVATE).getInt(CURRENT_CHECK, 0);
         RecyclerView.Adapter adapter = new ThemeAdapter(imageList, this, currentCheck);
         recyclerView.setAdapter(adapter);
@@ -159,9 +159,6 @@ public class ThemeActivity extends AppCompatActivity implements ThemeAdapter.Cal
     private boolean saveTheme(int position) {
         SharedPreferences.Editor editor = getSharedPreferences(PREFERENCES_THEME, MODE_PRIVATE).edit();
         switch (position) {
-            case ThemeAdapter.DEFAULT:
-                editor.putString(CURRENT_THEME, "DEFAULT");
-                break;
             case ThemeAdapter.WHITE:
                 editor.putString(CURRENT_THEME, "WHITE");
                 break;
@@ -188,6 +185,9 @@ public class ThemeActivity extends AppCompatActivity implements ThemeAdapter.Cal
                 break;
             case ThemeAdapter.ORANGE:
                 editor.putString(CURRENT_THEME, "ORANGE");
+                break;
+            case ThemeAdapter.JUST_LIKE:
+                editor.putString(CURRENT_THEME, "JUST_LIKE");
                 break;
         }
         return editor.commit();

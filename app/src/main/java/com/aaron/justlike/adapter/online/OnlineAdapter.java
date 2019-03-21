@@ -83,7 +83,10 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             String urls = photo.getUrls().getRegular();
             String color = photo.getColor();
             Drawable placeHolder = new ColorDrawable(Color.parseColor(color));
-            ((ViewHolder) holder).placeHolder.setImageDrawable(placeHolder);
+            Glide.with(mContext)
+                    .load(placeHolder)
+                    .apply(new RequestOptions().placeholder(placeHolder))
+                    .into(((ViewHolder) holder).placeHolder);
 
             // load author image
             Glide.with(mContext)

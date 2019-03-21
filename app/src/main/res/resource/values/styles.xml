@@ -1,14 +1,14 @@
 <resources>
 
     <!-- Customize splash image here. -->
-    <style name="DefaultTheme.Splash">
+    <style name="JustLikeTheme.Splash">
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@drawable/for_splash</item>
     </style>
 
     <!-- Base application theme. -->
-    <style name="DefaultTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="JustLikeTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>

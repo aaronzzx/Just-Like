@@ -26,16 +26,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static final int DEFAULT = 0;
-    public static final int WHITE = 1;
-    public static final int BLACK = 2;
-    public static final int GREY = 3;
-    public static final int GREEN = 4;
-    public static final int RED = 5;
-    public static final int PINK = 6;
-    public static final int BLUE = 7;
-    public static final int PURPLE = 8;
-    public static final int ORANGE = 9;
+    public static final int WHITE = 0;
+    public static final int BLACK = 1;
+    public static final int GREY = 2;
+    public static final int GREEN = 3;
+    public static final int RED = 4;
+    public static final int PINK = 5;
+    public static final int BLUE = 6;
+    public static final int PURPLE = 7;
+    public static final int ORANGE = 8;
+    public static final int JUST_LIKE = 9;
 
     private Context mContext;
     private List<Drawable> mList;
@@ -120,9 +120,6 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         String themeName = null;
         // 初始化主题名称
         switch (position) {
-            case DEFAULT:
-                themeName = "JUST LIKE";
-                break;
             case WHITE:
                 themeName = "WHITE";
                 break;
@@ -150,6 +147,9 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             case ORANGE:
                 themeName = "ORANGE";
                 break;
+            case JUST_LIKE:
+                themeName = "JUST LIKE";
+                break;
         }
         holder.themeName.setText(themeName);
     }
@@ -157,10 +157,6 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private void initThemeColor(ViewHolder holder, int position) {
         // 初始化主题颜色
         switch (position) {
-            case DEFAULT:
-                holder.background
-                        .setImageDrawable(new ColorDrawable(mContext.getResources().getColor(R.color.colorPrimary)));
-                break;
             case WHITE:
                 holder.background
                         .setImageDrawable(new ColorDrawable(mContext.getResources().getColor(R.color.colorPrimaryWhite)));
@@ -197,6 +193,10 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             case ORANGE:
                 holder.background
                         .setImageDrawable(new ColorDrawable(mContext.getResources().getColor(R.color.colorPrimaryOrange)));
+                break;
+            case JUST_LIKE:
+                holder.background
+                        .setImageDrawable(new ColorDrawable(mContext.getResources().getColor(R.color.colorPrimary)));
                 break;
         }
     }

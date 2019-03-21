@@ -36,14 +36,11 @@ public class ThemeManager {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
         String type = sharedPreferences.getString(CURRENT_THEME, null);
         if (type == null) {
-            context.setTheme(R.style.DefaultTheme);
+            context.setTheme(R.style.WhiteTheme);
             return;
         }
         mCurrentTheme = Theme.valueOf(type);
         switch (mCurrentTheme) {
-            case DEFAULT:
-                context.setTheme(R.style.DefaultTheme);
-                break;
             case WHITE:
                 context.setTheme(R.style.WhiteTheme);
                 break;
@@ -71,11 +68,14 @@ public class ThemeManager {
             case ORANGE:
                 context.setTheme(R.style.OrangeTheme);
                 break;
+            case JUST_LIKE:
+                context.setTheme(R.style.JustLikeTheme);
+                break;
         }
     }
 
     public enum Theme {
 
-        DEFAULT, WHITE, BLACK, GREY, GREEN, RED, PINK, BLUE, PURPLE, ORANGE
+        WHITE, BLACK, GREY, GREEN, RED, PINK, BLUE, PURPLE, ORANGE, JUST_LIKE
     }
 }

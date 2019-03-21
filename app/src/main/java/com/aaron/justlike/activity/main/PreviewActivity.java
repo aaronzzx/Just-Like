@@ -301,7 +301,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
             return;
         }
         switch (theme) {
-            case DEFAULT:
+            case JUST_LIKE:
                 mColorPrimary = resources.getColor(R.color.colorPrimary);
                 break;
             case WHITE:

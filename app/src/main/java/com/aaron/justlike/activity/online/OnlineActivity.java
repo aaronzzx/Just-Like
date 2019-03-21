@@ -227,7 +227,7 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
             return;
         }
         switch (theme) {
-            case DEFAULT:
+            case JUST_LIKE:
                 mColorPrimary = resources.getColor(R.color.colorPrimary);
                 break;
             case WHITE:

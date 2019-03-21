@@ -369,14 +369,14 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         if (theme == null) {
             mColorPrimary = R.color.colorPrimary;
             mMatisseTheme = R.style.MatisseDefaultTheme;
-            mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_default));
+            mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_just_like));
             return;
         }
         switch (theme) {
-            case DEFAULT:
+            case JUST_LIKE:
                 mColorPrimary = R.color.colorPrimary;
                 mMatisseTheme = R.style.MatisseDefaultTheme;
-                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_default));
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_just_like));
                 break;
             case WHITE:
                 mColorPrimary = R.color.colorPrimaryBlack;

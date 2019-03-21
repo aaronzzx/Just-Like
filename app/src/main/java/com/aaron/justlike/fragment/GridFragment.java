@@ -161,7 +161,7 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
         // 查找当前 View 在 RecyclerView 中处于哪个位置
         int itemPosition = mRecyclerView.getChildLayoutPosition(firstVisibleItem);
         if (itemPosition >= 48) {
-            mRecyclerView.scrollToPosition(42);
+            mRecyclerView.scrollToPosition(36);
         }
         mRecyclerView.smoothScrollToPosition(0);
     }
