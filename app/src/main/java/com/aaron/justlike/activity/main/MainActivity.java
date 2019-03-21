@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         if (hasFocus) {
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
-            if (theme != null && theme == ThemeManager.Theme.WHITE) {
+            if (theme == null || theme == ThemeManager.Theme.WHITE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -138,8 +138,8 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
-        if (ThemeManager.getInstance().getCurrentTheme() != null
-                && ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
+        if (ThemeManager.getInstance().getCurrentTheme() == null
+                || ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
             menu.findItem(R.id.sort).setIcon(mIconSort);
         }
         // 实例化 Popup 子菜单
@@ -350,8 +350,8 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         mIconDrawer = getResources().getDrawable(R.drawable.ic_drawer_menu);
         mIconSort = getResources().getDrawable(R.drawable.ic_sort);
         mIconAdd = getResources().getDrawable(R.drawable.ic_add_fab);
-        if (ThemeManager.getInstance().getCurrentTheme() != null
-                && ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
+        if (ThemeManager.getInstance().getCurrentTheme() == null
+                || ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
             DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorGreyText));
             DrawableCompat.setTint(mIconSort, getResources().getColor(R.color.colorGreyText));
             DrawableCompat.setTint(mIconAdd, getResources().getColor(R.color.colorGreyText));
@@ -367,15 +367,17 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     private void initTheme() {
         ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
         if (theme == null) {
-            mColorPrimary = R.color.colorPrimary;
-            mMatisseTheme = R.style.MatisseDefaultTheme;
-            mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_just_like));
+            mColorPrimary = R.color.colorPrimaryBlack;
+            mMatisseTheme = R.style.MatisseBlackTheme;
+            mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
+            // 初次安装时由于有权限申请，此时没有获取到焦点，所以会有一刹那没变色，这里设置一下就好了
+            mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
             return;
         }
         switch (theme) {
             case JUST_LIKE:
                 mColorPrimary = R.color.colorPrimary;
-                mMatisseTheme = R.style.MatisseDefaultTheme;
+                mMatisseTheme = R.style.MatisseJustLikeTheme;
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_just_like));
                 break;
             case WHITE:

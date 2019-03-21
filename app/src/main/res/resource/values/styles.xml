@@ -115,7 +115,7 @@
         <item name="android:navigationBarColor">#FF000000</item>
     </style>
 
-    <style name="MatisseDefaultTheme" parent="Matisse.Zhihu">
+    <style name="MatisseJustLikeTheme" parent="Matisse.Zhihu">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="bottomToolbar.bg">@color/colorPrimaryWhite</item>

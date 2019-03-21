@@ -83,10 +83,7 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             String urls = photo.getUrls().getRegular();
             String color = photo.getColor();
             Drawable placeHolder = new ColorDrawable(Color.parseColor(color));
-            Glide.with(mContext)
-                    .load(placeHolder)
-                    .apply(new RequestOptions().placeholder(placeHolder))
-                    .into(((ViewHolder) holder).placeHolder);
+            ((ViewHolder) holder).placeHolder.setImageDrawable(placeHolder);
 
             // load author image
             Glide.with(mContext)
@@ -97,13 +94,14 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             // set author name
             ((ViewHolder) holder).authorName.setText(authorName);
 
-            loadImage((ViewHolder) holder, urls);
+            loadImage((ViewHolder) holder, urls, placeHolder);
         }
     }
 
-    private void loadImage(ViewHolder holder, String urls) {
+    private void loadImage(ViewHolder holder, String urls, Drawable placeHolder) {
         Glide.with(mContext)
                 .load(urls)
+                .apply(new RequestOptions().placeholder(placeHolder))
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {

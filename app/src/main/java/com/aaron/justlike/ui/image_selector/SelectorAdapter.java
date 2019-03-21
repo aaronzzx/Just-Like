@@ -178,7 +178,7 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Drawable checked = null;
             switch (theme) {
                 case JUST_LIKE:
-                    checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true);
+                    checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_just_like);
                     break;
                 case WHITE:
                     checked = itemView.getContext().getResources().getDrawable(R.drawable.checkbox_true_white);
