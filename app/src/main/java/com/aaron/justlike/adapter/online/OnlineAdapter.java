@@ -76,12 +76,12 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             String color = photo.getColor();
             Drawable placeHolder = new ColorDrawable(Color.parseColor(color));
 
-            // load image
-            GlideApp.loadImageBySaturation(mContext, regular, placeHolder, ((ViewHolder) holder).imageView);
-            // load author image
-            GlideApp.loadImage(mContext, authorImage, R.drawable.ic_place_holder, ((ViewHolder) holder).authorImage);
             // set author name
             ((ViewHolder) holder).authorName.setText(authorName);
+            // load author image
+            GlideApp.loadImage(mContext, authorImage, R.drawable.ic_place_holder, ((ViewHolder) holder).authorImage);
+            // load image
+            GlideApp.loadImageBySaturation(mContext, regular, placeHolder, ((ViewHolder) holder).imageView);
         }
     }
 

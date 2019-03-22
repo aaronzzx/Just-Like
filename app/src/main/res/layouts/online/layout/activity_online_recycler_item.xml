@@ -29,9 +29,9 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/image_view"
             android:layout_alignBottom="@id/image_view"
-            android:background="@drawable/author_image_name"
             android:clipToPadding="true"
             android:padding="5dp">
+            <!--android:background="@drawable/author_image_name"-->
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/author_image"
@@ -47,8 +47,8 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="8dp"
                 android:maxLines="1"
-                android:textColor="#fff"
-                android:textSize="13sp"
+                android:textColor="#FFFFFFFF"
+                android:textSize="14sp"
                 android:textStyle="bold"/>
 
         </LinearLayout>

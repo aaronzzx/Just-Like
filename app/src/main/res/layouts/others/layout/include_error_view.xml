@@ -22,6 +22,7 @@
             android:layout_marginTop="10dp"
             android:layout_gravity="center"
             android:text="加载失败"
+            android:textStyle="bold"
             android:textColor="#42000000" />
 
     </LinearLayout>

@@ -16,6 +16,7 @@
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
         android:text="空空如也"
+        android:textStyle="bold"
         android:textColor="#42000000" />
 
 </LinearLayout>

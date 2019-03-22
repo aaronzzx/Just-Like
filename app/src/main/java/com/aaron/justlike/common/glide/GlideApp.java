@@ -1,11 +1,15 @@
 package com.aaron.justlike.common.glide;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
 import android.content.Context;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
+import com.aaron.justlike.R;
+import com.aaron.justlike.ui.ViewWrapper;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -35,33 +39,21 @@ public class GlideApp {
     }
 
     public static void loadImageBySaturation(Context context, String urls, Drawable placeHolder, ImageView imageView) {
+        Animator animator = AnimatorInflater.loadAnimator(context, R.animator.image_saturation);
+        animator.setTarget(new ViewWrapper(imageView));
         Glide.with(context)
                 .load(urls)
                 .placeholder(placeHolder)
                 .transition(DrawableTransitionOptions.withCrossFade())
-//                .listener(new RequestListener<Drawable>() {
-//                    @Override
-//                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-//                        return false;
-//                    }
-//
-//                    @Override
-//                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-//                        imageView.setImageDrawable(resource);
-//                        ObjectAnimator animator = ObjectAnimator.ofFloat(new ViewWrapper(imageView), "saturation", 0, 1)
-//                                .setDuration(2000);
-//                        animator.start();
-//                        return true;
-//                    }
-//                })
                 .into(imageView);
+        animator.start();
     }
 
     public static void loadImageByColorScale(Context context, String path, int placeHolder, ImageView imageView) {
         Glide.with(context)
                 .load(path)
                 .placeholder(placeHolder)
-                .dontAnimate()
+                .transition(DrawableTransitionOptions.withCrossFade(100))
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -84,7 +76,7 @@ public class GlideApp {
         Glide.with(context)
                 .load(drawable)
                 .placeholder(placeHolder)
-                .dontAnimate()
+                .transition(DrawableTransitionOptions.withCrossFade(100))
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
