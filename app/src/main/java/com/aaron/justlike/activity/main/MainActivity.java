@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -116,7 +115,6 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         Window window = getWindow();
         View decorView = window.getDecorView();
         if (hasFocus) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
             if (theme == null || theme == ThemeManager.Theme.WHITE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

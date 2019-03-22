@@ -1,5 +1,7 @@
 package com.aaron.justlike.adapter.online;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
@@ -80,7 +82,7 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Photo photo = mPhotoList.get(position);
             String authorName = photo.getUser().getName();
             String authorImage = photo.getUser().getProfileImage().getLarge();
-            String urls = photo.getUrls().getRegular();
+            String regular = photo.getUrls().getRegular();
             String color = photo.getColor();
             Drawable placeHolder = new ColorDrawable(Color.parseColor(color));
             ((ViewHolder) holder).placeHolder.setImageDrawable(placeHolder);
@@ -94,7 +96,7 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             // set author name
             ((ViewHolder) holder).authorName.setText(authorName);
 
-            loadImage((ViewHolder) holder, urls, placeHolder);
+            loadImage((ViewHolder) holder, regular, placeHolder);
         }
     }
 
@@ -110,13 +112,17 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        holder.placeHolder.animate().setDuration(300).alpha(0).start();
                         holder.imageView.setImageDrawable(resource);
-                        ViewWrapper viewWrapper = new ViewWrapper(holder.imageView);
-                        ObjectAnimator.ofFloat(viewWrapper, "saturation", 0, 1)
-                                .setDuration(2000)
-                                .start();
-                        return false;
+                        ObjectAnimator animator = ObjectAnimator.ofFloat(new ViewWrapper(holder.imageView), "saturation", 0, 1)
+                                .setDuration(2000);
+                        animator.addListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+                                holder.placeHolder.animate().setDuration(300).alpha(0).start();
+                            }
+                        });
+                        animator.start();
+                        return true;
                     }
                 })
                 .into(holder.imageView);
