@@ -30,6 +30,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class SelectorActivity extends AppCompatActivity implements SelectorAdapter.Callback {
 
+    private static final String[] TYPE = {"jpg", "jpeg", "png", "gif"};
+
     private Worker mWorker;
     private ImageSelector mImageSelector;
     private ImageSelector.ImageCallback mCallback;
@@ -37,6 +39,7 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
     private Toolbar mToolbar;
     private ActionBar mActionBar;
     private RecyclerView mRecyclerView;
+    private View mEmptyView;
 
     private Drawable mIconBack;
     private Drawable mIconDone;
@@ -119,6 +122,12 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
         // find id
         mToolbar = findViewById(R.id.toolbar);
         mRecyclerView = findViewById(R.id.recycler_view);
+        mEmptyView = findViewById(R.id.empty_view);
+        if (mWorker.getImageList().size() == 0) {
+            mEmptyView.setVisibility(View.VISIBLE);
+        } else {
+            mEmptyView.setVisibility(View.GONE);
+        }
 
         initIconColor();
         initToolbar();
@@ -164,7 +173,6 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
 
     private static class Worker {
 
-        private static final String[] TYPE = {"jpg", "jpeg", "png", "gif"};
         private String loadPath;
         private String title;
 
@@ -185,6 +193,10 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
 
         private void setImageList() {
             FileUtils.getLocalFiles(imageList, loadPath, TYPE);
+        }
+
+        private List<Image> getImageList() {
+            return imageList;
         }
     }
 

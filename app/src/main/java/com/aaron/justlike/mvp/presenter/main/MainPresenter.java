@@ -70,7 +70,7 @@ public class MainPresenter implements IMainPresenter<Image> {
             @Override
             public void onFailure(String args) {
                 mView.onHideRefresh();
-//                mView.onShowMessage(args);
+                mView.onShowMessage(args);
             }
         });
     }

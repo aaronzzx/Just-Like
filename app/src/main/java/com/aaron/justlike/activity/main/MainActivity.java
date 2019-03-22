@@ -9,6 +9,7 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -75,11 +76,11 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     private FloatingActionButton mFabButton;
     private GridFragment mGridFragment;
     private ImageView mNavHeaderImage;
-    private View mEmptyView;
 
     private Drawable mIconDrawer;
     private Drawable mIconSort;
     private Drawable mIconAdd;
+    private View mEmptyView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -288,12 +289,12 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         mImageList.clear();
         mImageList.addAll(imageList);
         runOnUiThread(() -> {
+            mGridFragment.update(imageList);
             if (mImageList.size() == 0) {
                 mEmptyView.setVisibility(View.VISIBLE);
             } else {
                 mEmptyView.setVisibility(View.GONE);
             }
-            mGridFragment.update(imageList);
         });
         mSortType = sortType;
         mIsAscending = ascendingOrder;
@@ -315,7 +316,16 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
      */
     @Override
     public void onShowMessage(String args) {
-        Toast.makeText(this, args, Toast.LENGTH_SHORT).show();
+        runOnUiThread(() -> {
+            if (args != null) {
+                new Handler().postDelayed(() -> Toast.makeText(this, args, Toast.LENGTH_SHORT).show(), 80);
+            }
+            if (mImageList.size() == 0) {
+                mEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyView.setVisibility(View.GONE);
+            }
+        });
     }
 
     /**
