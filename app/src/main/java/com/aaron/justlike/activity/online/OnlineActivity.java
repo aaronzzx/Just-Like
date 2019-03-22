@@ -172,6 +172,9 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
 
     @Override
     public void onShowMessage(int mode, String args) {
+        if (mPhotoList.size() == 0) {
+            mErrorView.setVisibility(View.VISIBLE);
+        }
         Snackbar snackbar = Snackbar.make(mToolbar, args, Snackbar.LENGTH_SHORT);
         if (mCurrentTheme == null
                 || mCurrentTheme == ThemeManager.Theme.BLACK) {

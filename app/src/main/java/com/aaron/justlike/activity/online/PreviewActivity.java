@@ -2,6 +2,7 @@ package com.aaron.justlike.activity.online;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -25,8 +26,8 @@ import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
 import com.bm.library.PhotoView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.github.clans.fab.FloatingActionButton;
@@ -37,13 +38,13 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class PreviewActivity extends AppCompatActivity implements IPreviewView,
-        View.OnClickListener, RequestListener<String, GlideDrawable> {
+public class PreviewActivity extends AppCompatActivity implements IPreviewView, View.OnClickListener {
 
     private IPreviewPresenter mPresenter;
 
@@ -157,30 +158,6 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
     }
 
     /**
-     * Glide 加载图像的回调函数
-     */
-    @Override
-    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-        mProgressBar.setVisibility(View.GONE);
-        mProgressImage.setVisibility(View.VISIBLE);
-        mProgressImage.setImageResource(R.drawable.ic_error_circle);
-        Snackbar.make(mPhotoView, "加载失败，请检查网络", Snackbar.LENGTH_LONG).show();
-        return true;
-    }
-
-    /**
-     * Glide 加载图像的回调函数
-     */
-    @Override
-    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-        mProgressBar.setVisibility(View.GONE);
-        AnimationUtil.showProgressImage(mProgressImage);
-        mPhotoView.enable();
-        mPhotoView.setImageDrawable(resource);
-        return true;
-    }
-
-    /**
      * 与 OnlineActivity 通信
      */
     @Subscribe(threadMode = ThreadMode.POSTING, sticky = true)
@@ -190,11 +167,25 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
 
     @Override
     public void onShowImage(String urls, String thumbnail) {
-        Glide.with(this)
-                .load(urls)
-                .thumbnail(Glide.with(this).load(thumbnail))
-                .listener(this)
-                .into(mPhotoView);
+        GlideApp.loadImageByThumb(this, urls, thumbnail, mPhotoView, new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                mProgressBar.setVisibility(View.GONE);
+                mProgressImage.setVisibility(View.VISIBLE);
+                mProgressImage.setImageResource(R.drawable.ic_error_circle);
+                Snackbar.make(mPhotoView, "加载失败，请检查网络", Snackbar.LENGTH_LONG).show();
+                return true;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                mProgressBar.setVisibility(View.GONE);
+                AnimationUtil.showProgressImage(mProgressImage);
+                mPhotoView.enable();
+                mPhotoView.setImageDrawable(resource);
+                return true;
+            }
+        });
     }
 
     @Override

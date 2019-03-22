@@ -51,8 +51,8 @@ public class PreviewAdapter<T> extends PagerAdapter {
             parent.removeView(photoView);
         }
 
-//        GlideApp.loadImage(context, path, photoView);
-        GlideApp.loadImageByOverride(context, path, new int[]{1440, 1440}, photoView);
+//        GlideApp.loadImageByOverride(context, path, new int[]{3000, 3000}, photoView);
+        GlideApp.loadImageNoPlaceHolder(context, path, photoView);
         photoView.setOnClickListener(v -> mCallback.onPress());
         container.addView(photoView);
         return photoView;

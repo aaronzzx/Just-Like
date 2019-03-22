@@ -13,8 +13,8 @@ public class GlideEngine implements ImageEngine {
     @Override
     public void loadThumbnail(Context context, int resize, Drawable placeholder, ImageView imageView, Uri uri) {
         Glide.with(context)
-                .load(uri)
                 .asBitmap()
+                .load(uri)
                 .placeholder(placeholder)
                 .centerCrop()
                 .override(resize, resize)
@@ -33,8 +33,8 @@ public class GlideEngine implements ImageEngine {
     @Override
     public void loadGifThumbnail(Context context, int resize, Drawable placeholder, ImageView imageView, Uri uri) {
         Glide.with(context)
-                .load(uri)
                 .asGif()
+                .load(uri)
                 .placeholder(placeholder)
                 .centerCrop()
                 .override(resize, resize)
@@ -54,8 +54,8 @@ public class GlideEngine implements ImageEngine {
     @Override
     public void loadImage(Context context, int resizeX, int resizeY, ImageView imageView, Uri uri) {
         Glide.with(context)
-                .load(uri)
                 .asBitmap()
+                .load(uri)
                 .centerCrop()
                 .override(resizeX, resizeY)
                 .into(imageView);
@@ -72,8 +72,8 @@ public class GlideEngine implements ImageEngine {
     @Override
     public void loadGifImage(Context context, int resizeX, int resizeY, ImageView imageView, Uri uri) {
         Glide.with(context)
-                .load(uri)
                 .asGif()
+                .load(uri)
                 .centerCrop()
                 .override(resizeX, resizeY)
                 .into(imageView);
