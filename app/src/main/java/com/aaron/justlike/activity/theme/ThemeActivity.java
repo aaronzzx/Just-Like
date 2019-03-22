@@ -140,17 +140,17 @@ public class ThemeActivity extends AppCompatActivity implements ThemeAdapter.Cal
     private void initRecyclerView(RecyclerView recyclerView) {
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
-        List<Drawable> imageList = new ArrayList<>();
-        imageList.add(getResources().getDrawable(R.drawable.theme_white));
-        imageList.add(getResources().getDrawable(R.drawable.theme_black));
-        imageList.add(getResources().getDrawable(R.drawable.theme_grey));
-        imageList.add(getResources().getDrawable(R.drawable.theme_green));
-        imageList.add(getResources().getDrawable(R.drawable.theme_red));
-        imageList.add(getResources().getDrawable(R.drawable.theme_pink));
-        imageList.add(getResources().getDrawable(R.drawable.theme_blue));
-        imageList.add(getResources().getDrawable(R.drawable.theme_purple));
-        imageList.add(getResources().getDrawable(R.drawable.theme_orange));
-        imageList.add(getResources().getDrawable(R.drawable.theme_just_like));
+        List<Integer> imageList = new ArrayList<>();
+        imageList.add(R.drawable.theme_white);
+        imageList.add(R.drawable.theme_black);
+        imageList.add(R.drawable.theme_grey);
+        imageList.add(R.drawable.theme_green);
+        imageList.add(R.drawable.theme_red);
+        imageList.add(R.drawable.theme_pink);
+        imageList.add(R.drawable.theme_blue);
+        imageList.add(R.drawable.theme_purple);
+        imageList.add(R.drawable.theme_orange);
+        imageList.add(R.drawable.theme_just_like);
         int currentCheck = getSharedPreferences(PREFERENCES_THEME_CHECK, MODE_PRIVATE).getInt(CURRENT_CHECK, 0);
         RecyclerView.Adapter adapter = new ThemeAdapter(imageList, this, currentCheck);
         recyclerView.setAdapter(adapter);

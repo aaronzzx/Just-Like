@@ -2,10 +2,7 @@ package com.aaron.justlike.adapter.theme;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.ImageViewTarget;
+import com.aaron.justlike.common.glide.GlideApp;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -38,11 +32,11 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static final int JUST_LIKE = 9;
 
     private Context mContext;
-    private List<Drawable> mList;
+    private List<Integer> mList;
     private Callback mCallback;
     private int mCurrentCheck;
 
-    public ThemeAdapter(List<Drawable> list, Callback callback, int currentCheck) {
+    public ThemeAdapter(List<Integer> list, Callback callback, int currentCheck) {
         mList = list;
         mCallback = callback;
         mCurrentCheck = currentCheck;
@@ -73,22 +67,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         initThemeColor((ViewHolder) holder, position);
 
-        RequestOptions options = new RequestOptions()
-                .placeholder(R.color.colorBlue);
-        Glide.with(mContext)
-                .load(mList.get(position))
-                .apply(options)
-                .into(new ImageViewTarget<Drawable>(((ViewHolder) holder).imageView) {
-                    @Override
-                    protected void setResource(@Nullable Drawable resource) {
-                        if (resource != null) {
-                            ColorMatrix matrix = new ColorMatrix();
-                            matrix.setScale(0.65F, 0.65F, 0.65F, 1);
-                            resource.setColorFilter(new ColorMatrixColorFilter(matrix));
-                            ((ViewHolder) holder).imageView.setImageDrawable(resource);
-                        }
-                    }
-                });
+        GlideApp.loadImageByColorScale(mContext, mList.get(position), R.color.colorBlue, ((ViewHolder) holder).imageView);
     }
 
     @Override

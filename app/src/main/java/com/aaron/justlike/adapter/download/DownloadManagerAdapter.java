@@ -1,9 +1,6 @@
 package com.aaron.justlike.adapter.download;
 
 import android.content.Context;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.common.glide.GlideApp;
 import com.aaron.justlike.entity.Image;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.ImageViewTarget;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class DownloadManagerAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -64,22 +58,7 @@ public class DownloadManagerAdapter<T> extends RecyclerView.Adapter<RecyclerView
         String photoId = fileName.substring(0, fileName.indexOf("."));
         ((ViewHolder) holder).imageId.setText(photoId);
 
-        RequestOptions options = new RequestOptions()
-                .placeholder(R.color.colorBlue);
-        Glide.with(mContext)
-                .load(((Image) mList.get(position)).getPath())
-                .apply(options)
-                .into(new ImageViewTarget<Drawable>(((ViewHolder) holder).imageView) {
-                    @Override
-                    protected void setResource(@Nullable Drawable resource) {
-                        if (resource != null) {
-                            ColorMatrix matrix = new ColorMatrix();
-                            matrix.setScale(0.65F, 0.65F, 0.65F, 1);
-                            resource.setColorFilter(new ColorMatrixColorFilter(matrix));
-                            ((ViewHolder) holder).imageView.setImageDrawable(resource);
-                        }
-                    }
-                });
+        GlideApp.loadImageByColorScale(mContext, path, R.color.colorBlue, ((ViewHolder) holder).imageView);
     }
 
     @Override

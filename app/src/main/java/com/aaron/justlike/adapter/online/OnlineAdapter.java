@@ -1,8 +1,5 @@
 package com.aaron.justlike.adapter.online;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -14,19 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.common.glide.GlideApp;
 import com.aaron.justlike.http.unsplash.entity.Photo;
-import com.aaron.justlike.ui.ViewWrapper;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -85,47 +75,13 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             String regular = photo.getUrls().getRegular();
             String color = photo.getColor();
             Drawable placeHolder = new ColorDrawable(Color.parseColor(color));
-            ((ViewHolder) holder).placeHolder.setImageDrawable(placeHolder);
 
+            GlideApp.loadImageByAnimation(mContext, regular, placeHolder, ((ViewHolder) holder).imageView);
             // load author image
-            Glide.with(mContext)
-                    .load(authorImage)
-                    .apply(new RequestOptions().placeholder(R.drawable.ic_place_holder))
-                    .into(((ViewHolder) holder).authorImage);
-
+            GlideApp.loadImage(mContext, authorImage, R.drawable.ic_place_holder, ((ViewHolder) holder).authorImage);
             // set author name
             ((ViewHolder) holder).authorName.setText(authorName);
-
-            loadImage((ViewHolder) holder, regular, placeHolder);
         }
-    }
-
-    private void loadImage(ViewHolder holder, String urls, Drawable placeHolder) {
-        Glide.with(mContext)
-                .load(urls)
-                .apply(new RequestOptions().placeholder(placeHolder))
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        holder.imageView.setImageDrawable(resource);
-                        ObjectAnimator animator = ObjectAnimator.ofFloat(new ViewWrapper(holder.imageView), "saturation", 0, 1)
-                                .setDuration(2000);
-                        animator.addListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationStart(Animator animation) {
-                                holder.placeHolder.animate().setDuration(300).alpha(0).start();
-                            }
-                        });
-                        animator.start();
-                        return true;
-                    }
-                })
-                .into(holder.imageView);
     }
 
     @Override

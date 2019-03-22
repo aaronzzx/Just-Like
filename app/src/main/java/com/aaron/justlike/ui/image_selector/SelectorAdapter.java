@@ -11,12 +11,10 @@ import android.widget.CheckBox;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.ThemeManager;
+import com.aaron.justlike.common.glide.GlideApp;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.ui.SquareView;
 import com.aaron.justlike.util.AnimationUtil;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
-import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,14 +67,7 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ViewHolder viewHolder = (ViewHolder) holder;
         String path = mImages.get(position).getPath();
 
-        RequestOptions options = new RequestOptions()
-                .placeholder(R.color.colorBlue)
-                .priority(Priority.HIGH);
-        Glide.with(mContext)
-                .load(path)
-                .apply(options)
-                .into(viewHolder.squareView);
-
+        GlideApp.loadImage(mContext, path, R.color.colorBlue, viewHolder.squareView);
         // 解决 View 复用混乱
         selectBefore(viewHolder, position);
         selectRightNow(viewHolder, position);

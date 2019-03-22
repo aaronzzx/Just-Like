@@ -5,12 +5,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.aaron.justlike.common.glide.GlideApp;
 import com.aaron.justlike.entity.Image;
 import com.bm.library.PhotoView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 
 import java.util.List;
 
@@ -54,21 +51,9 @@ public class PreviewAdapter<T> extends PagerAdapter {
             parent.removeView(photoView);
         }
 
-        RequestOptions options = new RequestOptions()
-                .override(3000, 3000)
-                .centerInside();
-        DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory
-                .Builder(300)
-                .setCrossFadeEnabled(true)
-                .build();
-        Glide.with(context)
-                .load(path)
-                .apply(options)
-                .transition(DrawableTransitionOptions.with(factory))
-                .into(photoView);
-        photoView.setOnClickListener(v -> {
-            mCallback.onPress();
-        });
+//        GlideApp.loadImage(context, path, photoView);
+        GlideApp.loadImageByOverride(context, path, new int[]{1440, 1440}, photoView);
+        photoView.setOnClickListener(v -> mCallback.onPress());
         container.addView(photoView);
         return photoView;
     }

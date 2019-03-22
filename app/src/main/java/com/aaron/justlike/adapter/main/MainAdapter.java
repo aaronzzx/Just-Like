@@ -1,22 +1,18 @@
 package com.aaron.justlike.adapter.main;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.common.glide.GlideApp;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.ui.SquareView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.ImageViewTarget;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MainAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -58,15 +54,7 @@ public class MainAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Image image = (Image) mList.get(position); // 从集合中找到 Image 对象
         String path = image.getPath();
 
-        Glide.with(mContext)
-                .load(path)
-                .apply(new RequestOptions().placeholder(R.color.colorBlue))
-                .into(new ImageViewTarget<Drawable>(((ViewHolder) holder).squareView) {
-                    @Override
-                    protected void setResource(@Nullable Drawable resource) {
-                        ((ViewHolder) holder).squareView.setImageDrawable(resource);
-                    }
-                });
+        GlideApp.loadImage(mContext, path, R.color.colorBlue, ((ViewHolder) holder).squareView);
     }
 
     @Override
