@@ -37,12 +37,25 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="5dp"
-                android:clipToPadding="false" />
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:padding="5dp" />
+
+                <include
+                    layout="@layout/include_error_view"
+                    android:id="@+id/error_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
+
+            </FrameLayout>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -55,13 +68,13 @@
         android:layout_centerInParent="true" />
 
     <include
-        layout="@layout/include_footer_progress"
         android:id="@+id/footer_progress"
+        layout="@layout/include_footer_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>

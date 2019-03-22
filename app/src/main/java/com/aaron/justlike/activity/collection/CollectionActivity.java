@@ -28,6 +28,7 @@ import com.aaron.justlike.mvp.presenter.collection.ICollectionPresenter;
 import com.aaron.justlike.mvp.view.collection.ICollectionView;
 import com.aaron.justlike.ui.MyGridLayoutManager;
 import com.aaron.justlike.ui.image_selector.ImageSelector;
+import com.aaron.justlike.util.EmptyViewUtil;
 import com.aaron.justlike.util.SystemUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -57,6 +58,7 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
     private Drawable mIconAdd;
     private ProgressDialog mDialog;
     private RecyclerView mRecyclerView;
+    private View mEmptyView;
     private MyGridLayoutManager mLayoutManager;
     private CollectionAdapter mAdapter;
 
@@ -214,12 +216,18 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
             hideProgress();
 //            mAdapter.notifyItemRangeChanged(0, mCollections.size());
             mAdapter.notifyDataSetChanged();
+            if (mCollections.size() == 0) {
+                EmptyViewUtil.showEmptyView(mEmptyView);
+            } else {
+                EmptyViewUtil.hideEmptyView(mEmptyView);
+            }
         });
     }
 
     private void initView() {
         mToolbar = findViewById(R.id.activity_collection_toolbar);
         mRecyclerView = findViewById(R.id.recycler_view);
+        mEmptyView = findViewById(R.id.empty_view);
 
         mDialog = new ProgressDialog(this);
         mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);

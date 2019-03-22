@@ -20,6 +20,7 @@ import com.aaron.justlike.http.unsplash.entity.Photo;
 import com.aaron.justlike.mvp.presenter.download.BasePresenter;
 import com.aaron.justlike.mvp.presenter.download.IPresenter;
 import com.aaron.justlike.mvp.view.download.IView;
+import com.aaron.justlike.util.EmptyViewUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.snackbar.Snackbar;
@@ -53,6 +54,7 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
     private Toolbar mToolbar;
     private ActionBar mActionBar;
     private Drawable mIconBack;
+    private View mEmptyView;
     private DownloadManagerAdapter mAdapter;
 
     @Override
@@ -156,6 +158,11 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
         mImageList.clear();
         mImageList.addAll(list);
         mAdapter.notifyItemRangeChanged(0, mImageList.size());
+        if (mImageList.size() == 0) {
+            EmptyViewUtil.showEmptyView(mEmptyView);
+        } else {
+            EmptyViewUtil.hideEmptyView(mEmptyView);
+        }
     }
 
     /**
@@ -198,6 +205,7 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
     private void initView() {
         mToolbar = findViewById(R.id.activity_download_manager_toolbar);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        mEmptyView = findViewById(R.id.empty_view);
 
         initIconColor();
         initToolbar(mToolbar);

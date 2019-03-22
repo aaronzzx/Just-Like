@@ -19,6 +19,7 @@ import com.aaron.justlike.entity.DeleteEvent;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.entity.PreviewEvent;
 import com.aaron.justlike.ui.MyGridLayoutManager;
+import com.aaron.justlike.util.EmptyViewUtil;
 import com.aaron.justlike.util.SystemUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,6 +41,7 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
+    private View mEmptyView;
     private List<Image> mImageList = new ArrayList<>();
 
     public GridFragment() {
@@ -148,6 +150,11 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
         mImageList.clear();
         mImageList.addAll(0, list);
         mAdapter.notifyDataSetChanged();
+        if (mImageList.size() == 0) {
+            EmptyViewUtil.showEmptyView(mEmptyView);
+        } else {
+            EmptyViewUtil.hideEmptyView(mEmptyView);
+        }
 //        mAdapter.notifyItemRangeInserted(0, list.size());
 //        mAdapter.notifyItemRangeChanged(list.size(), mImageList.size() - list.size());
         mRecyclerView.scrollToPosition(0);
@@ -169,6 +176,7 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
 
     private void initView(View parent) {
         mRecyclerView = parent.findViewById(R.id.rv);
+        mEmptyView = parent.findViewById(R.id.empty_view);
         MyGridLayoutManager layoutManager = new MyGridLayoutManager(mContext, 3);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());
