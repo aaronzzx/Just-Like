@@ -21,7 +21,6 @@ public class CollectionModel implements ICollectionModel<Album> {
 
     @Override
     public void queryCollection(Callback<Album> callback) {
-//        LitePal.getDatabase();
         mService.execute(() -> {
             List<Album> albumList = new ArrayList<>();
             // 取出集合的名称和元素的数量和封面图

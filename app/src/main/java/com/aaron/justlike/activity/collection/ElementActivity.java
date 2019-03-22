@@ -127,8 +127,11 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
     }
 
     @Override
-    public void onDelet(String path) {
+    public void onDelet(String path, boolean isNone) {
         mPresenter.deleteImage(mTitle, path);
+        if (isNone) {
+            onBackPressed();
+        }
     }
 
     @Override

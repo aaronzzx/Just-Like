@@ -210,11 +210,10 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
         for (E e : list) {
             mCollections.add((Album) e);
         }
-//        mAdapter.notifyItemRangeChanged(0, mCollections.size());
         runOnUiThread(() -> {
             hideProgress();
-            mAdapter.notifyItemRangeChanged(0, mCollections.size());
-//            mAdapter.notifyDataSetChanged();
+//            mAdapter.notifyItemRangeChanged(0, mCollections.size());
+            mAdapter.notifyDataSetChanged();
         });
     }
 
