@@ -201,6 +201,11 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
                     mPresenter.deleteCollection(title);
                     mCollections.remove(position);
                     mAdapter.notifyDataSetChanged();
+                    if (mCollections.size() == 0) {
+                        EmptyViewUtil.showEmptyView(mEmptyView);
+                    } else {
+                        EmptyViewUtil.hideEmptyView(mEmptyView);
+                    }
                 })
                 .setNegativeButton("取消", (dialog, which) -> {
                 }).show();

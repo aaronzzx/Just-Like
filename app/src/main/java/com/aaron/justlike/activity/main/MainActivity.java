@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     private FloatingActionButton mFabButton;
     private GridFragment mGridFragment;
     private ImageView mNavHeaderImage;
+    private View mEmptyView;
 
     private Drawable mIconDrawer;
     private Drawable mIconSort;
@@ -286,7 +287,14 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     public void onShowImage(List<Image> imageList, int sortType, boolean ascendingOrder) {
         mImageList.clear();
         mImageList.addAll(imageList);
-        runOnUiThread(() -> mGridFragment.update(imageList));
+        runOnUiThread(() -> {
+            if (mImageList.size() == 0) {
+                mEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyView.setVisibility(View.GONE);
+            }
+            mGridFragment.update(imageList);
+        });
         mSortType = sortType;
         mIsAscending = ascendingOrder;
     }
@@ -330,6 +338,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         mFabButton = findViewById(R.id.fab_home_activity_main);
         mGridFragment = (GridFragment) getSupportFragmentManager().findFragmentById(R.id.grid_fragment);
         mNavHeaderImage = headerView.findViewById(R.id.nav_head_image);
+        mEmptyView = findViewById(R.id.empty_view);
 
         // Part 2, setClickListener
         mToolbar.setOnClickListener(this);
