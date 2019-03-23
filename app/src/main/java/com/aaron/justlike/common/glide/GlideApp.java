@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 
 import com.aaron.justlike.R;
@@ -24,7 +25,13 @@ public class GlideApp {
     public static void loadImage(Context context, String path, int placeHolder, ImageView imageView) {
         Glide.with(context)
                 .load(path)
-//                .dontAnimate()
+                .placeholder(placeHolder)
+                .into(imageView);
+    }
+
+    public static void loadImageByFade(Context context, String path, int placeHolder, ImageView imageView) {
+        Glide.with(context)
+                .load(path)
                 .placeholder(placeHolder)
                 .transition(DrawableTransitionOptions.withCrossFade(100))
                 .into(imageView);
@@ -41,6 +48,7 @@ public class GlideApp {
     public static void loadImageBySaturation(Context context, String urls, Drawable placeHolder, ImageView imageView) {
         Animator animator = AnimatorInflater.loadAnimator(context, R.animator.image_saturation);
         animator.setTarget(new ViewWrapper(imageView));
+        animator.setInterpolator(new AccelerateInterpolator());
         Glide.with(context)
                 .load(urls)
                 .placeholder(placeHolder)

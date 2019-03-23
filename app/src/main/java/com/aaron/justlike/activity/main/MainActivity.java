@@ -318,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     public void onShowMessage(String args) {
         runOnUiThread(() -> {
             if (args != null) {
-                new Handler().postDelayed(() -> Toast.makeText(this, args, Toast.LENGTH_SHORT).show(), 80);
+                new Handler().postDelayed(() -> Toast.makeText(this, args, Toast.LENGTH_SHORT).show(), 100);
             }
             if (mImageList.size() == 0) {
                 mEmptyView.setVisibility(View.VISIBLE);

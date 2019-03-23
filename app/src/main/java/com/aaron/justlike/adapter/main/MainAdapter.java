@@ -54,7 +54,7 @@ public class MainAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Image image = (Image) mList.get(position); // 从集合中找到 Image 对象
         String path = image.getPath();
 
-        GlideApp.loadImage(mContext, path, R.color.colorBlue, ((ViewHolder) holder).squareView);
+        GlideApp.loadImageByFade(mContext, path, R.color.colorBlue, ((ViewHolder) holder).squareView);
     }
 
     @Override

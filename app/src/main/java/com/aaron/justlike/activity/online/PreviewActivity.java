@@ -195,7 +195,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView, 
 
     @Override
     public void onShowAuthorAvatar(String urls) {
-        GlideApp.loadImage(this, urls, R.drawable.ic_place_holder, mAuthorImage);
+        GlideApp.loadImageByFade(this, urls, R.drawable.ic_place_holder, mAuthorImage);
     }
 
     @Override

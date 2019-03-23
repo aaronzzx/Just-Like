@@ -67,7 +67,7 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ViewHolder viewHolder = (ViewHolder) holder;
         String path = mImages.get(position).getPath();
 
-        GlideApp.loadImage(mContext, path, R.color.colorBlue, viewHolder.squareView);
+        GlideApp.loadImageByFade(mContext, path, R.color.colorBlue, viewHolder.squareView);
         // 解决 View 复用混乱
         selectBefore(viewHolder, position);
         selectRightNow(viewHolder, position);
