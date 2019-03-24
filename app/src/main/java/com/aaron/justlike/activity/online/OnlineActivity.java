@@ -11,10 +11,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.ProgressBar;
 
 import com.aaron.justlike.R;
@@ -206,12 +209,52 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
 
     @Override
     public void onShowLoading() {
-        mFooterProgress.setVisibility(View.VISIBLE);
+        ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+        animation.setFillAfter(true);
+        animation.setDuration(250);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mFooterProgress.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        mFooterProgress.startAnimation(animation);
     }
 
     @Override
     public void onHideLoading() {
-        mFooterProgress.setVisibility(View.GONE);
+        new Handler().postDelayed(() -> {
+            ScaleAnimation animation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+            animation.setFillAfter(true);
+            animation.setDuration(250);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    mFooterProgress.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            mFooterProgress.startAnimation(animation);
+        }, 700);
     }
 
     private void initView() {
