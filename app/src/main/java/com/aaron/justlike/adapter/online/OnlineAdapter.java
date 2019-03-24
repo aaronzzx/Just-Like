@@ -1,5 +1,7 @@
 package com.aaron.justlike.adapter.online;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -7,12 +9,14 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.common.glide.GlideApp;
 import com.aaron.justlike.http.unsplash.entity.Photo;
+import com.aaron.justlike.library.glide.GlideApp;
+import com.aaron.justlike.ui.ViewWrapper;
 
 import java.util.List;
 
@@ -79,9 +83,23 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             // set author name
             ((ViewHolder) holder).authorName.setText(authorName);
             // load author image
-            GlideApp.loadImage(mContext, authorImage, R.drawable.ic_place_holder, ((ViewHolder) holder).authorImage);
+            GlideApp.getInstance()
+                    .with(mContext)
+                    .asDrawable()
+                    .load(authorImage)
+                    .placeHolder(R.drawable.ic_place_holder)
+                    .into(((ViewHolder) holder).authorImage);
             // load image
-            GlideApp.loadImageBySaturation(mContext, regular, placeHolder, ((ViewHolder) holder).imageView);
+            GlideApp.getInstance()
+                    .with(mContext)
+                    .asDrawable()
+                    .load(regular)
+                    .placeHolder(placeHolder)
+                    .transition(300)
+                    .into(((ViewHolder) holder).imageView);
+            Animator animator = ObjectAnimator.ofFloat(new ViewWrapper(((ViewHolder) holder).imageView), "saturation", 0, 1);
+            animator.setDuration(2000).setInterpolator(new AccelerateInterpolator());
+            animator.start();
         }
     }
 

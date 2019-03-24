@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.common.glide.GlideApp;
 import com.aaron.justlike.entity.Image;
+import com.aaron.justlike.library.glide.GlideApp;
 import com.aaron.justlike.ui.SquareView;
 
 import java.util.List;
@@ -54,7 +54,13 @@ public class MainAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Image image = (Image) mList.get(position); // 从集合中找到 Image 对象
         String path = image.getPath();
 
-        GlideApp.loadImageByFade(mContext, path, R.color.colorBlue, ((ViewHolder) holder).squareView);
+        GlideApp.getInstance()
+                .with(mContext)
+                .asDrawable()
+                .load(path)
+                .placeHolder(R.color.colorBlue)
+                .transition(100)
+                .into(((ViewHolder) holder).squareView);
     }
 
     @Override

@@ -5,8 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.aaron.justlike.common.glide.GlideApp;
 import com.aaron.justlike.entity.Image;
+import com.aaron.justlike.library.glide.GlideApp;
 import com.bm.library.PhotoView;
 
 import java.util.List;
@@ -51,8 +51,11 @@ public class PreviewAdapter<T> extends PagerAdapter {
             parent.removeView(photoView);
         }
 
-//        GlideApp.loadImageByOverride(context, path, new int[]{3000, 3000}, photoView);
-        GlideApp.loadImageNoPlaceHolder(context, path, photoView);
+        GlideApp.getInstance()
+                .with(context)
+                .asDrawable()
+                .load(path)
+                .into(photoView);
         photoView.setOnClickListener(v -> mCallback.onPress());
         container.addView(photoView);
         return photoView;

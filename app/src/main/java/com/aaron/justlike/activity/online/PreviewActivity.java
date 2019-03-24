@@ -16,9 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.common.glide.GlideApp;
 import com.aaron.justlike.entity.PhotoEvent;
 import com.aaron.justlike.http.unsplash.entity.Photo;
+import com.aaron.justlike.library.glide.GlideApp;
+import com.aaron.justlike.library.glide.request.Request;
 import com.aaron.justlike.mvp.presenter.online.preview.IPreviewPresenter;
 import com.aaron.justlike.mvp.presenter.online.preview.PreviewPresenter;
 import com.aaron.justlike.mvp.view.online.IPreviewView;
@@ -26,10 +27,6 @@ import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtils;
 import com.aaron.justlike.util.SystemUtils;
 import com.bm.library.PhotoView;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.snackbar.Snackbar;
@@ -38,7 +35,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -167,25 +163,29 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView, 
 
     @Override
     public void onShowImage(String urls, String thumbnail) {
-        GlideApp.loadImageByThumb(this, urls, thumbnail, mPhotoView, new RequestListener<Drawable>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                mProgressBar.setVisibility(View.GONE);
-                mProgressImage.setVisibility(View.VISIBLE);
-                mProgressImage.setImageResource(R.drawable.ic_error_circle);
-                Snackbar.make(mPhotoView, "加载失败，请检查网络", Snackbar.LENGTH_LONG).show();
-                return true;
-            }
+        GlideApp.getInstance()
+                .with(this)
+                .asDrawable()
+                .load(urls)
+                .thumbnail(thumbnail)
+                .listener(new Request.Listener<Drawable>() {
+                    @Override
+                    public void onLoadFailed() {
+                        mProgressBar.setVisibility(View.GONE);
+                        mProgressImage.setVisibility(View.VISIBLE);
+                        mProgressImage.setImageResource(R.drawable.ic_error_circle);
+                        Snackbar.make(mPhotoView, "加载失败，请检查网络", Snackbar.LENGTH_LONG).show();
+                    }
 
-            @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                mProgressBar.setVisibility(View.GONE);
-                AnimationUtil.showProgressImage(mProgressImage);
-                mPhotoView.enable();
-                mPhotoView.setImageDrawable(resource);
-                return true;
-            }
-        });
+                    @Override
+                    public void onResourceReady(Drawable resource) {
+                        mProgressBar.setVisibility(View.GONE);
+                        AnimationUtil.showProgressImage(mProgressImage);
+                        mPhotoView.enable();
+                        mPhotoView.setImageDrawable(resource);
+                    }
+                })
+                .into(mPhotoView);
     }
 
     @Override
@@ -195,7 +195,12 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView, 
 
     @Override
     public void onShowAuthorAvatar(String urls) {
-        GlideApp.loadImageByFade(this, urls, R.drawable.ic_place_holder, mAuthorImage);
+        GlideApp.getInstance()
+                .with(this)
+                .asDrawable()
+                .load(urls)
+                .placeHolder(R.drawable.ic_place_holder)
+                .into(mAuthorImage);
     }
 
     @Override

@@ -2,7 +2,10 @@ package com.aaron.justlike.adapter.theme;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.common.glide.GlideApp;
+import com.aaron.justlike.library.glide.GlideApp;
+import com.aaron.justlike.library.glide.request.Request;
 
 import java.util.List;
 
@@ -67,7 +71,26 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         initThemeColor((ViewHolder) holder, position);
 
-        GlideApp.loadImageByColorScale(mContext, mList.get(position), R.color.colorBlue, ((ViewHolder) holder).imageView);
+        GlideApp.getInstance()
+                .with(mContext)
+                .asDrawable()
+                .load(mList.get(position))
+                .placeHolder(R.color.colorBlue)
+                .listener(new Request.Listener<Drawable>() {
+                    @Override
+                    public void onLoadFailed() {
+
+                    }
+
+                    @Override
+                    public void onResourceReady(Drawable resource) {
+                        ColorMatrix matrix = new ColorMatrix();
+                        matrix.setScale(0.7F, 0.7F, 0.7F, 1);
+                        resource.setColorFilter(new ColorMatrixColorFilter(matrix));
+                        ((ViewHolder) holder).imageView.setImageDrawable(resource);
+                    }
+                })
+                .into(((ViewHolder) holder).imageView);
     }
 
     @Override

@@ -36,7 +36,7 @@ public class AboutLibraryAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
             switch (holder.getAdapterPosition()) {
                 case 0:
                     Intent glide = new Intent(Intent.ACTION_VIEW);
-                    glide.setData(Uri.parse("https://github.com/bumptech/glide"));
+                    glide.setData(Uri.parse("https://github.com/bumptech/with"));
                     mContext.startActivity(glide);
                     break;
                 case 1:
