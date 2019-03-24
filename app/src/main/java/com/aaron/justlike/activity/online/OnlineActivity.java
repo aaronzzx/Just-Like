@@ -1,14 +1,9 @@
 package com.aaron.justlike.activity.online;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -51,7 +46,6 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
         OnlineAdapter.Callback<Photo> {
 
     private IOnlinePresenter mPresenter;
-    private NetworkStatusReceiver mNetworkStatusReceiver;
 
     private ThemeManager.Theme mCurrentTheme;
     private int mColorPrimary;
@@ -75,12 +69,6 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
         mCurrentTheme = ThemeManager.getInstance().getCurrentTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online);
-        // 注册广播接收器监听网络状态
-        mNetworkStatusReceiver = new NetworkStatusReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        registerReceiver(mNetworkStatusReceiver, intentFilter);
-
         initView();
         attachPresenter();
         mPresenter.requestImage(false);
@@ -90,7 +78,6 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.detachView();
-        unregisterReceiver(mNetworkStatusReceiver);
     }
 
     @Override
@@ -141,7 +128,9 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
 
     @Override
     public void onRefresh() {
-        mPresenter.requestImage(true);
+        if (mProgressBar.getVisibility() == View.GONE) {
+            mPresenter.requestImage(true);
+        }
     }
 
     /**
@@ -161,6 +150,7 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
 
     @Override
     public void onShowImage(List<Photo> list) {
+        mSwipeRefresh.setEnabled(true);
         mErrorView.setVisibility(View.GONE);
         mPhotoList.clear();
         mPhotoList.addAll(list);
@@ -209,25 +199,10 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
 
     @Override
     public void onShowLoading() {
+        mFooterProgress.setVisibility(View.VISIBLE);
         ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
         animation.setFillAfter(true);
         animation.setDuration(250);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                mFooterProgress.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
         mFooterProgress.startAnimation(animation);
     }
 
@@ -254,7 +229,7 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
                 }
             });
             mFooterProgress.startAnimation(animation);
-        }, 700);
+        }, 500);
     }
 
     private void initView() {
@@ -273,6 +248,7 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
         initToolbar();
         initRecyclerView();
         mSwipeRefresh.setColorSchemeColors(mColorPrimary);
+        mSwipeRefresh.setEnabled(false);
     }
 
     private void initIconColor() {
@@ -355,7 +331,7 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && mPhotoList.size() != 0) {
                     boolean canScrollVertical = mRecyclerView.canScrollVertically(1);
-                    if (!canScrollVertical) {
+                    if (!canScrollVertical && mFooterProgress.getVisibility() == View.GONE) {
                         mPresenter.requestLoadMore();
                     }
                 }
@@ -379,18 +355,6 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
                 outRect.right = SystemUtils.dp2px(OnlineActivity.this, 2.5F);
             } else if (parent.getChildAdapterPosition(view) % 2 == 1) {
                 outRect.left = SystemUtils.dp2px(OnlineActivity.this, 2.5F);
-            }
-        }
-    }
-
-    private class NetworkStatusReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-            if (networkInfo == null && mPhotoList.size() == 0) {
-                mErrorView.setVisibility(View.VISIBLE);
             }
         }
     }
