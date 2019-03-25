@@ -8,4 +8,40 @@
         android:icon="@drawable/ic_search"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/action_filter"
+        android:title="筛选"
+        android:icon="@drawable/ic_filter"
+        app:showAsAction="always">
+
+        <menu>
+
+            <item
+                android:id="@+id/filter_latest"
+                android:title="最近"
+                android:icon="@drawable/ic_latest"
+                app:showAsAction="always" />
+
+            <item
+                android:id="@+id/filter_oldest"
+                android:title="最久远"
+                android:icon="@drawable/ic_oldest"
+                app:showAsAction="always" />
+
+            <item
+                android:id="@+id/filter_popular"
+                android:title="最流行"
+                android:icon="@drawable/ic_popular"
+                app:showAsAction="always" />
+
+            <item
+                android:id="@+id/filter_random"
+                android:title="随机"
+                android:icon="@drawable/ic_random"
+                app:showAsAction="always" />
+
+        </menu>
+
+    </item>
+
 </menu>

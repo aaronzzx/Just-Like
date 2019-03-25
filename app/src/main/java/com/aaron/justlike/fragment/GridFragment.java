@@ -57,7 +57,7 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View parentLayout = inflater.inflate(R.layout.fragment_grid, container, false);
+        View parentLayout = inflater.inflate(R.layout.include_fragment_grid, container, false);
         initView(parentLayout);
         return parentLayout;
     }

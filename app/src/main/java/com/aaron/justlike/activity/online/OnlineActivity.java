@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.aaron.justlike.mvp.view.online.IOnlineView;
 import com.aaron.justlike.ui.MyGridLayoutManager;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -51,8 +53,11 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
     private int mColorPrimary;
 
     private Toolbar mToolbar;
+    private TabLayout mTabLayout;
     private ActionBar mActionBar;
     private Drawable mIconBack;
+    private Drawable mIconSearch;
+    private Drawable mIconFilter;
     private SwipeRefreshLayout mSwipeRefresh;
     private RecyclerView mRecyclerView;
     private View mErrorView;
@@ -89,9 +94,7 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
             ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
             if (theme == null || theme == ThemeManager.Theme.WHITE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                 } else {
                     window.setStatusBarColor(getResources().getColor(R.color.status_bar_background));
                 }
@@ -99,6 +102,13 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
                 mActionBar.setHomeAsUpIndicator(mIconBack);
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_online_menu, menu);
+        SystemUtils.setIconEnable(menu, true);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -235,6 +245,7 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
 
     private void initView() {
         mToolbar = findViewById(R.id.activity_online_toolbar);
+        mTabLayout = findViewById(R.id.tab_layout);
         mSwipeRefresh = findViewById(R.id.swipe_refresh_home_activity_main);
         mRecyclerView = findViewById(R.id.recycler_view);
         mErrorView = findViewById(R.id.error_view);
@@ -255,8 +266,14 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
     private void initIconColor() {
         if (ThemeManager.getInstance().getCurrentTheme() == null
                 || ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
+            mTabLayout.setTabTextColors(getResources().getColor(R.color.colorAccentWhite), getResources().getColor(R.color.colorAccentWhite));
+            mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccentWhite));
             mIconBack = getResources().getDrawable(R.drawable.ic_back);
-            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorGreyText));
+            mIconSearch = getResources().getDrawable(R.drawable.ic_search);
+            mIconFilter = getResources().getDrawable(R.drawable.ic_filter);
+            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorAccentWhite));
+            DrawableCompat.setTint(mIconSearch, getResources().getColor(R.color.colorAccentWhite));
+            DrawableCompat.setTint(mIconFilter, getResources().getColor(R.color.colorAccentWhite));
         }
     }
 
@@ -302,10 +319,6 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
     }
 
     private void initToolbar() {
-        Window window = getWindow();
-        View decorView = window.getDecorView();
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {

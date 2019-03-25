@@ -30,7 +30,7 @@ android {
                     'src/main/res/layouts/download',
                     'src/main/res/layouts/theme',
                     'src/main/res/layouts/about',
-                    'src/main/res/layouts/others',
+                    'src/main/res/layouts/common',
                     'src/main/res/resource',
                     'src/main/res'
             ]

@@ -14,20 +14,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:id="@+id/activity_online_linear_layout"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/activity_online_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_scrollFlags="scroll|enterAlways|snap" />
 
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/activity_online_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="25dp"
-                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-            </LinearLayout>
+            <include
+                layout="@layout/include_tab_layout"
+                android:id="@+id/tab" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -37,25 +34,7 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipToPadding="false"
-                    android:padding="5dp" />
-
-                <include
-                    layout="@layout/include_error_view"
-                    android:id="@+id/error_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone" />
-
-            </FrameLayout>
+            <include layout="@layout/include_image_list" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

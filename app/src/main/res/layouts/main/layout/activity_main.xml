@@ -91,7 +91,7 @@
         android:layout_gravity="start"
         app:itemTextColor="@color/colorGreyText"
         app:itemIconTint="@color/colorGrey"
-        app:headerLayout="@layout/nav_header"
+        app:headerLayout="@layout/include_nav_header"
         app:menu="@menu/nav_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
