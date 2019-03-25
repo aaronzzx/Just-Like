@@ -12,7 +12,7 @@ import com.aaron.justlike.R;
 import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.entity.UpdateEvent;
-import com.aaron.justlike.fragment.GridFragment;
+import com.aaron.justlike.fragment.SquareFragment;
 import com.aaron.justlike.mvp.presenter.collection.element.ElementPresenter;
 import com.aaron.justlike.mvp.presenter.collection.element.IElementPresenter;
 import com.aaron.justlike.mvp.view.collection.IElementView;
@@ -29,12 +29,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 
-public class ElementActivity extends AppCompatActivity implements GridFragment.Callback,
+public class ElementActivity extends AppCompatActivity implements SquareFragment.Callback,
         IElementView<Image> {
 
     private IElementPresenter<Image> mPresenter;
 
-    private GridFragment mGridFragment;
+    private SquareFragment mSquareFragment;
     private Toolbar mToolbar;
     private ActionBar mActionBar;
     private Drawable mIconBack;
@@ -138,14 +138,14 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
     public void onShowImage(List<Image> list) {
         mImageList.clear();
         mImageList.addAll(list);
-        mGridFragment.updateForAdd(list);
+        mSquareFragment.updateForAdd(list);
     }
 
     @Override
     public void onShowAddImage(List<Image> list) {
         mImageList.addAll(list);
         FileUtils.sortByDate(list, false);
-        runOnUiThread(() -> mGridFragment.updateForAdd(list));
+        runOnUiThread(() -> mSquareFragment.updateForAdd(list));
     }
 
     private void initView() {
@@ -154,7 +154,7 @@ public class ElementActivity extends AppCompatActivity implements GridFragment.C
 
         // find id
         mToolbar = findViewById(R.id.toolbar);
-        mGridFragment = (GridFragment) getSupportFragmentManager().findFragmentById(R.id.grid_fragment);
+        mSquareFragment = (SquareFragment) getSupportFragmentManager().findFragmentById(R.id.grid_fragment);
 
         // init status
         initIconColor();

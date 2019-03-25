@@ -34,7 +34,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class GridFragment extends Fragment implements MainAdapter.Callback<Image> {
+public class SquareFragment extends Fragment implements MainAdapter.Callback<Image> {
 
     private Context mContext;
 
@@ -42,7 +42,7 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
     private RecyclerView.Adapter mAdapter;
     private List<Image> mImageList = new ArrayList<>();
 
-    public GridFragment() {
+    public SquareFragment() {
         // Required empty public constructor
     }
 
@@ -57,7 +57,7 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View parentLayout = inflater.inflate(R.layout.include_fragment_grid, container, false);
+        View parentLayout = inflater.inflate(R.layout.fragment_square, container, false);
         initView(parentLayout);
         return parentLayout;
     }
@@ -77,7 +77,7 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
         String path = event.getPath();
         mImageList.remove(position);
         mAdapter.notifyDataSetChanged();
-        ((GridFragment.Callback) mContext).onDelete(path);
+        ((SquareFragment.Callback) mContext).onDelete(path);
     }
 
     /**
@@ -89,7 +89,7 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
         String path = event.getPath();
         mImageList.remove(position);
         mAdapter.notifyDataSetChanged();
-        ((GridFragment.Callback) mContext).onDelet(path, mImageList.size() == 0);
+        ((SquareFragment.Callback) mContext).onDelet(path, mImageList.size() == 0);
     }
 
     /**
@@ -121,9 +121,9 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
                     mAdapter.notifyItemRemoved(position);
                     mAdapter.notifyItemRangeChanged(0, mImageList.size() - 1);
                     if (getActivity() instanceof MainActivity) {
-                        ((GridFragment.Callback) mContext).onDelete(path);
+                        ((SquareFragment.Callback) mContext).onDelete(path);
                     } else if (getActivity() instanceof ElementActivity) {
-                        ((GridFragment.Callback) mContext).onDelet(path, mImageList.size() == 0);
+                        ((SquareFragment.Callback) mContext).onDelet(path, mImageList.size() == 0);
                     }
                 })
                 .setNegativeButton("取消", (dialog, which) -> {
@@ -180,9 +180,9 @@ public class GridFragment extends Fragment implements MainAdapter.Callback<Image
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0) {
-                    ((GridFragment.Callback) mContext).onHide();
+                    ((SquareFragment.Callback) mContext).onHide();
                 } else if (dy < 0) {
-                    ((GridFragment.Callback) mContext).onShow();
+                    ((SquareFragment.Callback) mContext).onShow();
                 }
             }
         });

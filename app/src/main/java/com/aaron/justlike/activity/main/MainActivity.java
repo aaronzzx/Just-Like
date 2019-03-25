@@ -25,7 +25,7 @@ import com.aaron.justlike.activity.online.OnlineActivity;
 import com.aaron.justlike.activity.theme.ThemeActivity;
 import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.Image;
-import com.aaron.justlike.fragment.GridFragment;
+import com.aaron.justlike.fragment.SquareFragment;
 import com.aaron.justlike.library.glide.GlideEngine;
 import com.aaron.justlike.mvp.presenter.main.IMainPresenter;
 import com.aaron.justlike.mvp.presenter.main.MainPresenter;
@@ -52,7 +52,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MainActivity extends AppCompatActivity implements IMainView<Image>, View.OnClickListener,
-        NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener, GridFragment.Callback {
+        NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener, SquareFragment.Callback {
 
     private static final int REQUEST_PERMISSION = 0;
     private static final int REQUEST_SELECT_IMAGE = 1;
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     private MenuItem mSortByAscending;
     private SwipeRefreshLayout mSwipeRefresh;
     private FloatingActionButton mFabButton;
-    private GridFragment mGridFragment;
+    private SquareFragment mSquareFragment;
     private ImageView mNavHeaderImage;
 
     private Drawable mIconDrawer;
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPresenter.detachView(); // 断开 Presenter
+        mPresenter.detachView(); // 断开 OnlinePresenter
     }
 
     @Override
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_home_activity_main:
-                mGridFragment.backToTop();
+                mSquareFragment.backToTop();
                 break;
             case R.id.fab_home_activity_main:
                 openImageSelector();
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     }
 
     /**
-     * 关联 Presenter
+     * 关联 OnlinePresenter
      */
     @Override
     public void attachPresenter() {
@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         mImageList.clear();
         mImageList.addAll(imageList);
         runOnUiThread(() -> {
-            mGridFragment.update(imageList);
+            mSquareFragment.update(imageList);
             if (mImageList.size() == 0) {
                 mEmptyView.setVisibility(View.VISIBLE);
             } else {
@@ -308,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     @Override
     public void onShowAddImage(List<Image> list) {
         mImageList.addAll(0, list);
-        runOnUiThread(() -> mGridFragment.updateForAdd(list));
+        runOnUiThread(() -> mSquareFragment.updateForAdd(list));
     }
 
     /**
@@ -346,7 +346,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         mToolbar = findViewById(R.id.toolbar_home_activity_main);
         mSwipeRefresh = findViewById(R.id.swipe_refresh_home_activity_main);
         mFabButton = findViewById(R.id.fab_home_activity_main);
-        mGridFragment = (GridFragment) getSupportFragmentManager().findFragmentById(R.id.grid_fragment);
+        mSquareFragment = (SquareFragment) getSupportFragmentManager().findFragmentById(R.id.grid_fragment);
         mNavHeaderImage = headerView.findViewById(R.id.nav_head_image);
         mEmptyView = findViewById(R.id.empty_view);
 

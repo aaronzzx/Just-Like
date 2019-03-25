@@ -53,6 +53,23 @@ public class Unsplash {
                 });
     }
 
+    public void getCuratedPhotos(int page, int perPage, Order order, PhotoCallback<List<Photo>> callback) {
+        mPhotoService.getCuratedPhotos(page, perPage, order.getOrder())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ObserverImpl<List<Photo>>() {
+                    @Override
+                    public void onNext(List<Photo> photos) {
+                        callback.onSuccess(photos);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e.getMessage());
+                    }
+                });
+    }
+
     public void getPhoto(String id, PhotoCallback<Photo> callback) {
         mPhotoService.getPhoto(id)
                 .subscribeOn(Schedulers.io())

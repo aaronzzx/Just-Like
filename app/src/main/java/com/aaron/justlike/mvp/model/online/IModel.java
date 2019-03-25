@@ -4,7 +4,9 @@ import java.util.List;
 
 public interface IModel<T> {
 
-    void findImage(boolean refreshMode, Callback<T> callback);
+    void findPhotos(boolean refreshMode, Callback<T> callback);
+
+    void findCuratedPhotos(boolean refreshMode, Callback<T> callback);
 
     interface Callback<T> {
 

@@ -1,7 +1,5 @@
 package com.aaron.justlike.mvp.model.online;
 
-import android.util.Log;
-
 import com.aaron.justlike.http.unsplash.Order;
 import com.aaron.justlike.http.unsplash.Unsplash;
 import com.aaron.justlike.http.unsplash.entity.Photo;
@@ -11,22 +9,21 @@ import java.util.List;
 
 public class OnlineModel implements IModel<Photo> {
 
-    private static final String TAG = "OnlineModel";
     private Unsplash mUnsplash;
 
-    private int mPage = 1;
+    private int mRecommend = 1;
+    private int mCurated = 1;
 
     public OnlineModel() {
         mUnsplash = Unsplash.getInstance();
-        Log.d(TAG, "Unsplash: " + mUnsplash);
     }
 
     @Override
-    public void findImage(boolean refreshMode, Callback<Photo> callback) {
+    public void findPhotos(boolean refreshMode, Callback<Photo> callback) {
         if (refreshMode) {
-            mPage = 1;
+            mRecommend = 1;
         }
-        mUnsplash.getPhotos(mPage, 30, Order.LATEST, new PhotoCallback<List<Photo>>() {
+        mUnsplash.getPhotos(mRecommend, 30, Order.LATEST, new PhotoCallback<List<Photo>>() {
             @Override
             public void onSuccess(List<Photo> photos) {
                 callback.onSuccess(photos);
@@ -37,6 +34,25 @@ public class OnlineModel implements IModel<Photo> {
                 callback.onFailure();
             }
         });
-        mPage++;
+        mRecommend++;
+    }
+
+    @Override
+    public void findCuratedPhotos(boolean refreshMode, Callback<Photo> callback) {
+        if (refreshMode) {
+            mCurated = 1;
+        }
+        mUnsplash.getCuratedPhotos(mCurated, 30, Order.LATEST, new PhotoCallback<List<Photo>>() {
+            @Override
+            public void onSuccess(List<Photo> photos) {
+                callback.onSuccess(photos);
+            }
+
+            @Override
+            public void onFailure(String error) {
+                callback.onFailure();
+            }
+        });
+        mCurated++;
     }
 }
