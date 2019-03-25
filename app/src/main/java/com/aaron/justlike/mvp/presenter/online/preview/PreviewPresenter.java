@@ -36,6 +36,7 @@ public class PreviewPresenter implements IPreviewPresenter {
 
     @Override
     public void requestImage(Photo photo) {
+        mView.onHideProgressStatus();
         mView.onShowProgress();
         mView.onShowAuthorName(photo.getUser().getName());
         mView.onShowAuthorAvatar(photo.getUser().getProfileImage().getLarge());

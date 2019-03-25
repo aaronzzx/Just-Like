@@ -14,6 +14,8 @@ public interface IPreviewView {
 
     void onShowProgress();
 
+    void onHideProgressStatus();
+
     void onSetWallpaper(String imagePath);
 
     void onShowMessage(String args);

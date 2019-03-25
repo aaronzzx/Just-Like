@@ -46,7 +46,7 @@ public class AboutMessageAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
             switch (holder.getAdapterPosition()) {
                 case INTRODUCE:
                     Intent introduce = new Intent(Intent.ACTION_VIEW);
-                    introduce.setData(Uri.parse("https://www.jianshu.com/p/011e616982f4"));
+                    introduce.setData(Uri.parse("https://juejin.im/user/5c3f3b2b5188252580051f8c"));
                     mActivity.startActivity(introduce);
                     break;
                 case FEEDBACK:

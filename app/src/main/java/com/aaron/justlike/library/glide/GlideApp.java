@@ -35,12 +35,12 @@ public class GlideApp {
         return sGlideApp;
     }
 
-    public TranscodeType with(Context context) {
+    public ResourceType with(Context context) {
         mRequestManager = Glide.with(context);
-        return new TranscodeType();
+        return new ResourceType();
     }
 
-    public class TranscodeType {
+    public class ResourceType {
 
         public Request<Drawable> asDrawable() {
             return new DrawableRequest(mRequestManager.asDrawable());

@@ -29,7 +29,6 @@ import com.aaron.justlike.util.SystemUtils;
 import com.bm.library.PhotoView;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -174,12 +173,14 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView, 
                         mProgressBar.setVisibility(View.GONE);
                         mProgressImage.setVisibility(View.VISIBLE);
                         mProgressImage.setImageResource(R.drawable.ic_error_circle);
-                        Snackbar.make(mPhotoView, "加载失败，请检查网络", Snackbar.LENGTH_LONG).show();
+                        Toast.makeText(PreviewActivity.this, "网络开小差了", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onResourceReady(Drawable resource) {
                         mProgressBar.setVisibility(View.GONE);
+                        mProgressImage.setVisibility(View.VISIBLE);
+                        mProgressImage.setImageResource(R.drawable.ic_done_circle);
                         AnimationUtil.showProgressImage(mProgressImage);
                         mPhotoView.enable();
                         mPhotoView.setImageDrawable(resource);
@@ -216,6 +217,11 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView, 
     @Override
     public void onShowProgress() {
         mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onHideProgressStatus() {
+        mProgressImage.setVisibility(View.GONE);
     }
 
     @Override

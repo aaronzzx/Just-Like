@@ -150,7 +150,6 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
 
     @Override
     public void onShowImage(List<Photo> list) {
-        mSwipeRefresh.setEnabled(true);
         mErrorView.setVisibility(View.GONE);
         mPhotoList.clear();
         mPhotoList.addAll(list);
@@ -189,6 +188,8 @@ public class OnlineActivity extends AppCompatActivity implements IOnlineView<Pho
 
     @Override
     public void onHideRefresh() {
+        if (!mSwipeRefresh.isEnabled())
+            mSwipeRefresh.setEnabled(true);
         mSwipeRefresh.setRefreshing(false);
     }
 

@@ -46,7 +46,7 @@ public class OnlinePresenter implements IOnlinePresenter {
                 }
                 mView.onHideProgress();
                 mView.onHideRefresh();
-                mView.onShowMessage(REQUEST_IMAGE, "加载失败");
+                mView.onShowMessage(REQUEST_IMAGE, "网络开小差了");
             }
         });
     }
