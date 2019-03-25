@@ -137,6 +137,7 @@ public class AboutActivity extends AppCompatActivity implements IAboutView<Messa
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
+            mActionBar.setHomeAsUpIndicator(R.drawable.ic_back);
         }
     }
 

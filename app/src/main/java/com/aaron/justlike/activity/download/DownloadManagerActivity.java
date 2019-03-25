@@ -229,6 +229,7 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
+            mActionBar.setHomeAsUpIndicator(R.drawable.ic_back);
         }
     }
 

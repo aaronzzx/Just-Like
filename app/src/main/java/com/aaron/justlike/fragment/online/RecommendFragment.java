@@ -1,14 +1,14 @@
-package com.aaron.justlike.fragment;
+package com.aaron.justlike.fragment.online;
 
 import com.aaron.justlike.http.unsplash.entity.Photo;
 import com.aaron.justlike.mvp.presenter.online.IOnlinePresenter;
 import com.aaron.justlike.mvp.presenter.online.OnlinePresenter;
 
-public class CuratedFragment extends PhotoFragment {
+public class RecommendFragment extends PhotoFragment {
 
     private IOnlinePresenter<Photo> mPresenter;
 
-    public CuratedFragment() {
+    public RecommendFragment() {
         // Required empty public constructor
     }
 
@@ -20,12 +20,12 @@ public class CuratedFragment extends PhotoFragment {
 
     @Override
     public void requestPhotos(boolean isRefresh) {
-        mPresenter.requestCuratedPhotos(isRefresh);
+        mPresenter.requestPhotos(isRefresh);
     }
 
     @Override
     public void requestLoadMore() {
-        mPresenter.requestLoadMoreCurated();
+        mPresenter.requestLoadMore();
     }
 
     @Override

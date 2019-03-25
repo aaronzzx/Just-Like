@@ -268,6 +268,7 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
+            mActionBar.setHomeAsUpIndicator(R.drawable.ic_back);
         }
     }
 

@@ -1,4 +1,4 @@
-package com.aaron.justlike.fragment;
+package com.aaron.justlike.fragment.online;
 
 import android.app.Activity;
 import android.content.Context;

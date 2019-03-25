@@ -184,6 +184,7 @@ public class ElementActivity extends AppCompatActivity implements SquareFragment
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
+            mActionBar.setHomeAsUpIndicator(R.drawable.ic_back);
         }
     }
 }

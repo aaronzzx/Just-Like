@@ -12,7 +12,7 @@ import android.view.Window;
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.online.OnlinePagerAdapter;
 import com.aaron.justlike.common.ThemeManager;
-import com.aaron.justlike.fragment.PhotoFragment;
+import com.aaron.justlike.fragment.online.PhotoFragment;
 import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.tabs.TabLayout;
 
@@ -137,20 +137,27 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
+            mActionBar.setHomeAsUpIndicator(R.drawable.ic_back);
         }
     }
 
     private void initIconColor() {
+        mIconBack = getResources().getDrawable(R.drawable.ic_back);
+        mIconSearch = getResources().getDrawable(R.drawable.ic_search);
+        mIconFilter = getResources().getDrawable(R.drawable.ic_filter);
         if (ThemeManager.getInstance().getCurrentTheme() == null
                 || ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
             mTabLayout.setTabTextColors(getResources().getColor(R.color.colorAccentWhite), getResources().getColor(R.color.colorAccentWhite));
             mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccentWhite));
-            mIconBack = getResources().getDrawable(R.drawable.ic_back);
-            mIconSearch = getResources().getDrawable(R.drawable.ic_search);
-            mIconFilter = getResources().getDrawable(R.drawable.ic_filter);
             DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorAccentWhite));
             DrawableCompat.setTint(mIconSearch, getResources().getColor(R.color.colorAccentWhite));
             DrawableCompat.setTint(mIconFilter, getResources().getColor(R.color.colorAccentWhite));
+        } else {
+            mTabLayout.setTabTextColors(getResources().getColor(R.color.colorPrimaryWhite), getResources().getColor(R.color.colorPrimaryWhite));
+            mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
+            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorPrimaryWhite));
+            DrawableCompat.setTint(mIconSearch, getResources().getColor(R.color.colorPrimaryWhite));
+            DrawableCompat.setTint(mIconFilter, getResources().getColor(R.color.colorPrimaryWhite));
         }
     }
 

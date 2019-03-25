@@ -576,6 +576,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                 .thumbnailScale(0.85f)
                 .imageEngine(new GlideEngine())
+                .autoHideToolbarOnSingleTap(true)
                 .theme(mMatisseTheme)
                 .forResult(REQUEST_SELECT_IMAGE);
     }

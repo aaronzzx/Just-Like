@@ -1,7 +1,7 @@
 package com.aaron.justlike.adapter.online;
 
-import com.aaron.justlike.fragment.CuratedFragment;
-import com.aaron.justlike.fragment.RecommendFragment;
+import com.aaron.justlike.fragment.online.CuratedFragment;
+import com.aaron.justlike.fragment.online.RecommendFragment;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;

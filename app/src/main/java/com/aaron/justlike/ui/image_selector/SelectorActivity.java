@@ -157,6 +157,7 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
+            mActionBar.setHomeAsUpIndicator(R.drawable.ic_back);
         }
     }
 
