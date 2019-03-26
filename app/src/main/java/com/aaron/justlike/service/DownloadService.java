@@ -3,7 +3,9 @@ package com.aaron.justlike.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.aaron.justlike.common.ObserverImpl;
 import com.aaron.justlike.library.aria.AriaApp;
 import com.aaron.justlike.mvp.presenter.online.preview.PreviewPresenter;
 import com.aaron.justlike.util.FileUtil;
@@ -15,6 +17,11 @@ import com.arialyy.aria.core.download.DownloadTask;
 
 import java.io.File;
 import java.util.Map;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class DownloadService extends IntentService {
 
@@ -36,6 +43,14 @@ public class DownloadService extends IntentService {
         AriaApp.getInstance().startDownload(this, urls, mPath, mode);
         mNotificationId = SystemUtil.getRandomNum(10000);
         startForeground(mNotificationId, NotificationUtil.getNotification(this, "正在下载 " + mPhotoName, "0%", 1));
+        Observable.create((ObservableOnSubscribe<String>) emitter -> emitter.onNext("开始下载"))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ObserverImpl<String>() {
+                    @Override
+                    public void onNext(String s) {
+                        Toast.makeText(DownloadService.this, s, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     /**
@@ -61,7 +76,24 @@ public class DownloadService extends IntentService {
         Map.Entry<String, Integer> entry = AriaApp.getInstance().getMode();
         if (entry != null) {
             if (entry.getValue() == PreviewPresenter.SET_WALLPAPER) {
-                FileUtil.setWallpaper(this, mPath);
+                Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
+                    emitter.onNext(0);
+                    emitter.onNext(FileUtil.setWallpaper(DownloadService.this, mPath));
+                })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new ObserverImpl<Integer>() {
+                            @Override
+                            public void onNext(Integer flag) {
+                                if (flag == 0) {
+                                    Toast.makeText(DownloadService.this, "稍等片刻", Toast.LENGTH_SHORT).show();
+                                } else if (flag == 1) {
+                                    Toast.makeText(DownloadService.this, "设置成功", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(DownloadService.this, "设置失败", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
             }
         }
     }

@@ -38,6 +38,7 @@ public class AriaApp {
         if (path != null) {
             HashMap<String, Integer> map = new HashMap<>();
             map.put(path, mode);
+            mModeContainer.clear();
             return map.entrySet().iterator().next();
         }
         return null;
