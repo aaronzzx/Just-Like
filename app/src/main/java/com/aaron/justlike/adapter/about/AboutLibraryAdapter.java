@@ -99,6 +99,11 @@ public class AboutLibraryAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
                     rxAndroid.setData(Uri.parse("https://github.com/ReactiveX/RxAndroid"));
                     mContext.startActivity(rxAndroid);
                     break;
+                case 13:
+                    Intent aria = new Intent(Intent.ACTION_VIEW);
+                    aria.setData(Uri.parse("https://github.com/AriaLyy/Aria"));
+                    mContext.startActivity(aria);
+                    break;
             }
         });
         return holder;

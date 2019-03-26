@@ -150,7 +150,6 @@ public class FileUtil {
     }
 
     public static int setWallpaper(Context context, String path) {
-        Toast.makeText(context, "改造中", Toast.LENGTH_SHORT).show();
         WallpaperManager manager = WallpaperManager.getInstance(context);
         if (manager != null && path != null) {
             File file = new File(path);
@@ -158,7 +157,6 @@ public class FileUtil {
             try {
                 fis = new FileInputStream(file);
                 manager.setStream(fis);
-                Toast.makeText(context, "改造成功", Toast.LENGTH_SHORT).show();
                 return 1;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -412,9 +410,9 @@ public class FileUtil {
                         if (mFabType == 1) {
                             String path = Environment.getExternalStoragePublicDirectory
                                     (Environment.DIRECTORY_PICTURES) + "/JustLike/online/" + mPhotoName;
-                            int i = FileUtil.setWallpaper(mContext, path);
-                            if (i == -1) {
-                                Toast.makeText(mContext, "改造失败", Toast.LENGTH_SHORT).show();
+                            int flag = FileUtil.setWallpaper(mContext, path);
+                            if (flag == -1) {
+                                Toast.makeText(mContext, "设置失败", Toast.LENGTH_SHORT).show();
                             }
                         }
                         mContext.unregisterReceiver(receiver);

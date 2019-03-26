@@ -72,7 +72,8 @@ public class AboutPresenter implements IAboutPresenter {
                 "OkHttp",
                 "Retrofit",
                 "RxJava",
-                "RxAndroid"};
+                "RxAndroid",
+                "Aria"};
 
         public static final String[] LIBRARY_AUTHOR = {
                 "bumptech",
@@ -87,7 +88,8 @@ public class AboutPresenter implements IAboutPresenter {
                 "square",
                 "square",
                 "ReactiveX",
-                "ReactiveX"};
+                "ReactiveX",
+                "AriaLyy"};
 
         public static final String[] LIBRARY_INTRODUCE = {
                 "An image loading and caching library for Android focused on smooth scrolling",
@@ -102,6 +104,7 @@ public class AboutPresenter implements IAboutPresenter {
                 "An HTTP+HTTP/2 client for Android and Java applications.",
                 "Type-safe HTTP client for Android and Java by Square, Inc.",
                 "RxJava – Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.",
-                "RxJava bindings for Android"};
+                "RxJava bindings for Android",
+                "一个简洁的下载器，使用注解进行回调监听"};
     }
 }

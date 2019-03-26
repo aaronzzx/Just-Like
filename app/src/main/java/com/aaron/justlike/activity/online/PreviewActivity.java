@@ -1,5 +1,6 @@
 package com.aaron.justlike.activity.online;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -39,10 +40,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class PreviewActivity extends AppCompatActivity implements IPreviewView, View.OnClickListener {
 
     private IPreviewPresenter mPresenter;
+    private Disposable mDisposable;
 
     private Toolbar mToolbar;
     private ProgressBar mProgressBar;
@@ -55,6 +62,8 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView, 
     private Photo mPhoto;
     private FrameLayout mBottomBar;
     private FloatingActionMenu mFloatingActionMenu;
+
+    private long mPressTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,11 +153,15 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView, 
                 break;
             case R.id.fab_download:
                 mFloatingActionMenu.close(true);
+                if (System.currentTimeMillis() - mPressTime < (3 * 1000)) break;
                 mPresenter.requestMode(this, mPhoto, PreviewPresenter.NORMAL);
+                mPressTime = System.currentTimeMillis();
                 break;
             case R.id.fab_set_wallpaper:
                 mFloatingActionMenu.close(true);
+                if (System.currentTimeMillis() - mPressTime < (3 * 1000)) break;
                 mPresenter.requestMode(this, mPhoto, PreviewPresenter.SET_WALLPAPER);
+                mPressTime = System.currentTimeMillis();
                 break;
         }
     }
@@ -225,9 +238,26 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView, 
         mProgressImage.setVisibility(View.GONE);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void onSetWallpaper(String imagePath) {
-        FileUtil.setWallpaper(this, imagePath);
+        mDisposable = Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
+            emitter.onNext(0);
+            emitter.onNext(FileUtil.setWallpaper(PreviewActivity.this, imagePath));
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(flag -> {
+                    if (flag == 1) {
+                        onShowMessage("设置成功");
+                    } else if (flag == -1) {
+                        onShowMessage("设置失败");
+                        mDisposable.dispose();
+                    } else {
+                        onShowMessage("稍等片刻");
+                        mDisposable.dispose();
+                    }
+                });
     }
 
     @Override

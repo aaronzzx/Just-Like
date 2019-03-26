@@ -1,4 +1,4 @@
-package com.aaron.justlike.http.unsplash;
+package com.aaron.justlike.common;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -6,10 +6,14 @@ import io.reactivex.disposables.Disposable;
 public abstract class ObserverImpl<T> implements Observer<T> {
 
     @Override
-    public abstract void onNext(T t);
+    public void onNext(T t) {
+
+    }
 
     @Override
-    public abstract void onError(Throwable e);
+    public void onError(Throwable e) {
+
+    }
 
     @Override
     public void onSubscribe(Disposable d) {

@@ -1,5 +1,6 @@
 package com.aaron.justlike.http.unsplash;
 
+import com.aaron.justlike.common.ObserverImpl;
 import com.aaron.justlike.http.unsplash.entity.Photo;
 import com.aaron.justlike.http.unsplash.interfaces.PhotoCallback;
 import com.aaron.justlike.http.unsplash.interfaces.PhotoService;

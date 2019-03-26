@@ -58,7 +58,7 @@ public class MainPresenter implements IMainPresenter<Image> {
             public void onSuccess(List<Image> list) {
                 mView.onHideRefresh();
                 if (refreshMode) {
-                    if (imageList.containsAll(list)) {
+                    if (imageList.containsAll(list) && imageList.size() == list.size()) {
                         onFailure("暂时没有新增的图片");
                         return;
                     }

@@ -31,8 +31,7 @@ public class BaseModel implements IModel<Image> {
      * @param listener 回调接口
      */
     @Override
-    @SuppressWarnings("unchecked")
-    public void queryImage(OnQueryImageListener listener) {
+    public void queryImage(OnQueryImageListener<Image> listener) {
         mExecutorService.execute(() -> {
             List<Image> imageList = getImage();
             if (imageList != null && imageList.size() != 0) {

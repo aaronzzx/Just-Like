@@ -23,8 +23,10 @@ public class PreviewModel implements IPreviewModel {
     @Override
     public void startDownload(Context context, String urls, String name, int mode, Callback callback) {
         String savePath = PATH + name;
-        File file = new File(savePath);
-        if (file.exists()) {
+        String tempPath = savePath + ".TEMP";
+        File file1 = new File(savePath);
+        File file2 = new File(tempPath);
+        if (file1.exists()) {
             switch (mode) {
                 case PreviewPresenter.NORMAL:
                     callback.onResponse("图片已下载");
@@ -33,6 +35,9 @@ public class PreviewModel implements IPreviewModel {
                     callback.onWallpaper(savePath);
                     return;
             }
+        } else if (file2.exists()) {
+            callback.onResponse("图片正在下载");
+            return;
         }
         Intent intent = new Intent(context, DownloadService.class);
         intent.putExtra("urls", urls);

@@ -39,7 +39,7 @@ public class DownloadService extends IntentService {
     }
 
     /**
-     * Called by Aria
+     * Called by Aria , 监听进度
      */
     @Download.onTaskRunning
     public void onDownloadProgress(DownloadTask task) {
@@ -49,7 +49,7 @@ public class DownloadService extends IntentService {
     }
 
     /**
-     * Called by Aria
+     * Called by Aria , 监听是否完成
      */
     @Download.onTaskComplete
     public void onDownloadComplete(DownloadTask task) {
@@ -67,7 +67,7 @@ public class DownloadService extends IntentService {
     }
 
     /**
-     * Called by Aria
+     * Called by Aria , 监听是否失败
      */
     @Download.onTaskFail
     public void onDownloadFailure(DownloadTask task) {
