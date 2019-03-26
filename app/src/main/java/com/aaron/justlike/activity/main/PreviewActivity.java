@@ -7,7 +7,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -21,7 +20,6 @@ import android.widget.Toast;
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.main.PreviewAdapter;
 import com.aaron.justlike.common.ThemeManager;
-import com.aaron.justlike.entity.DeletEvent;
 import com.aaron.justlike.entity.DeleteEvent;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.entity.ImageInfo;
@@ -36,7 +34,6 @@ import com.yalantis.ucrop.UCrop;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.List;
@@ -61,7 +58,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
 
     private int mColorPrimary;
     private int mPosition;
-    private int mEventFlag;
+    private int mEventType;
     private List<Image> mImageList;
 
     private IPreviewPresenter mPresenter;
@@ -73,7 +70,6 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        ThemeManager.getInstance().setTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preview);
         EventBus.getDefault().register(this);
@@ -202,15 +198,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
                         .setTitle("删除图片")
                         .setMessage("图片将会被删除，无法撤销")
                         .setPositiveButton("确定", (dialog, which) -> {
-                            if (mEventFlag == DELETE_EVENT) {
-                                // 回传 MainActivity
-                                EventBus.getDefault().postSticky(new DeleteEvent(mPosition,
-                                        mImageList.get(mPosition).getPath()));
-                            } else if (mEventFlag == DELET_EVENT) {
-                                // 回传 ElementActivity
-                                EventBus.getDefault().postSticky(new DeletEvent(mPosition,
-                                        mImageList.get(mPosition).getPath()));
-                            }
+                            EventBus.getDefault().post(new DeleteEvent(mEventType, mPosition, mImageList.get(mPosition).getPath()));
                             finish();
                             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         })
@@ -249,14 +237,13 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
     }
 
     /**
-     * 接收从 MainActivity 传过来的值
+     * 接收从 Activity 传过来的值
      */
-    @Subscribe(threadMode = ThreadMode.POSTING, sticky = true)
+    @Subscribe(sticky = true)
     public void onPreviewEvent(PreviewEvent<Image> event) {
+        mEventType = event.getEventType();
         mPosition = event.getPosition();
         mImageList = event.getList();
-        mEventFlag = mImageList.get(0).getEventFlag();
-        Log.d("PreviewActivity", "mEventFlag: " + mEventFlag);
     }
 
     @Override

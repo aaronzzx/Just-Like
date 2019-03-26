@@ -1,8 +1,6 @@
 package com.aaron.justlike.common;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,17 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.activity.main.PreviewActivity;
 import com.aaron.justlike.adapter.main.MainAdapter;
 import com.aaron.justlike.entity.DeleteEvent;
 import com.aaron.justlike.entity.Image;
-import com.aaron.justlike.entity.PreviewEvent;
 import com.aaron.justlike.ui.MyGridLayoutManager;
 import com.aaron.justlike.util.SystemUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,14 +61,15 @@ public abstract class SquareFragment extends Fragment implements MainAdapter.Cal
     /**
      * 接收 PreviewActivity 传过来的关于被删除图片的信息，并更新 UI
      */
-    @Subscribe(threadMode = ThreadMode.POSTING, sticky = true)
+    @Subscribe()
     public void onDeleteEvent(DeleteEvent event) {
-        int position = event.getPosition();
-        String path = event.getPath();
-        mImageList.remove(position);
-        mAdapter.notifyDataSetChanged();
-        ((com.aaron.justlike.fragment.SquareFragment.Callback) mContext).onDelet(path, mImageList.size() == 0);
+        executeEvent(event);
     }
+
+    /**
+     * 必须由子类实现，根据不同子类执行逻辑
+     */
+    public abstract void executeEvent(DeleteEvent event);
 
     /**
      * Adapter 中发生 onClick 行为，需要回调此方法
@@ -82,14 +78,10 @@ public abstract class SquareFragment extends Fragment implements MainAdapter.Cal
      * @param list     存放 Image 实例的 List
      */
     @Override
-    public void onPress(int position, List<Image> list) {
-        EventBus.getDefault().postSticky(new PreviewEvent<>(position, list));
-        startActivity(new Intent(mContext, PreviewActivity.class));
-        ((Activity) mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-    }
+    public abstract void onPress(int position, List<Image> list);
 
     /**
-     * Adapter 中发生 onLongClick 行为，需要回调此方法
+     * Adapter 中发生 onLongClick 行为，需要回调此方法，由子类实现
      *
      * @param position 被删图片的索引
      */
@@ -185,10 +177,14 @@ public abstract class SquareFragment extends Fragment implements MainAdapter.Cal
 
     public interface Callback {
 
-        void onDelete(String path);
+        void onDelete(String path, boolean isEmpty);
 
-        void onHide();
+        default void onHide() {
 
-        void onShow();
+        }
+
+        default void onShow() {
+
+        }
     }
 }

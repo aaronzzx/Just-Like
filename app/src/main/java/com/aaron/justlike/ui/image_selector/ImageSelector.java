@@ -63,6 +63,10 @@ public class ImageSelector {
         return Holder.INSTANCE;
     }
 
+    public void clear() {
+        mCallback = null;
+    }
+
     public void start() {
         if (mWeakReference.get() != null) {
             Context context = mWeakReference.get();

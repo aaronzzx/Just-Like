@@ -23,9 +23,9 @@ import com.aaron.justlike.activity.collection.CollectionActivity;
 import com.aaron.justlike.activity.download.DownloadManagerActivity;
 import com.aaron.justlike.activity.online.OnlineActivity;
 import com.aaron.justlike.activity.theme.ThemeActivity;
+import com.aaron.justlike.common.SquareFragment;
 import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.Image;
-import com.aaron.justlike.fragment.SquareFragment;
 import com.aaron.justlike.library.glide.GlideEngine;
 import com.aaron.justlike.mvp.presenter.main.IMainPresenter;
 import com.aaron.justlike.mvp.presenter.main.MainPresenter;
@@ -52,7 +52,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MainActivity extends AppCompatActivity implements IMainView<Image>, View.OnClickListener,
-        NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener, SquareFragment.Callback {
+        NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener,
+        SquareFragment.Callback {
 
     private static final int REQUEST_PERMISSION = 0;
     private static final int REQUEST_SELECT_IMAGE = 1;
@@ -259,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     }
 
     @Override
-    public void onDelete(String path) {
+    public void onDelete(String path, boolean isEmpty) {
         mPresenter.deleteImage(path);
     }
 
@@ -346,7 +347,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         mToolbar = findViewById(R.id.toolbar_home_activity_main);
         mSwipeRefresh = findViewById(R.id.swipe_refresh_home_activity_main);
         mFabButton = findViewById(R.id.fab_home_activity_main);
-        mSquareFragment = (SquareFragment) getSupportFragmentManager().findFragmentById(R.id.grid_fragment);
+        mSquareFragment = (SquareFragment) getSupportFragmentManager().findFragmentById(R.id.square_fragment);
         mNavHeaderImage = headerView.findViewById(R.id.nav_head_image);
         mEmptyView = findViewById(R.id.empty_view);
 

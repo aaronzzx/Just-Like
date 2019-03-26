@@ -9,10 +9,10 @@ import android.view.View;
 import android.view.Window;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.common.SquareFragment;
 import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.entity.UpdateEvent;
-import com.aaron.justlike.fragment.SquareFragment;
 import com.aaron.justlike.mvp.presenter.collection.element.ElementPresenter;
 import com.aaron.justlike.mvp.presenter.collection.element.IElementPresenter;
 import com.aaron.justlike.mvp.view.collection.IElementView;
@@ -59,8 +59,7 @@ public class ElementActivity extends AppCompatActivity implements SquareFragment
         super.onDestroy();
         mPresenter.detachView();
         EventBus.getDefault().post(new UpdateEvent());
-        ImageSelector.getInstance()
-                .setCallback(null);
+        ImageSelector.getInstance().clear();
     }
 
     @Override
@@ -127,9 +126,9 @@ public class ElementActivity extends AppCompatActivity implements SquareFragment
     }
 
     @Override
-    public void onDelet(String path, boolean isNone) {
+    public void onDelete(String path, boolean isEmpty) {
         mPresenter.deleteImage(mTitle, path);
-        if (isNone) {
+        if (isEmpty) {
             onBackPressed();
         }
     }
@@ -154,7 +153,7 @@ public class ElementActivity extends AppCompatActivity implements SquareFragment
 
         // find id
         mToolbar = findViewById(R.id.toolbar);
-        mSquareFragment = (SquareFragment) getSupportFragmentManager().findFragmentById(R.id.grid_fragment);
+        mSquareFragment = (SquareFragment) getSupportFragmentManager().findFragmentById(R.id.square_fragment);
 
         // init status
         initIconColor();
