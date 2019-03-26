@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.common.ObserverImpl;
 import com.aaron.justlike.entity.PhotoEvent;
 import com.aaron.justlike.http.unsplash.entity.Photo;
 import com.aaron.justlike.library.glide.GlideApp;
@@ -43,13 +44,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class PreviewActivity extends AppCompatActivity implements IPreviewView, View.OnClickListener {
 
     private IPreviewPresenter mPresenter;
-    private Disposable mDisposable;
 
     private Toolbar mToolbar;
     private ProgressBar mProgressBar;
@@ -241,21 +240,22 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView, 
     @SuppressLint("CheckResult")
     @Override
     public void onSetWallpaper(String imagePath) {
-        mDisposable = Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
+        Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
             emitter.onNext(0);
             emitter.onNext(FileUtil.setWallpaper(PreviewActivity.this, imagePath));
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(flag -> {
-                    if (flag == 1) {
-                        onShowMessage("设置成功");
-                    } else if (flag == -1) {
-                        onShowMessage("设置失败");
-                        mDisposable.dispose();
-                    } else {
-                        onShowMessage("稍等片刻");
-                        mDisposable.dispose();
+                .subscribe(new ObserverImpl<Integer>() {
+                    @Override
+                    public void onNext(Integer flag) {
+                        if (flag == 0) {
+                            onShowMessage("稍等片刻");
+                        } else if (flag == 1) {
+                            onShowMessage("设置成功");
+                        } else {
+                            onShowMessage("设置失败");
+                        }
                     }
                 });
     }
