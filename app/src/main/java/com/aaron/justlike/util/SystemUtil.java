@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
-public class SystemUtils {
+public class SystemUtil {
 
     /**
      * 利用反射开启 Toolbar 菜单图标

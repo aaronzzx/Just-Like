@@ -1,5 +1,6 @@
 package com.aaron.justlike.mvp.presenter.online;
 
+import com.aaron.justlike.http.unsplash.Order;
 import com.aaron.justlike.http.unsplash.entity.Photo;
 import com.aaron.justlike.mvp.model.online.IModel;
 import com.aaron.justlike.mvp.model.online.OnlineModel;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public class OnlinePresenter implements IOnlinePresenter<Photo> {
 
-    public static final int REQUEST_IMAGE = 0;
+    public static final int REQUEST_PHOTOS = 0;
     public static final int LOAD_MORE = 1;
 
     private IOnlineView<Photo> mView;
@@ -28,8 +29,11 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
     }
 
     @Override
-    public void requestPhotos(boolean isRefresh) {
-        mModel.findPhotos(isRefresh, new IModel.Callback<Photo>() {
+    public void requestPhotos(Order order, boolean isRefresh, boolean isFilter) {
+        if (isFilter) {
+            mView.onShowRefresh();
+        }
+        mModel.findPhotos(order, isRefresh, new IModel.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
                 if (mView == null) {
@@ -47,14 +51,17 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
                 }
                 mView.onHideProgress();
                 mView.onHideRefresh();
-                mView.onShowMessage(REQUEST_IMAGE, "网络开小差了");
+                mView.onShowMessage(REQUEST_PHOTOS, "网络开小差了");
             }
         });
     }
 
     @Override
-    public void requestCuratedPhotos(boolean isRefresh) {
-        mModel.findCuratedPhotos(isRefresh, new IModel.Callback<Photo>() {
+    public void requestCuratedPhotos(Order order, boolean isRefresh, boolean isFilter) {
+        if (isFilter) {
+            mView.onShowRefresh();
+        }
+        mModel.findCuratedPhotos(order, isRefresh, new IModel.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
                 if (mView == null) {
@@ -72,15 +79,15 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
                 }
                 mView.onHideProgress();
                 mView.onHideRefresh();
-                mView.onShowMessage(REQUEST_IMAGE, "网络开小差了");
+                mView.onShowMessage(REQUEST_PHOTOS, "网络开小差了");
             }
         });
     }
 
     @Override
-    public void requestLoadMore() {
+    public void requestLoadMore(Order order) {
         mView.onShowLoading();
-        mModel.findPhotos(false, new IModel.Callback<Photo>() {
+        mModel.findPhotos(order, false, new IModel.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
                 if (mView == null) {
@@ -102,9 +109,9 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
     }
 
     @Override
-    public void requestLoadMoreCurated() {
+    public void requestLoadMoreCurated(Order order) {
         mView.onShowLoading();
-        mModel.findCuratedPhotos(false, new IModel.Callback<Photo>() {
+        mModel.findCuratedPhotos(order, false, new IModel.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
                 if (mView == null) {

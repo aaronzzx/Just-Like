@@ -1,26 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
         android:icon="@drawable/ic_sort"
         android:title="排序"
         app:showAsAction="always">
-
         <menu>
-
-            <item
-                android:id="@+id/sort_latest"
-                android:title="最近"
-                android:icon="@drawable/ic_latest" />
-
-            <item
-                android:id="@+id/sort_oldest"
-                android:title="最久远"
-                android:icon="@drawable/ic_oldest" />
-
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/sort_latest"
+                    android:title="最近"
+                    android:icon="@drawable/ic_latest" />
+                <item
+                    android:id="@+id/sort_oldest"
+                    android:title="最久远"
+                    android:icon="@drawable/ic_oldest" />
+            </group>
         </menu>
-
     </item>
-
 </menu>

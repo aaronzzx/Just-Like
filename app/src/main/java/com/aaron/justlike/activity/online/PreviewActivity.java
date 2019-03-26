@@ -24,8 +24,8 @@ import com.aaron.justlike.mvp.presenter.online.preview.IPreviewPresenter;
 import com.aaron.justlike.mvp.presenter.online.preview.PreviewPresenter;
 import com.aaron.justlike.mvp.view.online.IPreviewView;
 import com.aaron.justlike.util.AnimationUtil;
-import com.aaron.justlike.util.FileUtils;
-import com.aaron.justlike.util.SystemUtils;
+import com.aaron.justlike.util.FileUtil;
+import com.aaron.justlike.util.SystemUtil;
 import com.bm.library.PhotoView;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -37,6 +37,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.DrawableCompat;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PreviewActivity extends AppCompatActivity implements IPreviewView, View.OnClickListener {
@@ -88,8 +89,8 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView, 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_online_image_menu, menu);
-        SystemUtils.setIconEnable(menu, true);
+        getMenuInflater().inflate(R.menu.activity_online_preview_menu, menu);
+        SystemUtil.setIconEnable(menu, true);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -143,11 +144,11 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView, 
                 break;
             case R.id.fab_download:
                 mFloatingActionMenu.close(true);
-                mPresenter.requestMode(mPhoto, PreviewPresenter.NORMAL);
+                mPresenter.requestMode(this, mPhoto, PreviewPresenter.NORMAL);
                 break;
             case R.id.fab_set_wallpaper:
                 mFloatingActionMenu.close(true);
-                mPresenter.requestMode(mPhoto, PreviewPresenter.SET_WALLPAPER);
+                mPresenter.requestMode(this, mPhoto, PreviewPresenter.SET_WALLPAPER);
                 break;
         }
     }
@@ -226,7 +227,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView, 
 
     @Override
     public void onSetWallpaper(String imagePath) {
-        FileUtils.setWallpaper(this, imagePath);
+        FileUtil.setWallpaper(this, imagePath);
     }
 
     @Override
@@ -263,7 +264,9 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView, 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_back);
+            Drawable iconBack = getResources().getDrawable(R.drawable.ic_back);
+            DrawableCompat.setTint(iconBack, getResources().getColor(R.color.colorPrimaryWhite));
+            actionBar.setHomeAsUpIndicator(iconBack);
         }
     }
 

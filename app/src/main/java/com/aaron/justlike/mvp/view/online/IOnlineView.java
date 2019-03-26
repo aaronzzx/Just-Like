@@ -12,6 +12,8 @@ public interface IOnlineView<T> {
 
     void onShowMessage(int mode, String args);
 
+    void onShowRefresh();
+
     void onHideRefresh();
 
     void onHideProgress();

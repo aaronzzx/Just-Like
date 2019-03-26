@@ -4,8 +4,6 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
@@ -13,7 +11,6 @@ import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.online.OnlinePagerAdapter;
 import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.fragment.online.PhotoFragment;
-import com.aaron.justlike.util.SystemUtils;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
@@ -75,20 +72,10 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_online_menu, menu);
-        SystemUtils.setIconEnable(menu, true);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
+    public boolean onSupportNavigateUp() {
+        finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        return super.onSupportNavigateUp();
     }
 
     @Override
@@ -165,7 +152,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
         Resources resources = getResources();
         ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
         if (theme == null) {
-            mColorPrimary = resources.getColor(R.color.colorPrimaryBlack);
+            mColorPrimary = resources.getColor(R.color.colorAccentWhite);
             return;
         }
         switch (theme) {
@@ -173,7 +160,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                 mColorPrimary = resources.getColor(R.color.colorPrimary);
                 break;
             case WHITE:
-                mColorPrimary = resources.getColor(R.color.colorPrimaryBlack);
+                mColorPrimary = resources.getColor(R.color.colorAccentWhite);
                 break;
             case BLACK:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryBlack);
@@ -188,7 +175,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                 mColorPrimary = resources.getColor(R.color.colorPrimaryRed);
                 break;
             case PINK:
-                mColorPrimary = resources.getColor(R.color.colorPrimaryRed);
+                mColorPrimary = resources.getColor(R.color.colorPrimaryPink);
                 break;
             case BLUE:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryBlue);

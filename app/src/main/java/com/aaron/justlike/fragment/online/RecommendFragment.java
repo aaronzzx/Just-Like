@@ -1,5 +1,6 @@
 package com.aaron.justlike.fragment.online;
 
+import com.aaron.justlike.http.unsplash.Order;
 import com.aaron.justlike.http.unsplash.entity.Photo;
 import com.aaron.justlike.mvp.presenter.online.IOnlinePresenter;
 import com.aaron.justlike.mvp.presenter.online.OnlinePresenter;
@@ -19,13 +20,13 @@ public class RecommendFragment extends PhotoFragment {
     }
 
     @Override
-    public void requestPhotos(boolean isRefresh) {
-        mPresenter.requestPhotos(isRefresh);
+    public void requestPhotos(Order order, boolean isRefresh, boolean isFilter) {
+        mPresenter.requestPhotos(order, isRefresh, isFilter);
     }
 
     @Override
-    public void requestLoadMore() {
-        mPresenter.requestLoadMore();
+    public void requestLoadMore(Order order) {
+        mPresenter.requestLoadMore(order);
     }
 
     @Override

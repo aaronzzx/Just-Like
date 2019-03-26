@@ -20,12 +20,13 @@ public class Unsplash {
 
     private static final String BASE_URL = "https://api.unsplash.com/";
     private static final String CLIENT_ID = "18db24a3d59a1b2633897fa63f3f49455c2cbfa8a22e5b8520141cb2660fa816";
+    private static final String NEW_CLIENT_ID = "41f1f23556b01d63b1ae823bdf008cc32ce446f77c843e2daa2a80c770015df3";
 
     private PhotoService mPhotoService;
 
     private Unsplash() {
         OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new HeaderInterceptor(CLIENT_ID))
+                .addInterceptor(new HeaderInterceptor(NEW_CLIENT_ID))
                 .build();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)

@@ -5,7 +5,7 @@ import com.aaron.justlike.http.unsplash.entity.Photo;
 import com.aaron.justlike.mvp.model.download.BaseModel;
 import com.aaron.justlike.mvp.model.download.IModel;
 import com.aaron.justlike.mvp.view.download.IView;
-import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.util.FileUtil;
 
 import java.util.List;
 
@@ -60,9 +60,9 @@ public class BasePresenter implements IPresenter {
 
     private List<Image> sortList(List<Image> list, boolean isAscending) {
         if (isAscending) {
-            FileUtils.sortByDate(list, ASCENDING);
+            FileUtil.sortByDate(list, ASCENDING);
         } else {
-            FileUtils.sortByDate(list, DESCENDING);
+            FileUtil.sortByDate(list, DESCENDING);
         }
         return list;
     }

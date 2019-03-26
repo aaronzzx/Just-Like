@@ -17,7 +17,7 @@ import com.aaron.justlike.entity.Message;
 import com.aaron.justlike.mvp.presenter.about.AboutPresenter;
 import com.aaron.justlike.mvp.presenter.about.IAboutPresenter;
 import com.aaron.justlike.mvp.view.about.IAboutView;
-import com.aaron.justlike.util.SystemUtils;
+import com.aaron.justlike.util.SystemUtil;
 
 import java.util.List;
 
@@ -144,7 +144,7 @@ public class AboutActivity extends AppCompatActivity implements IAboutView<Messa
     @SuppressLint("SetTextI18n")
     private void initVersionStatus() {
         TextView version = findViewById(R.id.activity_about_version);
-        String versionName = SystemUtils.getVersionName(this);
+        String versionName = SystemUtil.getVersionName(this);
         version.setText("Version " + versionName);
     }
 

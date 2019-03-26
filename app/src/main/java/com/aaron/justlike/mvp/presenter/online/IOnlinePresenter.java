@@ -1,5 +1,6 @@
 package com.aaron.justlike.mvp.presenter.online;
 
+import com.aaron.justlike.http.unsplash.Order;
 import com.aaron.justlike.mvp.view.online.IOnlineView;
 
 public interface IOnlinePresenter<T> {
@@ -8,11 +9,11 @@ public interface IOnlinePresenter<T> {
 
     void detachView();
 
-    void requestPhotos(boolean isRefresh);
+    void requestPhotos(Order order, boolean isRefresh, boolean isFilter);
 
-    void requestCuratedPhotos(boolean isRefresh);
+    void requestCuratedPhotos(Order order, boolean isRefresh, boolean isFilter);
 
-    void requestLoadMore();
+    void requestLoadMore(Order order);
 
-    void requestLoadMoreCurated();
+    void requestLoadMoreCurated(Order order);
 }

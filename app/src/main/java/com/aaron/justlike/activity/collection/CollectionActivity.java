@@ -29,7 +29,7 @@ import com.aaron.justlike.mvp.view.collection.ICollectionView;
 import com.aaron.justlike.ui.MyGridLayoutManager;
 import com.aaron.justlike.ui.image_selector.ImageSelector;
 import com.aaron.justlike.util.EmptyViewUtil;
-import com.aaron.justlike.util.SystemUtils;
+import com.aaron.justlike.util.SystemUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -307,7 +307,7 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
         @Override
         public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
             outRect.bottom = 0;
-            outRect.top = SystemUtils.dp2px(CollectionActivity.this, 9.9F);
+            outRect.top = SystemUtil.dp2px(CollectionActivity.this, 9.9F);
             if (parent.getChildAdapterPosition(view) == 0) {
                 outRect.top = 0;
             }

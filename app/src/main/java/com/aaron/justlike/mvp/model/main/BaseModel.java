@@ -5,7 +5,7 @@ import com.aaron.justlike.entity.Collection;
 import com.aaron.justlike.entity.Element;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.entity.SortInfo;
-import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.util.FileUtil;
 
 import org.litepal.LitePal;
 
@@ -49,7 +49,7 @@ public class BaseModel implements IModel<Image> {
             List<Image> imageList = new ArrayList<>();
             int suffix = 1;
             for (String path : pathList) {
-                String savedPath = FileUtils.saveToCache(path, suffix);
+                String savedPath = FileUtil.saveToCache(path, suffix);
                 imageList.add(new Image(savedPath));
                 suffix++;
                 if (suffix > 9) suffix = 1;
@@ -61,7 +61,7 @@ public class BaseModel implements IModel<Image> {
     @Override
     public void deleteImage(String path) {
         mExecutorService.execute(() -> {
-            FileUtils.deleteFile(path);
+            FileUtil.deleteFile(path);
             List<Element> elementList = LitePal.where("path = ?", path).find(Element.class);
             for (Element element : elementList) {
                 String title = element.getTitle();
@@ -115,7 +115,7 @@ public class BaseModel implements IModel<Image> {
      */
     private List<Image> getImage() {
         List<Image> imageList = new ArrayList<>();
-        boolean success = FileUtils.getLocalFiles(imageList, PATH, TYPE);
+        boolean success = FileUtil.getLocalFiles(imageList, PATH, TYPE);
         if (success) {
             List<Image> newList = new ArrayList<>();
             for (Image image : imageList) {

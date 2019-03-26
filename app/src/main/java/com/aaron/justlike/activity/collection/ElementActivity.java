@@ -17,7 +17,7 @@ import com.aaron.justlike.mvp.presenter.collection.element.ElementPresenter;
 import com.aaron.justlike.mvp.presenter.collection.element.IElementPresenter;
 import com.aaron.justlike.mvp.view.collection.IElementView;
 import com.aaron.justlike.ui.image_selector.ImageSelector;
-import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.util.FileUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -143,7 +143,7 @@ public class ElementActivity extends AppCompatActivity implements SquareFragment
     @Override
     public void onShowAddImage(List<Image> list) {
         mImageList.addAll(list);
-        FileUtils.sortByDate(list, false);
+        FileUtil.sortByDate(list, false);
         runOnUiThread(() -> mSquareFragment.updateForAdd(list));
     }
 

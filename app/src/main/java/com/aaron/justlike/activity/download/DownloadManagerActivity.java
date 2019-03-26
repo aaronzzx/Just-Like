@@ -21,8 +21,8 @@ import com.aaron.justlike.mvp.presenter.download.BasePresenter;
 import com.aaron.justlike.mvp.presenter.download.IPresenter;
 import com.aaron.justlike.mvp.view.download.IView;
 import com.aaron.justlike.util.EmptyViewUtil;
-import com.aaron.justlike.util.FileUtils;
-import com.aaron.justlike.util.SystemUtils;
+import com.aaron.justlike.util.FileUtil;
+import com.aaron.justlike.util.SystemUtil;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -110,20 +110,19 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_download_manager_menu, menu);
         // 打开 Popup 菜单的图标
-        SystemUtils.setIconEnable(menu, true);
+        SystemUtil.setIconEnable(menu, true);
         menu.findItem(R.id.sort_latest).setChecked(true);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        item.setChecked(true);
         switch (item.getItemId()) {
             case R.id.sort_latest:
-                item.setChecked(true);
                 mPresenter.requestImage(BasePresenter.DESCENDING);
                 break;
             case R.id.sort_oldest:
-                item.setChecked(true);
                 mPresenter.requestImage(BasePresenter.ASCENDING);
                 break;
         }
@@ -136,7 +135,7 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
     @Override
     public void onSearchByLocal(String path) {
         Intent openImage = new Intent(Intent.ACTION_VIEW);
-        openImage.setDataAndType(FileUtils.getImageContentUri(this, new File(path)), "image/*");
+        openImage.setDataAndType(FileUtil.getImageContentUri(this, new File(path)), "image/*");
         startActivity(openImage);
     }
 

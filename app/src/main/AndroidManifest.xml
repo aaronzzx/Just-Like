@@ -18,10 +18,18 @@
         android:theme="@style/WhiteTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
+        <service
+            android:name=".service.DownloadService"
+            android:exported="false"></service>
+        <service
+            android:name=".http.download_manager.DownloadService"
+            android:enabled="true"
+            android:exported="false" />
+
         <activity
             android:name=".activity.main.MainActivity"
-            android:theme="@style/JustLikeTheme.Splash"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/JustLikeTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

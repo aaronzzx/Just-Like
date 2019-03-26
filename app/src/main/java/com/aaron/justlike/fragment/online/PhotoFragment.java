@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -17,12 +19,14 @@ import com.aaron.justlike.R;
 import com.aaron.justlike.activity.online.OnlineActivity;
 import com.aaron.justlike.activity.online.PreviewActivity;
 import com.aaron.justlike.adapter.online.OnlineAdapter;
+import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.PhotoEvent;
+import com.aaron.justlike.http.unsplash.Order;
 import com.aaron.justlike.http.unsplash.entity.Photo;
 import com.aaron.justlike.mvp.presenter.online.OnlinePresenter;
 import com.aaron.justlike.mvp.view.online.IOnlineView;
 import com.aaron.justlike.ui.MyGridLayoutManager;
-import com.aaron.justlike.util.SystemUtils;
+import com.aaron.justlike.util.SystemUtil;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -39,7 +44,9 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
         OnlineAdapter.Callback<Photo>, IOnlineView<Photo> {
 
     private Context mContext;
+    private Order mOrder;
 
+    private View mParentLayout;
     private SwipeRefreshLayout mSwipeRefresh;
     private RecyclerView mRecyclerView;
     private View mErrorView;
@@ -47,6 +54,7 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
     private View mFooterProgress;
     private RecyclerView.Adapter mAdapter;
 
+    private int mMenuItemId;
     private int mColorPrimary;
     private List<Photo> mPhotoList = new ArrayList<>();
 
@@ -62,29 +70,88 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isVisible()) {
             if (mPhotoList.size() == 0) {
-                requestPhotos(false);
+                requestPhotos(mOrder, false, false);
             }
         }
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View parentLayout = inflater.inflate(R.layout.fragment_photo, container, false);
+        mParentLayout = inflater.inflate(R.layout.fragment_photo, container, false);
+        return mParentLayout;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         mContext = getActivity();
-        initView(parentLayout);
+        mOrder = Order.LATEST;
+        initView(mParentLayout);
         attachPresenter();
         // 实现 RecommendFragment 的加载
         if (getUserVisibleHint()) {
-            requestPhotos(false);
+            requestPhotos(mOrder, false, false);
         }
-        return parentLayout;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.activity_online_menu, menu);
+        SystemUtil.setIconEnable(menu, true);
+        switch (mMenuItemId) {
+            case R.id.filter_latest:
+                menu.findItem(R.id.filter_latest).setChecked(true);
+                break;
+            case R.id.filter_oldest:
+                menu.findItem(R.id.filter_oldest).setChecked(true);
+                break;
+            case R.id.filter_popular:
+                menu.findItem(R.id.filter_popular).setChecked(true);
+                break;
+            default:
+                menu.findItem(R.id.filter_latest).setChecked(true);
+                break;
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        item.setChecked(true);
+        switch (item.getItemId()) {
+            case R.id.action_search:
+
+                break;
+            case R.id.filter_latest:
+                mMenuItemId = R.id.filter_latest;
+                mOrder = Order.LATEST;
+                requestPhotos(mOrder, true, true);
+                break;
+            case R.id.filter_oldest:
+                mMenuItemId = R.id.filter_oldest;
+                mOrder = Order.OLDEST;
+                requestPhotos(mOrder, true, true);
+                break;
+            case R.id.filter_popular:
+                mMenuItemId = R.id.filter_popular;
+                mOrder = Order.POPULAR;
+                requestPhotos(mOrder, true, true);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onRefresh() {
         if (mProgressBar.getVisibility() == View.GONE) {
-            requestPhotos(true);
+            requestPhotos(mOrder, true, false);
         }
     }
 
@@ -98,22 +165,27 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
     /**
      * 子类实现
      */
-    public abstract void requestPhotos(boolean isRefresh);
+    public abstract void requestPhotos(Order order, boolean isRefresh, boolean isFilter);
 
     /**
      * 子类实现
      */
-    public abstract void requestLoadMore();
+    public abstract void requestLoadMore(Order order);
 
     @Override
     public abstract void attachPresenter();
 
     @Override
     public void onShowImage(List<Photo> list) {
+        if (mPhotoList.size() > 30) {
+            mPhotoList.clear();
+            mAdapter.notifyDataSetChanged();
+        }
         mErrorView.setVisibility(View.GONE);
         mPhotoList.clear();
         mPhotoList.addAll(list);
         mAdapter.notifyItemRangeChanged(0, mPhotoList.size());
+        backToTop();
     }
 
     @Override
@@ -128,24 +200,37 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
             mErrorView.setVisibility(View.VISIBLE);
         }
         Snackbar snackbar = Snackbar.make(mRecyclerView, args, Snackbar.LENGTH_SHORT);
-        snackbar.setActionTextColor(getResources().getColor(mColorPrimary));
+        ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+        if (theme != ThemeManager.Theme.WHITE && theme != ThemeManager.Theme.BLACK) {
+            snackbar.setActionTextColor(mColorPrimary);
+        } else {
+            snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimaryWhite));
+        }
         snackbar.setAction("刷新", v -> {
             switch (mode) {
-                case OnlinePresenter.REQUEST_IMAGE:
-                    requestPhotos(true);
+                case OnlinePresenter.REQUEST_PHOTOS:
+                    requestPhotos(mOrder, false, false);
                     break;
                 case OnlinePresenter.LOAD_MORE:
-                    requestLoadMore();
+                    requestLoadMore(mOrder);
                     break;
             }
         }).show();
     }
 
     @Override
+    public void onShowRefresh() {
+        if (!mSwipeRefresh.isRefreshing()) {
+            mSwipeRefresh.setRefreshing(true);
+        }
+    }
+
+    @Override
     public void onHideRefresh() {
-        if (!mSwipeRefresh.isEnabled())
+        if (!mSwipeRefresh.isEnabled()) {
             mSwipeRefresh.setEnabled(true);
-        mSwipeRefresh.setRefreshing(false);
+        }
+        mSwipeRefresh.postDelayed(() -> mSwipeRefresh.setRefreshing(false), 500);
     }
 
     @Override
@@ -164,7 +249,7 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
 
     @Override
     public void onHideLoading() {
-        new Handler().postDelayed(() -> {
+        mFooterProgress.postDelayed(() -> {
             ScaleAnimation animation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
             animation.setFillAfter(true);
             animation.setDuration(250);
@@ -189,7 +274,7 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
     }
 
     /**
-     * Called by activity
+     * Called by activity or self.
      */
     public void backToTop() {
         int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
@@ -225,7 +310,7 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && mPhotoList.size() != 0) {
                     boolean canScrollVertical = mRecyclerView.canScrollVertically(1);
                     if (!canScrollVertical && mFooterProgress.getVisibility() == View.GONE) {
-                        requestLoadMore();
+                        requestLoadMore(mOrder);
                     }
                 }
             }
@@ -243,9 +328,9 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
         @Override
         public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) % 2 == 0) {
-                outRect.right = SystemUtils.dp2px(mContext, 2.5F);
+                outRect.right = SystemUtil.dp2px(mContext, 2.5F);
             } else if (parent.getChildAdapterPosition(view) % 2 == 1) {
-                outRect.left = SystemUtils.dp2px(mContext, 2.5F);
+                outRect.left = SystemUtil.dp2px(mContext, 2.5F);
             }
         }
     }

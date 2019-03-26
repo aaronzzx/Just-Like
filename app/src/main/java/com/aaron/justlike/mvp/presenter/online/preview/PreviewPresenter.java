@@ -1,18 +1,16 @@
 package com.aaron.justlike.mvp.presenter.online.preview;
 
+import android.content.Context;
+
 import com.aaron.justlike.http.unsplash.entity.Photo;
 import com.aaron.justlike.mvp.model.online.preview.IPreviewModel;
 import com.aaron.justlike.mvp.model.online.preview.PreviewModel;
 import com.aaron.justlike.mvp.view.online.IPreviewView;
-import com.aaron.justlike.util.DownloadUtil;
-
-import java.io.File;
 
 public class PreviewPresenter implements IPreviewPresenter {
 
-    private static final String PATH = "/storage/0/Pictures/JustLike/online";
-    public static final int NORMAL = DownloadUtil.NORMAL;
-    public static final int SET_WALLPAPER = DownloadUtil.SET_WALLPAPER;
+    public static final int NORMAL = 0;
+    public static final int SET_WALLPAPER = 1;
 
     private IPreviewView mView;
     private IPreviewModel mModel;
@@ -21,11 +19,6 @@ public class PreviewPresenter implements IPreviewPresenter {
     public void attachView(IPreviewView view) {
         mView = view;
         mModel = new PreviewModel();
-        File mkDir = new File(PATH);
-        if (!mkDir.exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            mkDir.mkdirs();
-        }
     }
 
     @Override
@@ -46,10 +39,10 @@ public class PreviewPresenter implements IPreviewPresenter {
     }
 
     @Override
-    public void requestMode(Photo photo, int mode) {
+    public void requestMode(Context context, Photo photo, int mode) {
         String urls = photo.getUrls().getRaw();
         String photoId = photo.getId() + ".JPG";
-        mModel.startDownload(urls, photoId, mode, new IPreviewModel.Callback() {
+        mModel.startDownload(context, urls, photoId, mode, new IPreviewModel.Callback() {
             @Override
             public void onResponse(String args) {
                 mView.onShowMessage(args);

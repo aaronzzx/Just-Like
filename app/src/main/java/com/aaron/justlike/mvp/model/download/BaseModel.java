@@ -6,7 +6,7 @@ import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.http.unsplash.Unsplash;
 import com.aaron.justlike.http.unsplash.entity.Photo;
 import com.aaron.justlike.http.unsplash.interfaces.PhotoCallback;
-import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.util.FileUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class BaseModel implements IModel<Image> {
     @Override
     public void queryImage(QueryCallback<Image> callback) {
         List<Image> imageList = new ArrayList<>();
-        FileUtils.getLocalFiles(imageList, PATH, "jpg");
+        FileUtil.getLocalFiles(imageList, PATH, "jpg");
         callback.onResponse(imageList);
     }
 

@@ -87,7 +87,7 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     .with(mContext)
                     .asDrawable()
                     .load(authorImage)
-                    .placeHolder(R.drawable.ic_place_holder)
+                    .placeHolder(R.drawable.ic_author_image)
                     .into(((ViewHolder) holder).authorImage);
             // load image
             GlideApp.getInstance()

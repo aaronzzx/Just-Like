@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,8 +29,8 @@ import com.aaron.justlike.mvp.presenter.main.preview.IPreviewPresenter;
 import com.aaron.justlike.mvp.presenter.main.preview.PreviewPresenter;
 import com.aaron.justlike.mvp.view.main.IPreviewView;
 import com.aaron.justlike.util.AnimationUtil;
-import com.aaron.justlike.util.FileUtils;
-import com.aaron.justlike.util.SystemUtils;
+import com.aaron.justlike.util.FileUtil;
+import com.aaron.justlike.util.SystemUtil;
 import com.yalantis.ucrop.UCrop;
 
 import org.greenrobot.eventbus.EventBus;
@@ -43,6 +44,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -121,8 +123,8 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
      */
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.activity_main_image_menu, menu);
-//        SystemUtils.setIconEnable(menu, true);
+//        getMenuInflater().inflate(R.menu.activity_main_preview_menu, menu);
+//        SystemUtil.setIconEnable(menu, true);
 //        return super.onCreateOptionsMenu(menu);
 //    }
 
@@ -151,7 +153,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
                         resultUri = UCrop.getOutput(data);
                     }
                     if (resultUri != null) {
-                        FileUtils.setWallpaper(this, FileUtils.getPath(this, resultUri));
+                        FileUtil.setWallpaper(this, FileUtil.getPath(this, resultUri));
                     }
                 } else if (resultCode == UCrop.RESULT_ERROR) {
                     Toast.makeText(this, "设置失败", Toast.LENGTH_SHORT).show();
@@ -165,7 +167,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         switch (v.getId()) {
             case R.id.action_share:
                 Intent share = new Intent(Intent.ACTION_VIEW);
-                Uri shareUri = FileUtils.getImageContentUri(this, new File(mImageList.get(mPosition).getPath()));
+                Uri shareUri = FileUtil.getImageContentUri(this, new File(mImageList.get(mPosition).getPath()));
                 share.setDataAndType(shareUri, "image/*");
                 startActivity(share);
                 break;
@@ -326,7 +328,9 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_back);
+            Drawable iconBack = getResources().getDrawable(R.drawable.ic_back);
+            DrawableCompat.setTint(iconBack, getResources().getColor(R.color.colorPrimaryWhite));
+            actionBar.setHomeAsUpIndicator(iconBack);
         }
         mPresenter.requestTitle(mImageList.get(mPosition).getPath());
     }
@@ -341,7 +345,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
 
     private void openImageCrop(String cropType) {
         // 源文件位置
-        Uri sourceUri = FileUtils.getUriFromPath(this, new File(mImageList.get(mPosition).getPath()));
+        Uri sourceUri = FileUtil.getUriFromPath(this, new File(mImageList.get(mPosition).getPath()));
         File file = new File(getCacheDir(), "Wallpaper.JPG");
         Uri destinationUri = Uri.fromFile(file); // 需要输出的位置
         // 设置裁剪页面主题
@@ -351,7 +355,7 @@ public class PreviewActivity extends AppCompatActivity implements IPreviewView,
         options.setActiveWidgetColor(mColorPrimary);
         switch (cropType) {
             case FIT_SCREEN: // 打开默认裁剪页面
-                int[] widthHeightPixels = SystemUtils.getResolution(getWindowManager());
+                int[] widthHeightPixels = SystemUtil.getResolution(getWindowManager());
                 UCrop.of(sourceUri, destinationUri)
                         .withAspectRatio(widthHeightPixels[0], widthHeightPixels[1])
                         .withOptions(options)

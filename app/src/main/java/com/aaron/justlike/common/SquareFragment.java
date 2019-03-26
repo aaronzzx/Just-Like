@@ -12,7 +12,7 @@ import com.aaron.justlike.adapter.main.MainAdapter;
 import com.aaron.justlike.entity.DeleteEvent;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.ui.MyGridLayoutManager;
-import com.aaron.justlike.util.SystemUtils;
+import com.aaron.justlike.util.SystemUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -147,12 +147,12 @@ public abstract class SquareFragment extends Fragment implements MainAdapter.Cal
                                    @NonNull RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) % 3 == 0) {
                 outRect.left = 0;
-                outRect.right = SystemUtils.dp2px(mContext, 2.8F); // 8px
+                outRect.right = SystemUtil.dp2px(mContext, 2.8F); // 8px
             } else if (parent.getChildAdapterPosition(view) % 3 == 1) {
-                outRect.left = SystemUtils.dp2px(mContext, 1.3F); // 4px
-                outRect.right = SystemUtils.dp2px(mContext, 1.3F); // 4px
+                outRect.left = SystemUtil.dp2px(mContext, 1.3F); // 4px
+                outRect.right = SystemUtil.dp2px(mContext, 1.3F); // 4px
             } else if (parent.getChildAdapterPosition(view) % 3 == 2) {
-                outRect.left = SystemUtils.dp2px(mContext, 2.8F); // 8px
+                outRect.left = SystemUtil.dp2px(mContext, 2.8F); // 8px
                 outRect.right = 0;
             }
         }
@@ -164,7 +164,7 @@ public abstract class SquareFragment extends Fragment implements MainAdapter.Cal
         public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent,
                                    @NonNull RecyclerView.State state) {
             outRect.bottom = 0;
-            outRect.top = SystemUtils.dp2px(mContext, 4.2F); // 12px
+            outRect.top = SystemUtil.dp2px(mContext, 4.2F); // 12px
             if (parent.getChildAdapterPosition(view) == 0) {
                 outRect.top = 0;
             } else if (parent.getChildAdapterPosition(view) == 1) {

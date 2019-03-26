@@ -19,11 +19,11 @@ public class OnlineModel implements IModel<Photo> {
     }
 
     @Override
-    public void findPhotos(boolean refreshMode, Callback<Photo> callback) {
+    public void findPhotos(Order order, boolean refreshMode, Callback<Photo> callback) {
         if (refreshMode) {
             mRecommend = 1;
         }
-        mUnsplash.getPhotos(mRecommend, 30, Order.LATEST, new PhotoCallback<List<Photo>>() {
+        mUnsplash.getPhotos(mRecommend, 30, order, new PhotoCallback<List<Photo>>() {
             @Override
             public void onSuccess(List<Photo> photos) {
                 callback.onSuccess(photos);
@@ -38,11 +38,11 @@ public class OnlineModel implements IModel<Photo> {
     }
 
     @Override
-    public void findCuratedPhotos(boolean refreshMode, Callback<Photo> callback) {
+    public void findCuratedPhotos(Order order, boolean refreshMode, Callback<Photo> callback) {
         if (refreshMode) {
             mCurated = 1;
         }
-        mUnsplash.getCuratedPhotos(mCurated, 30, Order.LATEST, new PhotoCallback<List<Photo>>() {
+        mUnsplash.getCuratedPhotos(mCurated, 30, order, new PhotoCallback<List<Photo>>() {
             @Override
             public void onSuccess(List<Photo> photos) {
                 callback.onSuccess(photos);

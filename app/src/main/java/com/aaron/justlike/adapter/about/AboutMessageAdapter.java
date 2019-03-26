@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.entity.Message;
-import com.aaron.justlike.util.SystemUtils;
+import com.aaron.justlike.util.SystemUtil;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -50,15 +50,15 @@ public class AboutMessageAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
                     mActivity.startActivity(introduce);
                     break;
                 case FEEDBACK:
-                    int[] widthHeightPixels = SystemUtils.getResolution(mActivity.getWindowManager());
-                    String subject = "Just Like for Android " + SystemUtils.getVersionName(mActivity) + "\n"
+                    int[] widthHeightPixels = SystemUtil.getResolution(mActivity.getWindowManager());
+                    String subject = "Just Like for Android " + SystemUtil.getVersionName(mActivity) + "\n"
                             + "Feedback(" + Build.BRAND + "-" + Build.MODEL + ")";
                     String text = "请尽可能详细描述您的问题或建议，请不要删除或修改下列设备信息。" + "\n"
                             + "Device: " + Build.BRAND + "-" + Build.MODEL + "\n"
                             + "Android Version: " + Build.VERSION.RELEASE + "(SDK=" + Build.VERSION.SDK_INT + ")" + "\n"
                             + "Resolution: " + widthHeightPixels[1] + "*" + widthHeightPixels[0] + "\n"
                             + "System Language: " + Locale.getDefault().getLanguage() + "(" + Locale.getDefault().getCountry() + ")" + "\n"
-                            + "App Version: " + SystemUtils.getVersionName(mActivity);
+                            + "App Version: " + SystemUtil.getVersionName(mActivity);
                     Intent sendMail = new Intent(Intent.ACTION_SENDTO);
                     sendMail.setData(Uri.parse("mailto:aaronzheng9603@gmail.com"));
                     sendMail.putExtra(Intent.EXTRA_SUBJECT, subject);

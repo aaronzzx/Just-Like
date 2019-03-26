@@ -22,8 +22,8 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.activity.main.PreviewActivity;
+import com.aaron.justlike.entity.Image;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,7 +37,7 @@ import java.util.List;
 
 import androidx.core.content.FileProvider;
 
-public class FileUtils {
+public class FileUtil {
 
     public static long getFileSize(String path) {
         File file = new File(path);
@@ -255,11 +255,11 @@ public class FileUtils {
     public static String saveToCache(String path, int num) {
         String filePath;
         String originalDate;
-        String createDate = SystemUtils.getCreateDate(path);
+        String createDate = SystemUtil.getCreateDate(path);
         if (!TextUtils.isEmpty(createDate)) {
             originalDate = createDate;
         } else {
-            originalDate = SystemUtils.getLastModified(path, "yyyy-MM-dd HH:mm:ss");
+            originalDate = SystemUtil.getLastModified(path, "yyyy-MM-dd HH:mm:ss");
         }
         String dirPath = Environment.getExternalStoragePublicDirectory
                 (Environment.DIRECTORY_PICTURES) + "/JustLike/images";
@@ -268,7 +268,7 @@ public class FileUtils {
             //noinspection ResultOfMethodCallIgnored
             mkDir.mkdirs();
         }
-        String date = SystemUtils.getCurrentDate("yyyyMMdd_HHmmss");
+        String date = SystemUtil.getCurrentDate("yyyyMMdd_HHmmss");
         String name = "/IMG_" + date + "_" + num;
         String suffix = path.substring(path.lastIndexOf("."));
         String fileName = name + suffix;
@@ -412,7 +412,7 @@ public class FileUtils {
                         if (mFabType == 1) {
                             String path = Environment.getExternalStoragePublicDirectory
                                     (Environment.DIRECTORY_PICTURES) + "/JustLike/online/" + mPhotoName;
-                            int i = FileUtils.setWallpaper(mContext, path);
+                            int i = FileUtil.setWallpaper(mContext, path);
                             if (i == -1) {
                                 Toast.makeText(mContext, "改造失败", Toast.LENGTH_SHORT).show();
                             }

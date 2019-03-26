@@ -30,7 +30,7 @@ import com.aaron.justlike.library.glide.GlideEngine;
 import com.aaron.justlike.mvp.presenter.main.IMainPresenter;
 import com.aaron.justlike.mvp.presenter.main.MainPresenter;
 import com.aaron.justlike.mvp.view.main.IMainView;
-import com.aaron.justlike.util.SystemUtils;
+import com.aaron.justlike.util.SystemUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.jaeger.library.StatusBarUtil;
@@ -137,10 +137,17 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     }
 
     @Override
+    public boolean onSupportNavigateUp() {
+        mParentLayout.openDrawer(GravityCompat.START);
+        return super.onSupportNavigateUp();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
-        if (ThemeManager.getInstance().getCurrentTheme() == null
-                || ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
+        SystemUtil.setIconEnable(menu, true);
+        ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+        if (theme == null || theme == ThemeManager.Theme.WHITE) {
             menu.findItem(R.id.sort).setIcon(mIconSort);
         }
         // 实例化 Popup 子菜单
@@ -157,11 +164,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     public boolean onOptionsItemSelected(MenuItem item) {
         // 这里判断升序排列选项是否被选中
         boolean ascendingOrder = mSortByAscending.isChecked();
-        int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
-                mParentLayout.openDrawer(GravityCompat.START);
-                break;
+        switch (item.getItemId()) {
             case R.id.sort_date:
                 setSort(MainPresenter.SORT_BY_DATE, ascendingOrder);
                 break;
@@ -573,7 +576,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
                 .countable(true)
                 .maxSelectable(9)
 //                .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
-                .gridExpectedSize(SystemUtils.dp2px(this, 120.0F))
+                .gridExpectedSize(SystemUtil.dp2px(this, 120.0F))
                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                 .thumbnailScale(0.85f)
                 .imageEngine(new GlideEngine())

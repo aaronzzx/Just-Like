@@ -4,7 +4,7 @@ import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.mvp.model.main.BaseModel;
 import com.aaron.justlike.mvp.model.main.IModel;
 import com.aaron.justlike.mvp.view.main.IMainView;
-import com.aaron.justlike.util.FileUtils;
+import com.aaron.justlike.util.FileUtil;
 
 import java.util.List;
 
@@ -101,13 +101,13 @@ public class MainPresenter implements IMainPresenter<Image> {
     private void sortImageList(List<Image> imageList, int sortType, boolean ascendingOrder) {
         switch (sortType) {
             case SORT_BY_DATE:
-                FileUtils.sortByDate(imageList, ascendingOrder);
+                FileUtil.sortByDate(imageList, ascendingOrder);
                 break;
             case SORT_BY_NAME:
-                FileUtils.sortByName(imageList, ascendingOrder);
+                FileUtil.sortByName(imageList, ascendingOrder);
                 break;
             case SORT_BY_SIZE:
-                FileUtils.sortBySize(imageList, ascendingOrder);
+                FileUtil.sortBySize(imageList, ascendingOrder);
                 break;
         }
     }

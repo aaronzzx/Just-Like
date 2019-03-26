@@ -13,8 +13,8 @@ import android.widget.Toast;
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.Image;
-import com.aaron.justlike.util.FileUtils;
-import com.aaron.justlike.util.SystemUtils;
+import com.aaron.justlike.util.FileUtil;
+import com.aaron.justlike.util.SystemUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -193,7 +193,7 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
         }
 
         private void setImageList() {
-            FileUtils.getLocalFiles(imageList, loadPath, TYPE);
+            FileUtil.getLocalFiles(imageList, loadPath, TYPE);
         }
 
         private List<Image> getImageList() {
@@ -207,12 +207,12 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
         public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) % 3 == 0) {
                 outRect.left = 0;
-                outRect.right = SystemUtils.dp2px(SelectorActivity.this, 2.8F); // 8px
+                outRect.right = SystemUtil.dp2px(SelectorActivity.this, 2.8F); // 8px
             } else if (parent.getChildAdapterPosition(view) % 3 == 1) {
-                outRect.left = SystemUtils.dp2px(SelectorActivity.this, 1.3F); // 4px
-                outRect.right = SystemUtils.dp2px(SelectorActivity.this, 1.3F); // 4px
+                outRect.left = SystemUtil.dp2px(SelectorActivity.this, 1.3F); // 4px
+                outRect.right = SystemUtil.dp2px(SelectorActivity.this, 1.3F); // 4px
             } else if (parent.getChildAdapterPosition(view) % 3 == 2) {
-                outRect.left = SystemUtils.dp2px(SelectorActivity.this, 2.8F); // 8px
+                outRect.left = SystemUtil.dp2px(SelectorActivity.this, 2.8F); // 8px
                 outRect.right = 0;
             }
         }
@@ -223,7 +223,7 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
         @Override
         public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
             outRect.bottom = 0;
-            outRect.top = SystemUtils.dp2px(SelectorActivity.this, 4.2F); // 12px
+            outRect.top = SystemUtil.dp2px(SelectorActivity.this, 4.2F); // 12px
             if (parent.getChildAdapterPosition(view) == 0) {
                 outRect.top = 0;
             } else if (parent.getChildAdapterPosition(view) == 1) {

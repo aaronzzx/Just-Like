@@ -3,6 +3,7 @@ package com.aaron.justlike.ui;
 import android.content.Context;
 
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MyGridLayoutManager extends GridLayoutManager {
 
@@ -19,5 +20,14 @@ public class MyGridLayoutManager extends GridLayoutManager {
     @Override
     public boolean canScrollVertically() {
         return isScrollEnabled && super.canScrollVertically();
+    }
+
+    @Override
+    public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
+        try {
+            super.onLayoutChildren(recycler, state);
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
     }
 }
