@@ -118,10 +118,12 @@ public class ThemeActivity extends AppCompatActivity implements ThemeAdapter.Cal
     }
 
     private void initIconColor() {
+        mIconBack = getResources().getDrawable(R.drawable.ic_back);
         if (ThemeManager.getInstance().getCurrentTheme() == null
                 || ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
-            mIconBack = getResources().getDrawable(R.drawable.ic_back);
             DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorGreyText));
+        } else {
+            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorPrimaryWhite));
         }
     }
 
@@ -200,6 +202,6 @@ public class ThemeActivity extends AppCompatActivity implements ThemeAdapter.Cal
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }

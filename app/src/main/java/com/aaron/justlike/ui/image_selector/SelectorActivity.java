@@ -135,14 +135,14 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
     }
 
     private void initIconColor() {
+        mIconBack = getResources().getDrawable(R.drawable.ic_back);
+        mIconDone = getResources().getDrawable(R.drawable.ic_done);
         if (ThemeManager.getInstance().getCurrentTheme() == null
                 || ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
-            mIconBack = getResources().getDrawable(R.drawable.ic_back);
-            mIconDone = getResources().getDrawable(R.drawable.ic_done);
             DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorGreyText));
             DrawableCompat.setTint(mIconDone, getResources().getColor(R.color.colorGreyText));
         } else {
-            mIconDone = getResources().getDrawable(R.drawable.ic_done);
+            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(mIconDone, getResources().getColor(R.color.colorPrimaryWhite));
         }
     }

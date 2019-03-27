@@ -212,9 +212,11 @@ public class DownloadManagerActivity extends AppCompatActivity implements IView<
     }
 
     private void initIconColor() {
+        mIconBack = getResources().getDrawable(R.drawable.ic_back);
         if (ThemeManager.getInstance().getCurrentTheme() == null
                 || ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
-            mIconBack = getResources().getDrawable(R.drawable.ic_back);
+            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorGreyText));
+        } else {
             DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorGreyText));
         }
     }

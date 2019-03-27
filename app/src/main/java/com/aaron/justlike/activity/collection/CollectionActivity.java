@@ -247,14 +247,14 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
     }
 
     private void initIconColor() {
+        mIconBack = getResources().getDrawable(R.drawable.ic_back);
+        mIconAdd = getResources().getDrawable(R.drawable.ic_add);
         if (ThemeManager.getInstance().getCurrentTheme() == null
                 || ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
-            mIconBack = getResources().getDrawable(R.drawable.ic_back);
-            mIconAdd = getResources().getDrawable(R.drawable.ic_add);
             DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorGreyText));
             DrawableCompat.setTint(mIconAdd, getResources().getColor(R.color.colorGreyText));
         } else {
-            mIconAdd = getResources().getDrawable(R.drawable.ic_add);
+            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(mIconAdd, getResources().getColor(R.color.colorPrimaryWhite));
         }
     }
