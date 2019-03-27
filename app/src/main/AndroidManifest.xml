@@ -18,70 +18,95 @@
         android:theme="@style/WhiteTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <service
-            android:name=".service.DownloadService"
-            android:exported="false"></service>
-        <service
-            android:name=".http.download_manager.DownloadService"
-            android:enabled="true"
-            android:exported="false" />
 
         <activity
-            android:name=".activity.main.MainActivity"
+            android:name=".activity.main.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/JustLikeTheme.Splash">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
+        <activity
+            android:name=".activity.main.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/WhiteTheme" />
+
         <activity
             android:name=".activity.main.PreviewActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/PreviewTheme" />
+
         <activity
             android:name=".activity.online.OnlineActivity"
             android:label="Online"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.online.PreviewActivity"
             android:label=""
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.collection.CollectionActivity"
             android:label="集合"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.collection.ElementActivity"
             android:label="元素"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.download.DownloadManagerActivity"
             android:label="下载管理"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.theme.ThemeActivity"
-            android:label="主题" />
+            android:label="主题"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.about.AboutActivity"
             android:label="关于"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.image_selector.SelectorActivity" />
+
+        <activity
+            android:name=".ui.image_selector.SelectorActivity"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait" />
+
+        <service
+            android:name=".http.download_manager.DownloadService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <service
+            android:name=".service.DownloadService"
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.aaron.justlike.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
+
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
+
         </provider>
+
     </application>
 
 </manifest>
