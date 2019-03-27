@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.ObserverImpl;
 import com.aaron.justlike.entity.PhotoEvent;
-import com.aaron.justlike.http.unsplash.entity.Photo;
+import com.aaron.justlike.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.library.glide.GlideApp;
 import com.aaron.justlike.library.glide.request.Request;
 import com.aaron.justlike.mvp.presenter.online.preview.IPreviewPresenter;

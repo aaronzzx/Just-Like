@@ -1,26 +1,23 @@
-package com.aaron.justlike.http.unsplash.entity;
+package com.aaron.justlike.http.unsplash.entity.collection;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-public class UserLinks implements Parcelable {
+public class Links implements Parcelable {
     /**
-     * self : https://api.unsplash.com/photos/LBI7cgq3pbM
-     * html : https://unsplash.com/photos/LBI7cgq3pbM
-     * download : https://unsplash.com/photos/LBI7cgq3pbM/download
-     * download_location : https://api.unsplash.com/photos/LBI7cgq3pbM/download
+     * self : https://api.unsplash.com/photos/C-mxLOk6ANs
+     * html : https://unsplash.com/photos/C-mxLOk6ANs
+     * download : https://unsplash.com/photos/C-mxLOk6ANs/download
      */
 
     @SerializedName("self")
     private String self;
     @SerializedName("html")
     private String html;
-    @SerializedName("")
+    @SerializedName("download")
     private String download;
-    @SerializedName("download_location")
-    private String downloadLocation;
 
     public String getSelf() {
         return self;
@@ -46,14 +43,6 @@ public class UserLinks implements Parcelable {
         this.download = download;
     }
 
-    public String getDownloadLocation() {
-        return downloadLocation;
-    }
-
-    public void setDownloadLocation(String downloadLocation) {
-        this.downloadLocation = downloadLocation;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -64,28 +53,26 @@ public class UserLinks implements Parcelable {
         dest.writeString(this.self);
         dest.writeString(this.html);
         dest.writeString(this.download);
-        dest.writeString(this.downloadLocation);
     }
 
-    public UserLinks() {
+    public Links() {
     }
 
-    protected UserLinks(Parcel in) {
+    protected Links(Parcel in) {
         this.self = in.readString();
         this.html = in.readString();
         this.download = in.readString();
-        this.downloadLocation = in.readString();
     }
 
-    public static final Parcelable.Creator<UserLinks> CREATOR = new Parcelable.Creator<UserLinks>() {
+    public static final Parcelable.Creator<Links> CREATOR = new Parcelable.Creator<Links>() {
         @Override
-        public UserLinks createFromParcel(Parcel source) {
-            return new UserLinks(source);
+        public Links createFromParcel(Parcel source) {
+            return new Links(source);
         }
 
         @Override
-        public UserLinks[] newArray(int size) {
-            return new UserLinks[size];
+        public Links[] newArray(int size) {
+            return new Links[size];
         }
     };
 }

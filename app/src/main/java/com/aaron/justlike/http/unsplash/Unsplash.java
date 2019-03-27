@@ -1,7 +1,8 @@
 package com.aaron.justlike.http.unsplash;
 
 import com.aaron.justlike.common.ObserverImpl;
-import com.aaron.justlike.http.unsplash.entity.Photo;
+import com.aaron.justlike.http.unsplash.entity.collection.Collection;
+import com.aaron.justlike.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.http.unsplash.interfaces.PhotoCallback;
 import com.aaron.justlike.http.unsplash.interfaces.PhotoService;
 
@@ -97,6 +98,40 @@ public class Unsplash {
                     @Override
                     public void onNext(Photo photo) {
                         callback.onSuccess(photo);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e.getMessage());
+                    }
+                });
+    }
+
+    public void searchPhotos(String keyWord, int page, int perPage, PhotoCallback<List<Photo>> callback) {
+        mPhotoService.searchPhotos(keyWord, page, perPage)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ObserverImpl<List<Photo>>() {
+                    @Override
+                    public void onNext(List<Photo> photos) {
+                        callback.onSuccess(photos);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e.getMessage());
+                    }
+                });
+    }
+
+    public void searchCollections(String keyWord, int page, int perPage, PhotoCallback<List<Collection>> callback) {
+        mPhotoService.searchCollections(keyWord, page, perPage)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ObserverImpl<List<Collection>>() {
+                    @Override
+                    public void onNext(List<Collection> list) {
+                        callback.onSuccess(list);
                     }
 
                     @Override

@@ -16,7 +16,7 @@ import com.aaron.justlike.adapter.download.DownloadManagerAdapter;
 import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.entity.PhotoEvent;
-import com.aaron.justlike.http.unsplash.entity.Photo;
+import com.aaron.justlike.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.mvp.presenter.download.BasePresenter;
 import com.aaron.justlike.mvp.presenter.download.IPresenter;
 import com.aaron.justlike.mvp.view.download.IView;

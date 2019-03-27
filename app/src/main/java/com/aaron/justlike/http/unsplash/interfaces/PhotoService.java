@@ -1,6 +1,7 @@
 package com.aaron.justlike.http.unsplash.interfaces;
 
-import com.aaron.justlike.http.unsplash.entity.Photo;
+import com.aaron.justlike.http.unsplash.entity.collection.Collection;
+import com.aaron.justlike.http.unsplash.entity.photo.Photo;
 
 import java.util.List;
 
@@ -22,4 +23,10 @@ public interface PhotoService {
 
     @GET("photos/random")
     Observable<List<Photo>> getRandomPhotos(@Query("count") int count);
+
+    @GET("search/photos")
+    Observable<List<Photo>> searchPhotos(@Query("query") String keyWord, @Query("page") int page, @Query("per_page") int perPage);
+
+    @GET("search/collections")
+    Observable<List<Collection>> searchCollections(@Query("query") String keyWord, @Query("page") int page, @Query("per_page") int perPage);
 }

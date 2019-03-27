@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -50,6 +51,12 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         initView();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        hideSoftKeyboard();
     }
 
     @Override
@@ -136,7 +143,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         initIconColor();
         initToolbar();
 //        initTabLayout();
-//        SystemUtil.showKeyboard(mEditText); // 打开软键盘
+        showSoftKeyboard();
     }
 
     private void initToolbar() {
@@ -211,5 +218,13 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         FragmentPagerAdapter pagerAdapter = new OnlinePagerAdapter(mFragmentManager);
         mViewPager.setAdapter(pagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
+    }
+
+    private void showSoftKeyboard() {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+    }
+
+    private void hideSoftKeyboard() {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 }

@@ -1,7 +1,7 @@
 package com.aaron.justlike.mvp.presenter.download;
 
 import com.aaron.justlike.entity.Image;
-import com.aaron.justlike.http.unsplash.entity.Photo;
+import com.aaron.justlike.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.mvp.model.download.BaseModel;
 import com.aaron.justlike.mvp.model.download.IModel;
 import com.aaron.justlike.mvp.view.download.IView;

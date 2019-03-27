@@ -23,7 +23,7 @@ import com.aaron.justlike.adapter.online.OnlineAdapter;
 import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.PhotoEvent;
 import com.aaron.justlike.http.unsplash.Order;
-import com.aaron.justlike.http.unsplash.entity.Photo;
+import com.aaron.justlike.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.mvp.presenter.online.OnlinePresenter;
 import com.aaron.justlike.mvp.view.online.IOnlineView;
 import com.aaron.justlike.ui.MyGridLayoutManager;
@@ -94,7 +94,7 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
         super.onActivityCreated(savedInstanceState);
         mContext = getActivity();
         mOrder = Order.LATEST;
-        initView(mParentLayout);
+        initView();
         attachPresenter();
         // 实现 RecommendFragment 的加载
         if (getUserVisibleHint()) {
@@ -178,7 +178,7 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
     public abstract void attachPresenter();
 
     @Override
-    public void onShowImage(List<Photo> list) {
+    public void onShowPhoto(List<Photo> list) {
         if (mPhotoList.size() > 30) {
             mPhotoList.clear();
             mAdapter.notifyDataSetChanged();
@@ -197,7 +197,7 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
     }
 
     @Override
-    public void onShowMessage(int mode, String args) {
+    public void onShowMessage(int requestMode, String args) {
         if (mPhotoList.size() == 0) {
             mErrorView.setVisibility(View.VISIBLE);
         }
@@ -209,7 +209,7 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
             snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimaryWhite));
         }
         snackbar.setAction("刷新", v -> {
-            switch (mode) {
+            switch (requestMode) {
                 case OnlinePresenter.REQUEST_PHOTOS:
                     requestPhotos(mOrder, false, false);
                     break;
@@ -286,12 +286,12 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
         mRecyclerView.smoothScrollToPosition(0);
     }
 
-    private void initView(View parentLayout) {
-        mSwipeRefresh = parentLayout.findViewById(R.id.swipe_refresh_home_activity_main);
-        mRecyclerView = parentLayout.findViewById(R.id.recycler_view);
-        mErrorView = parentLayout.findViewById(R.id.error_view);
-        mProgressBar = parentLayout.findViewById(R.id.progress_bar);
-        mFooterProgress = parentLayout.findViewById(R.id.footer_progress);
+    private void initView() {
+        mSwipeRefresh = mParentLayout.findViewById(R.id.swipe_refresh_home_activity_main);
+        mRecyclerView = mParentLayout.findViewById(R.id.recycler_view);
+        mErrorView = mParentLayout.findViewById(R.id.error_view);
+        mProgressBar = mParentLayout.findViewById(R.id.progress_bar);
+        mFooterProgress = mParentLayout.findViewById(R.id.footer_progress);
 
         mColorPrimary = ((OnlineActivity) mContext).getColorPrimary();
         initRecyclerView();

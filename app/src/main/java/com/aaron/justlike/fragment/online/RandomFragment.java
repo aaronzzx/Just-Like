@@ -4,7 +4,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.aaron.justlike.http.unsplash.Order;
-import com.aaron.justlike.http.unsplash.entity.Photo;
+import com.aaron.justlike.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.mvp.presenter.online.IOnlinePresenter;
 import com.aaron.justlike.mvp.presenter.online.OnlinePresenter;
 

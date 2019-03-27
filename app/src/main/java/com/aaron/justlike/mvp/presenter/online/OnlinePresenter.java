@@ -1,7 +1,7 @@
 package com.aaron.justlike.mvp.presenter.online;
 
 import com.aaron.justlike.http.unsplash.Order;
-import com.aaron.justlike.http.unsplash.entity.Photo;
+import com.aaron.justlike.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.mvp.model.online.IModel;
 import com.aaron.justlike.mvp.model.online.OnlineModel;
 import com.aaron.justlike.mvp.view.online.IOnlineView;
@@ -41,7 +41,7 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
                 }
                 mView.onHideProgress();
                 mView.onHideRefresh();
-                mView.onShowImage(list);
+                mView.onShowPhoto(list);
             }
 
             @Override
@@ -69,7 +69,7 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
                 }
                 mView.onHideProgress();
                 mView.onHideRefresh();
-                mView.onShowImage(list);
+                mView.onShowPhoto(list);
             }
 
             @Override
@@ -94,7 +94,7 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
                 }
                 mView.onHideProgress();
                 mView.onHideRefresh();
-                mView.onShowImage(list);
+                mView.onShowPhoto(list);
             }
 
             @Override

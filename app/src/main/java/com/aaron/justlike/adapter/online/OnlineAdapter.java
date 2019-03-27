@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.http.unsplash.entity.Photo;
+import com.aaron.justlike.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.library.glide.GlideApp;
 import com.aaron.justlike.ui.ViewWrapper;
 
@@ -25,11 +25,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int TYPE_NORMAL = 0;
-    private static final int TYPE_FOOTER = 1;
-    private Context mContext;
-    private List<Photo> mPhotoList;
-    private Callback<Photo> mCallback;
+    protected static final int TYPE_NORMAL = 0;
+    protected static final int TYPE_FOOTER = 1;
+    protected Context mContext;
+    protected List<Photo> mPhotoList;
+    protected Callback<Photo> mCallback;
 
     public OnlineAdapter(List<Photo> photoList, Callback<Photo> callback) {
         mPhotoList = photoList;
@@ -108,14 +108,14 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return mPhotoList.size() + 1;
     }
 
-    public static class FooterViewHolder extends RecyclerView.ViewHolder {
+    protected static class FooterViewHolder extends RecyclerView.ViewHolder {
 
         FooterViewHolder(View itemView) {
             super(itemView);
         }
     }
 
-    private static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends RecyclerView.ViewHolder {
 
         View itemView;
         ImageView imageView;
