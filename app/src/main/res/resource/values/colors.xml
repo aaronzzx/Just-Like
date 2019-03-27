@@ -57,7 +57,9 @@
     <color name="colorRed">#b71c1c</color>
     <color name="colorGreen">#388e3c</color>
     <color name="colorBlue">#E6ECFC</color>
-    <color name="colorGrey">#6B6B6B</color>
+    <color name="navigationViewIcon">#696969</color>
+    <color name="colorGrey">#EEEEEE</color>
+    <color name="colorHint">#BBBBBB</color>
     <color name="colorText">#B8B8B8</color>
     <color name="colorGreyText">#494949</color>
     <color name="colorGreyDark">#494949</color>

@@ -72,6 +72,23 @@ public class Unsplash {
                 });
     }
 
+    public void getRandomPhotos(int count, PhotoCallback<List<Photo>> callback) {
+        mPhotoService.getRandomPhotos(count)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ObserverImpl<List<Photo>>() {
+                    @Override
+                    public void onNext(List<Photo> photos) {
+                        callback.onSuccess(photos);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e.getMessage());
+                    }
+                });
+    }
+
     public void getPhoto(String id, PhotoCallback<Photo> callback) {
         mPhotoService.getPhoto(id)
                 .subscribeOn(Schedulers.io())

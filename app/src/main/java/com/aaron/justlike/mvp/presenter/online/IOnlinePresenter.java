@@ -13,7 +13,11 @@ public interface IOnlinePresenter<T> {
 
     void requestCuratedPhotos(Order order, boolean isRefresh, boolean isFilter);
 
+    void requestRandomPhotos(int count);
+
     void requestLoadMore(Order order);
 
     void requestLoadMoreCurated(Order order);
+
+    void requestLoadMoreRandom(int count);
 }

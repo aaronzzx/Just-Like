@@ -10,6 +10,8 @@ public interface IModel<T> {
 
     void findCuratedPhotos(Order order, boolean refreshMode, Callback<T> callback);
 
+    void findRandomPhotos(int count, Callback<T> callback);
+
     interface Callback<T> {
 
         void onSuccess(List<T> list);

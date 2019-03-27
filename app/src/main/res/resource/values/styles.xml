@@ -231,4 +231,15 @@
         <item name="android:popupBackground">#FFFFFF</item>
     </style>
 
+    <!--<style name="MySearchView" parent="Widget.AppCompat.SearchView">-->
+    <!--<item name="defaultQueryHint">建议使用英文搜索</item>-->
+    <!--<item name="queryBackground">@drawable/abc_textfield_search_material</item>-->
+    <!--<item name="submitBackground">@drawable/abc_textfield_search_material</item>-->
+    <!--<item name="closeIcon">@drawable/abc_ic_clear_mtrl_alpha</item>-->
+    <!--<item name="searchIcon">@drawable/abc_ic_search_api_mtrl_alpha</item>-->
+    <!--<item name="searchHintIcon">@drawable/abc_ic_search_api_mtrl_alpha</item>-->
+    <!--<item name="goIcon">@drawable/ic_search</item>-->
+    <!--<item name="commitIcon">@drawable/abc_ic_commit_search_api_mtrl_alpha</item>-->
+    <!--</style>-->
+
 </resources>

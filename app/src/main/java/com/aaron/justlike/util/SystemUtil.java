@@ -11,6 +11,10 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+
+import com.aaron.justlike.JustLike;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +25,19 @@ import java.util.Date;
 import java.util.Random;
 
 public class SystemUtil {
+
+    public static void showKeyboard(EditText editText) {
+        if (editText != null) {
+            //设置可获得焦点
+            editText.setFocusable(true);
+            editText.setFocusableInTouchMode(true);
+            //请求获得焦点
+            editText.requestFocus();
+            //调用系统输入法
+            InputMethodManager inputManager = (InputMethodManager) JustLike.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.showSoftInput(editText, 0);
+        }
+    }
 
     /**
      * 利用反射开启 Toolbar 菜单图标

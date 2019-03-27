@@ -1,7 +1,6 @@
 package com.aaron.justlike.activity.collection;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -13,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.aaron.justlike.R;
@@ -150,7 +148,7 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
                         .setNegativeButton("取消", (dialog, which) -> {
                         })
                         .create();
-                alertDialog.setOnShowListener(dialog -> showKeyboard(editText));
+                alertDialog.setOnShowListener(dialog -> SystemUtil.showKeyboard(editText));
                 alertDialog.show();
                 break;
         }
@@ -286,20 +284,6 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
 
     private void hideProgress() {
         mDialog.dismiss();
-    }
-
-
-    public void showKeyboard(EditText editText) {
-        if (editText != null) {
-            //设置可获得焦点
-            editText.setFocusable(true);
-            editText.setFocusableInTouchMode(true);
-            //请求获得焦点
-            editText.requestFocus();
-            //调用系统输入法
-            InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputManager.showSoftInput(editText, 0);
-        }
     }
 
     private class YItemDecoration extends RecyclerView.ItemDecoration {

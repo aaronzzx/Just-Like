@@ -55,4 +55,19 @@ public class OnlineModel implements IModel<Photo> {
         });
         mCurated++;
     }
+
+    @Override
+    public void findRandomPhotos(int count, Callback<Photo> callback) {
+        mUnsplash.getRandomPhotos(count, new PhotoCallback<List<Photo>>() {
+            @Override
+            public void onSuccess(List<Photo> photos) {
+                callback.onSuccess(photos);
+            }
+
+            @Override
+            public void onFailure(String error) {
+                callback.onFailure();
+            }
+        });
+    }
 }

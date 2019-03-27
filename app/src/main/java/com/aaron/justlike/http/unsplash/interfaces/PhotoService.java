@@ -19,4 +19,7 @@ public interface PhotoService {
 
     @GET("photos/curated")
     Observable<List<Photo>> getCuratedPhotos(@Query("page") int page, @Query("per_page") int perPage, @Query("order_by") String orderBy);
+
+    @GET("photos/random")
+    Observable<List<Photo>> getRandomPhotos(@Query("count") int count);
 }

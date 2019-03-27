@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.online.OnlineActivity;
 import com.aaron.justlike.activity.online.PreviewActivity;
+import com.aaron.justlike.activity.online.SearchActivity;
 import com.aaron.justlike.adapter.online.OnlineAdapter;
 import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.PhotoEvent;
@@ -127,7 +128,8 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
         item.setChecked(true);
         switch (item.getItemId()) {
             case R.id.action_search:
-
+                startActivity(new Intent(getContext(), SearchActivity.class));
+                ((Activity) mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.filter_latest:
                 mMenuItemId = R.id.filter_latest;

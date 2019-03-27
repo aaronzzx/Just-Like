@@ -85,6 +85,31 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
     }
 
     @Override
+    public void requestRandomPhotos(int count) {
+        mModel.findRandomPhotos(count, new IModel.Callback<Photo>() {
+            @Override
+            public void onSuccess(List<Photo> list) {
+                if (mView == null) {
+                    return;
+                }
+                mView.onHideProgress();
+                mView.onHideRefresh();
+                mView.onShowImage(list);
+            }
+
+            @Override
+            public void onFailure() {
+                if (mView == null) {
+                    return;
+                }
+                mView.onHideProgress();
+                mView.onHideRefresh();
+                mView.onShowMessage(REQUEST_PHOTOS, "网络开小差了");
+            }
+        });
+    }
+
+    @Override
     public void requestLoadMore(Order order) {
         mView.onShowLoading();
         mModel.findPhotos(order, false, new IModel.Callback<Photo>() {
@@ -112,6 +137,30 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
     public void requestLoadMoreCurated(Order order) {
         mView.onShowLoading();
         mModel.findCuratedPhotos(order, false, new IModel.Callback<Photo>() {
+            @Override
+            public void onSuccess(List<Photo> list) {
+                if (mView == null) {
+                    return;
+                }
+                mView.onHideLoading();
+                mView.onShowMore(list);
+            }
+
+            @Override
+            public void onFailure() {
+                if (mView == null) {
+                    return;
+                }
+                mView.onHideLoading();
+                mView.onShowMessage(LOAD_MORE, "加载失败");
+            }
+        });
+    }
+
+    @Override
+    public void requestLoadMoreRandom(int count) {
+        mView.onShowLoading();
+        mModel.findRandomPhotos(count, new IModel.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
                 if (mView == null) {

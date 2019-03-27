@@ -4,8 +4,12 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.adapter.online.OnlinePagerAdapter;
@@ -24,16 +28,19 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-public class OnlineActivity extends AppCompatActivity implements View.OnClickListener {
+public class SearchActivity extends AppCompatActivity implements View.OnClickListener,
+        EditText.OnEditorActionListener {
 
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
 
+    private EditText mEditText;
+    private TextView mTextView;
+
     private FragmentManager mFragmentManager;
     private ActionBar mActionBar;
     private Drawable mIconBack;
-    private Drawable mIconFilter;
 
     private int mColorPrimary;
 
@@ -41,7 +48,7 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         ThemeManager.getInstance().setTheme(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_online);
+        setContentView(R.layout.activity_search);
         initView();
     }
 
@@ -58,8 +65,8 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                 } else {
                     window.setStatusBarColor(getResources().getColor(R.color.status_bar_background));
                 }
-                setIconFilterColor(theme);
-                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
+                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
+                mTextView.setTextColor(getResources().getColor(R.color.colorAccentWhite));
                 mActionBar.setHomeAsUpIndicator(mIconBack);
             }
         }
@@ -90,7 +97,21 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 }
                 break;
+            case R.id.tv_search:
+                String text = mEditText.getText().toString();
+                Log.i("SearchActivity", "text: " + text);
+                break;
         }
+    }
+
+    /**
+     * 回调搜索框输入的内容
+     */
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        Log.i("SearchActivity", "v: " + v.getText().toString());
+        Log.i("SearchActivity", "actionId: " + actionId);
+        return true;
     }
 
     /**
@@ -101,16 +122,21 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initView() {
-        mToolbar = findViewById(R.id.activity_online_toolbar);
-        mTabLayout = findViewById(R.id.tab_online);
+        mToolbar = findViewById(R.id.activity_search_toolbar);
+        mTabLayout = findViewById(R.id.tab_search);
         mViewPager = findViewById(R.id.view_pager);
+        mEditText = findViewById(R.id.edit_text);
+        mTextView = findViewById(R.id.tv_search);
 
         mToolbar.setOnClickListener(this);
+        mEditText.setOnEditorActionListener(this);
+        mTextView.setOnClickListener(this);
 
         initTheme();
         initIconColor();
         initToolbar();
-        initTabLayout();
+//        initTabLayout();
+//        SystemUtil.showKeyboard(mEditText); // 打开软键盘
     }
 
     private void initToolbar() {
@@ -125,28 +151,17 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     private void initIconColor() {
         mIconBack = getResources().getDrawable(R.drawable.ic_back);
         Drawable iconSearch = getResources().getDrawable(R.drawable.ic_search);
-        mIconFilter = getResources().getDrawable(R.drawable.ic_filter);
-        ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
-        if (theme == null || theme == ThemeManager.Theme.WHITE) {
+        if (ThemeManager.getInstance().getCurrentTheme() == null
+                || ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
             mTabLayout.setTabTextColors(getResources().getColor(R.color.colorAccentWhite), getResources().getColor(R.color.colorAccentWhite));
             mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccentWhite));
             DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorAccentWhite));
             DrawableCompat.setTint(iconSearch, getResources().getColor(R.color.colorAccentWhite));
-            DrawableCompat.setTint(mIconFilter, getResources().getColor(R.color.colorAccentWhite));
         } else {
             mTabLayout.setTabTextColors(getResources().getColor(R.color.colorPrimaryWhite), getResources().getColor(R.color.colorPrimaryWhite));
             mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(iconSearch, getResources().getColor(R.color.colorPrimaryWhite));
-            DrawableCompat.setTint(mIconFilter, getResources().getColor(R.color.colorPrimaryWhite));
-        }
-    }
-
-    private void setIconFilterColor(ThemeManager.Theme theme) {
-        if (theme == null || theme == ThemeManager.Theme.WHITE) {
-            DrawableCompat.setTint(mIconFilter, getResources().getColor(R.color.colorAccentWhite));
-        } else {
-            DrawableCompat.setTint(mIconFilter, getResources().getColor(R.color.colorPrimaryWhite));
         }
     }
 
@@ -194,7 +209,6 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     private void initTabLayout() {
         mFragmentManager = getSupportFragmentManager();
         FragmentPagerAdapter pagerAdapter = new OnlinePagerAdapter(mFragmentManager);
-        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(pagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
