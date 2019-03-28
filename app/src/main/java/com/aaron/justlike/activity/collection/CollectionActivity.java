@@ -61,6 +61,7 @@ public class CollectionActivity extends BaseActivity implements CollectionAdapte
     private ICollectionPresenter mPresenter;
 
     private DrawerLayout mParentLayout;
+    private NavigationView mNavView;
     private Toolbar mToolbar;
     private ImageView mNavHeaderImage;
 
@@ -102,6 +103,7 @@ public class CollectionActivity extends BaseActivity implements CollectionAdapte
         Window window = getWindow();
         View decorView = window.getDecorView();
         if (hasFocus) {
+            mNavView.setCheckedItem(R.id.nav_collection);
             ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
             if (theme == null || theme == ThemeManager.Theme.WHITE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -200,6 +202,10 @@ public class CollectionActivity extends BaseActivity implements CollectionAdapte
 
     @Override
     public void onBackPressed() {
+        if (mParentLayout.isDrawerOpen(GravityCompat.START)) {
+            mParentLayout.closeDrawer(GravityCompat.START);
+            return;
+        }
         super.onBackPressed();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
@@ -272,14 +278,14 @@ public class CollectionActivity extends BaseActivity implements CollectionAdapte
 
     private void initView() {
         mParentLayout = findViewById(R.id.drawer_layout);
-        NavigationView navView = findViewById(R.id.navigation_view);
+        mNavView = findViewById(R.id.navigation_view);
         mToolbar = findViewById(R.id.activity_collection_toolbar);
         mRecyclerView = findViewById(R.id.recycler_view);
         mEmptyView = findViewById(R.id.empty_view);
-        View headerView = navView.getHeaderView(0);
+        View headerView = mNavView.getHeaderView(0);
         mNavHeaderImage = headerView.findViewById(R.id.nav_head_image);
 
-        navView.setNavigationItemSelectedListener(this);
+        mNavView.setNavigationItemSelectedListener(this);
 
         mDialog = new ProgressDialog(this);
         mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);

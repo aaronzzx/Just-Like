@@ -96,7 +96,9 @@ public class CollectionPresenter implements ISearchPresenter<Collection> {
                 mView.onHideProgress();
                 mView.onHideLoading();
                 mView.onHideRefresh();
-                mView.onShowSearchLogo("搜索失败");
+                if (oldList.isEmpty()) {
+                    mView.onShowSearchLogo("搜索失败");
+                }
                 mView.onShowMessage("网络开小差了");
             }
         });

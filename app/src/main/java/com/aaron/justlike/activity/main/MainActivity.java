@@ -65,23 +65,25 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
     private List<Image> mImageList = new ArrayList<>();
 
     private IMainPresenter<Image> mPresenter;
+    private SquareFragment mSquareFragment;
 
     private DrawerLayout mParentLayout;
+    private NavigationView mNavView;
     private Toolbar mToolbar;
+    private SwipeRefreshLayout mSwipeRefresh;
+    private FloatingActionButton mFabButton;
+    private ImageView mNavHeaderImage;
+    private View mEmptyView;
+
     private ActionBar mActionBar;
     private MenuItem mSortByDate;
     private MenuItem mSortByName;
     private MenuItem mSortBySize;
     private MenuItem mSortByAscending;
-    private SwipeRefreshLayout mSwipeRefresh;
-    private FloatingActionButton mFabButton;
-    private SquareFragment mSquareFragment;
-    private ImageView mNavHeaderImage;
 
     private Drawable mIconDrawer;
     private Drawable mIconSort;
     private Drawable mIconAdd;
-    private View mEmptyView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +120,7 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
         Window window = getWindow();
         View decorView = window.getDecorView();
         if (hasFocus) {
+            mNavView.setCheckedItem(R.id.nav_home);
             ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
             if (theme == null || theme == ThemeManager.Theme.WHITE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -341,19 +344,19 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
     private void initView() {
         // Part 1, find id
         mParentLayout = findViewById(R.id.drawer_layout_home_activity_main);
-        NavigationView navView = findViewById(R.id.navigation_view);
+        mNavView = findViewById(R.id.navigation_view);
+        View headerView = mNavView.getHeaderView(0);
+        mNavHeaderImage = headerView.findViewById(R.id.nav_head_image);
         mToolbar = findViewById(R.id.toolbar_home_activity_main);
         mSwipeRefresh = findViewById(R.id.swipe_refresh_home_activity_main);
         mFabButton = findViewById(R.id.fab_home_activity_main);
         mSquareFragment = (SquareFragment) getSupportFragmentManager().findFragmentById(R.id.square_fragment);
-        View headerView = navView.getHeaderView(0);
-        mNavHeaderImage = headerView.findViewById(R.id.nav_head_image);
         mEmptyView = findViewById(R.id.empty_view);
 
         // Part 2, setClickListener
         mToolbar.setOnClickListener(this);
         mFabButton.setOnClickListener(this);
-        navView.setNavigationItemSelectedListener(this);
+        mNavView.setNavigationItemSelectedListener(this);
         mSwipeRefresh.setOnRefreshListener(this);
 
         // Part 3, init status

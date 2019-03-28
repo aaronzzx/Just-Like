@@ -1,16 +1,21 @@
 package com.aaron.justlike.activity.main;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.activity.online.OnlineActivity;
 import com.aaron.justlike.common.ObserverImpl;
 import com.jaeger.library.StatusBarUtil;
 
@@ -25,13 +30,24 @@ import io.reactivex.schedulers.Schedulers;
 
 public class SplashActivity extends AppCompatActivity {
 
+    private NetworkReceiver mReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.WhiteTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         animation();
-        startMainActivity();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        mReceiver = new NetworkReceiver();
+        registerReceiver(mReceiver, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mReceiver);
     }
 
     @Override
@@ -55,16 +71,16 @@ public class SplashActivity extends AppCompatActivity {
         set.setDuration(300);
         set.setFillAfter(true);
         AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
-        alphaAnimation.setFillAfter(true);
-        ScaleAnimation scaleAnimation = new ScaleAnimation(0.7F, 1, 0.7F, 1,
-                Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-        scaleAnimation.setFillAfter(true);
+//        ScaleAnimation scaleAnimation = new ScaleAnimation(0.7F, 1, 0.7F, 1,
+//                Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 100, 0);
         set.addAnimation(alphaAnimation);
-        set.addAnimation(scaleAnimation);
+//        set.addAnimation(scaleAnimation);
+        set.addAnimation(translateAnimation);
         imageView.startAnimation(set);
     }
 
-    private void startMainActivity() {
+    private void openActivity(Class clazz) {
         Observable.create((ObservableOnSubscribe<String>) Emitter::onComplete)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -72,9 +88,23 @@ public class SplashActivity extends AppCompatActivity {
                 .subscribe(new ObserverImpl<String>() {
                     @Override
                     public void onComplete() {
-                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                        startActivity(new Intent(SplashActivity.this, clazz));
                         finish();
                     }
                 });
+    }
+
+    private class NetworkReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+            if (networkInfo == null || !networkInfo.isAvailable()) {
+                openActivity(MainActivity.class);
+            } else {
+                openActivity(OnlineActivity.class);
+            }
+        }
     }
 }

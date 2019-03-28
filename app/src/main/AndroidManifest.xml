@@ -31,6 +31,7 @@
         </activity>
         <activity
             android:name=".activity.main.MainActivity"
+            android:label="本地"
             android:screenOrientation="portrait"
             android:theme="@style/WhiteTheme"
             android:launchMode="singleTask" />
@@ -41,7 +42,7 @@
             android:theme="@style/PreviewTheme" />
         <activity
             android:name=".activity.online.OnlineActivity"
-            android:label="Online"
+            android:label="Just Like"
             android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity

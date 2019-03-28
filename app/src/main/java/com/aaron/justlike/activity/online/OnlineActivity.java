@@ -1,6 +1,8 @@
 package com.aaron.justlike.activity.online;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -30,6 +32,8 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -41,7 +45,10 @@ import androidx.viewpager.widget.ViewPager;
 public class OnlineActivity extends BaseActivity implements View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener {
 
+    private static final int REQUEST_PERMISSION = 0;
+
     private DrawerLayout mParentLayout;
+    private NavigationView mNavView;
     private View mStatusBar;
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
@@ -51,6 +58,7 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
     private FragmentManager mFragmentManager;
     private ActionBar mActionBar;
     private Drawable mIconDrawer;
+    private Drawable mIconSearch;
     private Drawable mIconFilter;
 
     private int mColorPrimary;
@@ -60,6 +68,7 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
         ThemeManager.getInstance().setTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online);
+        requestPermission();
         initView();
     }
 
@@ -69,6 +78,7 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
         Window window = getWindow();
         View decorView = window.getDecorView();
         if (hasFocus) {
+            mNavView.setCheckedItem(R.id.nav_online_wallpaper);
             ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
             if (theme == null || theme == ThemeManager.Theme.WHITE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -80,8 +90,22 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
                 }
                 setIconFilterColor(theme);
                 mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
-                mActionBar.setHomeAsUpIndicator(mIconDrawer);
+//                mActionBar.setHomeAsUpIndicator(mIconDrawer);
             }
+        }
+    }
+
+    /**
+     * 请求权限回调
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSION:
+                if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    finish();
+                }
+                break;
         }
     }
 
@@ -93,6 +117,10 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onBackPressed() {
+        if (mParentLayout.isDrawerOpen(GravityCompat.START)) {
+            mParentLayout.closeDrawer(GravityCompat.START);
+            return;
+        }
         super.onBackPressed();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
@@ -151,15 +179,15 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
     private void initView() {
         mParentLayout = findViewById(R.id.drawer_layout);
         mStatusBar = findViewById(R.id.status_bar);
-        NavigationView navView = findViewById(R.id.navigation_view);
+        mNavView = findViewById(R.id.navigation_view);
         mToolbar = findViewById(R.id.activity_online_toolbar);
         mTabLayout = findViewById(R.id.tab_online);
         mViewPager = findViewById(R.id.view_pager);
-        View headerView = navView.getHeaderView(0);
+        View headerView = mNavView.getHeaderView(0);
         mNavHeaderImage = headerView.findViewById(R.id.nav_head_image);
 
         mToolbar.setOnClickListener(this);
-        navView.setNavigationItemSelectedListener(this);
+        mNavView.setNavigationItemSelectedListener(this);
 
         initTheme();
         initIconColor();
@@ -179,20 +207,20 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
 
     private void initIconColor() {
         mIconDrawer = getResources().getDrawable(R.drawable.ic_drawer_menu);
-        Drawable iconSearch = getResources().getDrawable(R.drawable.ic_search);
+        mIconSearch = getResources().getDrawable(R.drawable.ic_search);
         mIconFilter = getResources().getDrawable(R.drawable.ic_filter);
         ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
         if (theme == null || theme == ThemeManager.Theme.WHITE) {
             mTabLayout.setTabTextColors(getResources().getColor(R.color.textForBlack), getResources().getColor(R.color.colorAccentWhite));
             mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccentWhite));
             DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorAccentWhite));
-            DrawableCompat.setTint(iconSearch, getResources().getColor(R.color.colorAccentWhite));
+            DrawableCompat.setTint(mIconSearch, getResources().getColor(R.color.colorAccentWhite));
             DrawableCompat.setTint(mIconFilter, getResources().getColor(R.color.colorAccentWhite));
         } else {
             mTabLayout.setTabTextColors(getResources().getColor(R.color.textForWhite), getResources().getColor(R.color.colorPrimaryWhite));
             mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorPrimaryWhite));
-            DrawableCompat.setTint(iconSearch, getResources().getColor(R.color.colorPrimaryWhite));
+            DrawableCompat.setTint(mIconSearch, getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(mIconFilter, getResources().getColor(R.color.colorPrimaryWhite));
         }
     }
@@ -200,8 +228,10 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
     private void setIconFilterColor(ThemeManager.Theme theme) {
         if (theme == null || theme == ThemeManager.Theme.WHITE) {
             DrawableCompat.setTint(mIconFilter, getResources().getColor(R.color.colorAccentWhite));
+            DrawableCompat.setTint(mIconSearch, getResources().getColor(R.color.colorAccentWhite));
         } else {
             DrawableCompat.setTint(mIconFilter, getResources().getColor(R.color.colorPrimaryWhite));
+            DrawableCompat.setTint(mIconSearch, getResources().getColor(R.color.colorPrimaryWhite));
         }
     }
 
@@ -278,5 +308,18 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
                 mParentLayout.removeDrawerListener(this);
             }
         });
+    }
+
+    /**
+     * 请求权限
+     */
+    private void requestPermission() {
+        // 判断是否已经获得权限
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            // 申请读写存储的权限
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSION);
+        }
     }
 }
