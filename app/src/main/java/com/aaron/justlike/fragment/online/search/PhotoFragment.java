@@ -63,7 +63,7 @@ public class PhotoFragment extends Fragment implements ISearchView<Photo>,
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mParentLayout = inflater.inflate(R.layout.fragment_search_photo, container, false);
+        mParentLayout = inflater.inflate(R.layout.fragment_search, container, false);
         mContext = getActivity();
         initView();
         attachPresenter();

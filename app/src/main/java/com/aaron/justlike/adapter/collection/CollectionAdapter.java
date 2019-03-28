@@ -1,9 +1,6 @@
 package com.aaron.justlike.adapter.collection;
 
 import android.content.Context;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +10,6 @@ import android.widget.TextView;
 import com.aaron.justlike.R;
 import com.aaron.justlike.entity.Album;
 import com.aaron.justlike.library.glide.GlideApp;
-import com.aaron.justlike.library.glide.request.Request;
 
 import java.util.List;
 
@@ -65,20 +61,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 .asDrawable()
                 .load(path)
                 .placeHolder(R.color.colorBlue)
-                .listener(new Request.Listener<Drawable>() {
-                    @Override
-                    public void onLoadFailed() {
-
-                    }
-
-                    @Override
-                    public void onResourceReady(Drawable resource) {
-                        ColorMatrix matrix = new ColorMatrix();
-                        matrix.setScale(0.7F, 0.7F, 0.7F, 1);
-                        resource.setColorFilter(new ColorMatrixColorFilter(matrix));
-                        ((ViewHolder) holder).itemImage.setImageDrawable(resource);
-                    }
-                })
+                .transition(300)
                 .into(((ViewHolder) holder).itemImage);
     }
 
