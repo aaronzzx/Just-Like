@@ -95,8 +95,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_search:
-                hideKeyboard();
                 String text = mEditText.getText().toString();
+                if (text.equals("")) break;
+                hideKeyboard();
                 List<Fragment> fragments = mFragmentManager.getFragments();
                 for (Fragment fragment : fragments) {
                     if (fragment.getUserVisibleHint()) {
@@ -113,8 +114,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
      */
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        hideKeyboard();
         String text = v.getText().toString();
+        if (text.equals("")) return true;
+        hideKeyboard();
         List<Fragment> fragments = mFragmentManager.getFragments();
         for (Fragment fragment : fragments) {
             if (fragment.getUserVisibleHint()) {
