@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.justlike.JustLike;
@@ -39,6 +40,7 @@ public class CollectionFragment extends Fragment implements ISearchView<Collecti
 
     private View mParentLayout;
     private View mSearchLogo;
+    private TextView mSearchLogoHint;
     private ProgressBar mProgressBar;
     private View mRefresh;
     private View mFooterProgress;
@@ -102,8 +104,11 @@ public class CollectionFragment extends Fragment implements ISearchView<Collecti
     }
 
     @Override
-    public void onShowSearchLogo() {
+    public void onShowSearchLogo(String msg) {
+        if (msg != null) mSearchLogoHint.setText(msg);
         mSearchLogo.setVisibility(View.VISIBLE);
+        mCollectionList.clear();
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -214,6 +219,7 @@ public class CollectionFragment extends Fragment implements ISearchView<Collecti
     private void initView() {
         mRecyclerView = mParentLayout.findViewById(R.id.recycler_view);
         mSearchLogo = mParentLayout.findViewById(R.id.search_logo);
+        mSearchLogoHint = mParentLayout.findViewById(R.id.search_logo_hint);
         mProgressBar = mParentLayout.findViewById(R.id.progress_bar);
         mRefresh = mParentLayout.findViewById(R.id.refresh);
         mFooterProgress = mParentLayout.findViewById(R.id.footer_progress);

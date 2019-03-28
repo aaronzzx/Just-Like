@@ -1,11 +1,9 @@
 package com.aaron.justlike.mvp.model.online.search;
 
 import com.aaron.justlike.http.unsplash.Unsplash;
-import com.aaron.justlike.http.unsplash.entity.collection.Collection;
-import com.aaron.justlike.http.unsplash.entity.photo.Photo;
+import com.aaron.justlike.http.unsplash.entity.collection.SearchCollectionResult;
+import com.aaron.justlike.http.unsplash.entity.photo.SearchPhotoResult;
 import com.aaron.justlike.http.unsplash.interfaces.PhotoCallback;
-
-import java.util.List;
 
 public class SearchModel implements ISearchModel {
 
@@ -19,11 +17,11 @@ public class SearchModel implements ISearchModel {
     }
 
     @Override
-    public void findPhotos(String keyWord, Callback<Photo> callback) {
-        mUnsplash.searchPhotos(keyWord, mPhotos, 30, new PhotoCallback<List<Photo>>() {
+    public void findPhotos(String keyWord, int page, Callback<SearchPhotoResult> callback) {
+        mUnsplash.searchPhotos(keyWord, page, 30, new PhotoCallback<SearchPhotoResult>() {
             @Override
-            public void onSuccess(List<Photo> list) {
-                callback.onSuccess(list);
+            public void onSuccess(SearchPhotoResult result) {
+                callback.onSuccess(result);
             }
 
             @Override
@@ -35,11 +33,11 @@ public class SearchModel implements ISearchModel {
     }
 
     @Override
-    public void findCollections(String keyWord, Callback<Collection> callback) {
-        mUnsplash.searchCollections(keyWord, mCollections, 15, new PhotoCallback<List<Collection>>() {
+    public void findCollections(String keyWord, int page, Callback<SearchCollectionResult> callback) {
+        mUnsplash.searchCollections(keyWord, page, 15, new PhotoCallback<SearchCollectionResult>() {
             @Override
-            public void onSuccess(List<Collection> list) {
-                callback.onSuccess(list);
+            public void onSuccess(SearchCollectionResult result) {
+                callback.onSuccess(result);
             }
 
             @Override

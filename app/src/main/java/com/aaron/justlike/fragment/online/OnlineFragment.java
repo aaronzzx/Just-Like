@@ -164,14 +164,8 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
         ((Activity) mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-    /**
-     * 子类实现
-     */
     public abstract void requestPhotos(Order order, boolean isRefresh, boolean isFilter);
 
-    /**
-     * 子类实现
-     */
     public abstract void requestLoadMore(Order order);
 
     @Override

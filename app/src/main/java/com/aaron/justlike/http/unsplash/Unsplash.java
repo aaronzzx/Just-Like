@@ -1,8 +1,9 @@
 package com.aaron.justlike.http.unsplash;
 
 import com.aaron.justlike.common.ObserverImpl;
-import com.aaron.justlike.http.unsplash.entity.collection.Collection;
+import com.aaron.justlike.http.unsplash.entity.collection.SearchCollectionResult;
 import com.aaron.justlike.http.unsplash.entity.photo.Photo;
+import com.aaron.justlike.http.unsplash.entity.photo.SearchPhotoResult;
 import com.aaron.justlike.http.unsplash.interfaces.PhotoCallback;
 import com.aaron.justlike.http.unsplash.interfaces.PhotoService;
 
@@ -107,15 +108,15 @@ public class Unsplash {
                 });
     }
 
-    public void searchPhotos(String keyWord, int page, int perPage, PhotoCallback<List<Photo>> callback) {
+    public void searchPhotos(String keyWord, int page, int perPage, PhotoCallback<SearchPhotoResult> callback) {
         mPhotoService.searchPhotos(keyWord, page, perPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(searchPhotoResult -> searchPhotoResult.getResults())
-                .subscribe(new ObserverImpl<List<Photo>>() {
+//                .map(searchPhotoResult -> searchPhotoResult.getResults())
+                .subscribe(new ObserverImpl<SearchPhotoResult>() {
                     @Override
-                    public void onNext(List<Photo> photos) {
-                        callback.onSuccess(photos);
+                    public void onNext(SearchPhotoResult result) {
+                        callback.onSuccess(result);
                     }
 
                     @Override
@@ -125,15 +126,15 @@ public class Unsplash {
                 });
     }
 
-    public void searchCollections(String keyWord, int page, int perPage, PhotoCallback<List<Collection>> callback) {
+    public void searchCollections(String keyWord, int page, int perPage, PhotoCallback<SearchCollectionResult> callback) {
         mPhotoService.searchCollections(keyWord, page, perPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(searchCollectionResult -> searchCollectionResult.getResults())
-                .subscribe(new ObserverImpl<List<Collection>>() {
+//                .map(searchCollectionResult -> searchCollectionResult.getResults())
+                .subscribe(new ObserverImpl<SearchCollectionResult>() {
                     @Override
-                    public void onNext(List<Collection> list) {
-                        callback.onSuccess(list);
+                    public void onNext(SearchCollectionResult result) {
+                        callback.onSuccess(result);
                     }
 
                     @Override

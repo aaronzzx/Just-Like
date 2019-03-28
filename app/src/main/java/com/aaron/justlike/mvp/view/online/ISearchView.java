@@ -20,7 +20,7 @@ public interface ISearchView<T> {
 
     void onHideProgress();
 
-    void onShowSearchLogo();
+    void onShowSearchLogo(String msg);
 
     void onHideSearchLogo();
 
