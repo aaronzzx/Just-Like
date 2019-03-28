@@ -1,5 +1,7 @@
 package com.aaron.justlike.mvp.presenter.main;
 
+import android.util.Log;
+
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.mvp.model.main.BaseModel;
 import com.aaron.justlike.mvp.model.main.IModel;
@@ -10,6 +12,7 @@ import java.util.List;
 
 public class MainPresenter implements IMainPresenter<Image> {
 
+    private static final String TAG = "MainPresenter";
     private static final int NO_SORT_STATUS = 0;
     public static final int SORT_BY_DATE = 1;
     public static final int SORT_BY_NAME = 2;
@@ -41,6 +44,7 @@ public class MainPresenter implements IMainPresenter<Image> {
      */
     @Override
     public void requestImage(List<Image> imageList, boolean refreshMode) {
+        Log.i(TAG, "requestImage: --------------------- 1");
         // Part 1, 请求排序状态
         if (mSortType == NO_SORT_STATUS) {
             String[] sortArray = mModel.querySortInfo();
@@ -59,29 +63,40 @@ public class MainPresenter implements IMainPresenter<Image> {
                 mView.onHideRefresh();
                 if (refreshMode) {
                     if (imageList.containsAll(list) && imageList.size() == list.size()) {
-                        onFailure("暂时没有新增的图片");
+                        mView.onHideRefresh();
+                        mView.onShowMessage("暂时没有新增的图片");
+                        Log.i(TAG, "requestImage: --------------------- 2");
                         return;
                     }
                 }
+                Log.i(TAG, "requestImage: --------------------- 3");
+                mView.onHideEmptyView();
                 sortImageList(list, mSortType, mAscendingOrder);
                 mView.onShowImage(list, mSortType, mAscendingOrder);
             }
 
             @Override
             public void onFailure(String args) {
+                mView.onShowEmptyView();
                 mView.onHideRefresh();
                 mView.onShowMessage(args);
+                mView.onShowImage(imageList, mSortType, mAscendingOrder);
             }
         });
     }
 
     @Override
     public void addImage(List<Image> list, List<String> pathList) {
-        mModel.saveImage(pathList, savedList -> mView.onShowAddImage(savedList));
+        mModel.saveImage(pathList, savedList -> {
+            Log.i(TAG, "requestImage: --------------------- 4");
+            mView.onHideEmptyView();
+            mView.onShowAddImage(savedList);
+        });
     }
 
     @Override
-    public void deleteImage(String path) {
+    public void deleteImage(String path, boolean isEmpty) {
+        if (isEmpty) mView.onShowEmptyView();
         mModel.deleteImage(path);
     }
 

@@ -12,7 +12,7 @@
 
     <include
         layout="@layout/include_error_view"
-        android:id="@+id/error_view"
+        android:id="@+id/search_logo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />

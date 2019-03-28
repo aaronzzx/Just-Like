@@ -11,26 +11,36 @@
         android:padding="5dp" />
 
     <include
-        android:id="@+id/error_view"
-        layout="@layout/include_error_view"
+        android:id="@+id/search_logo"
+        layout="@layout/include_search_logo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:layout_height="match_parent" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
     <include
         android:id="@+id/footer_progress"
-        layout="@layout/include_footer_progress"
+        layout="@layout/include_refresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="55dp"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/refresh"
+        layout="@layout/include_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:visibility="gone" />
 
 </RelativeLayout>

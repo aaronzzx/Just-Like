@@ -12,11 +12,17 @@ public interface ISearchView<T> {
 
     void onShowMessage(String msg);
 
+    void onShowRefresh();
+
+    void onHideRefresh();
+
     void onShowProgress();
 
     void onHideProgress();
 
-    void onHideEmptyView();
+    void onShowSearchLogo();
+
+    void onHideSearchLogo();
 
     void onShowLoading();
 

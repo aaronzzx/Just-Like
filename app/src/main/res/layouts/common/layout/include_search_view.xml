@@ -29,16 +29,25 @@
 
     </androidx.cardview.widget.CardView>
 
-    <TextView
+    <!--<TextView-->
+    <!--android:id="@+id/tv_search"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:paddingStart="16dp"-->
+    <!--android:paddingEnd="16dp"-->
+    <!--android:text="搜索"-->
+    <!--android:textColor="@color/colorPrimaryWhite"-->
+    <!--android:textSize="16sp"-->
+    <!--android:textStyle="bold" />-->
+
+    <ImageView
         android:id="@+id/tv_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_gravity="center"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="搜索"
-        android:textColor="@color/colorPrimaryWhite"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:src="@drawable/ic_search" />
 
 </LinearLayout>

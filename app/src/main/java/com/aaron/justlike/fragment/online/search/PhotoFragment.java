@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,14 +36,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class PhotoFragment extends Fragment implements ISearchView<Photo>,
-        OnlineAdapter.Callback<Photo> {
+        OnlineAdapter.Callback<Photo>, IFragment {
+
+    private static final String TAG = "PhotoFragment";
 
     private ISearchPresenter<Photo> mPresenter;
     private Context mContext;
 
     private View mParentLayout;
-    private View mErrorView;
+    private View mSearchLogo;
     private ProgressBar mProgressBar;
+    private View mRefresh;
     private View mFooterProgress;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -51,7 +55,7 @@ public class PhotoFragment extends Fragment implements ISearchView<Photo>,
     private List<Photo> mPhotoList = new ArrayList<>();
 
     public PhotoFragment() {
-
+        Log.i("PhotoFragment", "PhotoFragment: " + this);
     }
 
     @Override
@@ -61,6 +65,7 @@ public class PhotoFragment extends Fragment implements ISearchView<Photo>,
         mContext = getActivity();
         initView();
         attachPresenter();
+        Log.i(TAG, "onCreateView: -------------------------------- ");
         return mParentLayout;
     }
 
@@ -72,9 +77,14 @@ public class PhotoFragment extends Fragment implements ISearchView<Photo>,
 
     @Override
     public void onShow(List<Photo> list) {
+        if (mPhotoList.size() > 30) {
+            mPhotoList.clear();
+            mAdapter.notifyDataSetChanged();
+        }
         mPhotoList.clear();
         mPhotoList.addAll(list);
         mAdapter.notifyItemRangeChanged(0, mPhotoList.size());
+        backToTop();
     }
 
     @Override
@@ -99,43 +109,91 @@ public class PhotoFragment extends Fragment implements ISearchView<Photo>,
     }
 
     @Override
-    public void onHideEmptyView() {
-        mErrorView.setVisibility(View.GONE);
+    public void onShowSearchLogo() {
+        mSearchLogo.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onHideSearchLogo() {
+        mSearchLogo.setVisibility(View.GONE);
     }
 
     @Override
     public void onShowLoading() {
-        mFooterProgress.setVisibility(View.VISIBLE);
-        ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-        animation.setFillAfter(true);
-        animation.setDuration(250);
-        mFooterProgress.startAnimation(animation);
+        if (mFooterProgress.getVisibility() == View.GONE) {
+            mFooterProgress.setVisibility(View.VISIBLE);
+            ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+            animation.setFillAfter(true);
+            animation.setDuration(250);
+            mFooterProgress.startAnimation(animation);
+        }
     }
 
     @Override
     public void onHideLoading() {
-        mFooterProgress.postDelayed(() -> {
-            ScaleAnimation animation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+        if (mFooterProgress.getVisibility() == View.VISIBLE) {
+            mFooterProgress.postDelayed(() -> {
+                ScaleAnimation animation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+                animation.setFillAfter(true);
+                animation.setDuration(250);
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        mFooterProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                mFooterProgress.startAnimation(animation);
+            }, 500);
+        }
+    }
+
+    @Override
+    public void onShowRefresh() {
+        if (mRefresh.getVisibility() == View.GONE) {
+            mRefresh.setVisibility(View.VISIBLE);
+            ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
             animation.setFillAfter(true);
             animation.setDuration(250);
-            animation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
+            mRefresh.startAnimation(animation);
+        }
+    }
 
-                }
+    @Override
+    public void onHideRefresh() {
+        if (mRefresh.getVisibility() == View.VISIBLE) {
+            mRefresh.postDelayed(() -> {
+                ScaleAnimation animation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+                animation.setFillAfter(true);
+                animation.setDuration(250);
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    mFooterProgress.setVisibility(View.GONE);
-                }
+                    }
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        mRefresh.setVisibility(View.GONE);
+                    }
 
-                }
-            });
-            mFooterProgress.startAnimation(animation);
-        }, 500);
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                mRefresh.startAnimation(animation);
+            }, 500);
+        }
     }
 
     @Override
@@ -148,15 +206,25 @@ public class PhotoFragment extends Fragment implements ISearchView<Photo>,
     /**
      * Called by Activity
      */
-    public void setKeyWord(String keyWord) {
+    @Override
+    public void search(String keyWord) {
         mKeyWord = keyWord;
-        mPresenter.requestPhotos(ISearchPresenter.FIRST_REQUEST, keyWord);
+        mPresenter.requestPhotos(ISearchPresenter.FIRST_REQUEST, keyWord, mPhotoList);
+    }
+
+    public void backToTop() {
+        int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
+        if (firstItem >= 30) {
+            mRecyclerView.scrollToPosition(22);
+        }
+        mRecyclerView.smoothScrollToPosition(0);
     }
 
     private void initView() {
         mRecyclerView = mParentLayout.findViewById(R.id.recycler_view);
-        mErrorView = mParentLayout.findViewById(R.id.error_view);
+        mSearchLogo = mParentLayout.findViewById(R.id.search_logo);
         mProgressBar = mParentLayout.findViewById(R.id.progress_bar);
+        mRefresh = mParentLayout.findViewById(R.id.refresh);
         mFooterProgress = mParentLayout.findViewById(R.id.footer_progress);
 
         initRecyclerView();
@@ -176,7 +244,7 @@ public class PhotoFragment extends Fragment implements ISearchView<Photo>,
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && mPhotoList.size() != 0) {
                     boolean canScrollVertical = mRecyclerView.canScrollVertically(1);
                     if (!canScrollVertical && mFooterProgress.getVisibility() == View.GONE) {
-                        mPresenter.requestPhotos(ISearchPresenter.LOAD_MORE, mKeyWord);
+                        mPresenter.requestPhotos(ISearchPresenter.LOAD_MORE, mKeyWord, mPhotoList);
                     }
                 }
             }

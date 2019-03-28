@@ -7,14 +7,15 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.adapter.online.OnlinePagerAdapter;
+import com.aaron.justlike.adapter.online.SearchPagerAdapter;
 import com.aaron.justlike.common.ThemeManager;
-import com.aaron.justlike.fragment.online.search.CollectionFragment;
-import com.aaron.justlike.fragment.online.search.PhotoFragment;
+import com.aaron.justlike.fragment.online.search.IFragment;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -30,21 +32,17 @@ import androidx.viewpager.widget.ViewPager;
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener,
         EditText.OnEditorActionListener {
 
-    private PhotoFragment mPhotoFragment;
-    private CollectionFragment mCollectionFragment;
-
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
-    private TabLayout.Tab mPhotoTab;
-    private TabLayout.Tab mCollectionTab;
     private ViewPager mViewPager;
 
     private EditText mEditText;
-    private TextView mTextView;
+    private ImageView mImgSearch;
 
     private FragmentManager mFragmentManager;
     private ActionBar mActionBar;
     private Drawable mIconBack;
+    private Drawable mIconSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +50,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         initView();
-        getFragment();
     }
 
     @Override
@@ -75,6 +72,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                     window.setStatusBarColor(getResources().getColor(R.color.status_bar_background));
                 }
                 mActionBar.setHomeAsUpIndicator(mIconBack);
+//                mImgSearch.setTextColor(getResources().getColor(R.color.colorAccentWhite));
+                mImgSearch.setImageDrawable(mIconSearch);
             }
         }
     }
@@ -96,12 +95,15 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_search:
+                hideKeyboard();
                 String text = mEditText.getText().toString();
-                if (mCollectionTab.isSelected()) {
-                    mCollectionFragment.setKeyWord(text);
-                    return;
+                List<Fragment> fragments = mFragmentManager.getFragments();
+                for (Fragment fragment : fragments) {
+                    if (fragment.getUserVisibleHint()) {
+                        ((IFragment) fragment).search(text);
+                        break;
+                    }
                 }
-                mPhotoFragment.setKeyWord(text);
                 break;
         }
     }
@@ -111,12 +113,15 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
      */
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        hideKeyboard();
         String text = v.getText().toString();
-        if (mCollectionTab.isSelected()) {
-            mCollectionFragment.setKeyWord(text);
-            return true;
+        List<Fragment> fragments = mFragmentManager.getFragments();
+        for (Fragment fragment : fragments) {
+            if (fragment.getUserVisibleHint()) {
+                ((IFragment) fragment).search(text);
+                break;
+            }
         }
-        mPhotoFragment.setKeyWord(text);
         return true;
     }
 
@@ -125,15 +130,33 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         mTabLayout = findViewById(R.id.tab_search);
         mViewPager = findViewById(R.id.view_pager);
         mEditText = findViewById(R.id.edit_text);
-        mTextView = findViewById(R.id.tv_search);
+        mImgSearch = findViewById(R.id.tv_search);
 
         mToolbar.setOnClickListener(this);
         mEditText.setOnEditorActionListener(this);
-        mTextView.setOnClickListener(this);
+        mImgSearch.setOnClickListener(this);
 
+        initIconColor();
         initToolbar();
         initTabLayout();
         showSoftKeyboard();
+    }
+
+    private void initIconColor() {
+        mIconBack = getResources().getDrawable(R.drawable.ic_back);
+        mIconSearch = getResources().getDrawable(R.drawable.ic_search);
+        ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+        if (theme == null || theme == ThemeManager.Theme.WHITE) {
+            mTabLayout.setTabTextColors(getResources().getColor(R.color.textForBlack), getResources().getColor(R.color.colorAccentWhite));
+            mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccentWhite));
+            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorAccentWhite));
+            DrawableCompat.setTint(mIconSearch, getResources().getColor(R.color.colorAccentWhite));
+        } else {
+            mTabLayout.setTabTextColors(getResources().getColor(R.color.textForWhite), getResources().getColor(R.color.colorPrimaryWhite));
+            mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
+            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorPrimaryWhite));
+            DrawableCompat.setTint(mIconSearch, getResources().getColor(R.color.colorPrimaryWhite));
+        }
     }
 
     private void initToolbar() {
@@ -143,25 +166,13 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             mActionBar.setDisplayHomeAsUpEnabled(true);
             mActionBar.setHomeAsUpIndicator(R.drawable.ic_back);
         }
-        mIconBack = getResources().getDrawable(R.drawable.ic_back);
     }
 
     private void initTabLayout() {
         mFragmentManager = getSupportFragmentManager();
-        FragmentPagerAdapter pagerAdapter = new OnlinePagerAdapter(mFragmentManager);
+        FragmentPagerAdapter pagerAdapter = new SearchPagerAdapter(mFragmentManager);
         mViewPager.setAdapter(pagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-    }
-
-    private void getFragment() {
-        List<Fragment> fragments = mFragmentManager.getFragments();
-        for (Fragment fragment : fragments) {
-            if (fragment instanceof PhotoFragment) {
-                mPhotoFragment = (PhotoFragment) fragment;
-            } else if (fragment instanceof CollectionFragment) {
-                mCollectionFragment = (CollectionFragment) fragment;
-            }
-        }
     }
 
     private void showSoftKeyboard() {
@@ -170,5 +181,10 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     private void hideSoftKeyboard() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager im = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        im.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
     }
 }

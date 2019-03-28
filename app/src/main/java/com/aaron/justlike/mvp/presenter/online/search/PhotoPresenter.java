@@ -25,31 +25,50 @@ public class PhotoPresenter implements ISearchPresenter<Photo> {
     }
 
     @Override
-    public void requestPhotos(int requestMode, String keyWord) {
-        if (requestMode == FIRST_REQUEST) {
-            mView.onShowProgress();
-        } else {
-            mView.onShowLoading();
+    public void requestPhotos(int requestMode, String keyWord, List<Photo> oldList) {
+        if (keyWord.equals("")) return;
+
+        switch (requestMode) {
+            case ISearchPresenter.FIRST_REQUEST:
+                if (oldList.size() == 0) {
+                    mView.onHideSearchLogo();
+                    mView.onShowProgress();
+                } else {
+                    mView.onShowRefresh();
+                }
+                break;
+            case ISearchPresenter.LOAD_MORE:
+                mView.onShowLoading();
+                break;
         }
         mModel.findPhotos(keyWord, new ISearchModel.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
-                mView.onHideProgress();
-                mView.onHideLoading();
-                mView.onHideEmptyView();
-                mView.onShow(list);
+                if (requestMode == ISearchPresenter.FIRST_REQUEST) {
+                    mView.onHideProgress();
+                    mView.onHideRefresh();
+                    mView.onShow(list);
+                } else {
+                    mView.onHideLoading();
+                    mView.onShowMore(list);
+                }
             }
 
             @Override
             public void onFailure() {
                 mView.onHideProgress();
+                mView.onHideLoading();
+                mView.onHideRefresh();
+                if (oldList.size() == 0) {
+                    mView.onShowSearchLogo();
+                }
                 mView.onShowMessage("网络开小差了");
             }
         });
     }
 
     @Override
-    public void requestCollections(int requestMode, String keyWord) {
+    public void requestCollections(int requestMode, String keyWord, List<Photo> oldList) {
 
     }
 }

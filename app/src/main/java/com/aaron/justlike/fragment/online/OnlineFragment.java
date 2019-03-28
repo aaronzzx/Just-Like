@@ -41,7 +41,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
+public abstract class OnlineFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
         OnlineAdapter.Callback<Photo>, IOnlineView<Photo> {
 
     private Context mContext;
@@ -59,7 +59,7 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
     private int mColorPrimary;
     private List<Photo> mPhotoList = new ArrayList<>();
 
-    public PhotoFragment() {
+    public OnlineFragment() {
         // Required empty public constructor
     }
 
@@ -85,7 +85,7 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mParentLayout = inflater.inflate(R.layout.fragment_photo, container, false);
+        mParentLayout = inflater.inflate(R.layout.fragment_online, container, false);
         return mParentLayout;
     }
 
@@ -289,7 +289,7 @@ public abstract class PhotoFragment extends Fragment implements SwipeRefreshLayo
     private void initView() {
         mSwipeRefresh = mParentLayout.findViewById(R.id.swipe_refresh_home_activity_main);
         mRecyclerView = mParentLayout.findViewById(R.id.recycler_view);
-        mErrorView = mParentLayout.findViewById(R.id.error_view);
+        mErrorView = mParentLayout.findViewById(R.id.search_logo);
         mProgressBar = mParentLayout.findViewById(R.id.progress_bar);
         mFooterProgress = mParentLayout.findViewById(R.id.footer_progress);
 

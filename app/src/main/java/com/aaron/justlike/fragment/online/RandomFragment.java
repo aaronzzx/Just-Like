@@ -8,7 +8,7 @@ import com.aaron.justlike.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.mvp.presenter.online.IOnlinePresenter;
 import com.aaron.justlike.mvp.presenter.online.OnlinePresenter;
 
-public class RandomFragment extends PhotoFragment {
+public class RandomFragment extends OnlineFragment {
 
     private IOnlinePresenter<Photo> mPresenter;
 

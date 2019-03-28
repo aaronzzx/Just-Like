@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
 
     @Override
     public void onDelete(String path, boolean isEmpty) {
-        mPresenter.deleteImage(path);
+        mPresenter.deleteImage(path, isEmpty);
     }
 
     @Override
@@ -292,14 +292,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     public void onShowImage(List<Image> imageList, int sortType, boolean ascendingOrder) {
         mImageList.clear();
         mImageList.addAll(imageList);
-        runOnUiThread(() -> {
-            mSquareFragment.update(imageList);
-            if (mImageList.size() == 0) {
-                mEmptyView.setVisibility(View.VISIBLE);
-            } else {
-                mEmptyView.setVisibility(View.GONE);
-            }
-        });
+        mSquareFragment.update(imageList);
         mSortType = sortType;
         mIsAscending = ascendingOrder;
     }
@@ -312,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
     @Override
     public void onShowAddImage(List<Image> list) {
         mImageList.addAll(0, list);
-        runOnUiThread(() -> mSquareFragment.updateForAdd(list));
+        mSquareFragment.updateForAdd(list);
     }
 
     /**
@@ -324,12 +317,17 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
             if (args != null) {
                 new Handler().postDelayed(() -> Toast.makeText(this, args, Toast.LENGTH_SHORT).show(), 100);
             }
-            if (mImageList.size() == 0) {
-                mEmptyView.setVisibility(View.VISIBLE);
-            } else {
-                mEmptyView.setVisibility(View.GONE);
-            }
         });
+    }
+
+    @Override
+    public void onShowEmptyView() {
+        mEmptyView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onHideEmptyView() {
+        mEmptyView.setVisibility(View.GONE);
     }
 
     /**

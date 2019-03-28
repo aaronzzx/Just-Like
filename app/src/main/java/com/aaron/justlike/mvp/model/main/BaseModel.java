@@ -1,6 +1,7 @@
 package com.aaron.justlike.mvp.model.main;
 
 import com.aaron.justlike.activity.main.PreviewActivity;
+import com.aaron.justlike.common.ObserverImpl;
 import com.aaron.justlike.entity.Collection;
 import com.aaron.justlike.entity.Element;
 import com.aaron.justlike.entity.Image;
@@ -13,6 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class BaseModel implements IModel<Image> {
 
@@ -32,19 +38,32 @@ public class BaseModel implements IModel<Image> {
      */
     @Override
     public void queryImage(OnQueryImageListener<Image> listener) {
-        mExecutorService.execute(() -> {
-            List<Image> imageList = getImage();
-            if (imageList != null && imageList.size() != 0) {
-                listener.onSuccess(imageList);
+        Observable.create((ObservableOnSubscribe<List<Image>>) emitter -> {
+            List<Image> list = getImage();
+            if (list != null && list.size() != 0) {
+                emitter.onNext(list);
             } else {
-                listener.onFailure("本地没有图片缓存哦");
+                emitter.onComplete();
             }
-        });
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ObserverImpl<List<Image>>() {
+                    @Override
+                    public void onNext(List<Image> images) {
+                        listener.onSuccess(images);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        listener.onFailure("本地没有图片缓存哦");
+                    }
+                });
     }
 
     @Override
     public void saveImage(List<String> pathList, AddImageCallback<Image> callback) {
-        mExecutorService.execute(() -> {
+        Observable.create((ObservableOnSubscribe<List<Image>>) emitter -> {
             List<Image> imageList = new ArrayList<>();
             int suffix = 1;
             for (String path : pathList) {
@@ -53,8 +72,16 @@ public class BaseModel implements IModel<Image> {
                 suffix++;
                 if (suffix > 9) suffix = 1;
             }
-            callback.onSavedImage(imageList);
-        });
+            emitter.onNext(imageList);
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ObserverImpl<List<Image>>() {
+                    @Override
+                    public void onNext(List<Image> images) {
+                        callback.onSavedImage(images);
+                    }
+                });
     }
 
     @Override

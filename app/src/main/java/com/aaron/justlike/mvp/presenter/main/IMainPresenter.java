@@ -10,7 +10,7 @@ public interface IMainPresenter<T> {
 
     void addImage(List<T> list, List<String> pathList);
 
-    void deleteImage(String path);
+    void deleteImage(String path, boolean isEmpty);
 
     void setSortType(int sortType, boolean ascendingOrder);
 }

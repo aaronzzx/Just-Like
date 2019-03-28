@@ -2,6 +2,8 @@ package com.aaron.justlike.mvp.presenter.online.search;
 
 import com.aaron.justlike.mvp.view.online.ISearchView;
 
+import java.util.List;
+
 public interface ISearchPresenter<T> {
 
     int FIRST_REQUEST = 0;
@@ -11,7 +13,7 @@ public interface ISearchPresenter<T> {
 
     void detachView();
 
-    void requestPhotos(int requestMode, String keyWord);
+    void requestPhotos(int requestMode, String keyWord, List<T> list);
 
-    void requestCollections(int requestMode, String keyWord);
+    void requestCollections(int requestMode, String keyWord, List<T> list);
 }

@@ -111,6 +111,7 @@ public class Unsplash {
         mPhotoService.searchPhotos(keyWord, page, perPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .map(searchPhotoResult -> searchPhotoResult.getResults())
                 .subscribe(new ObserverImpl<List<Photo>>() {
                     @Override
                     public void onNext(List<Photo> photos) {
@@ -128,6 +129,7 @@ public class Unsplash {
         mPhotoService.searchCollections(keyWord, page, perPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .map(searchCollectionResult -> searchCollectionResult.getResults())
                 .subscribe(new ObserverImpl<List<Collection>>() {
                     @Override
                     public void onNext(List<Collection> list) {

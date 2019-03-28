@@ -12,5 +12,9 @@ public interface IMainView<T> {
 
     void onShowMessage(String args);
 
+    void onShowEmptyView();
+
+    void onHideEmptyView();
+
     void onHideRefresh();
 }
