@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.activity.BaseActivity;
 import com.aaron.justlike.activity.about.AboutActivity;
 import com.aaron.justlike.activity.collection.CollectionActivity;
 import com.aaron.justlike.activity.download.DownloadManagerActivity;
@@ -42,7 +43,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -51,7 +51,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class MainActivity extends AppCompatActivity implements IMainView<Image>, View.OnClickListener,
+public class MainActivity extends BaseActivity implements IMainView<Image>, View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener,
         SquareFragment.Callback {
 
@@ -121,9 +121,7 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
             ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
             if (theme == null || theme == ThemeManager.Theme.WHITE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                 } else {
                     StatusBarUtil.setTranslucentForDrawerLayout(this, mParentLayout, 70);
                 }
@@ -344,11 +342,11 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
         // Part 1, find id
         mParentLayout = findViewById(R.id.drawer_layout_home_activity_main);
         NavigationView navView = findViewById(R.id.navigation_view);
-        View headerView = navView.getHeaderView(0);
         mToolbar = findViewById(R.id.toolbar_home_activity_main);
         mSwipeRefresh = findViewById(R.id.swipe_refresh_home_activity_main);
         mFabButton = findViewById(R.id.fab_home_activity_main);
         mSquareFragment = (SquareFragment) getSupportFragmentManager().findFragmentById(R.id.square_fragment);
+        View headerView = navView.getHeaderView(0);
         mNavHeaderImage = headerView.findViewById(R.id.nav_head_image);
         mEmptyView = findViewById(R.id.empty_view);
 
@@ -449,10 +447,6 @@ public class MainActivity extends AppCompatActivity implements IMainView<Image>,
 
     private void initToolbar() {
         StatusBarUtil.setTransparentForDrawerLayout(this, mParentLayout);
-        Window window = getWindow();
-        View decorView = window.getDecorView();
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {

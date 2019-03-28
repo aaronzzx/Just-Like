@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.activity.BaseActivity;
 import com.aaron.justlike.activity.online.PreviewActivity;
 import com.aaron.justlike.adapter.download.DownloadManagerAdapter;
 import com.aaron.justlike.common.ThemeManager;
@@ -32,13 +33,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class DownloadManagerActivity extends AppCompatActivity implements IView<Image>,
+public class DownloadManagerActivity extends BaseActivity implements IView<Image>,
         DownloadManagerAdapter.Callback {
 
     private static final String PROGRESS_TITLE = "加载资源";

@@ -9,6 +9,7 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.activity.BaseActivity;
 import com.aaron.justlike.adapter.about.AboutLibraryAdapter;
 import com.aaron.justlike.adapter.about.AboutMessageAdapter;
 import com.aaron.justlike.common.ThemeManager;
@@ -22,13 +23,12 @@ import com.aaron.justlike.util.SystemUtil;
 import java.util.List;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class AboutActivity extends AppCompatActivity implements IAboutView<Message, Library> {
+public class AboutActivity extends BaseActivity implements IAboutView<Message, Library> {
 
     private IAboutPresenter mPresenter;
 

@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="none">
+    <group
+        android:id="@+id/group_1"
+        android:checkableBehavior="single">
 
         <item
             android:id="@+id/nav_home"
             android:checked="true"
             android:icon="@drawable/ic_home_page"
-            android:title="主页" />
+            android:title="本地" />
 
         <item
             android:id="@+id/nav_online_wallpaper"
@@ -18,6 +20,12 @@
             android:id="@+id/nav_collection"
             android:icon="@drawable/ic_collection"
             android:title="集合" />
+
+    </group>
+
+    <group
+        android:id="@+id/group_2"
+        android:checkableBehavior="none">
 
         <item
             android:id="@+id/nav_download_manager"
@@ -40,31 +48,5 @@
             android:title="关于" />
 
     </group>
-
-    <!--<group-->
-    <!--android:id="@+id/group_2"-->
-    <!--android:checkableBehavior="none">-->
-
-    <!--<item-->
-    <!--android:id="@+id/nav_collection"-->
-    <!--android:icon="@mipmap/ic_collection"-->
-    <!--android:title="集合" />-->
-
-    <!--<item-->
-    <!--android:id="@+id/nav_download_manager"-->
-    <!--android:title="下载管理"-->
-    <!--android:icon="@mipmap/ic_download" />-->
-
-    <!--<item-->
-    <!--android:id="@+id/nav_settings"-->
-    <!--android:title="设置"-->
-    <!--android:icon="@mipmap/ic_settings"/>-->
-
-    <!--<item-->
-    <!--android:id="@+id/nav_about"-->
-    <!--android:title="关于"-->
-    <!--android:icon="@mipmap/ic_about"/>-->
-
-    <!--</group>-->
 
 </menu>

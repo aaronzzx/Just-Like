@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.activity.ActivityCollector;
+import com.aaron.justlike.activity.BaseActivity;
 import com.aaron.justlike.activity.main.MainActivity;
 import com.aaron.justlike.adapter.theme.ThemeAdapter;
 import com.aaron.justlike.common.ThemeManager;
@@ -21,13 +23,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ThemeActivity extends AppCompatActivity implements ThemeAdapter.Callback {
+public class ThemeActivity extends BaseActivity implements ThemeAdapter.Callback {
 
     private static final String PREFERENCES_THEME = "justlike_theme";
     private static final String CURRENT_THEME = "current_theme";
@@ -197,11 +198,10 @@ public class ThemeActivity extends AppCompatActivity implements ThemeAdapter.Cal
     }
 
     private void reboot() {
+        ActivityCollector.finishAll();
         Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
-//        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }

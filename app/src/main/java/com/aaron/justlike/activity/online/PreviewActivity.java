@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.activity.BaseActivity;
 import com.aaron.justlike.common.ObserverImpl;
 import com.aaron.justlike.entity.PhotoEvent;
 import com.aaron.justlike.http.unsplash.entity.photo.Photo;
@@ -37,7 +38,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -46,7 +46,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class PreviewActivity extends AppCompatActivity implements IPreviewView, View.OnClickListener {
+public class PreviewActivity extends BaseActivity implements IPreviewView, View.OnClickListener {
 
     private IPreviewPresenter mPresenter;
 

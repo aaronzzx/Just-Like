@@ -1,38 +1,56 @@
 package com.aaron.justlike.activity.online;
 
+import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.activity.BaseActivity;
+import com.aaron.justlike.activity.about.AboutActivity;
+import com.aaron.justlike.activity.collection.CollectionActivity;
+import com.aaron.justlike.activity.download.DownloadManagerActivity;
+import com.aaron.justlike.activity.main.MainActivity;
+import com.aaron.justlike.activity.theme.ThemeActivity;
 import com.aaron.justlike.adapter.online.OnlinePagerAdapter;
 import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.fragment.online.OnlineFragment;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.jaeger.library.StatusBarUtil;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-public class OnlineActivity extends AppCompatActivity implements View.OnClickListener {
+public class OnlineActivity extends BaseActivity implements View.OnClickListener,
+        NavigationView.OnNavigationItemSelectedListener {
 
+    private DrawerLayout mParentLayout;
+    private View mStatusBar;
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
+    private ImageView mNavHeaderImage;
 
     private FragmentManager mFragmentManager;
     private ActionBar mActionBar;
-    private Drawable mIconBack;
+    private Drawable mIconDrawer;
     private Drawable mIconFilter;
 
     private int mColorPrimary;
@@ -54,21 +72,22 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
             ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
             if (theme == null || theme == ThemeManager.Theme.WHITE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                 } else {
                     window.setStatusBarColor(getResources().getColor(R.color.status_bar_background));
                 }
                 setIconFilterColor(theme);
                 mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
-                mActionBar.setHomeAsUpIndicator(mIconBack);
+                mActionBar.setHomeAsUpIndicator(mIconDrawer);
             }
         }
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        finish();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        mParentLayout.openDrawer(GravityCompat.START);
         return super.onSupportNavigateUp();
     }
 
@@ -93,6 +112,35 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_home:
+                startActivityByNav(MainActivity.class);
+                break;
+            case R.id.nav_online_wallpaper:
+                mParentLayout.closeDrawers();
+                break;
+            case R.id.nav_collection:
+                startActivityByNav(CollectionActivity.class);
+                break;
+            case R.id.nav_download_manager:
+                startActivityByNav(DownloadManagerActivity.class);
+                break;
+            // TODO 编写侧滑菜单设置项的逻辑
+//            case R.id.nav_settings:
+//
+//                break;
+            case R.id.nav_theme:
+                startActivityByNav(ThemeActivity.class);
+                break;
+            case R.id.nav_about:
+                startActivityByNav(AboutActivity.class);
+                break;
+        }
+        return true;
+    }
+
     /**
      * Called by fragment.
      */
@@ -101,11 +149,17 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initView() {
+        mParentLayout = findViewById(R.id.drawer_layout);
+        mStatusBar = findViewById(R.id.status_bar);
+        NavigationView navView = findViewById(R.id.navigation_view);
         mToolbar = findViewById(R.id.activity_online_toolbar);
         mTabLayout = findViewById(R.id.tab_online);
         mViewPager = findViewById(R.id.view_pager);
+        View headerView = navView.getHeaderView(0);
+        mNavHeaderImage = headerView.findViewById(R.id.nav_head_image);
 
         mToolbar.setOnClickListener(this);
+        navView.setNavigationItemSelectedListener(this);
 
         initTheme();
         initIconColor();
@@ -114,29 +168,30 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initToolbar() {
+        StatusBarUtil.setTransparentForDrawerLayout(this, mParentLayout);
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
-            mActionBar.setHomeAsUpIndicator(R.drawable.ic_back);
+            mActionBar.setHomeAsUpIndicator(R.drawable.ic_drawer_menu);
         }
     }
 
     private void initIconColor() {
-        mIconBack = getResources().getDrawable(R.drawable.ic_back);
+        mIconDrawer = getResources().getDrawable(R.drawable.ic_drawer_menu);
         Drawable iconSearch = getResources().getDrawable(R.drawable.ic_search);
         mIconFilter = getResources().getDrawable(R.drawable.ic_filter);
         ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
         if (theme == null || theme == ThemeManager.Theme.WHITE) {
             mTabLayout.setTabTextColors(getResources().getColor(R.color.textForBlack), getResources().getColor(R.color.colorAccentWhite));
             mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccentWhite));
-            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorAccentWhite));
+            DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorAccentWhite));
             DrawableCompat.setTint(iconSearch, getResources().getColor(R.color.colorAccentWhite));
             DrawableCompat.setTint(mIconFilter, getResources().getColor(R.color.colorAccentWhite));
         } else {
             mTabLayout.setTabTextColors(getResources().getColor(R.color.textForWhite), getResources().getColor(R.color.colorPrimaryWhite));
             mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
-            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorPrimaryWhite));
+            DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(iconSearch, getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(mIconFilter, getResources().getColor(R.color.colorPrimaryWhite));
         }
@@ -155,40 +210,53 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
         ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
         if (theme == null) {
             mColorPrimary = resources.getColor(R.color.colorAccentWhite);
+            mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
+            mStatusBar.setBackground(new ColorDrawable(getResources().getColor(R.color.colorPrimaryWhite)));
             return;
         }
         switch (theme) {
             case JUST_LIKE:
                 mColorPrimary = resources.getColor(R.color.colorPrimary);
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_just_like));
                 break;
             case WHITE:
                 mColorPrimary = resources.getColor(R.color.colorAccentWhite);
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
                 break;
             case BLACK:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryBlack);
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_black));
                 break;
             case GREY:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryGrey);
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_grey));
                 break;
             case GREEN:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryGreen);
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_green));
                 break;
             case RED:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryRed);
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_red));
                 break;
             case PINK:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryPink);
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_pink));
                 break;
             case BLUE:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryBlue);
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_blue));
                 break;
             case PURPLE:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryPurple);
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_purple));
                 break;
             case ORANGE:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryOrange);
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_orange));
                 break;
         }
+        mStatusBar.setBackground(new ColorDrawable(mColorPrimary));
     }
 
     private void initTabLayout() {
@@ -197,5 +265,18 @@ public class OnlineActivity extends AppCompatActivity implements View.OnClickLis
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(pagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
+    }
+
+    private void startActivityByNav(Class whichActivity) {
+        mParentLayout.closeDrawers();
+        mParentLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                Intent intent = new Intent(OnlineActivity.this, whichActivity);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                mParentLayout.removeDrawerListener(this);
+            }
+        });
     }
 }

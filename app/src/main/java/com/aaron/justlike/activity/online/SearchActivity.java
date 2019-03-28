@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.activity.BaseActivity;
 import com.aaron.justlike.adapter.online.SearchPagerAdapter;
 import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.fragment.online.search.IFragment;
@@ -21,7 +22,6 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.List;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
@@ -29,7 +29,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-public class SearchActivity extends AppCompatActivity implements View.OnClickListener,
+public class SearchActivity extends BaseActivity implements View.OnClickListener,
         EditText.OnEditorActionListener {
 
     private Toolbar mToolbar;

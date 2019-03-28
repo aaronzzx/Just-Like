@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.activity.BaseActivity;
 import com.aaron.justlike.common.SquareFragment;
 import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.Image;
@@ -25,11 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 
-public class ElementActivity extends AppCompatActivity implements SquareFragment.Callback,
+public class ElementActivity extends BaseActivity implements SquareFragment.Callback,
         IElementView<Image> {
 
     private IElementPresenter<Image> mPresenter;

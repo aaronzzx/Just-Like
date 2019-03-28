@@ -32,7 +32,8 @@
         <activity
             android:name=".activity.main.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/WhiteTheme" />
+            android:theme="@style/WhiteTheme"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.main.PreviewActivity"
             android:label=""
@@ -41,7 +42,8 @@
         <activity
             android:name=".activity.online.OnlineActivity"
             android:label="Online"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.online.SearchActivity"
             android:label=""
@@ -53,7 +55,8 @@
         <activity
             android:name=".activity.collection.CollectionActivity"
             android:label="集合"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.collection.ElementActivity"
             android:label="元素"

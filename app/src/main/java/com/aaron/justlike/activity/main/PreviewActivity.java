@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.activity.BaseActivity;
 import com.aaron.justlike.adapter.main.PreviewAdapter;
 import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.DeleteEvent;
@@ -42,13 +43,12 @@ import java.util.List;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-public class PreviewActivity extends AppCompatActivity implements IPreviewView,
+public class PreviewActivity extends BaseActivity implements IPreviewView,
         View.OnClickListener, ViewPager.OnPageChangeListener, PreviewAdapter.Callback {
 
     public static final int DELETE_EVENT = 1;

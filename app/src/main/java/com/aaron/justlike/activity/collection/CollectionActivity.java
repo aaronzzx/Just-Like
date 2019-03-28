@@ -13,8 +13,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.activity.BaseActivity;
+import com.aaron.justlike.activity.about.AboutActivity;
+import com.aaron.justlike.activity.download.DownloadManagerActivity;
+import com.aaron.justlike.activity.main.MainActivity;
+import com.aaron.justlike.activity.online.OnlineActivity;
+import com.aaron.justlike.activity.theme.ThemeActivity;
 import com.aaron.justlike.adapter.collection.CollectionAdapter;
 import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.Album;
@@ -28,6 +35,8 @@ import com.aaron.justlike.ui.MyGridLayoutManager;
 import com.aaron.justlike.ui.image_selector.ImageSelector;
 import com.aaron.justlike.util.EmptyViewUtil;
 import com.aaron.justlike.util.SystemUtil;
+import com.google.android.material.navigation.NavigationView;
+import com.jaeger.library.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -40,19 +49,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CollectionActivity extends AppCompatActivity implements CollectionAdapter.OnPressCallback,
-        ICollectionView {
+public class CollectionActivity extends BaseActivity implements CollectionAdapter.OnPressCallback,
+        ICollectionView, NavigationView.OnNavigationItemSelectedListener {
 
     private ICollectionPresenter mPresenter;
 
+    private DrawerLayout mParentLayout;
     private Toolbar mToolbar;
+    private ImageView mNavHeaderImage;
+
     private ActionBar mActionBar;
-    private Drawable mIconBack;
+    private Drawable mIconDrawer;
     private Drawable mIconAdd;
     private ProgressDialog mDialog;
     private RecyclerView mRecyclerView;
@@ -92,14 +105,12 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
             ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
             if (theme == null || theme == ThemeManager.Theme.WHITE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                 } else {
                     window.setStatusBarColor(getResources().getColor(R.color.status_bar_background));
                 }
                 mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
-                mActionBar.setHomeAsUpIndicator(mIconBack);
+                mActionBar.setHomeAsUpIndicator(mIconDrawer);
             }
         }
     }
@@ -117,9 +128,6 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
             case R.id.add_collection: // 添加集合
                 View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_create_collection, null);
                 EditText editText = dialogView.findViewById(R.id.input_collection_name);
@@ -153,6 +161,41 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        mParentLayout.openDrawer(GravityCompat.START);
+        return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_home:
+                startActivityByNav(MainActivity.class);
+                break;
+            case R.id.nav_online_wallpaper:
+                startActivityByNav(OnlineActivity.class);
+                break;
+            case R.id.nav_collection:
+                mParentLayout.closeDrawers();
+                break;
+            case R.id.nav_download_manager:
+                startActivityByNav(DownloadManagerActivity.class);
+                break;
+            // TODO 编写侧滑菜单设置项的逻辑
+//            case R.id.nav_settings:
+//
+//                break;
+            case R.id.nav_theme:
+                startActivityByNav(ThemeActivity.class);
+                break;
+            case R.id.nav_about:
+                startActivityByNav(AboutActivity.class);
+                break;
+        }
+        return true;
     }
 
     @Override
@@ -228,9 +271,15 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
     }
 
     private void initView() {
+        mParentLayout = findViewById(R.id.drawer_layout);
+        NavigationView navView = findViewById(R.id.navigation_view);
         mToolbar = findViewById(R.id.activity_collection_toolbar);
         mRecyclerView = findViewById(R.id.recycler_view);
         mEmptyView = findViewById(R.id.empty_view);
+        View headerView = navView.getHeaderView(0);
+        mNavHeaderImage = headerView.findViewById(R.id.nav_head_image);
+
+        navView.setNavigationItemSelectedListener(this);
 
         mDialog = new ProgressDialog(this);
         mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -240,33 +289,73 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
         mDialog.setMessage("Loading...");
 
         initIconColor();
+        initTheme();
         initToolbar();
         initRecyclerView();
     }
 
     private void initIconColor() {
-        mIconBack = getResources().getDrawable(R.drawable.ic_back);
+        mIconDrawer = getResources().getDrawable(R.drawable.ic_drawer_menu);
         mIconAdd = getResources().getDrawable(R.drawable.ic_add);
         if (ThemeManager.getInstance().getCurrentTheme() == null
                 || ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
-            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorGreyText));
+            DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorGreyText));
             DrawableCompat.setTint(mIconAdd, getResources().getColor(R.color.colorGreyText));
         } else {
-            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorPrimaryWhite));
+            DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(mIconAdd, getResources().getColor(R.color.colorPrimaryWhite));
         }
     }
 
+    private void initTheme() {
+        ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+        if (theme == null) {
+            mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
+            // 初次安装时由于有权限申请，此时没有获取到焦点，所以会有一刹那没变色，这里设置一下就好了
+            mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
+            return;
+        }
+        switch (theme) {
+            case JUST_LIKE:
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_just_like));
+                break;
+            case WHITE:
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
+                break;
+            case BLACK:
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_black));
+                break;
+            case GREY:
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_grey));
+                break;
+            case GREEN:
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_green));
+                break;
+            case RED:
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_red));
+                break;
+            case PINK:
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_pink));
+                break;
+            case BLUE:
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_blue));
+                break;
+            case PURPLE:
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_purple));
+                break;
+            case ORANGE:
+                mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_orange));
+                break;
+        }
+    }
+
     private void initToolbar() {
-        Window window = getWindow();
-        View decorView = window.getDecorView();
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        StatusBarUtil.setTransparentForDrawerLayout(this, mParentLayout);
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
-            mActionBar.setHomeAsUpIndicator(R.drawable.ic_back);
+            mActionBar.setHomeAsUpIndicator(R.drawable.ic_drawer_menu);
         }
     }
 
@@ -284,6 +373,19 @@ public class CollectionActivity extends AppCompatActivity implements CollectionA
 
     private void hideProgress() {
         mDialog.dismiss();
+    }
+
+    private void startActivityByNav(Class whichActivity) {
+        mParentLayout.closeDrawers();
+        mParentLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                Intent intent = new Intent(CollectionActivity.this, whichActivity);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                mParentLayout.removeDrawerListener(this);
+            }
+        });
     }
 
     private class YItemDecoration extends RecyclerView.ItemDecoration {
