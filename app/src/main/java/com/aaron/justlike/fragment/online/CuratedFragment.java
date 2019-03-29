@@ -21,7 +21,7 @@ public class CuratedFragment extends OnlineFragment {
 
     @Override
     public void requestPhotos(Order order, boolean isRefresh, boolean isFilter) {
-        mPresenter.requestCuratedPhotos(order, isRefresh, isFilter);
+        mPresenter.requestCuratedPhotos(order, isRefresh, isFilter, mPhotoList);
     }
 
     @Override

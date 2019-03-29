@@ -95,20 +95,6 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    /**
-     * 请求权限回调
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_PERMISSION:
-                if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    finish();
-                }
-                break;
-        }
-    }
-
     @Override
     public boolean onSupportNavigateUp() {
         mParentLayout.openDrawer(GravityCompat.START);

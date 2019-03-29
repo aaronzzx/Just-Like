@@ -21,7 +21,7 @@ public class RecommendFragment extends OnlineFragment {
 
     @Override
     public void requestPhotos(Order order, boolean isRefresh, boolean isFilter) {
-        mPresenter.requestPhotos(order, isRefresh, isFilter);
+        mPresenter.requestPhotos(order, isRefresh, isFilter, mPhotoList);
     }
 
     @Override

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.aaron.justlike.R;
@@ -20,11 +21,9 @@ import com.aaron.justlike.activity.online.OnlineActivity;
 import com.aaron.justlike.activity.online.PreviewActivity;
 import com.aaron.justlike.activity.online.SearchActivity;
 import com.aaron.justlike.adapter.online.OnlineAdapter;
-import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.PhotoEvent;
 import com.aaron.justlike.http.unsplash.Order;
 import com.aaron.justlike.http.unsplash.entity.photo.Photo;
-import com.aaron.justlike.mvp.presenter.online.OnlinePresenter;
 import com.aaron.justlike.mvp.view.online.IOnlineView;
 import com.aaron.justlike.ui.MyGridLayoutManager;
 import com.aaron.justlike.util.SystemUtil;
@@ -42,7 +41,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public abstract class OnlineFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
-        OnlineAdapter.Callback<Photo>, IOnlineView<Photo> {
+        OnlineAdapter.Callback<Photo>, IOnlineView<Photo>, View.OnClickListener {
 
     private Context mContext;
     private Order mOrder;
@@ -51,13 +50,14 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
     private SwipeRefreshLayout mSwipeRefresh;
     private RecyclerView mRecyclerView;
     private View mErrorView;
+    private Button mClickRefresh;
     private ProgressBar mProgressBar;
     private View mFooterProgress;
     private RecyclerView.Adapter mAdapter;
 
     private int mMenuItemId;
     private int mColorPrimary;
-    private List<Photo> mPhotoList = new ArrayList<>();
+    protected List<Photo> mPhotoList = new ArrayList<>();
 
     public OnlineFragment() {
         // Required empty public constructor
@@ -94,6 +94,7 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
         super.onActivityCreated(savedInstanceState);
         mContext = getActivity();
         mOrder = Order.LATEST;
+        mColorPrimary = mContext != null ? ((OnlineActivity) mContext).getColorPrimary() : 0;
         initView();
         attachPresenter();
         // 实现 RecommendFragment 的加载
@@ -150,6 +151,17 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 当 EmptyView 出现时，即网络连接不可用或者其他情况导致加载不出图片时，
+     * 此按钮用于用户点击重试加载图片
+     */
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_click_refresh) {
+            requestPhotos(mOrder, true, false);
+        }
+    }
+
     @Override
     public void onRefresh() {
         if (mProgressBar.getVisibility() == View.GONE) {
@@ -192,26 +204,7 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
 
     @Override
     public void onShowMessage(int requestMode, String args) {
-        if (mPhotoList.size() == 0) {
-            mErrorView.setVisibility(View.VISIBLE);
-        }
-        Snackbar snackbar = Snackbar.make(mRecyclerView, args, Snackbar.LENGTH_SHORT);
-        ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
-        if (theme != ThemeManager.Theme.WHITE && theme != ThemeManager.Theme.BLACK) {
-            snackbar.setActionTextColor(mColorPrimary);
-        } else {
-            snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimaryWhite));
-        }
-        snackbar.setAction("刷新", v -> {
-            switch (requestMode) {
-                case OnlinePresenter.REQUEST_PHOTOS:
-                    requestPhotos(mOrder, true, false);
-                    break;
-                case OnlinePresenter.LOAD_MORE:
-                    requestLoadMore(mOrder);
-                    break;
-            }
-        }).show();
+        Snackbar.make(mRecyclerView, "网络开小差了，请检查网络连接", Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -230,8 +223,23 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
     }
 
     @Override
+    public void onShowProgress() {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void onHideProgress() {
         mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onShowErrorView() {
+        mErrorView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onHideErrorView() {
+        mErrorView.setVisibility(View.GONE);
     }
 
     @Override
@@ -284,10 +292,12 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
         mSwipeRefresh = mParentLayout.findViewById(R.id.swipe_refresh_home_activity_main);
         mRecyclerView = mParentLayout.findViewById(R.id.recycler_view);
         mErrorView = mParentLayout.findViewById(R.id.search_logo);
+        mClickRefresh = mParentLayout.findViewById(R.id.btn_click_refresh);
         mProgressBar = mParentLayout.findViewById(R.id.progress_bar);
         mFooterProgress = mParentLayout.findViewById(R.id.footer_progress);
 
-        mColorPrimary = ((OnlineActivity) mContext).getColorPrimary();
+        mClickRefresh.setOnClickListener(this);
+
         initRecyclerView();
         initSwipeRefresh();
     }

@@ -16,7 +16,13 @@ public interface IOnlineView<T> {
 
     void onHideRefresh();
 
+    void onShowProgress();
+
     void onHideProgress();
+
+    void onShowErrorView();
+
+    void onHideErrorView();
 
     void onShowLoading();
 

@@ -17,6 +17,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.aaron.justlike.JustLike;
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.BaseActivity;
 import com.aaron.justlike.activity.about.AboutActivity;
@@ -205,6 +206,7 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
         switch (requestCode) {
             case REQUEST_PERMISSION:
                 if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(JustLike.getContext(), "不开启权限将无法使用壁纸缓存功能", Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 break;

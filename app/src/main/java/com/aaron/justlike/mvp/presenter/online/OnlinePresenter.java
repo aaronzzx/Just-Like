@@ -29,14 +29,17 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
     }
 
     @Override
-    public void requestPhotos(Order order, boolean isRefresh, boolean isFilter) {
-        if (isRefresh || isFilter) mView.onShowRefresh();
+    public void requestPhotos(Order order, boolean isRefresh, boolean isFilter, List<Photo> oldList) {
+        if (isFilter) {
+            mView.onShowRefresh();
+        } else if (oldList.isEmpty() && isRefresh) {
+            mView.onHideErrorView();
+            mView.onShowProgress();
+        }
         mModel.findPhotos(order, isRefresh, new IModel.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
-                if (mView == null) {
-                    return;
-                }
+                if (mView == null) return;
                 mView.onHideProgress();
                 mView.onHideRefresh();
                 mView.onShowPhoto(list);
@@ -44,9 +47,8 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
 
             @Override
             public void onFailure() {
-                if (mView == null) {
-                    return;
-                }
+                if (mView == null) return;
+                if (oldList.isEmpty()) mView.onShowErrorView();
                 mView.onHideProgress();
                 mView.onHideRefresh();
                 mView.onShowMessage(REQUEST_PHOTOS, "网络开小差了");
@@ -55,14 +57,17 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
     }
 
     @Override
-    public void requestCuratedPhotos(Order order, boolean isRefresh, boolean isFilter) {
-        if (isRefresh || isFilter) mView.onShowRefresh();
+    public void requestCuratedPhotos(Order order, boolean isRefresh, boolean isFilter, List<Photo> oldList) {
+        if (isFilter) {
+            mView.onShowRefresh();
+        } else if (oldList.isEmpty() && isRefresh) {
+            mView.onHideErrorView();
+            mView.onShowProgress();
+        }
         mModel.findCuratedPhotos(order, isRefresh, new IModel.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
-                if (mView == null) {
-                    return;
-                }
+                if (mView == null) return;
                 mView.onHideProgress();
                 mView.onHideRefresh();
                 mView.onShowPhoto(list);
@@ -70,9 +75,8 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
 
             @Override
             public void onFailure() {
-                if (mView == null) {
-                    return;
-                }
+                if (mView == null) return;
+                if (oldList.isEmpty()) mView.onShowErrorView();
                 mView.onHideProgress();
                 mView.onHideRefresh();
                 mView.onShowMessage(REQUEST_PHOTOS, "网络开小差了");
@@ -81,14 +85,15 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
     }
 
     @Override
-    public void requestRandomPhotos(boolean isRefresh, int count) {
-        if (isRefresh) mView.onShowRefresh();
+    public void requestRandomPhotos(boolean isRefresh, int count, List<Photo> oldList) {
+        if (oldList.isEmpty() && isRefresh) {
+            mView.onHideErrorView();
+            mView.onShowProgress();
+        }
         mModel.findRandomPhotos(count, new IModel.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
-                if (mView == null) {
-                    return;
-                }
+                if (mView == null) return;
                 mView.onHideProgress();
                 mView.onHideRefresh();
                 mView.onShowPhoto(list);
@@ -96,9 +101,8 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
 
             @Override
             public void onFailure() {
-                if (mView == null) {
-                    return;
-                }
+                if (mView == null) return;
+                if (oldList.isEmpty()) mView.onShowErrorView();
                 mView.onHideProgress();
                 mView.onHideRefresh();
                 mView.onShowMessage(REQUEST_PHOTOS, "网络开小差了");

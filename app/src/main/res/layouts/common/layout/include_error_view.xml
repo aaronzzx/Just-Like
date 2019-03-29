@@ -25,6 +25,16 @@
             android:textStyle="bold"
             android:textColor="#42000000" />
 
+        <Button
+            android:id="@+id/btn_click_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#00000000"
+            android:text="点击重试"
+            android:textStyle="bold"
+            android:textColor="@color/colorAccentWhite" />
+
     </LinearLayout>
 
 </RelativeLayout>
