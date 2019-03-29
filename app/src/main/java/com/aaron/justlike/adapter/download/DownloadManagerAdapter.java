@@ -63,7 +63,7 @@ public class DownloadManagerAdapter<T> extends RecyclerView.Adapter<RecyclerView
                 .asDrawable()
                 .load(path)
                 .placeHolder(R.color.colorBlue)
-                .transition(300)
+                .transition(50)
                 .into(((ViewHolder) holder).imageView);
     }
 

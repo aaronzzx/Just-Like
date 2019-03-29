@@ -72,7 +72,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 .asDrawable()
                 .load(mList.get(position))
                 .placeHolder(R.color.colorBlue)
-                .transition(300)
+                .transition(50)
                 .into(((ViewHolder) holder).imageView);
     }
 
