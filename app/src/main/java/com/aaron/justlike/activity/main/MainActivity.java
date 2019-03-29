@@ -110,6 +110,7 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
             return;
         }
         super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     /**
