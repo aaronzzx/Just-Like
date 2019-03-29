@@ -51,7 +51,7 @@ public class PhotoFragment extends Fragment implements ISearchView<Photo>,
     private View mRefresh;
     private View mFooterProgress;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private OnlineAdapter mAdapter;
 
     private String mKeyWord;
     private List<Photo> mPhotoList = new ArrayList<>();
@@ -213,6 +213,7 @@ public class PhotoFragment extends Fragment implements ISearchView<Photo>,
      */
     @Override
     public void search(String keyWord) {
+        mAdapter.clearAnimatedFlag();
         mKeyWord = keyWord;
         mPresenter.requestPhotos(ISearchPresenter.FIRST_REQUEST, keyWord, mPhotoList);
     }

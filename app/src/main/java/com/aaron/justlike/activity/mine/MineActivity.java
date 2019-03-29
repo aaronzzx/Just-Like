@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -161,6 +162,7 @@ public class MineActivity extends BaseActivity implements IMineView<Image>, View
         mSortByAscending = menu.findItem(R.id.ascending_order);
         // 初始化 Popup 记忆状态
         initMenuItem(mSortType, mIsAscending);
+        Log.d(TAG, "onCreateOptionsMenu: ----------------------------- ");
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -300,6 +302,7 @@ public class MineActivity extends BaseActivity implements IMineView<Image>, View
         runOnUiThread(() -> mSquareFragment.update(imageList));
         mSortType = sortType;
         mIsAscending = ascendingOrder;
+        Log.d(TAG, "onShowImage: ----------------------------------- ");
     }
 
     /**
@@ -327,12 +330,12 @@ public class MineActivity extends BaseActivity implements IMineView<Image>, View
 
     @Override
     public void onShowEmptyView() {
-        mEmptyView.setVisibility(View.VISIBLE);
+        runOnUiThread(() -> mEmptyView.setVisibility(View.VISIBLE));
     }
 
     @Override
     public void onHideEmptyView() {
-        mEmptyView.setVisibility(View.GONE);
+        runOnUiThread(() -> mEmptyView.setVisibility(View.GONE));
     }
 
     /**
@@ -340,9 +343,11 @@ public class MineActivity extends BaseActivity implements IMineView<Image>, View
      */
     @Override
     public void onHideRefresh() {
-        if (mSwipeRefresh.isRefreshing()) {
-            mSwipeRefresh.setRefreshing(false);
-        }
+        runOnUiThread(() -> {
+            if (mSwipeRefresh.isRefreshing()) {
+                mSwipeRefresh.setRefreshing(false);
+            }
+        });
     }
 
     private void initView() {

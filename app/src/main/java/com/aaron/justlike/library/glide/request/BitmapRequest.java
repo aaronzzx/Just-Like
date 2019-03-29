@@ -73,6 +73,12 @@ public class BitmapRequest implements Request<Bitmap> {
     }
 
     @Override
+    public Request<Bitmap> thumbnail(float sizeMultiplier) {
+        mRequestBuilder = mRequestBuilder.thumbnail(sizeMultiplier);
+        return this;
+    }
+
+    @Override
     public Request<Bitmap> transition(int duration) {
         mRequestBuilder = mRequestBuilder.transition(BitmapTransitionOptions.withCrossFade(duration));
         return this;
@@ -89,7 +95,7 @@ public class BitmapRequest implements Request<Bitmap> {
 
             @Override
             public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                listener.onResourceReady(resource);
+                listener.onResourceReady(resource, isFirstResource);
                 return false;
             }
         });

@@ -22,6 +22,8 @@ public interface Request<T> {
 
     Request<T> thumbnail(String thumb);
 
+    Request<T> thumbnail(float sizeMultiplier);
+
     Request<T> transition(int duration);
 
     Request<T> listener(Listener<T> listener);
@@ -34,6 +36,6 @@ public interface Request<T> {
 
         void onLoadFailed();
 
-        void onResourceReady(T resource);
+        void onResourceReady(T resource, boolean isFirstResource);
     }
 }

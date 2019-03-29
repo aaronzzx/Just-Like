@@ -6,16 +6,18 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.http.unsplash.entity.collection.Collection;
 import com.aaron.justlike.library.glide.GlideApp;
+import com.aaron.justlike.library.glide.request.Request;
 import com.aaron.justlike.ui.ViewWrapper;
 
 import java.util.List;
@@ -29,9 +31,10 @@ public class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     protected static final int TYPE_FOOTER = 1;
 
     private Context mContext;
+    private Callback<Collection> mCallback;
 
     private List<Collection> mCollectionList;
-    private Callback<Collection> mCallback;
+    private SparseBooleanArray mAnimatedFlag = new SparseBooleanArray();
 
     public CollectionAdapter(List<Collection> collectionList, Callback<Collection> callback) {
         mCollectionList = collectionList;
@@ -45,6 +48,10 @@ public class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         } else {
             return TYPE_NORMAL;
         }
+    }
+
+    public void clearAnimatedFlag() {
+        mAnimatedFlag.clear();
     }
 
     @NonNull
@@ -92,6 +99,23 @@ public class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     .load(photo)
                     .placeHolder(placeHolder)
                     .transition(300)
+                    .listener(new Request.Listener<Drawable>() {
+                        @Override
+                        public void onLoadFailed() {
+
+                        }
+
+                        @Override
+                        public void onResourceReady(Drawable resource, boolean isFirstResource) {
+                            // 仅对初次加载的图片做饱和度动画，意味着刷新
+                            if (!mAnimatedFlag.get(position, false)) {
+                                Animator animator = ObjectAnimator.ofFloat(new ViewWrapper(((ViewHolder) holder).itemImage), "saturation", 0, 1);
+                                animator.setDuration(2000).setInterpolator(new AccelerateDecelerateInterpolator());
+                                animator.start();
+                                mAnimatedFlag.put(position, true);
+                            }
+                        }
+                    })
                     .into(((ViewHolder) holder).itemImage);
 
             GlideApp.getInstance()
@@ -99,9 +123,6 @@ public class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     .asDrawable()
                     .load(authorImage)
                     .into(((ViewHolder) holder).authorImage);
-            Animator animator = ObjectAnimator.ofFloat(new ViewWrapper(((ViewHolder) holder).itemImage), "saturation", 0, 1);
-            animator.setDuration(2000).setInterpolator(new AccelerateInterpolator());
-            animator.start();
         }
     }
 

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.aaron.justlike.R;
 import com.aaron.justlike.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.library.glide.GlideApp;
+import com.aaron.justlike.library.glide.request.Request;
 import com.aaron.justlike.ui.ViewWrapper;
 
 import java.util.List;
@@ -27,13 +29,20 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     protected static final int TYPE_NORMAL = 0;
     protected static final int TYPE_FOOTER = 1;
+
     protected Context mContext;
-    protected List<Photo> mPhotoList;
     protected Callback<Photo> mCallback;
+
+    protected List<Photo> mPhotoList;
+    private SparseBooleanArray mAnimatedFlag = new SparseBooleanArray();
 
     public OnlineAdapter(List<Photo> photoList, Callback<Photo> callback) {
         mPhotoList = photoList;
         mCallback = callback;
+    }
+
+    public void clearAnimatedFlag() {
+        mAnimatedFlag.clear();
     }
 
     public boolean isFooterView(int position) {
@@ -96,10 +105,24 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     .load(regular)
                     .placeHolder(placeHolder)
                     .transition(300)
+                    .listener(new Request.Listener<Drawable>() {
+                        @Override
+                        public void onLoadFailed() {
+
+                        }
+
+                        @Override
+                        public void onResourceReady(Drawable resource, boolean isFirstResource) {
+                            // 仅对初次加载的图片做饱和度动画，意味着刷新
+                            if (!mAnimatedFlag.get(position, false)) {
+                                Animator animator = ObjectAnimator.ofFloat(new ViewWrapper(((ViewHolder) holder).imageView), "saturation", 0, 1);
+                                animator.setDuration(2000).setInterpolator(new AccelerateDecelerateInterpolator());
+                                animator.start();
+                                mAnimatedFlag.put(position, true);
+                            }
+                        }
+                    })
                     .into(((ViewHolder) holder).imageView);
-            Animator animator = ObjectAnimator.ofFloat(new ViewWrapper(((ViewHolder) holder).imageView), "saturation", 0, 1);
-            animator.setDuration(2000).setInterpolator(new AccelerateDecelerateInterpolator());
-            animator.start();
         }
     }
 

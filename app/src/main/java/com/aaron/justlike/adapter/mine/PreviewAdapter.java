@@ -55,6 +55,7 @@ public class PreviewAdapter<T> extends PagerAdapter {
                 .with(context)
                 .asDrawable()
                 .load(path)
+                .transition(200)
                 .into(photoView);
         photoView.setOnClickListener(v -> mCallback.onPress());
         container.addView(photoView);

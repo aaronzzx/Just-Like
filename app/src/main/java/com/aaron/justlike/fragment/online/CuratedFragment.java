@@ -21,6 +21,7 @@ public class CuratedFragment extends OnlineFragment {
 
     @Override
     public void requestPhotos(Order order, boolean isRefresh, boolean isFilter) {
+        if (isRefresh || isFilter) mAdapter.clearAnimatedFlag();
         mPresenter.requestCuratedPhotos(order, isRefresh, isFilter, mPhotoList);
     }
 

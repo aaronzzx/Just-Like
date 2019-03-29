@@ -180,6 +180,7 @@ public class PreviewActivity extends BaseActivity implements IPreviewView, View.
                 .asDrawable()
                 .load(urls)
                 .thumbnail(thumbnail)
+                .transition(200)
                 .listener(new Request.Listener<Drawable>() {
                     @Override
                     public void onLoadFailed() {
@@ -190,13 +191,12 @@ public class PreviewActivity extends BaseActivity implements IPreviewView, View.
                     }
 
                     @Override
-                    public void onResourceReady(Drawable resource) {
+                    public void onResourceReady(Drawable resource, boolean isFirstResource) {
                         mProgressBar.setVisibility(View.GONE);
                         mProgressImage.setVisibility(View.VISIBLE);
                         mProgressImage.setImageResource(R.drawable.ic_done_circle);
                         AnimationUtil.showProgressImage(mProgressImage);
                         mPhotoView.enable();
-                        mPhotoView.setImageDrawable(resource);
                     }
                 })
                 .into(mPhotoView);

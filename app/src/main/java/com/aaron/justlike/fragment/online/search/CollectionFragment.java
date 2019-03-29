@@ -45,7 +45,7 @@ public class CollectionFragment extends Fragment implements ISearchView<Collecti
     private View mRefresh;
     private View mFooterProgress;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private CollectionAdapter mAdapter;
 
     private String mKeyWord;
     private List<Collection> mCollectionList = new ArrayList<>();
@@ -204,6 +204,7 @@ public class CollectionFragment extends Fragment implements ISearchView<Collecti
      */
     @Override
     public void search(String keyWord) {
+        mAdapter.clearAnimatedFlag();
         mKeyWord = keyWord;
         mPresenter.requestCollections(ISearchPresenter.FIRST_REQUEST, keyWord, mCollectionList);
     }

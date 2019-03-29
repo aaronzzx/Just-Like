@@ -74,6 +74,12 @@ public class GifDrawableRequest implements Request<GifDrawable> {
     }
 
     @Override
+    public Request<GifDrawable> thumbnail(float sizeMultiplier) {
+        mRequestBuilder = mRequestBuilder.thumbnail(sizeMultiplier);
+        return this;
+    }
+
+    @Override
     public Request<GifDrawable> transition(int duration) {
         mRequestBuilder = mRequestBuilder.transition(GenericTransitionOptions.with(R.anim.fade_in));
         return this;
@@ -90,7 +96,7 @@ public class GifDrawableRequest implements Request<GifDrawable> {
 
             @Override
             public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
-                listener.onResourceReady(resource);
+                listener.onResourceReady(resource, isFirstResource);
                 return false;
             }
         });

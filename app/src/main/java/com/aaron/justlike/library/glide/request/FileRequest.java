@@ -81,6 +81,12 @@ public class FileRequest implements Request<File> {
     }
 
     @Override
+    public Request<File> thumbnail(float sizeMultiplier) {
+        mRequestBuilder = mRequestBuilder.thumbnail(sizeMultiplier);
+        return this;
+    }
+
+    @Override
     public Request<File> listener(Listener<File> listener) {
         mRequestBuilder = mRequestBuilder.listener(new RequestListener<File>() {
             @Override
@@ -91,7 +97,7 @@ public class FileRequest implements Request<File> {
 
             @Override
             public boolean onResourceReady(File resource, Object model, Target<File> target, DataSource dataSource, boolean isFirstResource) {
-                listener.onResourceReady(resource);
+                listener.onResourceReady(resource, isFirstResource);
                 return false;
             }
         });

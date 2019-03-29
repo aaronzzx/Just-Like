@@ -54,7 +54,7 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
     private Button mClickRefresh;
     private ProgressBar mProgressBar;
     private View mFooterProgress;
-    private RecyclerView.Adapter mAdapter;
+    protected OnlineAdapter mAdapter;
 
     private int mMenuItemId;
     private int mColorPrimary;

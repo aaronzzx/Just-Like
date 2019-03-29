@@ -72,6 +72,12 @@ public class DrawableRequest implements Request<Drawable> {
     }
 
     @Override
+    public Request<Drawable> thumbnail(float sizeMultiplier) {
+        mRequestBuilder = mRequestBuilder.thumbnail(sizeMultiplier);
+        return this;
+    }
+
+    @Override
     public Request<Drawable> transition(int duration) {
         mRequestBuilder = mRequestBuilder.transition(DrawableTransitionOptions.withCrossFade(duration));
         return this;
@@ -88,7 +94,7 @@ public class DrawableRequest implements Request<Drawable> {
 
             @Override
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                listener.onResourceReady(resource);
+                listener.onResourceReady(resource, isFirstResource);
                 return false;
             }
         });
