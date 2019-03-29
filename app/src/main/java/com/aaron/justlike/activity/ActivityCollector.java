@@ -23,4 +23,16 @@ public class ActivityCollector {
         }
         sActivityList.clear();
     }
+
+    public static int getActivityTotal() {
+        return sActivityList.size();
+    }
+
+    public static Activity getTopActivity() {
+        return sActivityList.isEmpty() ? null : sActivityList.get(sActivityList.size() - 1);
+    }
+
+    public static Activity getBottomActivity() {
+        return sActivityList.isEmpty() ? null : sActivityList.get(0);
+    }
 }

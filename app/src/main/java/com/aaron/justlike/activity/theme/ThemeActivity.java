@@ -1,5 +1,6 @@
 package com.aaron.justlike.activity.theme;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -13,7 +14,6 @@ import android.view.Window;
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.ActivityCollector;
 import com.aaron.justlike.activity.BaseActivity;
-import com.aaron.justlike.activity.main.MainActivity;
 import com.aaron.justlike.adapter.theme.ThemeAdapter;
 import com.aaron.justlike.common.ThemeManager;
 
@@ -198,8 +198,11 @@ public class ThemeActivity extends BaseActivity implements ThemeAdapter.Callback
     }
 
     private void reboot() {
+        Activity activity = ActivityCollector.getBottomActivity();
+        if (activity == null) return;
+        Class clazz = activity.getClass();
         ActivityCollector.finishAll();
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, clazz);
         startActivity(intent);
         finish();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

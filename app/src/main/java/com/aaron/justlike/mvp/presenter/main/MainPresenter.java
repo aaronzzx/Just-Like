@@ -1,7 +1,5 @@
 package com.aaron.justlike.mvp.presenter.main;
 
-import android.util.Log;
-
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.mvp.model.main.BaseModel;
 import com.aaron.justlike.mvp.model.main.IModel;
@@ -44,7 +42,6 @@ public class MainPresenter implements IMainPresenter<Image> {
      */
     @Override
     public void requestImage(List<Image> imageList, boolean refreshMode) {
-        Log.i(TAG, "requestImage: --------------------- 1");
         // Part 1, 请求排序状态
         if (mSortType == NO_SORT_STATUS) {
             String[] sortArray = mModel.querySortInfo();
@@ -65,11 +62,9 @@ public class MainPresenter implements IMainPresenter<Image> {
                     if (imageList.containsAll(list) && imageList.size() == list.size()) {
                         mView.onHideRefresh();
                         mView.onShowMessage("暂时没有新增的图片");
-                        Log.i(TAG, "requestImage: --------------------- 2");
                         return;
                     }
                 }
-                Log.i(TAG, "requestImage: --------------------- 3");
                 mView.onHideEmptyView();
                 sortImageList(list, mSortType, mAscendingOrder);
                 mView.onShowImage(list, mSortType, mAscendingOrder);
@@ -88,7 +83,6 @@ public class MainPresenter implements IMainPresenter<Image> {
     @Override
     public void addImage(List<Image> list, List<String> pathList) {
         mModel.saveImage(pathList, savedList -> {
-            Log.i(TAG, "requestImage: --------------------- 4");
             mView.onHideEmptyView();
             mView.onShowAddImage(savedList);
         });
