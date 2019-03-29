@@ -22,7 +22,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.aaron.justlike.activity.main.PreviewActivity;
+import com.aaron.justlike.activity.mine.PreviewActivity;
 import com.aaron.justlike.entity.Image;
 
 import java.io.File;

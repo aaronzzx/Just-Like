@@ -3,7 +3,7 @@ package com.aaron.justlike.fragment.collection;
 import android.app.Activity;
 import android.content.Intent;
 
-import com.aaron.justlike.activity.main.PreviewActivity;
+import com.aaron.justlike.activity.mine.PreviewActivity;
 import com.aaron.justlike.common.SquareFragment;
 import com.aaron.justlike.entity.DeleteEvent;
 import com.aaron.justlike.entity.Image;

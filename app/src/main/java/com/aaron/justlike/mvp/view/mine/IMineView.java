@@ -1,8 +1,8 @@
-package com.aaron.justlike.mvp.view.main;
+package com.aaron.justlike.mvp.view.mine;
 
 import java.util.List;
 
-public interface IMainView<T> {
+public interface IMineView<T> {
 
     void attachPresenter();
 

@@ -20,7 +20,7 @@
         tools:replace="android:allowBackup">
 
         <activity
-            android:name=".activity.main.SplashActivity"
+            android:name=".activity.mine.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/JustLikeTheme.Splash">
             <intent-filter>
@@ -30,13 +30,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.main.MainActivity"
-            android:label="本地"
+            android:name=".activity.mine.MineActivity"
+            android:label="收藏"
             android:screenOrientation="portrait"
             android:theme="@style/WhiteTheme"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.main.PreviewActivity"
+            android:name=".activity.mine.PreviewActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/PreviewTheme" />

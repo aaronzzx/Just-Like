@@ -1,4 +1,4 @@
-package com.aaron.justlike.mvp.presenter.main.preview;
+package com.aaron.justlike.mvp.presenter.mine.preview;
 
 import com.aaron.justlike.entity.ImageInfo;
 

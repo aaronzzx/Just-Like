@@ -1,4 +1,4 @@
-package com.aaron.justlike.activity.main;
+package com.aaron.justlike.activity.mine;
 
 import android.Manifest;
 import android.app.Activity;
@@ -29,9 +29,9 @@ import com.aaron.justlike.common.SquareFragment;
 import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.library.glide.GlideEngine;
-import com.aaron.justlike.mvp.presenter.main.IMainPresenter;
-import com.aaron.justlike.mvp.presenter.main.MainPresenter;
-import com.aaron.justlike.mvp.view.main.IMainView;
+import com.aaron.justlike.mvp.presenter.mine.IMinePresenter;
+import com.aaron.justlike.mvp.presenter.mine.MinePresenter;
+import com.aaron.justlike.mvp.view.mine.IMineView;
 import com.aaron.justlike.util.SystemUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -52,7 +52,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class MainActivity extends BaseActivity implements IMainView<Image>, View.OnClickListener,
+public class MineActivity extends BaseActivity implements IMineView<Image>, View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener,
         SquareFragment.Callback {
 
@@ -65,7 +65,7 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
     private boolean mIsAscending;
     private List<Image> mImageList = new ArrayList<>();
 
-    private IMainPresenter<Image> mPresenter;
+    private IMinePresenter<Image> mPresenter;
     private SquareFragment mSquareFragment;
 
     private DrawerLayout mParentLayout;
@@ -90,7 +90,7 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
     protected void onCreate(Bundle savedInstanceState) {
         ThemeManager.getInstance().setTheme(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_mine);
         requestPermission();
         attachPresenter();
         initView();
@@ -122,7 +122,7 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
         Window window = getWindow();
         View decorView = window.getDecorView();
         if (hasFocus) {
-            mNavView.setCheckedItem(R.id.nav_home);
+            mNavView.setCheckedItem(R.id.nav_mine);
             ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
             if (theme == null || theme == ThemeManager.Theme.WHITE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -147,7 +147,7 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main_menu, menu);
+        getMenuInflater().inflate(R.menu.activity_mine_menu, menu);
         SystemUtil.setIconEnable(menu, true);
         ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
         if (theme == null || theme == ThemeManager.Theme.WHITE) {
@@ -169,13 +169,13 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
         boolean ascendingOrder = mSortByAscending.isChecked();
         switch (item.getItemId()) {
             case R.id.sort_date:
-                setSort(MainPresenter.SORT_BY_DATE, ascendingOrder);
+                setSort(MinePresenter.SORT_BY_DATE, ascendingOrder);
                 break;
             case R.id.sort_name:
-                setSort(MainPresenter.SORT_BY_NAME, ascendingOrder);
+                setSort(MinePresenter.SORT_BY_NAME, ascendingOrder);
                 break;
             case R.id.sort_size:
-                setSort(MainPresenter.SORT_BY_SIZE, ascendingOrder);
+                setSort(MinePresenter.SORT_BY_SIZE, ascendingOrder);
                 break;
             case R.id.ascending_order:
                 setSortByAscending(!ascendingOrder);
@@ -233,10 +233,10 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
-                mParentLayout.closeDrawers();
-                break;
-            case R.id.nav_online_wallpaper:
                 startActivityByNav(OnlineActivity.class);
+                break;
+            case R.id.nav_mine:
+                mParentLayout.closeDrawers();
                 break;
             case R.id.nav_collection:
                 startActivityByNav(CollectionActivity.class);
@@ -286,7 +286,7 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
      */
     @Override
     public void attachPresenter() {
-        mPresenter = new MainPresenter(this);
+        mPresenter = new MinePresenter(this);
     }
 
     /**
@@ -478,15 +478,15 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
      */
     private void initMenuItem(int sortType, boolean ascendingOrder) {
         switch (sortType) {
-            case MainPresenter.SORT_BY_DATE:
+            case MinePresenter.SORT_BY_DATE:
                 mSortByDate.setChecked(true);
                 mSortByAscending.setChecked(ascendingOrder);
                 break;
-            case MainPresenter.SORT_BY_NAME:
+            case MinePresenter.SORT_BY_NAME:
                 mSortByName.setChecked(true);
                 mSortByAscending.setChecked(ascendingOrder);
                 break;
-            case MainPresenter.SORT_BY_SIZE:
+            case MinePresenter.SORT_BY_SIZE:
                 mSortBySize.setChecked(true);
                 mSortByAscending.setChecked(ascendingOrder);
                 break;
@@ -503,13 +503,13 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
     private void setSort(int sortType, boolean ascendingOrder) {
         mPresenter.setSortType(sortType, ascendingOrder);
         switch (sortType) {
-            case MainPresenter.SORT_BY_DATE:
+            case MinePresenter.SORT_BY_DATE:
                 mSortByDate.setChecked(true);
                 break;
-            case MainPresenter.SORT_BY_NAME:
+            case MinePresenter.SORT_BY_NAME:
                 mSortByName.setChecked(true);
                 break;
-            case MainPresenter.SORT_BY_SIZE:
+            case MinePresenter.SORT_BY_SIZE:
                 mSortBySize.setChecked(true);
                 break;
         }
@@ -521,15 +521,15 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
      */
     private void setSortByAscending(boolean sortByAscending) {
         if (mSortByDate.isChecked()) {
-            mPresenter.setSortType(MainPresenter.SORT_BY_DATE, sortByAscending);
+            mPresenter.setSortType(MinePresenter.SORT_BY_DATE, sortByAscending);
             mSortByAscending.setChecked(sortByAscending);
 
         } else if (mSortByName.isChecked()) {
-            mPresenter.setSortType(MainPresenter.SORT_BY_NAME, sortByAscending);
+            mPresenter.setSortType(MinePresenter.SORT_BY_NAME, sortByAscending);
             mSortByAscending.setChecked(sortByAscending);
 
         } else {
-            mPresenter.setSortType(MainPresenter.SORT_BY_SIZE, sortByAscending);
+            mPresenter.setSortType(MinePresenter.SORT_BY_SIZE, sortByAscending);
             mSortByAscending.setChecked(sortByAscending);
         }
         mPresenter.requestImage(mImageList, false);
@@ -556,7 +556,7 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
         mParentLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerClosed(View drawerView) {
-                Intent intent = new Intent(MainActivity.this, whichActivity);
+                Intent intent = new Intent(MineActivity.this, whichActivity);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 mParentLayout.removeDrawerListener(this);

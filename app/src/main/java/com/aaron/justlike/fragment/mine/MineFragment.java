@@ -1,9 +1,9 @@
-package com.aaron.justlike.fragment.main;
+package com.aaron.justlike.fragment.mine;
 
 import android.app.Activity;
 import android.content.Intent;
 
-import com.aaron.justlike.activity.main.PreviewActivity;
+import com.aaron.justlike.activity.mine.PreviewActivity;
 import com.aaron.justlike.common.SquareFragment;
 import com.aaron.justlike.entity.DeleteEvent;
 import com.aaron.justlike.entity.Image;
@@ -15,7 +15,7 @@ import java.util.List;
 
 import androidx.appcompat.app.AlertDialog;
 
-public class MainFragment extends SquareFragment {
+public class MineFragment extends SquareFragment {
 
     @Override
     public void executeEvent(DeleteEvent event) {

@@ -1,4 +1,4 @@
-package com.aaron.justlike.activity.main;
+package com.aaron.justlike.activity.mine;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -101,7 +101,7 @@ public class SplashActivity extends AppCompatActivity {
             ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = manager.getActiveNetworkInfo();
             if (networkInfo == null || !networkInfo.isAvailable()) {
-                openActivity(MainActivity.class);
+                openActivity(MineActivity.class);
             } else {
                 openActivity(OnlineActivity.class);
             }

@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.adapter.main.MainAdapter;
+import com.aaron.justlike.adapter.mine.MineAdapter;
 import com.aaron.justlike.entity.DeleteEvent;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.ui.MyGridLayoutManager;
@@ -24,7 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-public abstract class SquareFragment extends Fragment implements MainAdapter.Callback<Image> {
+public abstract class SquareFragment extends Fragment implements MineAdapter.Callback<Image> {
 
     protected Context mContext;
 
@@ -125,7 +125,7 @@ public abstract class SquareFragment extends Fragment implements MainAdapter.Cal
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mRecyclerView.addItemDecoration(new YItemDecoration());
-        mAdapter = new MainAdapter<>(mImageList, this);
+        mAdapter = new MineAdapter<>(mImageList, this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

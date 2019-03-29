@@ -1,4 +1,4 @@
-package com.aaron.justlike.adapter.main;
+package com.aaron.justlike.adapter.mine;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,13 +15,13 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MainAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MineAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<T> mList;
     private Callback<T> mCallback;
 
-    public MainAdapter(List<T> list, Callback<T> callback) {
+    public MineAdapter(List<T> list, Callback<T> callback) {
         mList = list;
         mCallback = callback;
     }
@@ -30,7 +30,7 @@ public class MainAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         mContext = parent.getContext();
-        View view = LayoutInflater.from(mContext).inflate(R.layout.activity_main_recycler_item,
+        View view = LayoutInflater.from(mContext).inflate(R.layout.activity_mine_recycler_item,
                 parent, false);
         ViewHolder holder = new ViewHolder(view);
 

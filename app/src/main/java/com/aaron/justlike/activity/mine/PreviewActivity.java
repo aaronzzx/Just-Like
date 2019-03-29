@@ -1,4 +1,4 @@
-package com.aaron.justlike.activity.main;
+package com.aaron.justlike.activity.mine;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -20,15 +20,15 @@ import android.widget.Toast;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.BaseActivity;
-import com.aaron.justlike.adapter.main.PreviewAdapter;
+import com.aaron.justlike.adapter.mine.PreviewAdapter;
 import com.aaron.justlike.common.ThemeManager;
 import com.aaron.justlike.entity.DeleteEvent;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.entity.ImageInfo;
 import com.aaron.justlike.entity.PreviewEvent;
-import com.aaron.justlike.mvp.presenter.main.preview.IPreviewPresenter;
-import com.aaron.justlike.mvp.presenter.main.preview.PreviewPresenter;
-import com.aaron.justlike.mvp.view.main.IPreviewView;
+import com.aaron.justlike.mvp.presenter.mine.preview.IPreviewPresenter;
+import com.aaron.justlike.mvp.presenter.mine.preview.PreviewPresenter;
+import com.aaron.justlike.mvp.view.mine.IPreviewView;
 import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.FileUtil;
 import com.aaron.justlike.util.SystemUtil;
@@ -123,7 +123,7 @@ public class PreviewActivity extends BaseActivity implements IPreviewView,
      */
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.activity_main_preview_menu, menu);
+//        getMenuInflater().inflate(R.menu.activity_preview_menu, menu);
 //        SystemUtil.setIconEnable(menu, true);
 //        return super.onCreateOptionsMenu(menu);
 //    }

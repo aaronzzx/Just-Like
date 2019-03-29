@@ -1,16 +1,16 @@
-package com.aaron.justlike.mvp.presenter.main;
+package com.aaron.justlike.mvp.presenter.mine;
 
 import com.aaron.justlike.entity.Image;
-import com.aaron.justlike.mvp.model.main.BaseModel;
-import com.aaron.justlike.mvp.model.main.IModel;
-import com.aaron.justlike.mvp.view.main.IMainView;
+import com.aaron.justlike.mvp.model.mine.BaseModel;
+import com.aaron.justlike.mvp.model.mine.IModel;
+import com.aaron.justlike.mvp.view.mine.IMineView;
 import com.aaron.justlike.util.FileUtil;
 
 import java.util.List;
 
-public class MainPresenter implements IMainPresenter<Image> {
+public class MinePresenter implements IMinePresenter<Image> {
 
-    private static final String TAG = "MainPresenter";
+    private static final String TAG = "MinePresenter";
     private static final int NO_SORT_STATUS = 0;
     public static final int SORT_BY_DATE = 1;
     public static final int SORT_BY_NAME = 2;
@@ -20,17 +20,17 @@ public class MainPresenter implements IMainPresenter<Image> {
     private int mSortType;
     private boolean mAscendingOrder;
 
-    private IMainView<Image> mView;
+    private IMineView<Image> mView;
     private IModel<Image> mModel;
 
-    public MainPresenter(IMainView<Image> view) {
-        // 同时持有 IMainView 和 IModel 引用
+    public MinePresenter(IMineView<Image> view) {
+        // 同时持有 IMineView 和 IModel 引用
         mView = view;
         mModel = new BaseModel();
     }
 
     /**
-     * 断开与 IMainView 的连接
+     * 断开与 IMineView 的连接
      */
     @Override
     public void detachView() {
@@ -38,7 +38,7 @@ public class MainPresenter implements IMainPresenter<Image> {
     }
 
     /**
-     * 请求数据并回调 IMainView 函数显示图片
+     * 请求数据并回调 IMineView 函数显示图片
      */
     @Override
     public void requestImage(List<Image> imageList, boolean refreshMode) {

@@ -54,7 +54,7 @@
 
                     <fragment
                         android:id="@+id/square_fragment"
-                        android:name="com.aaron.justlike.fragment.main.MainFragment"
+                        android:name="com.aaron.justlike.fragment.mine.MineFragment"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 

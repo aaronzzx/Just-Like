@@ -20,7 +20,7 @@ import com.aaron.justlike.R;
 import com.aaron.justlike.activity.BaseActivity;
 import com.aaron.justlike.activity.about.AboutActivity;
 import com.aaron.justlike.activity.download.DownloadManagerActivity;
-import com.aaron.justlike.activity.main.MainActivity;
+import com.aaron.justlike.activity.mine.MineActivity;
 import com.aaron.justlike.activity.online.OnlineActivity;
 import com.aaron.justlike.activity.theme.ThemeActivity;
 import com.aaron.justlike.adapter.collection.CollectionAdapter;
@@ -178,9 +178,9 @@ public class CollectionActivity extends BaseActivity implements CollectionAdapte
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
-                startActivityByNav(MainActivity.class);
+                startActivityByNav(MineActivity.class);
                 break;
-            case R.id.nav_online_wallpaper:
+            case R.id.nav_mine:
                 startActivityByNav(OnlineActivity.class);
                 break;
             case R.id.nav_collection:

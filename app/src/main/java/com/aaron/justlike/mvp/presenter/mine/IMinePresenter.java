@@ -1,8 +1,8 @@
-package com.aaron.justlike.mvp.presenter.main;
+package com.aaron.justlike.mvp.presenter.mine;
 
 import java.util.List;
 
-public interface IMainPresenter<T> {
+public interface IMinePresenter<T> {
 
     void detachView();
 

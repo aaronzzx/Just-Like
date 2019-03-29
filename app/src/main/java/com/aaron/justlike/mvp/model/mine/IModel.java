@@ -1,4 +1,4 @@
-package com.aaron.justlike.mvp.model.main;
+package com.aaron.justlike.mvp.model.mine;
 
 import java.util.List;
 

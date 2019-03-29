@@ -7,14 +7,13 @@
 
         <item
             android:id="@+id/nav_home"
-            android:checked="true"
             android:icon="@drawable/ic_home_page"
-            android:title="本地" />
+            android:title="主页" />
 
         <item
-            android:id="@+id/nav_online_wallpaper"
-            android:icon="@drawable/ic_wallpaper_center"
-            android:title="在线壁纸" />
+            android:id="@+id/nav_mine"
+            android:icon="@drawable/ic_mine"
+            android:title="收藏" />
 
         <item
             android:id="@+id/nav_collection"

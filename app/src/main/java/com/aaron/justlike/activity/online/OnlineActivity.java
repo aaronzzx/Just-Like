@@ -18,7 +18,7 @@ import com.aaron.justlike.activity.BaseActivity;
 import com.aaron.justlike.activity.about.AboutActivity;
 import com.aaron.justlike.activity.collection.CollectionActivity;
 import com.aaron.justlike.activity.download.DownloadManagerActivity;
-import com.aaron.justlike.activity.main.MainActivity;
+import com.aaron.justlike.activity.mine.MineActivity;
 import com.aaron.justlike.activity.theme.ThemeActivity;
 import com.aaron.justlike.adapter.online.OnlinePagerAdapter;
 import com.aaron.justlike.common.ThemeManager;
@@ -78,7 +78,7 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
         Window window = getWindow();
         View decorView = window.getDecorView();
         if (hasFocus) {
-            mNavView.setCheckedItem(R.id.nav_online_wallpaper);
+            mNavView.setCheckedItem(R.id.nav_home);
             ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
             if (theme == null || theme == ThemeManager.Theme.WHITE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -130,10 +130,10 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
-                startActivityByNav(MainActivity.class);
-                break;
-            case R.id.nav_online_wallpaper:
                 mParentLayout.closeDrawers();
+                break;
+            case R.id.nav_mine:
+                startActivityByNav(MineActivity.class);
                 break;
             case R.id.nav_collection:
                 startActivityByNav(CollectionActivity.class);

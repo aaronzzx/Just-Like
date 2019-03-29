@@ -96,7 +96,7 @@ public class ThemeActivity extends BaseActivity implements ThemeAdapter.Callback
                 ViewGroup checkbox = view.findViewById(R.id.checkbox);
                 checkbox.setVisibility(View.GONE);
             }
-            // reboot MainActivity
+            // reboot MineActivity
             reboot();
             // save new check to local
             mExecutorService.execute(() -> {

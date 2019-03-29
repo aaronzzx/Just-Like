@@ -1,4 +1,4 @@
-package com.aaron.justlike.adapter.main;
+package com.aaron.justlike.adapter.mine;
 
 import android.content.Context;
 import android.view.View;

@@ -1,6 +1,6 @@
-package com.aaron.justlike.mvp.model.main;
+package com.aaron.justlike.mvp.model.mine;
 
-import com.aaron.justlike.activity.main.PreviewActivity;
+import com.aaron.justlike.activity.mine.PreviewActivity;
 import com.aaron.justlike.common.ObserverImpl;
 import com.aaron.justlike.entity.Collection;
 import com.aaron.justlike.entity.Element;
