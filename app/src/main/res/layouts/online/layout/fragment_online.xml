@@ -13,8 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:padding="5dp"
-            android:layoutAnimation="@anim/layout_translate_up" />
+            android:padding="5dp" />
 
         <include
             android:id="@+id/search_logo"

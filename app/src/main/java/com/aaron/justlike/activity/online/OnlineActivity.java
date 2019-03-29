@@ -12,7 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.aaron.justlike.JustLike;
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.BaseActivity;
 import com.aaron.justlike.activity.about.AboutActivity;
@@ -92,6 +94,17 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
                 mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
 //                mActionBar.setHomeAsUpIndicator(mIconDrawer);
             }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSION:
+                if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(JustLike.getContext(), "不开启权限将无法使用壁纸缓存功能", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
     }
 

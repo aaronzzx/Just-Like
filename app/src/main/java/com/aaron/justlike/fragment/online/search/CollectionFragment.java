@@ -20,6 +20,7 @@ import com.aaron.justlike.http.unsplash.entity.collection.Collection;
 import com.aaron.justlike.mvp.presenter.online.search.CollectionPresenter;
 import com.aaron.justlike.mvp.presenter.online.search.ISearchPresenter;
 import com.aaron.justlike.mvp.view.online.ISearchView;
+import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.SystemUtil;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -212,7 +214,7 @@ public class CollectionFragment extends Fragment implements ISearchView<Collecti
     public void backToTop() {
         int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
         if (firstItem >= 16) {
-            mRecyclerView.scrollToPosition(12);
+            mRecyclerView.scrollToPosition(10);
         }
         mRecyclerView.smoothScrollToPosition(0);
     }
@@ -231,6 +233,18 @@ public class CollectionFragment extends Fragment implements ISearchView<Collecti
     private void initRecyclerView() {
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator() {
+            @Override
+            public boolean animateAdd(RecyclerView.ViewHolder holder) {
+                AnimationUtil.showViewByAlpha(holder.itemView, 0, 1, 400);
+                return true;
+            }
+
+            @Override
+            public boolean animateChange(RecyclerView.ViewHolder oldHolder, RecyclerView.ViewHolder newHolder, int fromX, int fromY, int toX, int toY) {
+                return true;
+            }
+        });
         mRecyclerView.addItemDecoration(new YItemDecoration());
         mAdapter = new CollectionAdapter(mCollectionList, this);
         mRecyclerView.setAdapter(mAdapter);
