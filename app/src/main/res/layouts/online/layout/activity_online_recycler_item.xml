@@ -34,7 +34,8 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/image_view"
             android:layout_alignBottom="@id/image_view"
-            android:clipToPadding="true"
+            android:layout_margin="3dp"
+            android:clipToPadding="false"
             android:padding="5dp">
             <!--android:background="@drawable/author_image_name"-->
 
