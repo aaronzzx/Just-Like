@@ -26,8 +26,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="20dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
             android:layout_marginTop="10dp"
+            android:maxLines="1"
             android:textColor="#fff"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -62,7 +64,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="10dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:maxLines="1"
                 android:textColor="#FFFFFFFF"
                 android:textSize="16sp" />
