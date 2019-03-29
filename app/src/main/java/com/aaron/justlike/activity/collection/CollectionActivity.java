@@ -3,6 +3,7 @@ package com.aaron.justlike.activity.collection;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -63,6 +64,7 @@ public class CollectionActivity extends BaseActivity implements CollectionAdapte
     private DrawerLayout mParentLayout;
     private NavigationView mNavView;
     private Toolbar mToolbar;
+    private View mStatusBar;
     private ImageView mNavHeaderImage;
 
     private ActionBar mActionBar;
@@ -74,6 +76,7 @@ public class CollectionActivity extends BaseActivity implements CollectionAdapte
     private MyGridLayoutManager mLayoutManager;
     private CollectionAdapter mAdapter;
 
+    private int mColorPrimary;
     private List<Album> mCollections = new ArrayList<>();
 
     @Override
@@ -280,6 +283,7 @@ public class CollectionActivity extends BaseActivity implements CollectionAdapte
         mParentLayout = findViewById(R.id.drawer_layout);
         mNavView = findViewById(R.id.navigation_view);
         mToolbar = findViewById(R.id.activity_collection_toolbar);
+        mStatusBar = findViewById(R.id.status_bar);
         mRecyclerView = findViewById(R.id.recycler_view);
         mEmptyView = findViewById(R.id.empty_view);
         View headerView = mNavView.getHeaderView(0);
@@ -319,40 +323,52 @@ public class CollectionActivity extends BaseActivity implements CollectionAdapte
             mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
             // 初次安装时由于有权限申请，此时没有获取到焦点，所以会有一刹那没变色，这里设置一下就好了
             mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
+            mStatusBar.setBackground(new ColorDrawable(getResources().getColor(R.color.colorPrimaryWhite)));
             return;
         }
         switch (theme) {
             case JUST_LIKE:
+                mColorPrimary = getResources().getColor(R.color.colorPrimary);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_just_like));
                 break;
             case WHITE:
+                mColorPrimary = getResources().getColor(R.color.colorPrimaryWhite);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
                 break;
             case BLACK:
+                mColorPrimary = getResources().getColor(R.color.colorPrimaryBlack);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_black));
                 break;
             case GREY:
+                mColorPrimary = getResources().getColor(R.color.colorPrimaryGrey);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_grey));
                 break;
             case GREEN:
+                mColorPrimary = getResources().getColor(R.color.colorPrimaryGreen);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_green));
                 break;
             case RED:
+                mColorPrimary = getResources().getColor(R.color.colorPrimaryRed);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_red));
                 break;
             case PINK:
+                mColorPrimary = getResources().getColor(R.color.colorPrimaryPink);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_pink));
                 break;
             case BLUE:
+                mColorPrimary = getResources().getColor(R.color.colorPrimaryBlue);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_blue));
                 break;
             case PURPLE:
+                mColorPrimary = getResources().getColor(R.color.colorPrimaryPurple);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_purple));
                 break;
             case ORANGE:
+                mColorPrimary = getResources().getColor(R.color.colorPrimaryOrange);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_orange));
                 break;
         }
+        mStatusBar.setBackground(new ColorDrawable(mColorPrimary));
     }
 
     private void initToolbar() {
