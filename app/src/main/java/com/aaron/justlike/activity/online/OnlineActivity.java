@@ -89,7 +89,7 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
                     window.setStatusBarColor(getResources().getColor(R.color.status_bar_background));
                 }
                 setIconFilterColor(theme);
-                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
+                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
 //                mActionBar.setHomeAsUpIndicator(mIconDrawer);
             }
         }
@@ -228,6 +228,7 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
             mColorPrimary = resources.getColor(R.color.colorAccentWhite);
             mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
             mStatusBar.setBackground(new ColorDrawable(getResources().getColor(R.color.colorPrimaryWhite)));
+            mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
             return;
         }
         switch (theme) {

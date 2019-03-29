@@ -394,7 +394,7 @@ public class MineActivity extends BaseActivity implements IMineView<Image>, View
             mMatisseTheme = R.style.MatisseBlackTheme;
             mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
             // 初次安装时由于有权限申请，此时没有获取到焦点，所以会有一刹那没变色，这里设置一下就好了
-            mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
+            mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
             return;
         }
         switch (theme) {

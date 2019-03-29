@@ -178,10 +178,10 @@ public class CollectionActivity extends BaseActivity implements CollectionAdapte
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
-                startActivityByNav(MineActivity.class);
+                startActivityByNav(OnlineActivity.class);
                 break;
             case R.id.nav_mine:
-                startActivityByNav(OnlineActivity.class);
+                startActivityByNav(MineActivity.class);
                 break;
             case R.id.nav_collection:
                 mParentLayout.closeDrawers();
