@@ -238,7 +238,8 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
             case WHITE:
                 mColorPrimary = resources.getColor(R.color.colorAccentWhite);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
-                break;
+                mStatusBar.setBackground(new ColorDrawable(getResources().getColor(R.color.colorPrimaryWhite)));
+                return;
             case BLACK:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryBlack);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_black));
