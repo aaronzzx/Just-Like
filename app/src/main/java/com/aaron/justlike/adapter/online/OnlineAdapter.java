@@ -9,7 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -98,7 +98,7 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     .transition(300)
                     .into(((ViewHolder) holder).imageView);
             Animator animator = ObjectAnimator.ofFloat(new ViewWrapper(((ViewHolder) holder).imageView), "saturation", 0, 1);
-            animator.setDuration(2000).setInterpolator(new AccelerateInterpolator());
+            animator.setDuration(2000).setInterpolator(new DecelerateInterpolator());
             animator.start();
         }
     }

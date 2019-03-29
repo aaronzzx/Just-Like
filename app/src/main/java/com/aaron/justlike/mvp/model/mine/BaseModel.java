@@ -1,7 +1,5 @@
 package com.aaron.justlike.mvp.model.mine;
 
-import com.aaron.justlike.activity.mine.PreviewActivity;
-import com.aaron.justlike.common.ObserverImpl;
 import com.aaron.justlike.entity.Collection;
 import com.aaron.justlike.entity.Element;
 import com.aaron.justlike.entity.Image;
@@ -14,11 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class BaseModel implements IModel<Image> {
 
@@ -38,32 +31,19 @@ public class BaseModel implements IModel<Image> {
      */
     @Override
     public void queryImage(OnQueryImageListener<Image> listener) {
-        Observable.create((ObservableOnSubscribe<List<Image>>) emitter -> {
+        mExecutorService.execute(() -> {
             List<Image> list = getImage();
             if (list != null && list.size() != 0) {
-                emitter.onNext(list);
+                listener.onSuccess(list);
             } else {
-                emitter.onComplete();
+                listener.onFailure("本地没有图片缓存哦");
             }
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new ObserverImpl<List<Image>>() {
-                    @Override
-                    public void onNext(List<Image> images) {
-                        listener.onSuccess(images);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        listener.onFailure("本地没有图片缓存哦");
-                    }
-                });
+        });
     }
 
     @Override
     public void saveImage(List<String> pathList, AddImageCallback<Image> callback) {
-        Observable.create((ObservableOnSubscribe<List<Image>>) emitter -> {
+        mExecutorService.execute(() -> {
             List<Image> imageList = new ArrayList<>();
             int suffix = 1;
             for (String path : pathList) {
@@ -72,16 +52,8 @@ public class BaseModel implements IModel<Image> {
                 suffix++;
                 if (suffix > 9) suffix = 1;
             }
-            emitter.onNext(imageList);
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new ObserverImpl<List<Image>>() {
-                    @Override
-                    public void onNext(List<Image> images) {
-                        callback.onSavedImage(images);
-                    }
-                });
+            callback.onSavedImage(imageList);
+        });
     }
 
     @Override
@@ -130,9 +102,7 @@ public class BaseModel implements IModel<Image> {
     @Override
     public String[] querySortInfo() {
         SortInfo sortInfo = LitePal.findFirst(SortInfo.class);
-        if (sortInfo == null) {
-            return null;
-        }
+        if (sortInfo == null) return null;
         return new String[]{sortInfo.getSortType(), sortInfo.getAscendingOrder()};
     }
 
@@ -141,15 +111,7 @@ public class BaseModel implements IModel<Image> {
      */
     private List<Image> getImage() {
         List<Image> imageList = new ArrayList<>();
-        boolean success = FileUtil.getLocalFiles(imageList, PATH, TYPE);
-        if (success) {
-            List<Image> newList = new ArrayList<>();
-            for (Image image : imageList) {
-                image.setEventFlag(PreviewActivity.DELETE_EVENT);
-                newList.add(image);
-            }
-            return newList;
-        }
-        return null;
+        FileUtil.getLocalFiles(imageList, PATH, TYPE);
+        return imageList;
     }
 }

@@ -56,6 +56,7 @@ public class MineActivity extends BaseActivity implements IMineView<Image>, View
         NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener,
         SquareFragment.Callback {
 
+    private static final String TAG = "MineActivity";
     private static final int REQUEST_PERMISSION = 0;
     private static final int REQUEST_SELECT_IMAGE = 1;
 
@@ -130,7 +131,7 @@ public class MineActivity extends BaseActivity implements IMineView<Image>, View
                 } else {
                     StatusBarUtil.setTranslucentForDrawerLayout(this, mParentLayout, 70);
                 }
-                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
+                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
                 mActionBar.setHomeAsUpIndicator(mIconDrawer);
             } else {
                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -296,7 +297,7 @@ public class MineActivity extends BaseActivity implements IMineView<Image>, View
     public void onShowImage(List<Image> imageList, int sortType, boolean ascendingOrder) {
         mImageList.clear();
         mImageList.addAll(imageList);
-        mSquareFragment.update(imageList);
+        runOnUiThread(() -> mSquareFragment.update(imageList));
         mSortType = sortType;
         mIsAscending = ascendingOrder;
     }
@@ -309,7 +310,7 @@ public class MineActivity extends BaseActivity implements IMineView<Image>, View
     @Override
     public void onShowAddImage(List<Image> list) {
         mImageList.addAll(0, list);
-        mSquareFragment.updateForAdd(list);
+        runOnUiThread(() -> mSquareFragment.updateForAdd(list));
     }
 
     /**
@@ -480,21 +481,18 @@ public class MineActivity extends BaseActivity implements IMineView<Image>, View
         switch (sortType) {
             case MinePresenter.SORT_BY_DATE:
                 mSortByDate.setChecked(true);
-                mSortByAscending.setChecked(ascendingOrder);
                 break;
             case MinePresenter.SORT_BY_NAME:
                 mSortByName.setChecked(true);
-                mSortByAscending.setChecked(ascendingOrder);
                 break;
             case MinePresenter.SORT_BY_SIZE:
                 mSortBySize.setChecked(true);
-                mSortByAscending.setChecked(ascendingOrder);
                 break;
             default:
                 mSortByDate.setChecked(true);
-                mSortByAscending.setChecked(true);
                 break;
         }
+        mSortByAscending.setChecked(ascendingOrder);
     }
 
     /**

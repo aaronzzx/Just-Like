@@ -16,6 +16,7 @@
                 <item
                     android:id="@+id/sort_date"
                     android:title="日期"
+                    android:checked="true"
                     android:icon="@drawable/ic_sort_date" />
 
                 <item
@@ -32,8 +33,9 @@
 
             <item
                 android:id="@+id/ascending_order"
-                android:checkable="true"
                 android:title="升序排列"
+                android:checkable="true"
+                android:checked="true"
                 android:icon="@drawable/ic_sort_ascend" />
 
         </menu>
