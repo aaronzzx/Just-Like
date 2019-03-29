@@ -165,8 +165,8 @@ public class ElementActivity extends BaseActivity implements SquareFragment.Call
         mIconAdd = getResources().getDrawable(R.drawable.ic_add);
         if (ThemeManager.getInstance().getCurrentTheme() == null
                 || ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
-            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorGreyText));
-            DrawableCompat.setTint(mIconAdd, getResources().getColor(R.color.colorGreyText));
+            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorAccentWhite));
+            DrawableCompat.setTint(mIconAdd, getResources().getColor(R.color.colorAccentWhite));
         } else {
             DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(mIconAdd, getResources().getColor(R.color.colorPrimaryWhite));

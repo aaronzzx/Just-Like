@@ -122,7 +122,7 @@ public class ThemeActivity extends BaseActivity implements ThemeAdapter.Callback
         mIconBack = getResources().getDrawable(R.drawable.ic_back);
         if (ThemeManager.getInstance().getCurrentTheme() == null
                 || ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
-            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorGreyText));
+            DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorAccentWhite));
         } else {
             DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorPrimaryWhite));
         }
