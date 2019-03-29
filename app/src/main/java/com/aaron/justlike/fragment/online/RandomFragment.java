@@ -35,7 +35,7 @@ public class RandomFragment extends OnlineFragment {
 
     @Override
     public void requestPhotos(Order order, boolean isRefresh, boolean isFilter) {
-        mPresenter.requestRandomPhotos(30);
+        mPresenter.requestRandomPhotos(isRefresh, 30);
     }
 
     @Override

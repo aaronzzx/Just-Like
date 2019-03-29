@@ -30,9 +30,7 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
 
     @Override
     public void requestPhotos(Order order, boolean isRefresh, boolean isFilter) {
-        if (isFilter) {
-            mView.onShowRefresh();
-        }
+        if (isRefresh || isFilter) mView.onShowRefresh();
         mModel.findPhotos(order, isRefresh, new IModel.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
@@ -58,9 +56,7 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
 
     @Override
     public void requestCuratedPhotos(Order order, boolean isRefresh, boolean isFilter) {
-        if (isFilter) {
-            mView.onShowRefresh();
-        }
+        if (isRefresh || isFilter) mView.onShowRefresh();
         mModel.findCuratedPhotos(order, isRefresh, new IModel.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
@@ -85,7 +81,8 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
     }
 
     @Override
-    public void requestRandomPhotos(int count) {
+    public void requestRandomPhotos(boolean isRefresh, int count) {
+        if (isRefresh) mView.onShowRefresh();
         mModel.findRandomPhotos(count, new IModel.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {

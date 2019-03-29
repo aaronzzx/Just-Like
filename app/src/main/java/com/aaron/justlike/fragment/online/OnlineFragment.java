@@ -205,7 +205,7 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
         snackbar.setAction("刷新", v -> {
             switch (requestMode) {
                 case OnlinePresenter.REQUEST_PHOTOS:
-                    requestPhotos(mOrder, false, false);
+                    requestPhotos(mOrder, true, false);
                     break;
                 case OnlinePresenter.LOAD_MORE:
                     requestLoadMore(mOrder);
