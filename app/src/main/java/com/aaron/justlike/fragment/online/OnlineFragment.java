@@ -37,6 +37,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -303,6 +304,7 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
     }
 
     private void initRecyclerView() {
+        ((DefaultItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         MyGridLayoutManager layoutManager = new MyGridLayoutManager(mContext, 2);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());

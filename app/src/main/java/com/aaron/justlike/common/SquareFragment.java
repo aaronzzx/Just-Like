@@ -22,6 +22,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 
 public abstract class SquareFragment extends Fragment implements MineAdapter.Callback<Image> {
@@ -121,6 +122,7 @@ public abstract class SquareFragment extends Fragment implements MineAdapter.Cal
 
     private void initView(View parent) {
         mRecyclerView = parent.findViewById(R.id.rv);
+        ((DefaultItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         MyGridLayoutManager layoutManager = new MyGridLayoutManager(mContext, 3);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());

@@ -44,8 +44,9 @@ public class ElementFragment extends SquareFragment {
                 .setPositiveButton("确定", (dialog, which) -> {
                     String path = mImageList.get(position).getPath();
                     mImageList.remove(position);
-                    mAdapter.notifyItemRemoved(position);
-                    mAdapter.notifyItemRangeChanged(0, mImageList.size() - 1);
+//                    mAdapter.notifyItemRemoved(position);
+//                    mAdapter.notifyItemRangeChanged(0, mImageList.size() - 1);
+                    mAdapter.notifyDataSetChanged();
                     ((SquareFragment.Callback) mContext).onDelete(path, mImageList.size() == 0);
                 })
                 .setNegativeButton("取消", (dialog, which) -> {

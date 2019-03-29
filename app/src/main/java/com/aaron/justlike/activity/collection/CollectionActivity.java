@@ -54,6 +54,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class CollectionActivity extends BaseActivity implements CollectionAdapter.OnPressCallback,
@@ -382,6 +383,7 @@ public class CollectionActivity extends BaseActivity implements CollectionAdapte
     }
 
     private void initRecyclerView() {
+        ((DefaultItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         mLayoutManager = new MyGridLayoutManager(this, 1);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new YItemDecoration());

@@ -137,7 +137,7 @@ public class ElementActivity extends BaseActivity implements SquareFragment.Call
     public void onShowImage(List<Image> list) {
         mImageList.clear();
         mImageList.addAll(list);
-        mSquareFragment.updateForAdd(list);
+        mSquareFragment.update(list);
     }
 
     @Override
