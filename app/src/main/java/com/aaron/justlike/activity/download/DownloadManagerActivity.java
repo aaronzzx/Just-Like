@@ -103,7 +103,7 @@ public class DownloadManagerActivity extends BaseActivity implements IView<Image
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
     @Override

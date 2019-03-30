@@ -1,4 +1,4 @@
-package com.aaron.justlike.activity.mine;
+package com.aaron.justlike.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
@@ -15,20 +16,11 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.activity.mine.MineActivity;
 import com.aaron.justlike.activity.online.OnlineActivity;
-import com.aaron.justlike.common.ObserverImpl;
 import com.jaeger.library.StatusBarUtil;
 
-import java.util.concurrent.TimeUnit;
-
-import androidx.appcompat.app.AppCompatActivity;
-import io.reactivex.Emitter;
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
     private NetworkReceiver mReceiver;
 
@@ -81,17 +73,10 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void openActivity(Class clazz) {
-        Observable.create((ObservableOnSubscribe<String>) Emitter::onComplete)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .delay(1000, TimeUnit.MILLISECONDS)
-                .subscribe(new ObserverImpl<String>() {
-                    @Override
-                    public void onComplete() {
-                        startActivity(new Intent(SplashActivity.this, clazz));
-                        finish();
-                    }
-                });
+        new Handler().postDelayed(() -> {
+            startActivity(new Intent(SplashActivity.this, clazz));
+            finish();
+        }, 1000);
     }
 
     private class NetworkReceiver extends BroadcastReceiver {

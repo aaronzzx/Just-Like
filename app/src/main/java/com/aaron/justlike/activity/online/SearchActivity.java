@@ -81,14 +81,14 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     @Override
     public boolean onSupportNavigateUp() {
         finish();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        overridePendingTransition(0, R.anim.activity_slide_out);
         return super.onSupportNavigateUp();
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
     @Override

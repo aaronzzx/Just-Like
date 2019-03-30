@@ -91,7 +91,7 @@ public class AboutActivity extends BaseActivity implements IAboutView<Message, L
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
     @Override

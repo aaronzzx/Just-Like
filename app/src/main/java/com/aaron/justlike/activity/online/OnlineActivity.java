@@ -305,7 +305,7 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
             public void onDrawerClosed(View drawerView) {
                 Intent intent = new Intent(OnlineActivity.this, whichActivity);
                 startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out);
                 mParentLayout.removeDrawerListener(this);
             }
         });

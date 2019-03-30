@@ -12,10 +12,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.activity.ActivityCollector;
 import com.aaron.justlike.activity.BaseActivity;
 import com.aaron.justlike.adapter.theme.ThemeAdapter;
 import com.aaron.justlike.common.ThemeManager;
+import com.aaron.justlike.util.ActivityCollector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +84,7 @@ public class ThemeActivity extends BaseActivity implements ThemeAdapter.Callback
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
     @Override

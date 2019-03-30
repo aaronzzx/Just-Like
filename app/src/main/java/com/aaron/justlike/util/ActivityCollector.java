@@ -1,4 +1,4 @@
-package com.aaron.justlike.activity;
+package com.aaron.justlike.util;
 
 import android.app.Activity;
 
