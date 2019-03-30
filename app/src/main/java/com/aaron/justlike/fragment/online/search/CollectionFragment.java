@@ -20,7 +20,6 @@ import com.aaron.justlike.http.unsplash.entity.collection.Collection;
 import com.aaron.justlike.mvp.presenter.online.search.CollectionPresenter;
 import com.aaron.justlike.mvp.presenter.online.search.ISearchPresenter;
 import com.aaron.justlike.mvp.view.online.ISearchView;
-import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.SystemUtil;
 
 import java.util.ArrayList;
@@ -232,14 +231,10 @@ public class CollectionFragment extends Fragment implements ISearchView<Collecti
 
     private void initRecyclerView() {
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
+        int padding = SystemUtil.dp2px(JustLike.getContext(), 7);
+        mRecyclerView.setPadding(padding, padding, padding, padding);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator() {
-            @Override
-            public boolean animateAdd(RecyclerView.ViewHolder holder) {
-                AnimationUtil.showViewByAlpha(holder.itemView, 0, 1, 400);
-                return true;
-            }
-
             @Override
             public boolean animateChange(RecyclerView.ViewHolder oldHolder, RecyclerView.ViewHolder newHolder, int fromX, int fromY, int toX, int toY) {
                 return true;

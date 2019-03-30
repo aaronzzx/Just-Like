@@ -26,7 +26,6 @@ import com.aaron.justlike.http.unsplash.Order;
 import com.aaron.justlike.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.mvp.view.online.IOnlineView;
 import com.aaron.justlike.ui.MyGridLayoutManager;
-import com.aaron.justlike.util.AnimationUtil;
 import com.aaron.justlike.util.SystemUtil;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -310,17 +309,9 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator() {
             @Override
-            public boolean animateAdd(RecyclerView.ViewHolder holder) {
-                AnimationUtil.showViewByAlpha(holder.itemView, 0, 1, 400);
-                return true;
-            }
-
-            @Override
             public boolean animateChange(RecyclerView.ViewHolder oldHolder, RecyclerView.ViewHolder newHolder, int fromX, int fromY, int toX, int toY) {
                 return true;
             }
-
-
         });
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mAdapter = new OnlineAdapter(mPhotoList, this);
