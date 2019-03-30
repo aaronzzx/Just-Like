@@ -75,7 +75,8 @@ public class ThemeActivity extends BaseActivity implements ThemeAdapter.Callback
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                finish();
+                overridePendingTransition(0, R.anim.activity_slide_out);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -83,7 +84,7 @@ public class ThemeActivity extends BaseActivity implements ThemeAdapter.Callback
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        finish();
         overridePendingTransition(0, R.anim.activity_slide_out);
     }
 

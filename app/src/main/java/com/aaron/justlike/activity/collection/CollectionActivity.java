@@ -210,8 +210,8 @@ public class CollectionActivity extends BaseActivity implements CollectionAdapte
             mParentLayout.closeDrawer(GravityCompat.START);
             return;
         }
-        super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
+        overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, sticky = true)

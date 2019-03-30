@@ -111,8 +111,8 @@ public class MineActivity extends BaseActivity implements IMineView<Image>, View
             mParentLayout.closeDrawer(GravityCompat.START);
             return;
         }
-        super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
+        overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
     /**

@@ -84,13 +84,14 @@ public class AboutActivity extends BaseActivity implements IAboutView<Message, L
      */
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        finish();
+        overridePendingTransition(0, R.anim.activity_slide_out);
         return super.onSupportNavigateUp();
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        finish();
         overridePendingTransition(0, R.anim.activity_slide_out);
     }
 

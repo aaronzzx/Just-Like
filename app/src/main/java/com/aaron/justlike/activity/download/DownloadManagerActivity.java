@@ -96,13 +96,14 @@ public class DownloadManagerActivity extends BaseActivity implements IView<Image
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        finish();
+        overridePendingTransition(0, R.anim.activity_slide_out);
         return super.onSupportNavigateUp();
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        finish();
         overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
