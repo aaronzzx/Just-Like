@@ -127,28 +127,31 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        item.setChecked(true);
         switch (item.getItemId()) {
             case R.id.action_search:
                 startActivity(new Intent(getContext(), SearchActivity.class));
                 ((Activity) mContext).overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out);
                 break;
             case R.id.filter_latest:
+                if (item.isChecked()) break;
                 mMenuItemId = R.id.filter_latest;
                 mOrder = Order.LATEST;
-                requestPhotos(mOrder, true, true);
+                requestPhotos(mOrder, false, true);
                 break;
             case R.id.filter_oldest:
+                if (item.isChecked()) break;
                 mMenuItemId = R.id.filter_oldest;
                 mOrder = Order.OLDEST;
-                requestPhotos(mOrder, true, true);
+                requestPhotos(mOrder, false, true);
                 break;
             case R.id.filter_popular:
+                if (item.isChecked()) break;
                 mMenuItemId = R.id.filter_popular;
                 mOrder = Order.POPULAR;
-                requestPhotos(mOrder, true, true);
+                requestPhotos(mOrder, false, true);
                 break;
         }
+        item.setChecked(true);
         return super.onOptionsItemSelected(item);
     }
 
@@ -185,16 +188,22 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
     public abstract void attachPresenter();
 
     @Override
-    public void onShowPhoto(List<Photo> list) {
-        if (mPhotoList.size() > 30) {
+    public void onShowPhoto(List<Photo> list, boolean isDifference) {
+        if (isDifference) {
             mPhotoList.clear();
+            mPhotoList.addAll(list);
             mAdapter.notifyDataSetChanged();
+            mRecyclerView.scrollToPosition(0);
+        } else {
+            if (mPhotoList.size() > 30) {
+                mPhotoList.clear();
+                mAdapter.notifyDataSetChanged();
+            }
+            mErrorView.setVisibility(View.GONE);
+            mPhotoList.clear();
+            mPhotoList.addAll(list);
+            mAdapter.notifyItemRangeChanged(0, mPhotoList.size());
         }
-        mErrorView.setVisibility(View.GONE);
-        mPhotoList.clear();
-        mPhotoList.addAll(list);
-        mAdapter.notifyItemRangeChanged(0, mPhotoList.size());
-        backToTop();
     }
 
     @Override
@@ -217,10 +226,9 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
 
     @Override
     public void onHideRefresh() {
-        if (!mSwipeRefresh.isEnabled()) {
-            mSwipeRefresh.setEnabled(true);
-        }
-        mSwipeRefresh.postDelayed(() -> mSwipeRefresh.setRefreshing(false), 500);
+        if (!mSwipeRefresh.isEnabled()) mSwipeRefresh.setEnabled(true);
+        if (mSwipeRefresh.isRefreshing())
+            mSwipeRefresh.postDelayed(() -> mSwipeRefresh.setRefreshing(false), 500);
     }
 
     @Override
@@ -324,7 +332,7 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && mPhotoList.size() != 0) {
                     boolean canScrollVertical = mRecyclerView.canScrollVertically(1);
                     if (!canScrollVertical && mFooterProgress.getVisibility() == View.GONE) {
-                        requestLoadMore(mOrder);
+                        if (!mSwipeRefresh.isRefreshing()) requestLoadMore(mOrder);
                     }
                 }
             }

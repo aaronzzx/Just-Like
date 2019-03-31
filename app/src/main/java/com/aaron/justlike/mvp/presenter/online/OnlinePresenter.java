@@ -42,7 +42,11 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
                 if (mView == null) return;
                 mView.onHideProgress();
                 mView.onHideRefresh();
-                mView.onShowPhoto(list);
+                if (!oldList.containsAll(list)) {
+                    mView.onShowPhoto(list, true);
+                } else {
+                    mView.onShowPhoto(list, false);
+                }
             }
 
             @Override
@@ -70,7 +74,11 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
                 if (mView == null) return;
                 mView.onHideProgress();
                 mView.onHideRefresh();
-                mView.onShowPhoto(list);
+                if (!oldList.containsAll(list)) {
+                    mView.onShowPhoto(list, true);
+                } else {
+                    mView.onShowPhoto(list, false);
+                }
             }
 
             @Override
@@ -96,7 +104,11 @@ public class OnlinePresenter implements IOnlinePresenter<Photo> {
                 if (mView == null) return;
                 mView.onHideProgress();
                 mView.onHideRefresh();
-                mView.onShowPhoto(list);
+                if (!oldList.containsAll(list)) {
+                    mView.onShowPhoto(list, true);
+                } else {
+                    mView.onShowPhoto(list, false);
+                }
             }
 
             @Override

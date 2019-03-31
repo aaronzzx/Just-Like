@@ -6,7 +6,7 @@ public interface IOnlineView<T> {
 
     void attachPresenter();
 
-    void onShowPhoto(List<T> list);
+    void onShowPhoto(List<T> list, boolean isDifference);
 
     void onShowMore(List<T> list);
 

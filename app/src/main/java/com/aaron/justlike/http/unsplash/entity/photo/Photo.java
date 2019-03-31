@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 public class Photo implements Parcelable {
     /**
      * id : LBI7cgq3pbM
@@ -140,6 +142,30 @@ public class Photo implements Parcelable {
 
     public void setLinks(UserLinks links) {
         this.links = links;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Photo photo = (Photo) o;
+        return width == photo.width &&
+                height == photo.height &&
+                likes == photo.likes &&
+                likedByUser == photo.likedByUser &&
+                Objects.equals(id, photo.id) &&
+                Objects.equals(createdAt, photo.createdAt) &&
+                Objects.equals(updatedAt, photo.updatedAt) &&
+                Objects.equals(color, photo.color) &&
+                Objects.equals(description, photo.description) &&
+                Objects.equals(user, photo.user) &&
+                Objects.equals(urls, photo.urls) &&
+                Objects.equals(links, photo.links);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, createdAt, updatedAt, width, height, color, likes, likedByUser, description, user, urls, links);
     }
 
     @Override
