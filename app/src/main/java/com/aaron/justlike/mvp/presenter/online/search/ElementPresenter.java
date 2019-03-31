@@ -26,7 +26,7 @@ public class ElementPresenter implements IElementPresenter {
     }
 
     @Override
-    public void requestPhotos(int id, List<Photo> oldList) {
+    public void requestPhotos(int id, List<Photo> oldList, boolean isLoadMore) {
         if (currentPage == 1) {
             mView.onShowProgress();
         } else {
@@ -39,7 +39,11 @@ public class ElementPresenter implements IElementPresenter {
             public void onSuccess(List<Photo> list) {
                 mView.onHideProgress();
                 if (!oldList.isEmpty()) mView.onHideLoading();
-                mView.onShowPhotos(list);
+                if (!isLoadMore) {
+                    mView.onShowPhotos(list);
+                } else {
+                    mView.onShowMore(list);
+                }
             }
 
             @Override

@@ -17,4 +17,6 @@ public interface IElementView<T> {
     void onShowMessage(String msg);
 
     void onShowPhotos(T t);
+
+    void onShowMore(T t);
 }

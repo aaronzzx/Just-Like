@@ -8,5 +8,5 @@ public interface IElementPresenter {
 
     void detachView();
 
-    void requestPhotos(int id, List<Photo> oldList);
+    void requestPhotos(int id, List<Photo> oldList, boolean isLoadMore);
 }

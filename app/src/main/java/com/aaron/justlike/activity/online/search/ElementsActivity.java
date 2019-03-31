@@ -67,7 +67,7 @@ public class ElementsActivity extends BaseActivity implements IElementView<List<
         mCollectionTitle = getIntent().getStringExtra("title");
         initView();
         mPresenter = new ElementPresenter(this);
-        mPresenter.requestPhotos(mPhotosId, mPhotoList);
+        mPresenter.requestPhotos(mPhotosId, mPhotoList, false);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class ElementsActivity extends BaseActivity implements IElementView<List<
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_click_refresh) {
-            mPresenter.requestPhotos(mPhotosId, mPhotoList);
+            mPresenter.requestPhotos(mPhotosId, mPhotoList, false);
         } else if (v.getId() == R.id.toolbar) {
             backToTop();
         }
@@ -186,6 +186,12 @@ public class ElementsActivity extends BaseActivity implements IElementView<List<
         mAdapter.notifyItemRangeChanged(0, mPhotoList.size());
     }
 
+    @Override
+    public void onShowMore(List<Photo> list) {
+        mPhotoList.addAll(list);
+        mAdapter.notifyItemRangeInserted(mPhotoList.size() - list.size(), list.size());
+    }
+
     public void backToTop() {
         int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
         if (firstItem >= 24) {
@@ -254,7 +260,7 @@ public class ElementsActivity extends BaseActivity implements IElementView<List<
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && mPhotoList.size() != 0) {
                     boolean canScrollVertical = mRecyclerView.canScrollVertically(1);
                     if (!canScrollVertical && mFooterProgress.getVisibility() == View.GONE) {
-                        mPresenter.requestPhotos(mPhotosId, mPhotoList);
+                        mPresenter.requestPhotos(mPhotosId, mPhotoList, true);
                     }
                 }
             }
