@@ -96,9 +96,6 @@ public class ElementActivity extends BaseActivity implements SquareFragment.Call
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
             case R.id.add_element:
                 ArrayList<String> selectedList = new ArrayList<>();
                 for (Image image : mImageList) {
@@ -121,8 +118,15 @@ public class ElementActivity extends BaseActivity implements SquareFragment.Call
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
+        overridePendingTransition(0, R.anim.activity_slide_out);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        overridePendingTransition(0, R.anim.activity_slide_out);
+        return super.onSupportNavigateUp();
     }
 
     @Override

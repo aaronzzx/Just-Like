@@ -120,8 +120,8 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
             mParentLayout.closeDrawer(GravityCompat.START);
             return;
         }
-        super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
+        overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
     @Override
@@ -210,13 +210,13 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
         mIconFilter = getResources().getDrawable(R.drawable.ic_filter);
         ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
         if (theme == null || theme == ThemeManager.Theme.WHITE) {
-            mTabLayout.setTabTextColors(getResources().getColor(R.color.textForBlack), getResources().getColor(R.color.colorAccentWhite));
+            mTabLayout.setTabTextColors(getResources().getColor(R.color.blackText), getResources().getColor(R.color.colorAccentWhite));
             mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccentWhite));
             DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorAccentWhite));
             DrawableCompat.setTint(mIconSearch, getResources().getColor(R.color.colorAccentWhite));
             DrawableCompat.setTint(mIconFilter, getResources().getColor(R.color.colorAccentWhite));
         } else {
-            mTabLayout.setTabTextColors(getResources().getColor(R.color.textForWhite), getResources().getColor(R.color.colorPrimaryWhite));
+            mTabLayout.setTabTextColors(getResources().getColor(R.color.whiteText), getResources().getColor(R.color.colorPrimaryWhite));
             mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(mIconSearch, getResources().getColor(R.color.colorPrimaryWhite));
@@ -305,7 +305,7 @@ public class OnlineActivity extends BaseActivity implements View.OnClickListener
             public void onDrawerClosed(View drawerView) {
                 Intent intent = new Intent(OnlineActivity.this, whichActivity);
                 startActivity(intent);
-                overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out);
+                overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
                 mParentLayout.removeDrawerListener(this);
             }
         });

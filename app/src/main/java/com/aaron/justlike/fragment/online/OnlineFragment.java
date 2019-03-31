@@ -130,7 +130,7 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
         switch (item.getItemId()) {
             case R.id.action_search:
                 startActivity(new Intent(getContext(), SearchActivity.class));
-                ((Activity) mContext).overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out);
+                ((Activity) mContext).overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
                 break;
             case R.id.filter_latest:
                 if (item.isChecked()) break;

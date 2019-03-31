@@ -204,7 +204,7 @@ public class CollectionFragment extends Fragment implements ISearchView<Collecti
         intent.putExtra("id", collection.getId());
         intent.putExtra("title", collection.getTitle());
         startActivity(intent);
-        ((Activity) mContext).overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out);
+        ((Activity) mContext).overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
     }
 
     /**

@@ -9,8 +9,8 @@
     <color name="colorPrimaryWhite">#FFFFFF</color>
     <color name="colorPrimaryDarkWhite">#FFFFFF</color>
     <color name="colorAccentWhite">#494949</color>
-    <color name="textForBlack">#A0A0A0</color>
-    <color name="textForWhite">#B3FFFFFF</color>
+    <color name="blackText">#A0A0A0</color>
+    <color name="whiteText">#B3FFFFFF</color>
 
     <!-- Black Theme -->
     <color name="colorPrimaryBlack">#FF000000</color>

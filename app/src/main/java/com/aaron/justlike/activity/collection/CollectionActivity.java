@@ -238,7 +238,7 @@ public class CollectionActivity extends BaseActivity implements CollectionAdapte
         Intent intent = new Intent(this, ElementActivity.class);
         intent.putExtra("title", mCollections.get(position).getCollectionTitle());
         startActivity(intent);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
     }
 
     @Override
@@ -406,7 +406,7 @@ public class CollectionActivity extends BaseActivity implements CollectionAdapte
             public void onDrawerClosed(View drawerView) {
                 Intent intent = new Intent(CollectionActivity.this, whichActivity);
                 startActivity(intent);
-                overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out);
+                overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
                 mParentLayout.removeDrawerListener(this);
             }
         });
