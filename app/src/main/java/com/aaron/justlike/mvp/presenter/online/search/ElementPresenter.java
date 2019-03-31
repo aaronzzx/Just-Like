@@ -33,7 +33,6 @@ public class ElementPresenter implements IElementPresenter {
             mView.onShowLoading();
         }
         mView.onHideErrorView();
-        currentPage++;
         mModel.findPhotosFromCollection(id, currentPage, 30, new ISearchModel.Callback<List<Photo>>() {
             @Override
             public void onSuccess(List<Photo> list) {
@@ -58,5 +57,6 @@ public class ElementPresenter implements IElementPresenter {
                 mView.onShowMessage("加载失败");
             }
         });
+        currentPage++;
     }
 }

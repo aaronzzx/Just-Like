@@ -6,8 +6,8 @@
     "apkInfo": {
       "type": "MAIN",
       "splits": [],
-      "versionCode": 16,
-      "versionName": "2.1.0",
+      "versionCode": 17,
+      "versionName": "2.1.1",
       "enabled": true,
       "outputFile": "app-release.apk",
       "fullName": "release",
