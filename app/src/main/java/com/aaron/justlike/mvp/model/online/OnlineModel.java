@@ -3,7 +3,7 @@ package com.aaron.justlike.mvp.model.online;
 import com.aaron.justlike.http.unsplash.Order;
 import com.aaron.justlike.http.unsplash.Unsplash;
 import com.aaron.justlike.http.unsplash.entity.photo.Photo;
-import com.aaron.justlike.http.unsplash.interfaces.PhotoCallback;
+import com.aaron.justlike.http.unsplash.interfaces.UnsplashCallback;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class OnlineModel implements IModel<Photo> {
         if (refreshMode) {
             mRecommend = 1;
         }
-        mUnsplash.getPhotos(mRecommend, 30, order, new PhotoCallback<List<Photo>>() {
+        mUnsplash.getPhotos(mRecommend, 30, order, new UnsplashCallback<List<Photo>>() {
             @Override
             public void onSuccess(List<Photo> photos) {
                 callback.onSuccess(photos);
@@ -42,7 +42,7 @@ public class OnlineModel implements IModel<Photo> {
         if (refreshMode) {
             mCurated = 1;
         }
-        mUnsplash.getCuratedPhotos(mCurated, 30, order, new PhotoCallback<List<Photo>>() {
+        mUnsplash.getCuratedPhotos(mCurated, 30, order, new UnsplashCallback<List<Photo>>() {
             @Override
             public void onSuccess(List<Photo> photos) {
                 callback.onSuccess(photos);
@@ -58,7 +58,7 @@ public class OnlineModel implements IModel<Photo> {
 
     @Override
     public void findRandomPhotos(int count, Callback<Photo> callback) {
-        mUnsplash.getRandomPhotos(count, new PhotoCallback<List<Photo>>() {
+        mUnsplash.getRandomPhotos(count, new UnsplashCallback<List<Photo>>() {
             @Override
             public void onSuccess(List<Photo> photos) {
                 callback.onSuccess(photos);

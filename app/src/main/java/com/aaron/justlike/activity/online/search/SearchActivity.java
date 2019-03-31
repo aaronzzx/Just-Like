@@ -1,4 +1,4 @@
-package com.aaron.justlike.activity.online;
+package com.aaron.justlike.activity.online.search;
 
 import android.graphics.drawable.Drawable;
 import android.os.Build;

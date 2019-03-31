@@ -23,7 +23,7 @@ import com.aaron.justlike.entity.PhotoEvent;
 import com.aaron.justlike.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.mvp.presenter.online.search.ISearchPresenter;
 import com.aaron.justlike.mvp.presenter.online.search.PhotoPresenter;
-import com.aaron.justlike.mvp.view.online.ISearchView;
+import com.aaron.justlike.mvp.view.online.search.ISearchView;
 import com.aaron.justlike.ui.MyGridLayoutManager;
 import com.aaron.justlike.util.SystemUtil;
 
@@ -207,6 +207,13 @@ public class PhotoFragment extends Fragment implements ISearchView<Photo>,
         EventBus.getDefault().postSticky(new PhotoEvent(photo));
         startActivity(new Intent(mContext, PreviewActivity.class));
         ((Activity) mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    /**
+     * Called by ElementActivity
+     */
+    public void setElementList() {
+
     }
 
     /**

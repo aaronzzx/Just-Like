@@ -1,4 +1,4 @@
-package com.aaron.justlike.mvp.view.online;
+package com.aaron.justlike.mvp.view.online.search;
 
 import java.util.List;
 

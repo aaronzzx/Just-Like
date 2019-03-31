@@ -1,6 +1,7 @@
 package com.aaron.justlike.fragment.online.search;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,11 +16,12 @@ import android.widget.Toast;
 
 import com.aaron.justlike.JustLike;
 import com.aaron.justlike.R;
+import com.aaron.justlike.activity.online.search.ElementsActivity;
 import com.aaron.justlike.adapter.online.CollectionAdapter;
 import com.aaron.justlike.http.unsplash.entity.collection.Collection;
 import com.aaron.justlike.mvp.presenter.online.search.CollectionPresenter;
 import com.aaron.justlike.mvp.presenter.online.search.ISearchPresenter;
-import com.aaron.justlike.mvp.view.online.ISearchView;
+import com.aaron.justlike.mvp.view.online.search.ISearchView;
 import com.aaron.justlike.util.SystemUtil;
 
 import java.util.ArrayList;
@@ -197,7 +199,10 @@ public class CollectionFragment extends Fragment implements ISearchView<Collecti
 
     @Override
     public void onPress(Collection collection) {
-
+        Intent intent = new Intent(mContext, ElementsActivity.class);
+        intent.putExtra("id", collection.getId());
+        intent.putExtra("title", collection.getTitle());
+        startActivity(intent);
     }
 
     /**
@@ -226,6 +231,7 @@ public class CollectionFragment extends Fragment implements ISearchView<Collecti
         mRefresh = mParentLayout.findViewById(R.id.refresh);
         mFooterProgress = mParentLayout.findViewById(R.id.footer_progress);
 
+        mSearchLogoHint.setText("搜索集合");
         initRecyclerView();
     }
 

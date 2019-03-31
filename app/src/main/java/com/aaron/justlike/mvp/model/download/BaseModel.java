@@ -5,7 +5,7 @@ import android.util.Log;
 import com.aaron.justlike.entity.Image;
 import com.aaron.justlike.http.unsplash.Unsplash;
 import com.aaron.justlike.http.unsplash.entity.photo.Photo;
-import com.aaron.justlike.http.unsplash.interfaces.PhotoCallback;
+import com.aaron.justlike.http.unsplash.interfaces.UnsplashCallback;
 import com.aaron.justlike.util.FileUtil;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class BaseModel implements IModel<Image> {
 
     @Override
     public void searchImage(String imageId, SearchCallback callback) {
-        mUnsplash.getPhoto(imageId, new PhotoCallback<Photo>() {
+        mUnsplash.getPhoto(imageId, new UnsplashCallback<Photo>() {
             @Override
             public void onSuccess(Photo photo) {
                 callback.onSuccess(photo);

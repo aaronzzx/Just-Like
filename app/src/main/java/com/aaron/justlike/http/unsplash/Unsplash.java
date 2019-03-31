@@ -4,8 +4,8 @@ import com.aaron.justlike.common.ObserverImpl;
 import com.aaron.justlike.http.unsplash.entity.collection.SearchCollectionResult;
 import com.aaron.justlike.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.http.unsplash.entity.photo.SearchPhotoResult;
-import com.aaron.justlike.http.unsplash.interfaces.PhotoCallback;
-import com.aaron.justlike.http.unsplash.interfaces.PhotoService;
+import com.aaron.justlike.http.unsplash.interfaces.UnsplashCallback;
+import com.aaron.justlike.http.unsplash.interfaces.UnsplashService;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class Unsplash {
     private static final String CLIENT_ID = "18db24a3d59a1b2633897fa63f3f49455c2cbfa8a22e5b8520141cb2660fa816";
     private static final String NEW_CLIENT_ID = "41f1f23556b01d63b1ae823bdf008cc32ce446f77c843e2daa2a80c770015df3";
 
-    private PhotoService mPhotoService;
+    private UnsplashService mUnsplashService;
 
     private Unsplash() {
         OkHttpClient client = new OkHttpClient.Builder()
@@ -37,11 +37,11 @@ public class Unsplash {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        mPhotoService = retrofit.create(PhotoService.class);
+        mUnsplashService = retrofit.create(UnsplashService.class);
     }
 
-    public void getPhotos(int page, int perPage, Order order, PhotoCallback<List<Photo>> callback) {
-        mPhotoService.getPhotos(page, perPage, order.getOrder())
+    public void getPhotos(int page, int perPage, Order order, UnsplashCallback<List<Photo>> callback) {
+        mUnsplashService.getPhotos(page, perPage, order.getOrder())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ObserverImpl<List<Photo>>() {
@@ -57,8 +57,8 @@ public class Unsplash {
                 });
     }
 
-    public void getCuratedPhotos(int page, int perPage, Order order, PhotoCallback<List<Photo>> callback) {
-        mPhotoService.getCuratedPhotos(page, perPage, order.getOrder())
+    public void getCuratedPhotos(int page, int perPage, Order order, UnsplashCallback<List<Photo>> callback) {
+        mUnsplashService.getCuratedPhotos(page, perPage, order.getOrder())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ObserverImpl<List<Photo>>() {
@@ -74,8 +74,8 @@ public class Unsplash {
                 });
     }
 
-    public void getRandomPhotos(int count, PhotoCallback<List<Photo>> callback) {
-        mPhotoService.getRandomPhotos(count)
+    public void getRandomPhotos(int count, UnsplashCallback<List<Photo>> callback) {
+        mUnsplashService.getRandomPhotos(count)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ObserverImpl<List<Photo>>() {
@@ -91,8 +91,8 @@ public class Unsplash {
                 });
     }
 
-    public void getPhoto(String id, PhotoCallback<Photo> callback) {
-        mPhotoService.getPhoto(id)
+    public void getPhoto(String id, UnsplashCallback<Photo> callback) {
+        mUnsplashService.getPhoto(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ObserverImpl<Photo>() {
@@ -108,8 +108,8 @@ public class Unsplash {
                 });
     }
 
-    public void searchPhotos(String keyWord, int page, int perPage, PhotoCallback<SearchPhotoResult> callback) {
-        mPhotoService.searchPhotos(keyWord, page, perPage)
+    public void searchPhotos(String keyWord, int page, int perPage, UnsplashCallback<SearchPhotoResult> callback) {
+        mUnsplashService.searchPhotos(keyWord, page, perPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 //                .map(searchPhotoResult -> searchPhotoResult.getResults())
@@ -126,8 +126,8 @@ public class Unsplash {
                 });
     }
 
-    public void searchCollections(String keyWord, int page, int perPage, PhotoCallback<SearchCollectionResult> callback) {
-        mPhotoService.searchCollections(keyWord, page, perPage)
+    public void searchCollections(String keyWord, int page, int perPage, UnsplashCallback<SearchCollectionResult> callback) {
+        mUnsplashService.searchCollections(keyWord, page, perPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 //                .map(searchCollectionResult -> searchCollectionResult.getResults())
@@ -135,6 +135,23 @@ public class Unsplash {
                     @Override
                     public void onNext(SearchCollectionResult result) {
                         callback.onSuccess(result);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e.getMessage());
+                    }
+                });
+    }
+
+    public void searchPhotosFromCollection(int id, int page, int perPage, UnsplashCallback<List<Photo>> callback) {
+        mUnsplashService.searchPhotosFromCollection(id, page, perPage)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ObserverImpl<List<Photo>>() {
+                    @Override
+                    public void onNext(List<Photo> list) {
+                        callback.onSuccess(list);
                     }
 
                     @Override

@@ -19,7 +19,7 @@ import android.widget.ProgressBar;
 import com.aaron.justlike.R;
 import com.aaron.justlike.activity.online.OnlineActivity;
 import com.aaron.justlike.activity.online.PreviewActivity;
-import com.aaron.justlike.activity.online.SearchActivity;
+import com.aaron.justlike.activity.online.search.SearchActivity;
 import com.aaron.justlike.adapter.online.OnlineAdapter;
 import com.aaron.justlike.entity.PhotoEvent;
 import com.aaron.justlike.http.unsplash.Order;
@@ -338,7 +338,6 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
     }
 
     private class XItemDecoration extends RecyclerView.ItemDecoration {
-
         @Override
         public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) % 2 == 0) {

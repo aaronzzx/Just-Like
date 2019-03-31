@@ -32,9 +32,9 @@
         <activity
             android:name=".activity.mine.MineActivity"
             android:label="收藏"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/WhiteTheme"
-            android:launchMode="singleTask" />
+            android:theme="@style/WhiteTheme" />
         <activity
             android:name=".activity.mine.PreviewActivity"
             android:label=""
@@ -43,10 +43,14 @@
         <activity
             android:name=".activity.online.OnlineActivity"
             android:label="Just Like"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.online.SearchActivity"
+            android:name=".activity.online.search.SearchActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.online.search.ElementsActivity"
             android:label=""
             android:screenOrientation="portrait" />
         <activity
@@ -56,8 +60,8 @@
         <activity
             android:name=".activity.collection.CollectionActivity"
             android:label="集合"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.collection.ElementActivity"
             android:label="元素"
@@ -85,7 +89,6 @@
             android:name=".http.download_manager.DownloadService"
             android:enabled="true"
             android:exported="false" />
-
         <service
             android:name=".service.DownloadService"
             android:exported="false" />
@@ -99,7 +102,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

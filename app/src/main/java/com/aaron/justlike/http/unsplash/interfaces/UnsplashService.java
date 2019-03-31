@@ -11,7 +11,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-public interface PhotoService {
+public interface UnsplashService {
 
     @GET("photos/{id}")
     Observable<Photo> getPhoto(@Path("id") String id);
@@ -30,4 +30,7 @@ public interface PhotoService {
 
     @GET("search/collections")
     Observable<SearchCollectionResult> searchCollections(@Query("query") String keyWord, @Query("page") int page, @Query("per_page") int perPage);
+
+    @GET("collections/{id}/photos")
+    Observable<List<Photo>> searchPhotosFromCollection(@Path("id") int id, @Query("page") int page, @Query("per_page") int perPage);
 }

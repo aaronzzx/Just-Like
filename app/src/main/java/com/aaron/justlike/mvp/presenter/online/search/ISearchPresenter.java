@@ -1,6 +1,6 @@
 package com.aaron.justlike.mvp.presenter.online.search;
 
-import com.aaron.justlike.mvp.view.online.ISearchView;
+import com.aaron.justlike.mvp.view.online.search.ISearchView;
 
 import java.util.List;
 

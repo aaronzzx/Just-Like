@@ -5,7 +5,7 @@ import com.aaron.justlike.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.http.unsplash.entity.photo.SearchPhotoResult;
 import com.aaron.justlike.mvp.model.online.search.ISearchModel;
 import com.aaron.justlike.mvp.model.online.search.SearchModel;
-import com.aaron.justlike.mvp.view.online.ISearchView;
+import com.aaron.justlike.mvp.view.online.search.ISearchView;
 
 import java.util.List;
 

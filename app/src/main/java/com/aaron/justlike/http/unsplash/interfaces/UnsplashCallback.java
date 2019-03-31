@@ -1,6 +1,6 @@
 package com.aaron.justlike.http.unsplash.interfaces;
 
-public interface PhotoCallback<T> {
+public interface UnsplashCallback<T> {
 
     void onSuccess(T t);
 
