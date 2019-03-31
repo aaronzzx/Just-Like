@@ -51,13 +51,14 @@ public class AboutPresenter implements IAboutPresenter {
 
     public static class Element {
 
-        public static final String[] TITLE = {"介绍", "反馈", "源码", "GITHUB"};
+        public static final String[] TITLE = {"介绍", "反馈", "源码", "GITHUB", "捐赠(支付宝)"};
 
         public static final int[] ICON_ID = {
                 R.drawable.ic_introduce,
                 R.drawable.ic_email,
                 R.drawable.ic_source_code,
-                R.drawable.ic_github};
+                R.drawable.ic_github,
+                R.drawable.ic_gift};
 
         public static final String[] LIBRARY_NAME = {
                 "Glide",

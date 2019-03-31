@@ -9,9 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.aaron.justlike.JustLike;
 import com.aaron.justlike.R;
 import com.aaron.justlike.entity.Message;
+import com.aaron.justlike.util.AlipayUtil;
 import com.aaron.justlike.util.SystemUtil;
 import com.bumptech.glide.Glide;
 
@@ -27,6 +30,7 @@ public class AboutMessageAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
     private static final int FEEDBACK = 1;
     private static final int SOURCE_CODE = 2;
     private static final int GITHUB = 3;
+    private static final int GIFT = 4;
 
     private Activity mActivity;
     private List<T> mList;
@@ -74,6 +78,14 @@ public class AboutMessageAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
                     Intent github = new Intent(Intent.ACTION_VIEW);
                     github.setData(Uri.parse("https://github.com/AaronZheng9603"));
                     mActivity.startActivity(github);
+                    break;
+                case GIFT:
+                    boolean isInstall = AlipayUtil.hasInstalledAlipayClient(mActivity);
+                    if (isInstall) {
+                        AlipayUtil.startAlipayClient(mActivity, "a7x09336v9f1fjutignso50");
+                    } else {
+                        Toast.makeText(JustLike.getContext(), "需要安装支付宝客户端", Toast.LENGTH_SHORT).show();
+                    }
                     break;
             }
         });
