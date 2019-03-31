@@ -39,7 +39,7 @@ public class CollectionPresenter implements ISearchPresenter<Collection> {
     @Override
     public void requestCollections(int requestMode, String keyWord, List<Collection> oldList) {
         if (requestMode == ISearchPresenter.FIRST_REQUEST && mKeyWord.equals(keyWord)) {
-            return;
+            if (oldList.size() != 0) return;
         } else if (mRequestCount >= mCollectionsTotalPages && requestMode == ISearchPresenter.LOAD_MORE) {
             return;
         } else if (keyWord.equals("")) {

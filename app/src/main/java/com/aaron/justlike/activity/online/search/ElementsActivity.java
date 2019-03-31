@@ -94,14 +94,14 @@ public class ElementsActivity extends BaseActivity implements IElementView<List<
     @Override
     public boolean onSupportNavigateUp() {
         finish();
-        overridePendingTransition(0, android.R.anim.fade_out);
+        overridePendingTransition(0, R.anim.activity_slide_out);
         return super.onSupportNavigateUp();
     }
 
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(0, android.R.anim.fade_out);
+        overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
     @Override
