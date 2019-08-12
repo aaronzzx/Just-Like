@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/square_fragment"
-        android:name="com.aaron.justlike.fragment.collection.ElementFragment"
+        android:name="com.aaron.justlike.collection.ElementFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

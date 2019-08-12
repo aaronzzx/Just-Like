@@ -7,12 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.aaron.justlike.R;
-import com.aaron.justlike.adapter.mine.MineAdapter;
-import com.aaron.justlike.entity.DeleteEvent;
-import com.aaron.justlike.entity.Image;
-import com.aaron.justlike.ui.MyGridLayoutManager;
-import com.aaron.justlike.util.SystemUtil;
+import com.aaron.justlike.common.bean.Image;
+import com.aaron.justlike.common.event.DeleteEvent;
+import com.aaron.justlike.common.util.SystemUtil;
+import com.aaron.justlike.common.widget.MyGridLayoutManager;
+import com.aaron.justlike.main.MainAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -20,12 +25,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.RecyclerView;
-
-public abstract class SquareFragment extends Fragment implements MineAdapter.Callback<Image> {
+public abstract class SquareFragment extends Fragment implements MainAdapter.Callback<Image> {
 
     protected Context mContext;
 
@@ -127,7 +127,7 @@ public abstract class SquareFragment extends Fragment implements MineAdapter.Cal
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mRecyclerView.addItemDecoration(new YItemDecoration());
-        mAdapter = new MineAdapter<>(mImageList, this);
+        mAdapter = new MainAdapter<>(mImageList, this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

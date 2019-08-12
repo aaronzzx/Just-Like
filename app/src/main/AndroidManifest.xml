@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".JustLike"
+        android:name=".common.JustLike"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -20,7 +20,7 @@
         tools:replace="android:allowBackup">
 
         <activity
-            android:name=".activity.SplashActivity"
+            android:name=".common.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/JustLikeTheme.Splash">
             <intent-filter>
@@ -30,67 +30,67 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.mine.MineActivity"
+            android:name=".main.MainActivity"
             android:label="收藏"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/WhiteTheme" />
         <activity
-            android:name=".activity.mine.PreviewActivity"
+            android:name=".main.PreviewActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/PreviewTheme" />
         <activity
-            android:name=".activity.online.OnlineActivity"
+            android:name=".online.OnlineActivity"
             android:label="Just Like"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.online.search.SearchActivity"
+            android:name=".online.SearchActivity"
             android:label=""
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.online.search.ElementsActivity"
+            android:name=".online.ElementsActivity"
             android:label=""
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.online.PreviewActivity"
+            android:name=".online.PreviewActivity"
             android:label=""
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.collection.CollectionActivity"
+            android:name=".collection.CollectionActivity"
             android:label="集合"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.collection.ElementActivity"
+            android:name=".collection.ElementActivity"
             android:label="元素"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.download.DownloadManagerActivity"
+            android:name=".settings.DownloadManagerActivity"
             android:label="下载管理"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.theme.ThemeActivity"
+            android:name=".settings.ThemeActivity"
             android:label="主题"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.about.AboutActivity"
+            android:name=".settings.AboutActivity"
             android:label="关于"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.image_selector.SelectorActivity"
+            android:name=".common.widget.imageSelector.SelectorActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait" />
 
         <service
-            android:name=".http.download_manager.DownloadService"
+            android:name=".common.http.download.DownloadService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".service.DownloadService"
+            android:name=".common.http.download.DownloadIntentService"
             android:exported="false" />
 
         <provider
