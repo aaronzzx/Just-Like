@@ -7,30 +7,15 @@ import java.util.Objects;
 
 public class Image implements Parcelable {
 
-    public static final Parcelable.Creator<Image> CREATOR = new Parcelable.Creator<Image>() {
-        // 接收到对象后解序列化
-        @Override
-        public Image createFromParcel(Parcel source) {
-            Image image = new Image();
-            image.path = source.readString();
-            return image;
-        }
-
-        @Override
-        public Image[] newArray(int size) {
-            return new Image[size];
-        }
-    };
     private String date;
     private String name;
+    private String path;
     private long size;
     private int eventFlag;
 
     public Image() {
 
     }
-
-    private String path;
 
     public Image(String path) {
         this.path = path;
@@ -77,17 +62,6 @@ public class Image implements Parcelable {
     }
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    // 将数据写出
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(path);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -102,4 +76,38 @@ public class Image implements Parcelable {
     public int hashCode() {
         return Objects.hash(path, name, date, size);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.date);
+        dest.writeString(this.name);
+        dest.writeLong(this.size);
+        dest.writeInt(this.eventFlag);
+        dest.writeString(this.path);
+    }
+
+    protected Image(Parcel in) {
+        this.date = in.readString();
+        this.name = in.readString();
+        this.size = in.readLong();
+        this.eventFlag = in.readInt();
+        this.path = in.readString();
+    }
+
+    public static final Parcelable.Creator<Image> CREATOR = new Parcelable.Creator<Image>() {
+        @Override
+        public Image createFromParcel(Parcel source) {
+            return new Image(source);
+        }
+
+        @Override
+        public Image[] newArray(int size) {
+            return new Image[size];
+        }
+    };
 }
