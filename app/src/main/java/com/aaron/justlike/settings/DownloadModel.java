@@ -11,13 +11,13 @@ import com.aaron.justlike.common.util.FileUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DownloadModel implements IDownloadModel<Image> {
+class DownloadModel implements IDownloadContract.M<Image> {
 
     private static final String TAG = "DownloadModel";
     private static final String PATH = "/storage/emulated/0/Pictures/JustLike/online";
     private Unsplash mUnsplash;
 
-    public DownloadModel() {
+    DownloadModel() {
         mUnsplash = Unsplash.getInstance();
         Log.d(TAG, "Unsplash: " + mUnsplash);
     }

@@ -7,14 +7,14 @@ import com.aaron.justlike.common.bean.Message;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AboutPresenter implements IAboutPresenter {
+class AboutPresenter implements IAboutContract.P {
 
     private List<Message> mMessageList = new ArrayList<>();
     private List<Library> mLibraryList = new ArrayList<>();
 
-    private IAboutView<Message, Library> mView;
+    private IAboutContract.V<Message, Library> mView;
 
-    public AboutPresenter(IAboutView<Message, Library> view) {
+    AboutPresenter(IAboutContract.V<Message, Library> view) {
         mView = view;
     }
 

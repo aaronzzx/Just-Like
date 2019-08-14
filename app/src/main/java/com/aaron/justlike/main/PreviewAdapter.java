@@ -8,21 +8,19 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.aaron.base.image.ImageLoader;
 import com.aaron.justlike.common.bean.Image;
-import com.aaron.justlike.common.http.glide.GlideApp;
 import com.bm.library.PhotoView;
 
 import java.util.List;
 
-public class PreviewAdapter<T> extends PagerAdapter {
+class PreviewAdapter extends PagerAdapter {
 
-    private List<T> mList;
-    private Callback mCallback;
+    private List<Image> mList;
     private int mPosition;
 
-    public PreviewAdapter(List<T> list, Callback callback) {
+    PreviewAdapter(List<Image> list) {
         mList = list;
-        mCallback = callback;
     }
 
     @Override
@@ -40,7 +38,7 @@ public class PreviewAdapter<T> extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         Context context = container.getContext();
         mPosition = position;
-        String path = ((Image) mList.get(position)).getPath();
+        String path = mList.get(position).getPath();
         // 设置 PhotoView
         PhotoView photoView = new PhotoView(context);
         photoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -51,13 +49,14 @@ public class PreviewAdapter<T> extends PagerAdapter {
             parent.removeView(photoView);
         }
 
-        GlideApp.getInstance()
-                .with(context)
-                .asDrawable()
-                .load(path)
-                .transition(200)
-                .into(photoView);
-        photoView.setOnClickListener(v -> mCallback.onPress());
+//        GlideApp.getInstance()
+//                .with(context)
+//                .asDrawable()
+//                .load(path)
+//                .transition(200)
+//                .into(photoView);
+        ImageLoader.loadWithAnim(context, path, photoView);
+        photoView.setOnClickListener(((IPreviewCommunicable) context)::onTap);
         container.addView(photoView);
         return photoView;
     }
@@ -75,10 +74,5 @@ public class PreviewAdapter<T> extends PagerAdapter {
         } else {
             return POSITION_UNCHANGED;
         }
-    }
-
-    public interface Callback {
-
-        void onPress();
     }
 }

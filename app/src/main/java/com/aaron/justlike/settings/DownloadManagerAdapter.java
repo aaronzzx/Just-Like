@@ -1,6 +1,7 @@
 package com.aaron.justlike.settings;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +14,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.bean.Image;
 import com.aaron.justlike.common.http.glide.GlideApp;
+import com.aaron.justlike.common.util.FileUtil;
 
+import java.io.File;
 import java.util.List;
 
-public class DownloadManagerAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class DownloadManagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
-    private List<T> mList;
-    private Callback mCallback;
+    private List<Image> mList;
 
-    public DownloadManagerAdapter(List<T> list, Callback callback) {
+    DownloadManagerAdapter(List<Image> list) {
         mList = list;
-        mCallback = callback;
     }
 
     @NonNull
@@ -38,15 +39,17 @@ public class DownloadManagerAdapter<T> extends RecyclerView.Adapter<RecyclerView
         // local
         holder.itemView.setOnClickListener(v -> {
             int position = holder.getAdapterPosition();
-            String path = ((Image) mList.get(position)).getPath();
-            mCallback.onSearchByLocal(path);
+            String path = mList.get(position).getPath();
+            Intent openImage = new Intent(Intent.ACTION_VIEW);
+            openImage.setDataAndType(FileUtil.getImageContentUri(mContext, new File(path)), "image/*");
+            mContext.startActivity(openImage);
         });
 
         // online
         holder.search.setOnClickListener(v -> {
             int position = holder.getAdapterPosition();
-            String path = ((Image) mList.get(position)).getPath();
-            mCallback.onSearchByOnline(path);
+            String path = mList.get(position).getPath();
+            ((IDownloadCommunicable) mContext).onTap(v, path);
         });
         return holder;
     }
@@ -86,12 +89,5 @@ public class DownloadManagerAdapter<T> extends RecyclerView.Adapter<RecyclerView
             imageId = view.findViewById(R.id.image_id);
             search = view.findViewById(R.id.action_search);
         }
-    }
-
-    public interface Callback {
-
-        void onSearchByLocal(String path);
-
-        void onSearchByOnline(String path);
     }
 }

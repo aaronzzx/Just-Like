@@ -1,6 +1,5 @@
 package com.aaron.justlike.main;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -16,7 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -26,6 +24,8 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.aaron.base.impl.OnClickListenerImpl;
+import com.aaron.base.impl.OnPageChangeListenerImpl;
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.bean.Image;
@@ -33,6 +33,7 @@ import com.aaron.justlike.common.bean.ImageInfo;
 import com.aaron.justlike.common.event.DeleteEvent;
 import com.aaron.justlike.common.event.PreviewEvent;
 import com.aaron.justlike.common.manager.ThemeManager;
+import com.aaron.justlike.common.manager.UiManager;
 import com.aaron.justlike.common.util.AnimationUtil;
 import com.aaron.justlike.common.util.FileUtil;
 import com.aaron.justlike.common.util.SystemUtil;
@@ -44,8 +45,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.File;
 import java.util.List;
 
-public class PreviewActivity extends CommonActivity implements IPreviewContract.V,
-        View.OnClickListener, ViewPager.OnPageChangeListener, PreviewAdapter.Callback {
+public class PreviewActivity extends CommonActivity implements IPreviewContract.V, IPreviewCommunicable {
 
     public static final int DELETE_EVENT = 1;
     public static final int DELET_EVENT = 2;
@@ -87,8 +87,8 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
      */
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return super.onSupportNavigateUp();
+        finish();
+        return true;
     }
 
     @Override
@@ -112,6 +112,19 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
+    }
+
+    @Override
+    public void onTap(View v) {
+        if (mTopBar.getVisibility() == View.GONE) {
+            // 全屏状态下执行此代码块会退出全屏
+            AnimationUtil.showToolbar(this, mTopBar, 0);
+            AnimationUtil.showBottomBar(this, mBottomBar, 0);
+        } else {
+            // 进入全屏,自动沉浸
+            AnimationUtil.hideToolbar(this, mTopBar, 0);
+            AnimationUtil.hideBottomBar(this, mBottomBar, 0);
         }
     }
 
@@ -153,85 +166,9 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
                         FileUtil.setWallpaper(this, FileUtil.getPath(this, resultUri));
                     }
                 } else if (resultCode == UCrop.RESULT_ERROR) {
-                    Toast.makeText(this, "设置失败", Toast.LENGTH_SHORT).show();
+                    UiManager.showShort("设置失败");
                 }
                 break;
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.action_share:
-                Intent share = new Intent(Intent.ACTION_VIEW);
-                Uri shareUri = FileUtil.getImageContentUri(this, new File(mImageList.get(mPosition).getPath()));
-                share.setDataAndType(shareUri, "image/*");
-                startActivity(share);
-                break;
-            case R.id.action_set_wallpaper:
-                new AlertDialog.Builder(this)
-                        .setTitle("设置壁纸")
-                        .setItems(CROP_TYPE, (dialog, which) -> {
-                            switch (CROP_TYPE[which]) {
-                                case FIT_SCREEN:
-                                    openImageCrop(FIT_SCREEN);
-                                    break;
-                                case FREE_CROP:
-                                    openImageCrop(FREE_CROP);
-                                    break;
-                            }
-                        }).show();
-                break;
-            case R.id.action_info:
-                @SuppressLint("InflateParams")
-                View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_image_info, null);
-                initImageInfo(dialogView);
-                // 显示对话框
-                new AlertDialog.Builder(this)
-                        .setTitle("详情")
-                        .setView(dialogView)
-                        .show();
-                break;
-            case R.id.action_delete:
-                new AlertDialog.Builder(this)
-                        .setTitle("删除图片")
-                        .setMessage("图片将会被删除，无法撤销")
-                        .setPositiveButton("确定", (dialog, which) -> {
-                            EventBus.getDefault().post(new DeleteEvent(mEventType, mPosition, mImageList.get(mPosition).getPath()));
-                            finish();
-                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                        })
-                        .setNegativeButton("取消", (dialog, which) -> {
-                        }).show();
-                break;
-        }
-    }
-
-    /**
-     * 页面切换时回调
-     */
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        mPosition = mViewPager.getCurrentItem();
-        mPresenter.requestTitle(mImageList.get(mPosition).getPath());
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-    }
-
-    @Override
-    public void onPress() {
-        if (mTopBar.getVisibility() == View.GONE) {
-            // 全屏状态下执行此代码块会退出全屏
-            animIn(0);
-        } else {
-            // 进入全屏,自动沉浸
-            animOut(0);
         }
     }
 
@@ -267,16 +204,73 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
         ImageView imageInfoBtn = findViewById(R.id.action_info);
         ImageView deleteBtn = findViewById(R.id.action_delete);
 
-        shareBtn.setOnClickListener(this);
-        setWallpaperBtn.setOnClickListener(this);
-        imageInfoBtn.setOnClickListener(this);
-        deleteBtn.setOnClickListener(this);
-        mViewPager.addOnPageChangeListener(this);
+        shareBtn.setOnClickListener(new OnClickListenerImpl() {
+            @Override
+            public void onViewClick(View v, long interval) {
+                Intent share = new Intent(Intent.ACTION_VIEW);
+                Uri shareUri = FileUtil.getImageContentUri(PreviewActivity.this,
+                        new File(mImageList.get(mPosition).getPath()));
+                share.setDataAndType(shareUri, "image/*");
+                startActivity(share);
+            }
+        });
+        setWallpaperBtn.setOnClickListener(new OnClickListenerImpl() {
+            @Override
+            public void onViewClick(View v, long interval) {
+                new AlertDialog.Builder(PreviewActivity.this)
+                        .setTitle("设置壁纸")
+                        .setItems(CROP_TYPE, (dialog, which) -> {
+                            switch (CROP_TYPE[which]) {
+                                case FIT_SCREEN:
+                                    openImageCrop(FIT_SCREEN);
+                                    break;
+                                case FREE_CROP:
+                                    openImageCrop(FREE_CROP);
+                                    break;
+                            }
+                        }).show();
+            }
+        });
+        imageInfoBtn.setOnClickListener(new OnClickListenerImpl() {
+            @Override
+            public void onViewClick(View v, long interval) {
+                View dialogView = LayoutInflater.from(PreviewActivity.this).inflate(R.layout.dialog_image_info, null);
+                initImageInfo(dialogView);
+                // 显示对话框
+                new AlertDialog.Builder(PreviewActivity.this)
+                        .setTitle("详情")
+                        .setView(dialogView)
+                        .show();
+            }
+        });
+        deleteBtn.setOnClickListener(new OnClickListenerImpl() {
+            @Override
+            public void onViewClick(View v, long interval) {
+                new AlertDialog.Builder(PreviewActivity.this)
+                        .setTitle("删除图片")
+                        .setMessage("图片将会被删除，无法撤销")
+                        .setPositiveButton("确定", (dialog, which) -> {
+                            EventBus.getDefault().post(new DeleteEvent(mEventType,
+                                    mPosition, mImageList.get(mPosition).getPath()));
+                            finish();
+                            overridePendingTransition(android.R.anim.fade_in,
+                                    android.R.anim.fade_out);
+                        })
+                        .setNegativeButton("取消", (dialog, which) -> {
+                        }).show();
+            }
+        });
+        mViewPager.addOnPageChangeListener(new OnPageChangeListenerImpl() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                mPosition = mViewPager.getCurrentItem();
+                mPresenter.requestTitle(mImageList.get(mPosition).getPath());
+            }
+        });
 
         initUcropTheme();
         initToolbar();
         initViewPager();
-//        animIn(200);
     }
 
     private void initUcropTheme() {
@@ -335,7 +329,7 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
     private void initViewPager() {
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setPageMargin(50);
-        PagerAdapter adapter = new PreviewAdapter<>(mImageList, this);
+        PagerAdapter adapter = new PreviewAdapter(mImageList);
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(mPosition);
     }
@@ -379,15 +373,5 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
         imageSize.setText(imageInfo.getSize());
         imagePixel.setText(imageInfo.getPixel());
         imagePath.setText(path);
-    }
-
-    private void animIn(long startOffset) {
-        AnimationUtil.showToolbar(this, mTopBar, startOffset);
-        AnimationUtil.showBottomBar(this, mBottomBar, startOffset);
-    }
-
-    private void animOut(long startOffset) {
-        AnimationUtil.hideToolbar(this, mTopBar, startOffset);
-        AnimationUtil.hideBottomBar(this, mBottomBar, startOffset);
     }
 }

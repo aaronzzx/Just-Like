@@ -19,25 +19,25 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static final int WHITE = 0;
-    public static final int BLACK = 1;
-    public static final int GREY = 2;
-    public static final int GREEN = 3;
-    public static final int RED = 4;
-    public static final int PINK = 5;
-    public static final int BLUE = 6;
-    public static final int PURPLE = 7;
-    public static final int ORANGE = 8;
-    public static final int JUST_LIKE = 9;
+    static final int WHITE = 0;
+    static final int BLACK = 1;
+    static final int GREY = 2;
+    static final int GREEN = 3;
+    static final int RED = 4;
+    static final int PINK = 5;
+    static final int BLUE = 6;
+    static final int PURPLE = 7;
+    static final int ORANGE = 8;
+    static final int JUST_LIKE = 9;
 
     private Context mContext;
     private List<Integer> mList;
     private Callback mCallback;
     private int mCurrentCheck;
 
-    public ThemeAdapter(List<Integer> list, Callback callback, int currentCheck) {
+    ThemeAdapter(List<Integer> list, Callback callback, int currentCheck) {
         mList = list;
         mCallback = callback;
         mCurrentCheck = currentCheck;

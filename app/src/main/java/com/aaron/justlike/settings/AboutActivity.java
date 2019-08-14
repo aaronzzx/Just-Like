@@ -23,9 +23,9 @@ import com.aaron.justlike.common.util.SystemUtil;
 
 import java.util.List;
 
-public class AboutActivity extends CommonActivity implements IAboutView<Message, Library> {
+public class AboutActivity extends CommonActivity implements IAboutContract.V<Message, Library> {
 
-    private IAboutPresenter mPresenter;
+    private IAboutContract.P mPresenter;
 
     private Drawable mIconBack;
 

@@ -6,15 +6,15 @@ import com.aaron.justlike.common.util.FileUtil;
 
 import java.util.List;
 
-public class DownloadPresenter implements IDownloadPresenter {
+class DownloadPresenter implements IDownloadContract.P {
 
-    public static final boolean ASCENDING = true;
-    public static final boolean DESCENDING = false;
+    static final boolean ASCENDING = true;
+    static final boolean DESCENDING = false;
 
-    private IDownloadView<Image> mView;
-    private IDownloadModel<Image> mModel;
+    private IDownloadContract.V<Image> mView;
+    private IDownloadContract.M<Image> mModel;
 
-    public DownloadPresenter(IDownloadView<Image> view) {
+    DownloadPresenter(IDownloadContract.V<Image> view) {
         mView = view;
         mModel = new DownloadModel();
     }
@@ -39,7 +39,7 @@ public class DownloadPresenter implements IDownloadPresenter {
         String imageId = fileName.substring(0, fileName.indexOf("."));
         // 显示加载框
         mView.onShowProgress();
-        mModel.searchImage(imageId, new IDownloadModel.SearchCallback() {
+        mModel.searchImage(imageId, new IDownloadContract.M.SearchCallback() {
 
             @Override
             public void onSuccess(Photo photo) {

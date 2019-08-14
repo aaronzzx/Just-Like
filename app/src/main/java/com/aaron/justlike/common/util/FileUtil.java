@@ -306,7 +306,6 @@ public class FileUtil {
     /**
      * 加载缓存文件
      */
-    @Deprecated
     public static boolean getLocalFiles(List<Image> imageList, String path, String... type) {
         File files = new File(path);
         if (files.exists()) {

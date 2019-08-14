@@ -23,19 +23,17 @@ import com.aaron.justlike.common.event.PhotoEvent;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.common.manager.ThemeManager;
 import com.aaron.justlike.common.util.EmptyViewUtil;
-import com.aaron.justlike.common.util.FileUtil;
 import com.aaron.justlike.common.util.SystemUtil;
 import com.aaron.justlike.online.PreviewActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DownloadManagerActivity extends CommonActivity implements IDownloadView<Image>,
-        DownloadManagerAdapter.Callback {
+public class DownloadManagerActivity extends CommonActivity implements IDownloadContract.V<Image>,
+        IDownloadCommunicable {
 
     private static final String PROGRESS_TITLE = "加载资源";
     private static final String PROGRESS_MESSAGE = "Loading...";
@@ -44,7 +42,7 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
 
     private List<Image> mImageList = new ArrayList<>();
 
-    private IDownloadPresenter mPresenter;
+    private IDownloadContract.P mPresenter;
 
     private ProgressDialog mDialog;
     private Toolbar mToolbar;
@@ -127,20 +125,10 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
     }
 
     /**
-     * 适配器中点击视图回调，用本地 App 打开
-     */
-    @Override
-    public void onSearchByLocal(String path) {
-        Intent openImage = new Intent(Intent.ACTION_VIEW);
-        openImage.setDataAndType(FileUtil.getImageContentUri(this, new File(path)), "image/*");
-        startActivity(openImage);
-    }
-
-    /**
      * 适配器中点击搜索按钮回调，搜索网络资源
      */
     @Override
-    public void onSearchByOnline(String path) {
+    public void onTap(View v, String path) {
         mPresenter.findImageByOnline(path);
     }
 
@@ -234,7 +222,7 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
     private void initRecyclerView(RecyclerView recyclerView) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        mAdapter = new DownloadManagerAdapter<>(mImageList, this);
+        mAdapter = new DownloadManagerAdapter(mImageList);
         recyclerView.setAdapter(mAdapter);
     }
 }

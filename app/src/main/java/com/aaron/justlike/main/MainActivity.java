@@ -19,18 +19,23 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.aaron.base.impl.OnClickListenerImpl;
+import com.aaron.base.util.StatusBarUtils;
 import com.aaron.justlike.R;
 import com.aaron.justlike.collection.CollectionActivity;
 import com.aaron.justlike.common.CommonActivity;
-import com.aaron.justlike.common.SquareFragment;
 import com.aaron.justlike.common.bean.Image;
+import com.aaron.justlike.common.event.DeleteEvent;
 import com.aaron.justlike.common.http.glide.GlideEngine;
+import com.aaron.justlike.common.impl.SquareItemDecoration;
 import com.aaron.justlike.common.manager.ThemeManager;
 import com.aaron.justlike.common.manager.UiManager;
 import com.aaron.justlike.common.util.SystemUtil;
+import com.aaron.justlike.common.widget.MyGridLayoutManager;
 import com.aaron.justlike.online.OnlineActivity;
 import com.aaron.justlike.settings.AboutActivity;
 import com.aaron.justlike.settings.DownloadManagerActivity;
@@ -39,14 +44,16 @@ import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.jaeger.library.StatusBarUtil;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends CommonActivity implements IMainContract.V<Image>, SquareFragment.Callback {
+public class MainActivity extends CommonActivity implements IMainContract.V<Image> {
 
     private static final int REQUEST_SELECT_IMAGE = 1;
 
@@ -57,12 +64,13 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
     private List<Image> mImageList = new ArrayList<>();
 
     private IMainContract.P<Image> mPresenter;
-    private SquareFragment mSquareFragment;
+    private RecyclerView.Adapter mAdapter;
 
     private DrawerLayout mParentLayout;
     private NavigationView mNavView;
     private Toolbar mToolbar;
     private SwipeRefreshLayout mSwipeRefresh;
+    private RecyclerView mRv;
     private FloatingActionButton mFabButton;
     private ImageView mNavHeaderImage;
     private View mEmptyView;
@@ -82,6 +90,7 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
         ThemeManager.getInstance().setTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        EventBus.getDefault().register(this);
         requestPermission();
         attachPresenter();
         initView();
@@ -91,6 +100,7 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         mPresenter.detachView(); // 断开 OnlinePresenter
     }
 
@@ -105,9 +115,6 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
 //        overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
-    /**
-     * 配合 AppBarLayout 进入伪全屏模式
-     */
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -118,9 +125,10 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
             ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
             if (theme == null || theme == ThemeManager.Theme.WHITE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                    StatusBarUtils.setTransparent(this, true);
                 } else {
-                    StatusBarUtil.setTranslucentForDrawerLayout(this, mParentLayout, 70);
+//                    StatusBarUtil.setTranslucentForDrawerLayout(this, mParentLayout, 70);
+                    StatusBarUtils.setTranslucent(this);
                 }
                 mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
                 mActionBar.setHomeAsUpIndicator(mIconDrawer);
@@ -189,19 +197,18 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
         }
     }
 
-    @Override
-    public void onDelete(String path, boolean isEmpty) {
-        mPresenter.deleteImage(path, isEmpty);
-    }
-
-    @Override
-    public void onHide() {
-        mFabButton.hide();
-    }
-
-    @Override
-    public void onShow() {
-        mFabButton.show();
+    /**
+     * 接收 PreviewActivity 传过来的关于被删除图片的信息，并更新 UI
+     */
+    @Subscribe()
+    public void onDeleteEvent(DeleteEvent event) {
+        if (event.getEventType() == DeleteEvent.FROM_MAIN_ACTIVITY) {
+            int position = event.getPosition();
+            String path = event.getPath();
+            mImageList.remove(position);
+            mAdapter.notifyDataSetChanged();
+            mPresenter.deleteImage(path, mImageList.isEmpty());
+        }
     }
 
     @Override
@@ -213,7 +220,10 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
     public void onShowImage(List<Image> imageList, int sortType, boolean ascendingOrder) {
         mImageList.clear();
         mImageList.addAll(imageList);
-        runOnUiThread(() -> mSquareFragment.update(imageList));
+        runOnUiThread(() -> {
+            mAdapter.notifyDataSetChanged();
+            mRv.scrollToPosition(0);
+        });
         mSortType = sortType;
         mIsAscending = ascendingOrder;
     }
@@ -221,7 +231,11 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
     @Override
     public void onShowAddImage(List<Image> list) {
         mImageList.addAll(0, list);
-        runOnUiThread(() -> mSquareFragment.updateForAdd(list));
+        runOnUiThread(() -> {
+            mAdapter.notifyItemRangeInserted(0, list.size());
+            mAdapter.notifyItemRangeChanged(list.size(), mImageList.size() - list.size());
+            mRv.scrollToPosition(0);
+        });
     }
 
     @Override
@@ -254,15 +268,22 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
         mNavHeaderImage = headerView.findViewById(R.id.nav_head_image);
         mToolbar = findViewById(R.id.toolbar_home_activity_main);
         mSwipeRefresh = findViewById(R.id.swipe_refresh_home_activity_main);
+        mRv = findViewById(R.id.rv);
         mFabButton = findViewById(R.id.fab_home_activity_main);
-        mSquareFragment = (SquareFragment) getSupportFragmentManager().findFragmentById(R.id.square_fragment);
         mEmptyView = findViewById(R.id.empty_view);
 
-        // Part 2, setClickListener
+        // Part 2
         mToolbar.setOnClickListener(new OnClickListenerImpl() {
             @Override
             public void onViewClick(View v, long interval) {
-                mSquareFragment.backToTop();
+                // 查找当前屏幕内第一个可见的 View
+                View firstVisibleItem = mRv.getChildAt(0);
+                // 查找当前 View 在 RecyclerView 中处于哪个位置
+                int itemPosition = mRv.getChildLayoutPosition(firstVisibleItem);
+                if (itemPosition >= 48) {
+                    mRv.scrollToPosition(36);
+                }
+                mRv.smoothScrollToPosition(0);
             }
         });
         mFabButton.setOnClickListener(new OnClickListenerImpl() {
@@ -299,6 +320,24 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
             return true;
         });
         mSwipeRefresh.setOnRefreshListener(() -> mPresenter.requestImage(mImageList, true));
+        ((DefaultItemAnimator) mRv.getItemAnimator()).setSupportsChangeAnimations(false);
+        MyGridLayoutManager layoutManager = new MyGridLayoutManager(this, 3);
+        mRv.setLayoutManager(layoutManager);
+        mRv.addItemDecoration(new SquareItemDecoration.XItemDecoration());
+        mRv.addItemDecoration(new SquareItemDecoration.YItemDecoration());
+        mAdapter = new MainAdapter(mImageList);
+        mRv.setAdapter(mAdapter);
+        mRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    mFabButton.hide();
+                } else if (dy < 0) {
+                    mFabButton.show();
+                }
+            }
+        });
 
         // Part 3, init status
         initIconColor();
@@ -390,7 +429,7 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
     }
 
     private void initToolbar() {
-        StatusBarUtil.setTransparentForDrawerLayout(this, mParentLayout);
+        StatusBarUtils.setTransparent(this);
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {

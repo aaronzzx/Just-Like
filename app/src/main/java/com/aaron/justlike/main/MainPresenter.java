@@ -5,9 +5,8 @@ import com.aaron.justlike.common.util.FileUtil;
 
 import java.util.List;
 
-public class MainPresenter implements IMainContract.P<Image> {
+class MainPresenter implements IMainContract.P<Image> {
 
-    private static final String TAG = "MainPresenter";
     private static final int NO_SORT_STATUS = 0;
     public static final int SORT_BY_DATE = 1;
     public static final int SORT_BY_NAME = 2;
@@ -20,8 +19,7 @@ public class MainPresenter implements IMainContract.P<Image> {
     private IMainContract.V<Image> mView;
     private IMainContract.M<Image> mModel;
 
-    public MainPresenter(IMainContract.V<Image> view) {
-        // 同时持有 V 和 IDownloadModel 引用
+    MainPresenter(IMainContract.V<Image> view) {
         mView = view;
         mModel = new MainModel();
     }
@@ -50,7 +48,7 @@ public class MainPresenter implements IMainContract.P<Image> {
                 mAscendingOrder = ASCENDING_ORDER;
             }
         }
-        // Part 2, 向 IDownloadModel 请求数据
+        // Part 2, 向 M 请求数据
         mModel.queryImage(new IMainContract.M.OnQueryImageListener<Image>() {
             @Override
             public void onSuccess(List<Image> list) {

@@ -24,7 +24,7 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 import java.util.Locale;
 
-public class AboutMessageAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class AboutMessageAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int INTRODUCE = 0;
     private static final int FEEDBACK = 1;
@@ -35,7 +35,7 @@ public class AboutMessageAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
     private Activity mActivity;
     private List<T> mList;
 
-    public AboutMessageAdapter(Activity activity, List<T> list) {
+    AboutMessageAdapter(Activity activity, List<T> list) {
         mActivity = activity;
         mList = list;
     }

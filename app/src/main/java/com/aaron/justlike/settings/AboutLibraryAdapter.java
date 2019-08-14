@@ -16,12 +16,12 @@ import com.aaron.justlike.common.bean.Library;
 
 import java.util.List;
 
-public class AboutLibraryAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class AboutLibraryAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<T> mList;
 
-    public AboutLibraryAdapter(Context context, List<T> list) {
+    AboutLibraryAdapter(Context context, List<T> list) {
         mContext = context;
         mList = list;
     }
