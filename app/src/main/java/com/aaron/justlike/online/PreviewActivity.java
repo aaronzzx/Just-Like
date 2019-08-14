@@ -21,7 +21,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.common.BaseActivity;
+import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.event.PhotoEvent;
 import com.aaron.justlike.common.http.glide.GlideApp;
 import com.aaron.justlike.common.http.glide.request.Request;
@@ -44,7 +44,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class PreviewActivity extends BaseActivity implements IPreviewView, View.OnClickListener {
+public class PreviewActivity extends CommonActivity implements IPreviewView, View.OnClickListener {
 
     private IPreviewPresenter mPresenter;
 

@@ -1,46 +1,42 @@
 package com.aaron.justlike.main;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.aaron.base.impl.OnClickListenerImpl;
 import com.aaron.justlike.R;
 import com.aaron.justlike.collection.CollectionActivity;
-import com.aaron.justlike.common.BaseActivity;
-import com.aaron.justlike.common.JustLike;
+import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.SquareFragment;
 import com.aaron.justlike.common.bean.Image;
 import com.aaron.justlike.common.http.glide.GlideEngine;
 import com.aaron.justlike.common.manager.ThemeManager;
+import com.aaron.justlike.common.manager.UiManager;
 import com.aaron.justlike.common.util.SystemUtil;
 import com.aaron.justlike.online.OnlineActivity;
 import com.aaron.justlike.settings.AboutActivity;
 import com.aaron.justlike.settings.DownloadManagerActivity;
 import com.aaron.justlike.settings.ThemeActivity;
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.jaeger.library.StatusBarUtil;
@@ -50,12 +46,8 @@ import com.zhihu.matisse.MimeType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements IMainView<Image>, View.OnClickListener,
-        NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener,
-        SquareFragment.Callback {
+public class MainActivity extends CommonActivity implements IMainContract.V<Image>, SquareFragment.Callback {
 
-    private static final String TAG = "MainActivity";
-    private static final int REQUEST_PERMISSION = 0;
     private static final int REQUEST_SELECT_IMAGE = 1;
 
     private int mMatisseTheme;
@@ -64,7 +56,7 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
     private boolean mIsAscending;
     private List<Image> mImageList = new ArrayList<>();
 
-    private IMainPresenter<Image> mPresenter;
+    private IMainContract.P<Image> mPresenter;
     private SquareFragment mSquareFragment;
 
     private DrawerLayout mParentLayout;
@@ -106,10 +98,11 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
     public void onBackPressed() {
         if (mParentLayout.isDrawerOpen(GravityCompat.START)) {
             mParentLayout.closeDrawer(GravityCompat.START);
-            return;
+        } else {
+            super.onBackPressed();
         }
-        finish();
-        overridePendingTransition(0, R.anim.activity_slide_out);
+//        finish();
+//        overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
     /**
@@ -159,12 +152,11 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
         mSortByAscending = menu.findItem(R.id.ascending_order);
         // 初始化 Popup 记忆状态
         initMenuItem(mSortType, mIsAscending);
-        Log.d(TAG, "onCreateOptionsMenu: ----------------------------- ");
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // 这里判断升序排列选项是否被选中
         boolean ascendingOrder = mSortByAscending.isChecked();
         switch (item.getItemId()) {
@@ -189,81 +181,12 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_SELECT_IMAGE:
-                if (resultCode == Activity.RESULT_OK) {
-                    List<String> selectedList = Matisse.obtainPathResult(data);
-                    mPresenter.addImage(mImageList, selectedList);
-                }
-                break;
+        if (requestCode == REQUEST_SELECT_IMAGE) {
+            if (resultCode == Activity.RESULT_OK) {
+                List<String> selectedList = Matisse.obtainPathResult(data);
+                mPresenter.addImage(mImageList, selectedList);
+            }
         }
-    }
-
-    /**
-     * 请求权限回调
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_PERMISSION:
-                if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(JustLike.getContext(), "不开启权限将无法使用壁纸缓存功能", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.toolbar_home_activity_main:
-                mSquareFragment.backToTop();
-                break;
-            case R.id.fab_home_activity_main:
-                openImageSelector();
-                break;
-        }
-    }
-
-    /**
-     * 响应侧滑菜单点击
-     */
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.nav_home:
-                startActivityByNav(OnlineActivity.class);
-                break;
-            case R.id.nav_mine:
-                mParentLayout.closeDrawers();
-                break;
-            case R.id.nav_collection:
-                startActivityByNav(CollectionActivity.class);
-                break;
-            case R.id.nav_download_manager:
-                startActivityByNav(DownloadManagerActivity.class);
-                break;
-            // TODO 编写侧滑菜单设置项的逻辑
-//            case R.id.nav_settings:
-//
-//                break;
-            case R.id.nav_theme:
-                startActivityByNav(ThemeActivity.class);
-                break;
-            case R.id.nav_about:
-                startActivityByNav(AboutActivity.class);
-                break;
-        }
-        return true;
-    }
-
-    /**
-     * 下拉刷新监听器回调函数
-     */
-    @Override
-    public void onRefresh() {
-        mPresenter.requestImage(mImageList, true);
     }
 
     @Override
@@ -281,17 +204,11 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
         mFabButton.show();
     }
 
-    /**
-     * 关联 OnlinePresenter
-     */
     @Override
     public void attachPresenter() {
         mPresenter = new MainPresenter(this);
     }
 
-    /**
-     * 回调函数，在请求到数据后显示图片
-     */
     @Override
     public void onShowImage(List<Image> imageList, int sortType, boolean ascendingOrder) {
         mImageList.clear();
@@ -299,29 +216,18 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
         runOnUiThread(() -> mSquareFragment.update(imageList));
         mSortType = sortType;
         mIsAscending = ascendingOrder;
-        Log.d(TAG, "onShowImage: ----------------------------------- ");
     }
 
-    /**
-     * 回调函数，添加用户所选图片
-     *
-     * @param list 所选图片的集合
-     */
     @Override
     public void onShowAddImage(List<Image> list) {
         mImageList.addAll(0, list);
         runOnUiThread(() -> mSquareFragment.updateForAdd(list));
     }
 
-    /**
-     * 回调函数，用于请求不到数据时显示信息
-     */
     @Override
     public void onShowMessage(String args) {
         runOnUiThread(() -> {
-            if (args != null) {
-                new Handler().postDelayed(() -> Toast.makeText(this, args, Toast.LENGTH_SHORT).show(), 100);
-            }
+            if (args != null) UiManager.showShort(args);
         });
     }
 
@@ -335,16 +241,9 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
         runOnUiThread(() -> mEmptyView.setVisibility(View.GONE));
     }
 
-    /**
-     * 回调函数，用于请求数据得到结果后隐藏下拉刷新
-     */
     @Override
     public void onHideRefresh() {
-        runOnUiThread(() -> {
-            if (mSwipeRefresh.isRefreshing()) {
-                mSwipeRefresh.setRefreshing(false);
-            }
-        });
+        runOnUiThread(() -> mSwipeRefresh.setRefreshing(false));
     }
 
     private void initView() {
@@ -360,10 +259,46 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
         mEmptyView = findViewById(R.id.empty_view);
 
         // Part 2, setClickListener
-        mToolbar.setOnClickListener(this);
-        mFabButton.setOnClickListener(this);
-        mNavView.setNavigationItemSelectedListener(this);
-        mSwipeRefresh.setOnRefreshListener(this);
+        mToolbar.setOnClickListener(new OnClickListenerImpl() {
+            @Override
+            public void onViewClick(View v, long interval) {
+                mSquareFragment.backToTop();
+            }
+        });
+        mFabButton.setOnClickListener(new OnClickListenerImpl() {
+            @Override
+            public void onViewClick(View v, long interval) {
+                openImageSelector();
+            }
+        });
+        mNavView.setNavigationItemSelectedListener(menuItem -> {
+            switch (menuItem.getItemId()) {
+                case R.id.nav_home:
+                    startActivityByNav(OnlineActivity.class);
+                    break;
+                case R.id.nav_mine:
+                    mParentLayout.closeDrawers();
+                    break;
+                case R.id.nav_collection:
+                    startActivityByNav(CollectionActivity.class);
+                    break;
+                case R.id.nav_download_manager:
+                    startActivityByNav(DownloadManagerActivity.class);
+                    break;
+                // TODO 编写侧滑菜单设置项的逻辑
+//            case R.id.nav_settings:
+//
+//                break;
+                case R.id.nav_theme:
+                    startActivityByNav(ThemeActivity.class);
+                    break;
+                case R.id.nav_about:
+                    startActivityByNav(AboutActivity.class);
+                    break;
+            }
+            return true;
+        });
+        mSwipeRefresh.setOnRefreshListener(() -> mPresenter.requestImage(mImageList, true));
 
         // Part 3, init status
         initIconColor();
@@ -539,26 +474,32 @@ public class MainActivity extends BaseActivity implements IMainView<Image>, View
      * 请求权限
      */
     private void requestPermission() {
-        // 判断是否已经获得权限
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            // 申请读写存储的权限
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSION);
-        }
+        PermissionUtils.permission(PermissionConstants.STORAGE)
+                .callback(new PermissionUtils.SimpleCallback() {
+                    @Override
+                    public void onGranted() {
+
+                    }
+
+                    @Override
+                    public void onDenied() {
+                        UiManager.showShort("不开启权限将无法使用壁纸缓存功能");
+                    }
+                })
+                .request();
     }
 
     /**
      * 点击菜单跳转 Activity --- for NavigationView
      */
-    private void startActivityByNav(Class whichActivity) {
+    private void startActivityByNav(Class target) {
         mParentLayout.closeDrawers();
         mParentLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerClosed(View drawerView) {
-                Intent intent = new Intent(MainActivity.this, whichActivity);
+                Intent intent = new Intent(MainActivity.this, target);
                 startActivity(intent);
-                overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
+//                overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
                 mParentLayout.removeDrawerListener(this);
             }
         });

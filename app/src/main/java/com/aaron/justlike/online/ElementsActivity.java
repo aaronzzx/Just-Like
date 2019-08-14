@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.common.BaseActivity;
+import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.JustLike;
 import com.aaron.justlike.common.event.PhotoEvent;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
@@ -34,7 +34,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ElementsActivity extends BaseActivity implements IElementView<List<Photo>>,
+public class ElementsActivity extends CommonActivity implements IElementView<List<Photo>>,
         View.OnClickListener, OnlineAdapter.Callback<Photo> {
 
     private IElementPresenter mPresenter;

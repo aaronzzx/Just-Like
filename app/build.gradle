@@ -13,11 +13,30 @@ android {
         versionName "2.1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        release {
+            storeFile     file("E:\\AndroidStudioProjects\\Just-Like\\aaron.jks")
+            storePassword "mm123book"
+            keyAlias      "AaronZheng"
+            keyPassword   "mm123book"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            multiDexKeepProguard file('mainDexList.pro')
+            signingConfig signingConfigs.release
+        }
+
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            multiDexKeepProguard file('mainDexList.pro')
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -40,6 +59,8 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    implementation 'com.aaron:base:1.1.1'
+
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
@@ -47,21 +68,21 @@ dependencies {
     implementation 'androidx.exifinterface:exifinterface:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
-    implementation 'com.jaeger.statusbarutil:library:1.5.1'
+//    implementation 'com.jaeger.statusbarutil:library:1.5.1'
     implementation 'com.bm.photoview:library:1.4.1'
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
+//    implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'com.zhihu.android:matisse:0.5.2-beta4'
     implementation 'com.github.yalantis:ucrop:2.2.2'
     implementation 'com.github.clans:fab:1.6.4'
     implementation 'org.litepal.android:java:3.0.0'
     implementation 'org.greenrobot:eventbus:3.1.1'
-    implementation 'com.squareup.okhttp3:okhttp:3.13.1'
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.6'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+//    implementation 'com.squareup.okhttp3:okhttp:3.13.1'
+//    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+//    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+//    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
+//    implementation 'io.reactivex.rxjava2:rxjava:2.2.6'
+//    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'com.arialyy.aria:aria-core:3.6.3'
     annotationProcessor 'com.arialyy.aria:aria-compiler:3.5.4'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'

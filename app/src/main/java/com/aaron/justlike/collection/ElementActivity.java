@@ -13,7 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.common.BaseActivity;
+import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.SquareFragment;
 import com.aaron.justlike.common.bean.Image;
 import com.aaron.justlike.common.event.UpdateEvent;
@@ -26,7 +26,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ElementActivity extends BaseActivity implements SquareFragment.Callback,
+public class ElementActivity extends CommonActivity implements SquareFragment.Callback,
         IElementView<Image> {
 
     private IElementPresenter<Image> mPresenter;

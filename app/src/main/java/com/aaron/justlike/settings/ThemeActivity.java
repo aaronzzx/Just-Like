@@ -17,17 +17,17 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.aaron.base.base.ActivityCollector;
 import com.aaron.justlike.R;
-import com.aaron.justlike.common.BaseActivity;
+import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.manager.ThemeManager;
-import com.aaron.justlike.common.util.ActivityCollector;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ThemeActivity extends BaseActivity implements ThemeAdapter.Callback {
+public class ThemeActivity extends CommonActivity implements ThemeAdapter.Callback {
 
     private static final String PREFERENCES_THEME = "justlike_theme";
     private static final String CURRENT_THEME = "current_theme";
@@ -198,7 +198,7 @@ public class ThemeActivity extends BaseActivity implements ThemeAdapter.Callback
     }
 
     private void reboot() {
-        Activity activity = ActivityCollector.getBottomActivity();
+        Activity activity = ActivityCollector.getBottom();
         if (activity == null) return;
         Class clazz = activity.getClass();
         ActivityCollector.finishAll();

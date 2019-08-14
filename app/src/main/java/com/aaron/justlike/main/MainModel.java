@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MainModel implements IMainModel<Image> {
+public class MainModel implements IMainContract.M<Image> {
 
     private static final String PATH = "/storage/emulated/0/Pictures/JustLike";
     private static final String[] TYPE = {"jpg", "jpeg", "png", "gif"};

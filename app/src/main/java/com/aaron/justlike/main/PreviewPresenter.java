@@ -3,11 +3,11 @@ package com.aaron.justlike.main;
 import com.aaron.justlike.common.bean.ImageInfo;
 import com.aaron.justlike.common.util.FileUtil;
 
-public class PreviewPresenter implements IPreviewPresenter {
+public class PreviewPresenter implements IPreviewContract.P {
 
-    private IPreviewView mView;
+    private IPreviewContract.V mView;
 
-    public PreviewPresenter(IPreviewView view) {
+    public PreviewPresenter(IPreviewContract.V view) {
         mView = view;
     }
 

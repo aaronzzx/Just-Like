@@ -25,7 +25,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SquareFragment extends Fragment implements MainAdapter.Callback<Image> {
+public abstract class SquareFragment extends Fragment {
 
     protected Context mContext;
 
@@ -73,23 +73,6 @@ public abstract class SquareFragment extends Fragment implements MainAdapter.Cal
     public abstract void executeEvent(DeleteEvent event);
 
     /**
-     * Adapter 中发生 onClick 行为，需要回调此方法
-     *
-     * @param position 被点击图片在 List 中的位置
-     * @param list     存放 Image 实例的 List
-     */
-    @Override
-    public abstract void onPress(int position, List<Image> list);
-
-    /**
-     * Adapter 中发生 onLongClick 行为，需要回调此方法，由子类实现
-     *
-     * @param position 被删图片的索引
-     */
-    @Override
-    public abstract void onLongPress(int position);
-
-    /**
      * 由 Activity 调用
      */
     public void updateForAdd(List<Image> list) {
@@ -127,7 +110,7 @@ public abstract class SquareFragment extends Fragment implements MainAdapter.Cal
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mRecyclerView.addItemDecoration(new YItemDecoration());
-        mAdapter = new MainAdapter<>(mImageList, this);
+        mAdapter = new MainAdapter(mImageList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

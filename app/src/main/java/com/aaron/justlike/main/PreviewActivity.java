@@ -27,7 +27,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.common.BaseActivity;
+import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.bean.Image;
 import com.aaron.justlike.common.bean.ImageInfo;
 import com.aaron.justlike.common.event.DeleteEvent;
@@ -44,7 +44,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.File;
 import java.util.List;
 
-public class PreviewActivity extends BaseActivity implements IPreviewView,
+public class PreviewActivity extends CommonActivity implements IPreviewContract.V,
         View.OnClickListener, ViewPager.OnPageChangeListener, PreviewAdapter.Callback {
 
     public static final int DELETE_EVENT = 1;
@@ -59,7 +59,7 @@ public class PreviewActivity extends BaseActivity implements IPreviewView,
     private int mEventType;
     private List<Image> mImageList;
 
-    private IPreviewPresenter mPresenter;
+    private IPreviewContract.P mPresenter;
 
     private Toolbar mToolbar;
     private ViewPager mViewPager;

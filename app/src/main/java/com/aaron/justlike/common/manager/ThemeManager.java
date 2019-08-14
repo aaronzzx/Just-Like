@@ -10,7 +10,6 @@ public class ThemeManager {
     private static final String PREFERENCES_NAME = "justlike_theme";
     private static final String CURRENT_THEME = "current_theme";
 
-    private static ThemeManager sInstance;
     private Theme mCurrentTheme;
 
     private ThemeManager() {
@@ -18,14 +17,7 @@ public class ThemeManager {
     }
 
     public static ThemeManager getInstance() {
-        if (sInstance == null) {
-            synchronized (ThemeManager.class) {
-                if (sInstance == null) {
-                    sInstance = new ThemeManager();
-                }
-            }
-        }
-        return sInstance;
+        return Holder.INSTANCE;
     }
 
     public Theme getCurrentTheme() {
@@ -75,7 +67,10 @@ public class ThemeManager {
     }
 
     public enum Theme {
-
         WHITE, BLACK, GREY, GREEN, RED, PINK, BLUE, PURPLE, ORANGE, JUST_LIKE
+    }
+
+    private static class Holder {
+        private static final ThemeManager INSTANCE = new ThemeManager();
     }
 }

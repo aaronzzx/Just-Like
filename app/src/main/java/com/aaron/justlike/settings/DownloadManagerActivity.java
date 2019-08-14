@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.common.BaseActivity;
+import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.bean.Image;
 import com.aaron.justlike.common.event.PhotoEvent;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
@@ -34,7 +34,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DownloadManagerActivity extends BaseActivity implements IDownloadView<Image>,
+public class DownloadManagerActivity extends CommonActivity implements IDownloadView<Image>,
         DownloadManagerAdapter.Callback {
 
     private static final String PROGRESS_TITLE = "加载资源";

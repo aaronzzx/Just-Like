@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.common.BaseActivity;
+import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.bean.Library;
 import com.aaron.justlike.common.bean.Message;
 import com.aaron.justlike.common.manager.ThemeManager;
@@ -23,7 +23,7 @@ import com.aaron.justlike.common.util.SystemUtil;
 
 import java.util.List;
 
-public class AboutActivity extends BaseActivity implements IAboutView<Message, Library> {
+public class AboutActivity extends CommonActivity implements IAboutView<Message, Library> {
 
     private IAboutPresenter mPresenter;
 

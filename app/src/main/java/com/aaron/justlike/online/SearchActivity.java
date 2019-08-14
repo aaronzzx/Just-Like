@@ -21,13 +21,13 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.common.BaseActivity;
+import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.manager.ThemeManager;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
 
-public class SearchActivity extends BaseActivity implements View.OnClickListener,
+public class SearchActivity extends CommonActivity implements View.OnClickListener,
         EditText.OnEditorActionListener {
 
     private Toolbar mToolbar;

@@ -28,7 +28,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.common.BaseActivity;
+import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.bean.Album;
 import com.aaron.justlike.common.bean.Collection;
 import com.aaron.justlike.common.event.SelectEvent;
@@ -53,7 +53,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CollectionActivity extends BaseActivity implements CollectionAdapter.OnPressCallback,
+public class CollectionActivity extends CommonActivity implements CollectionAdapter.OnPressCallback,
         ICollectionView, NavigationView.OnNavigationItemSelectedListener {
 
     private ICollectionPresenter mPresenter;

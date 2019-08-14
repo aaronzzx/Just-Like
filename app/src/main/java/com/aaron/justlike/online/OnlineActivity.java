@@ -29,7 +29,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.collection.CollectionActivity;
-import com.aaron.justlike.common.BaseActivity;
+import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.JustLike;
 import com.aaron.justlike.common.manager.ThemeManager;
 import com.aaron.justlike.main.MainActivity;
@@ -42,7 +42,7 @@ import com.jaeger.library.StatusBarUtil;
 
 import java.util.List;
 
-public class OnlineActivity extends BaseActivity implements View.OnClickListener,
+public class OnlineActivity extends CommonActivity implements View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener {
 
     private static final int REQUEST_PERMISSION = 0;

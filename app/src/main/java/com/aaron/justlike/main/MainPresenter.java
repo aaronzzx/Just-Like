@@ -5,7 +5,7 @@ import com.aaron.justlike.common.util.FileUtil;
 
 import java.util.List;
 
-public class MainPresenter implements IMainPresenter<Image> {
+public class MainPresenter implements IMainContract.P<Image> {
 
     private static final String TAG = "MainPresenter";
     private static final int NO_SORT_STATUS = 0;
@@ -17,17 +17,17 @@ public class MainPresenter implements IMainPresenter<Image> {
     private int mSortType;
     private boolean mAscendingOrder;
 
-    private IMainView<Image> mView;
-    private IMainModel<Image> mModel;
+    private IMainContract.V<Image> mView;
+    private IMainContract.M<Image> mModel;
 
-    public MainPresenter(IMainView<Image> view) {
-        // 同时持有 IMainView 和 IDownloadModel 引用
+    public MainPresenter(IMainContract.V<Image> view) {
+        // 同时持有 V 和 IDownloadModel 引用
         mView = view;
         mModel = new MainModel();
     }
 
     /**
-     * 断开与 IMainView 的连接
+     * 断开与 V 的连接
      */
     @Override
     public void detachView() {
@@ -35,7 +35,7 @@ public class MainPresenter implements IMainPresenter<Image> {
     }
 
     /**
-     * 请求数据并回调 IMainView 函数显示图片
+     * 请求数据并回调 V 函数显示图片
      */
     @Override
     public void requestImage(List<Image> imageList, boolean refreshMode) {
@@ -51,7 +51,7 @@ public class MainPresenter implements IMainPresenter<Image> {
             }
         }
         // Part 2, 向 IDownloadModel 请求数据
-        mModel.queryImage(new IMainModel.OnQueryImageListener<Image>() {
+        mModel.queryImage(new IMainContract.M.OnQueryImageListener<Image>() {
             @Override
             public void onSuccess(List<Image> list) {
                 mView.onHideRefresh();
