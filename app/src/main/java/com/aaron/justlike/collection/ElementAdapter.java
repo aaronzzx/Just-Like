@@ -1,4 +1,4 @@
-package com.aaron.justlike.main;
+package com.aaron.justlike.collection;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,28 +13,30 @@ import com.aaron.justlike.R;
 import com.aaron.justlike.common.adapter.SquareAdapter;
 import com.aaron.justlike.common.bean.Image;
 import com.aaron.justlike.common.event.PreviewEvent;
+import com.aaron.justlike.main.PreviewActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-public class MainAdapter extends SquareAdapter {
+/**
+ * @author Aaron aaronzheng9603@gmail.com
+ */
+class ElementAdapter extends SquareAdapter {
 
-    public MainAdapter(List<Image> list) {
+    ElementAdapter(List<Image> list) {
         super(list);
     }
 
     @Override
-    protected void createHolder(SquareAdapter.ViewHolder holder, ViewGroup parent, int viewType) {
-        // for Image onClick()
+    protected void createHolder(ViewHolder holder, ViewGroup parent, int viewType) {
         holder.itemView.setOnClickListener(v -> {
             int position = holder.getAdapterPosition();
-            EventBus.getDefault().postSticky(new PreviewEvent<>(PreviewEvent.FROM_MAIN_ACTIVITY, position, mList));
+            EventBus.getDefault().postSticky(new PreviewEvent<>(PreviewEvent.FROM_ELEMENT_ACTIVITY, position, mList));
             mContext.startActivity(new Intent(mContext, PreviewActivity.class));
             ((Activity) mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         });
 
-        // for Image onLongClick()
         holder.itemView.setOnLongClickListener(v -> {
             int position = holder.getAdapterPosition();
             new AlertDialog.Builder(mContext)
@@ -44,7 +46,7 @@ public class MainAdapter extends SquareAdapter {
                         String path = mList.get(position).getPath();
                         mList.remove(position);
                         notifyDataSetChanged();
-                        ((IMainCommunicable) mContext).onDelete(path, mList.size() == 0);
+                        ((IElementCommunicable) mContext).onDelete(path, mList.size() == 0);
                     })
                     .setNegativeButton("取消", (dialog, which) -> {
                     })
@@ -54,7 +56,7 @@ public class MainAdapter extends SquareAdapter {
     }
 
     @Override
-    protected void bindHolder(SquareAdapter.ViewHolder holder, int position) {
+    protected void bindHolder(ViewHolder holder, int position) {
         Image image = mList.get(position); // 从集合中找到 Image 对象
         String path = image.getPath();
 
@@ -68,18 +70,4 @@ public class MainAdapter extends SquareAdapter {
         Drawable placeholder = new ColorDrawable(mContext.getResources().getColor(R.color.colorBlue));
         ImageLoader.loadWithPlaceholder(mContext, path, placeholder, holder.squareView);
     }
-//
-//    @Override
-//    public int getItemCount() {
-//        return mList.size();
-//    }
-
-//    private static class ViewHolder extends RecyclerView.ViewHolder {
-//        SquareView squareView;
-//
-//        ViewHolder(View view) {
-//            super(view);
-//            squareView = view.findViewById(R.id.square_view);
-//        }
-//    }
 }

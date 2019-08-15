@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ThemeActivity extends CommonActivity implements ThemeAdapter.Callback {
+public class ThemeActivity extends CommonActivity implements IThemeCommunicable {
 
     private static final String PREFERENCES_THEME = "justlike_theme";
     private static final String CURRENT_THEME = "current_theme";
@@ -87,10 +87,10 @@ public class ThemeActivity extends CommonActivity implements ThemeAdapter.Callba
     }
 
     @Override
-    public void onPress(int newCheck, int oldCheck) {
-        if (saveTheme(newCheck)) {
+    public void onTap(int newChecked, int oldChecked) {
+        if (saveTheme(newChecked)) {
             // change theme check
-            View view = mLayoutManager.findViewByPosition(oldCheck);
+            View view = mLayoutManager.findViewByPosition(oldChecked);
             if (view != null) {
                 ViewGroup checkbox = view.findViewById(R.id.checkbox);
                 checkbox.setVisibility(View.GONE);
@@ -100,7 +100,7 @@ public class ThemeActivity extends CommonActivity implements ThemeAdapter.Callba
             // save new check to local
             mExecutorService.execute(() -> {
                 SharedPreferences.Editor editor = getSharedPreferences(PREFERENCES_THEME_CHECK, MODE_PRIVATE).edit();
-                editor.putInt(CURRENT_CHECK, newCheck);
+                editor.putInt(CURRENT_CHECK, newChecked);
                 editor.apply();
             });
         }
@@ -155,7 +155,7 @@ public class ThemeActivity extends CommonActivity implements ThemeAdapter.Callba
         imageList.add(R.drawable.theme_orange);
         imageList.add(R.drawable.theme_just_like);
         int currentCheck = getSharedPreferences(PREFERENCES_THEME_CHECK, MODE_PRIVATE).getInt(CURRENT_CHECK, 0);
-        RecyclerView.Adapter adapter = new ThemeAdapter(imageList, this, currentCheck);
+        RecyclerView.Adapter adapter = new ThemeAdapter(imageList, currentCheck);
         recyclerView.setAdapter(adapter);
     }
 

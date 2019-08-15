@@ -5,13 +5,13 @@ import com.aaron.justlike.common.bean.Album;
 import java.util.Collections;
 import java.util.List;
 
-public class CollectionPresenter implements ICollectionPresenter {
+public class CollectionPresenter implements ICollectionContract.P {
 
-    private ICollectionView mView;
-    private ICollectionModel<Album> mModel;
+    private ICollectionContract.V mView;
+    private ICollectionContract.M<Album> mModel;
 
     @Override
-    public void attachView(ICollectionView view) {
+    public void attachView(ICollectionContract.V view) {
         mView = view;
         mModel = new CollectionModel();
     }
@@ -24,7 +24,7 @@ public class CollectionPresenter implements ICollectionPresenter {
 
     @Override
     public void requestCollection(List<Album> albums) {
-        mModel.queryCollection(new ICollectionModel.Callback<Album>() {
+        mModel.queryCollection(new ICollectionContract.M.Callback<Album>() {
             @Override
             public void onResponse(List<Album> list) {
                 if (albums.size() != list.size() || !albums.containsAll(list)) {
@@ -37,7 +37,7 @@ public class CollectionPresenter implements ICollectionPresenter {
 
     @Override
     public int saveCollection(List<String> list, String title) {
-        mModel.insertCollection(list, title, new ICollectionModel.Callback<Album>() {
+        mModel.insertCollection(list, title, new ICollectionContract.M.Callback<Album>() {
             @Override
             public void onFinish() {
             }

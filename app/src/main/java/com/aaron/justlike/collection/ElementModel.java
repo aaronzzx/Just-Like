@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ElementModel implements IElementModel<Image> {
+class ElementModel implements IElementContract.M<Image> {
 
     private ExecutorService mExecutorService;
 
-    public ElementModel() {
+    ElementModel() {
         mExecutorService = Executors.newSingleThreadExecutor();
     }
 

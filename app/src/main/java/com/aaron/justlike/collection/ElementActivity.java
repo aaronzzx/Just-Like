@@ -8,30 +8,36 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.CommonActivity;
-import com.aaron.justlike.common.SquareFragment;
 import com.aaron.justlike.common.bean.Image;
+import com.aaron.justlike.common.event.DeleteEvent;
 import com.aaron.justlike.common.event.UpdateEvent;
+import com.aaron.justlike.common.impl.SquareItemDecoration;
 import com.aaron.justlike.common.manager.ThemeManager;
 import com.aaron.justlike.common.util.FileUtil;
+import com.aaron.justlike.common.widget.MyGridLayoutManager;
 import com.aaron.justlike.common.widget.imageSelector.ImageSelector;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ElementActivity extends CommonActivity implements SquareFragment.Callback,
-        IElementView<Image> {
+public class ElementActivity extends CommonActivity implements IElementContract.V<Image>, IElementCommunicable {
 
-    private IElementPresenter<Image> mPresenter;
+    private IElementContract.P<Image> mPresenter;
+    private RecyclerView.Adapter mAdapter;
 
-    private SquareFragment mSquareFragment;
+    private RecyclerView mRv;
     private Toolbar mToolbar;
     private ActionBar mActionBar;
     private Drawable mIconBack;
@@ -44,6 +50,7 @@ public class ElementActivity extends CommonActivity implements SquareFragment.Ca
     protected void onCreate(Bundle savedInstanceState) {
         ThemeManager.getInstance().setTheme(this);
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_element);
         initView();
         mPresenter = new ElementPresenter();
@@ -54,6 +61,7 @@ public class ElementActivity extends CommonActivity implements SquareFragment.Ca
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         mPresenter.detachView();
         EventBus.getDefault().post(new UpdateEvent());
         ImageSelector.getInstance().clear();
@@ -92,23 +100,21 @@ public class ElementActivity extends CommonActivity implements SquareFragment.Ca
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.add_element:
-                ArrayList<String> selectedList = new ArrayList<>();
-                for (Image image : mImageList) {
-                    selectedList.add(image.getPath());
-                }
-                ImageSelector.getInstance(ElementActivity.this)
-                        .setFilePath("/storage/emulated/0/Pictures/JustLike")
-                        .setSelectedImage(selectedList)
-                        .setCallback(new ImageSelector.ImageCallback() {
-                            @Override
-                            public void onResponse(List<String> response) {
-                                mPresenter.saveImage(mTitle, mImageList.size(), response);
-                            }
-                        })
-                        .start();
-                break;
+        if (item.getItemId() == R.id.add_element) {
+            ArrayList<String> selectedList = new ArrayList<>();
+            for (Image image : mImageList) {
+                selectedList.add(image.getPath());
+            }
+            ImageSelector.getInstance(ElementActivity.this)
+                    .setFilePath("/storage/emulated/0/Pictures/JustLike")
+                    .setSelectedImage(selectedList)
+                    .setCallback(new ImageSelector.ImageCallback() {
+                        @Override
+                        public void onResponse(List<String> response) {
+                            mPresenter.saveImage(mTitle, mImageList.size(), response);
+                        }
+                    })
+                    .start();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -126,6 +132,20 @@ public class ElementActivity extends CommonActivity implements SquareFragment.Ca
         return super.onSupportNavigateUp();
     }
 
+    /**
+     * 接收 PreviewActivity 传过来的关于被删除图片的信息，并更新 UI
+     */
+    @Subscribe()
+    public void onDeleteEvent(DeleteEvent event) {
+        if (event.getEventType() == DeleteEvent.FROM_ELEMENT_ACTIVITY) {
+            int position = event.getPosition();
+            String path = event.getPath();
+            mImageList.remove(position);
+            mAdapter.notifyDataSetChanged();
+            mPresenter.deleteImage(mTitle, path);
+        }
+    }
+
     @Override
     public void onDelete(String path, boolean isEmpty) {
         mPresenter.deleteImage(mTitle, path);
@@ -138,14 +158,21 @@ public class ElementActivity extends CommonActivity implements SquareFragment.Ca
     public void onShowImage(List<Image> list) {
         mImageList.clear();
         mImageList.addAll(list);
-        mSquareFragment.update(list);
+        runOnUiThread(() -> {
+            mAdapter.notifyDataSetChanged();
+            mRv.scrollToPosition(0);
+        });
     }
 
     @Override
     public void onShowAddImage(List<Image> list) {
         mImageList.addAll(list);
         FileUtil.sortByDate(list, false);
-        runOnUiThread(() -> mSquareFragment.updateForAdd(list));
+        runOnUiThread(() -> {
+            mAdapter.notifyItemRangeInserted(0, list.size());
+            mAdapter.notifyItemRangeChanged(list.size(), mImageList.size() - list.size());
+            mRv.scrollToPosition(0);
+        });
     }
 
     private void initView() {
@@ -154,7 +181,22 @@ public class ElementActivity extends CommonActivity implements SquareFragment.Ca
 
         // find id
         mToolbar = findViewById(R.id.toolbar);
-        mSquareFragment = (SquareFragment) getSupportFragmentManager().findFragmentById(R.id.square_fragment);
+        mRv = findViewById(R.id.rv);
+
+        ((DefaultItemAnimator) mRv.getItemAnimator()).setSupportsChangeAnimations(false);
+        MyGridLayoutManager layoutManager = new MyGridLayoutManager(this, 3);
+        mRv.setLayoutManager(layoutManager);
+        mRv.addItemDecoration(new SquareItemDecoration.XItemDecoration());
+        mRv.addItemDecoration(new SquareItemDecoration.YItemDecoration());
+        mAdapter = new ElementAdapter(mImageList);
+        mRv.setAdapter(mAdapter);
+        mRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+            }
+        });
 
         // init status
         initIconColor();

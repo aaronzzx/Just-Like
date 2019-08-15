@@ -4,13 +4,13 @@ import com.aaron.justlike.common.bean.Image;
 
 import java.util.List;
 
-public class ElementPresenter implements IElementPresenter<Image> {
+public class ElementPresenter implements IElementContract.P<Image> {
 
-    private IElementView<Image> mView;
-    private IElementModel<Image> mModel;
+    private IElementContract.V<Image> mView;
+    private IElementContract.M<Image> mModel;
 
     @Override
-    public void attachView(IElementView<Image> view) {
+    public void attachView(IElementContract.V<Image> view) {
         mView = view;
         mModel = new ElementModel();
     }

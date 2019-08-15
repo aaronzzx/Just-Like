@@ -53,10 +53,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CollectionActivity extends CommonActivity implements CollectionAdapter.OnPressCallback,
-        ICollectionView, NavigationView.OnNavigationItemSelectedListener {
+public class CollectionActivity extends CommonActivity implements ICollectionCommunicable,
+        ICollectionContract.V {
 
-    private ICollectionPresenter mPresenter;
+    private ICollectionContract.P mPresenter;
 
     private DrawerLayout mParentLayout;
     private NavigationView mNavView;
@@ -172,35 +172,6 @@ public class CollectionActivity extends CommonActivity implements CollectionAdap
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.nav_home:
-                startActivityByNav(OnlineActivity.class);
-                break;
-            case R.id.nav_mine:
-                startActivityByNav(MainActivity.class);
-                break;
-            case R.id.nav_collection:
-                mParentLayout.closeDrawers();
-                break;
-            case R.id.nav_download_manager:
-                startActivityByNav(DownloadManagerActivity.class);
-                break;
-            // TODO 编写侧滑菜单设置项的逻辑
-//            case R.id.nav_settings:
-//
-//                break;
-            case R.id.nav_theme:
-                startActivityByNav(ThemeActivity.class);
-                break;
-            case R.id.nav_about:
-                startActivityByNav(AboutActivity.class);
-                break;
-        }
-        return true;
-    }
-
-    @Override
     public void onBackPressed() {
         if (mParentLayout.isDrawerOpen(GravityCompat.START)) {
             mParentLayout.closeDrawer(GravityCompat.START);
@@ -230,23 +201,23 @@ public class CollectionActivity extends CommonActivity implements CollectionAdap
     }
 
     @Override
-    public void onPress(int position) {
+    public void onTap(View v, int pos) {
         Intent intent = new Intent(this, ElementActivity.class);
-        intent.putExtra("title", mCollections.get(position).getCollectionTitle());
+        intent.putExtra("title", mCollections.get(pos).getCollectionTitle());
         startActivity(intent);
         overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
     }
 
     @Override
-    public void onLongPress(int position) {
+    public void onLongTap(View v, int pos) {
         new AlertDialog.Builder(this)
                 .setTitle("删除集合")
                 .setMessage("请慎重！集合的所有信息将被清除")
                 .setPositiveButton("确定", (dialog, which) -> {
                     Log.d("CollectionActivity", "which: " + which);
-                    String title = mCollections.get(position).getCollectionTitle();
+                    String title = mCollections.get(pos).getCollectionTitle();
                     mPresenter.deleteCollection(title);
-                    mCollections.remove(position);
+                    mCollections.remove(pos);
                     mAdapter.notifyDataSetChanged();
                     if (mCollections.size() == 0) {
                         EmptyViewUtil.showEmptyView(mEmptyView);
@@ -286,7 +257,33 @@ public class CollectionActivity extends CommonActivity implements CollectionAdap
         View headerView = mNavView.getHeaderView(0);
         mNavHeaderImage = headerView.findViewById(R.id.nav_head_image);
 
-        mNavView.setNavigationItemSelectedListener(this);
+        mNavView.setNavigationItemSelectedListener(menuItem -> {
+            switch (menuItem.getItemId()) {
+                case R.id.nav_home:
+                    startActivityByNav(OnlineActivity.class);
+                    break;
+                case R.id.nav_mine:
+                    startActivityByNav(MainActivity.class);
+                    break;
+                case R.id.nav_collection:
+                    mParentLayout.closeDrawers();
+                    break;
+                case R.id.nav_download_manager:
+                    startActivityByNav(DownloadManagerActivity.class);
+                    break;
+                // TODO 编写侧滑菜单设置项的逻辑
+//            case R.id.nav_settings:
+//
+//                break;
+                case R.id.nav_theme:
+                    startActivityByNav(ThemeActivity.class);
+                    break;
+                case R.id.nav_about:
+                    startActivityByNav(AboutActivity.class);
+                    break;
+            }
+            return true;
+        });
 
         mDialog = new ProgressDialog(this);
         mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -383,7 +380,7 @@ public class CollectionActivity extends CommonActivity implements CollectionAdap
         mLayoutManager = new MyGridLayoutManager(this, 1);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new YItemDecoration());
-        mAdapter = new CollectionAdapter(this, mCollections);
+        mAdapter = new CollectionAdapter(mCollections);
         mRecyclerView.setAdapter(mAdapter);
     }
 

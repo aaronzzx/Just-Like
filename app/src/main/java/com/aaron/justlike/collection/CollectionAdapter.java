@@ -16,15 +16,15 @@ import com.aaron.justlike.common.http.glide.GlideApp;
 
 import java.util.List;
 
-public class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<Album> mAlbums;
-    private OnPressCallback mCallback;
+//    private OnPressCallback mCallback;
 
-    public CollectionAdapter(OnPressCallback callback, List<Album> albums) {
+    CollectionAdapter(/*OnPressCallback callback, */List<Album> albums) {
         mAlbums = albums;
-        mCallback = callback;
+//        mCallback = callback;
     }
 
     @NonNull
@@ -35,9 +35,13 @@ public class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 .inflate(R.layout.activity_collection_recycler_item, parent, false);
         ViewHolder holder = new ViewHolder(view);
 
-        holder.itemView.setOnClickListener(v -> mCallback.onPress(holder.getAdapterPosition()));
+        holder.itemView.setOnClickListener(v -> {
+//            mCallback.onPress(holder.getAdapterPosition())
+            ((ICollectionCommunicable) mContext).onTap(v, holder.getAdapterPosition());
+        });
         holder.itemView.setOnLongClickListener(v -> {
-            mCallback.onLongPress(holder.getAdapterPosition());
+//            mCallback.onLongPress(holder.getAdapterPosition());
+            ((ICollectionCommunicable) mContext).onLongTap(v, holder.getAdapterPosition());
             return true;
         });
         return holder;
@@ -86,10 +90,10 @@ public class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public interface OnPressCallback {
-
-        void onPress(int position);
-
-        void onLongPress(int position);
-    }
+//    public interface OnPressCallback {
+//
+//        void onPress(int position);
+//
+//        void onLongPress(int position);
+//    }
 }

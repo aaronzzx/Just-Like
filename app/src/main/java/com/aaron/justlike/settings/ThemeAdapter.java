@@ -34,12 +34,12 @@ class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<Integer> mList;
-    private Callback mCallback;
+//    private Callback mCallback;
     private int mCurrentCheck;
 
-    ThemeAdapter(List<Integer> list, Callback callback, int currentCheck) {
+    ThemeAdapter(List<Integer> list,/* Callback callback,*/ int currentCheck) {
         mList = list;
-        mCallback = callback;
+//        mCallback = callback;
         mCurrentCheck = currentCheck;
     }
 
@@ -53,7 +53,8 @@ class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         holder.itemView.setOnClickListener(v -> {
             int position = holder.getAdapterPosition();
-            mCallback.onPress(position, mCurrentCheck);
+            ((IThemeCommunicable) mContext).onTap(position, mCurrentCheck);
+//            mCallback.onPress(position, mCurrentCheck);
             holder.checkbox.setVisibility(View.VISIBLE);
         });
         return holder;
@@ -83,7 +84,6 @@ class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private static class ViewHolder extends RecyclerView.ViewHolder {
-
         View itemView;
         ImageView imageView;
         TextView themeName;
@@ -187,8 +187,8 @@ class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public interface Callback {
-
-        void onPress(int newCheck, int oldCheck);
-    }
+//    public interface Callback {
+//
+//        void onPress(int newCheck, int oldCheck);
+//    }
 }

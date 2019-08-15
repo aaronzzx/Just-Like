@@ -53,7 +53,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends CommonActivity implements IMainContract.V<Image> {
+public class MainActivity extends CommonActivity implements IMainContract.V<Image>, IMainCommunicable{
 
     private static final int REQUEST_SELECT_IMAGE = 1;
 
@@ -209,6 +209,11 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
             mAdapter.notifyDataSetChanged();
             mPresenter.deleteImage(path, mImageList.isEmpty());
         }
+    }
+
+    @Override
+    public void onDelete(String path, boolean isListEmpty) {
+        mPresenter.deleteImage(path, isListEmpty);
     }
 
     @Override
