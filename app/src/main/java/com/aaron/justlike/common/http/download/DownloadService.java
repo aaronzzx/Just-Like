@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.aaron.justlike.R;
-import com.aaron.justlike.online.PreviewActivity;
+import com.aaron.justlike.online.preview.PreviewActivity;
 
 public class DownloadService extends Service {
 

@@ -9,7 +9,7 @@ import com.aaron.justlike.common.impl.ObserverImpl;
 import com.aaron.justlike.common.util.FileUtil;
 import com.aaron.justlike.common.util.NotificationUtil;
 import com.aaron.justlike.common.util.SystemUtil;
-import com.aaron.justlike.online.PreviewPresenter;
+import com.aaron.justlike.online.preview.IPreviewInterface;
 import com.arialyy.annotations.Download;
 import com.arialyy.aria.core.Aria;
 import com.arialyy.aria.core.download.DownloadTask;
@@ -74,7 +74,7 @@ public class DownloadIntentService extends IntentService {
         Log.i("DownloadIntentService", "onDownloadComplete: " + oldFile.renameTo(new File(mPath)));
         Map.Entry<String, Integer> entry = AriaApp.getInstance().getMode();
         if (entry != null) {
-            if (entry.getValue() == PreviewPresenter.SET_WALLPAPER) {
+            if (entry.getValue() == IPreviewInterface.SET_WALLPAPER) {
                 Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
                     emitter.onNext(0);
                     emitter.onNext(FileUtil.setWallpaper(DownloadIntentService.this, mPath));

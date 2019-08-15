@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class CollectionModel implements ICollectionContract.M<Album> {
+class CollectionModel implements ICollectionContract.M<Album> {
 
     private ExecutorService mService;
 
-    public CollectionModel() {
+    CollectionModel() {
         mService = Executors.newSingleThreadExecutor();
     }
 

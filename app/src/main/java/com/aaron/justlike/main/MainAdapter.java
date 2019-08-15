@@ -13,14 +13,15 @@ import com.aaron.justlike.R;
 import com.aaron.justlike.common.adapter.SquareAdapter;
 import com.aaron.justlike.common.bean.Image;
 import com.aaron.justlike.common.event.PreviewEvent;
+import com.aaron.justlike.main.preview.PreviewActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-public class MainAdapter extends SquareAdapter {
+class MainAdapter extends SquareAdapter {
 
-    public MainAdapter(List<Image> list) {
+    MainAdapter(List<Image> list) {
         super(list);
     }
 

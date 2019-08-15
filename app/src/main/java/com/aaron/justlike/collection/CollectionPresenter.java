@@ -5,13 +5,12 @@ import com.aaron.justlike.common.bean.Album;
 import java.util.Collections;
 import java.util.List;
 
-public class CollectionPresenter implements ICollectionContract.P {
+class CollectionPresenter implements ICollectionContract.P {
 
     private ICollectionContract.V mView;
     private ICollectionContract.M<Album> mModel;
 
-    @Override
-    public void attachView(ICollectionContract.V view) {
+    CollectionPresenter(ICollectionContract.V view) {
         mView = view;
         mModel = new CollectionModel();
     }

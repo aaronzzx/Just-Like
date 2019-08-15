@@ -36,25 +36,25 @@
             android:screenOrientation="portrait"
             android:theme="@style/WhiteTheme" />
         <activity
-            android:name=".main.PreviewActivity"
+            android:name=".main.preview.PreviewActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/PreviewTheme" />
         <activity
-            android:name=".online.OnlineActivity"
+            android:name=".online.home.OnlineActivity"
             android:label="Just Like"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".online.SearchActivity"
+            android:name=".online.search.SearchActivity"
             android:label=""
             android:screenOrientation="portrait" />
         <activity
-            android:name=".online.ElementsActivity"
+            android:name=".online.search.ElementsActivity"
             android:label=""
             android:screenOrientation="portrait" />
         <activity
-            android:name=".online.PreviewActivity"
+            android:name=".online.preview.PreviewActivity"
             android:label=""
             android:screenOrientation="portrait" />
         <activity
@@ -63,19 +63,19 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".collection.ElementActivity"
+            android:name=".collection.element.ElementActivity"
             android:label="元素"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".settings.DownloadManagerActivity"
+            android:name=".others.download.DownloadManagerActivity"
             android:label="下载管理"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".settings.ThemeActivity"
+            android:name=".others.theme.ThemeActivity"
             android:label="主题"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".settings.AboutActivity"
+            android:name=".others.about.AboutActivity"
             android:label="关于"
             android:screenOrientation="portrait" />
         <activity

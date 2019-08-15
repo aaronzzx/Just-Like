@@ -30,8 +30,6 @@ interface ICollectionContract {
     }
 
     interface P {
-        void attachView(V view);
-
         void detachView();
 
         void requestCollection(List<Album> list);

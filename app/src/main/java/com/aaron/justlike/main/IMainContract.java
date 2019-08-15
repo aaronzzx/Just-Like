@@ -8,7 +8,6 @@ import java.util.List;
 interface IMainContract {
 
     interface M<T> {
-
         void queryImage(M.OnQueryImageListener<T> listener);
 
         void saveImage(List<String> pathList, M.AddImageCallback<T> callback);
@@ -33,7 +32,6 @@ interface IMainContract {
     }
 
     interface V<T> {
-
         void attachPresenter();
 
         void onShowImage(List<T> list, int sortType, boolean ascendingOrder);
@@ -50,7 +48,6 @@ interface IMainContract {
     }
 
     interface P<T> {
-
         void detachView();
 
         void requestImage(List<T> list, boolean refreshMode);

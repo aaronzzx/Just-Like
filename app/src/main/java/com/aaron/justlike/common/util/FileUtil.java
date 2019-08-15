@@ -25,7 +25,7 @@ import android.widget.Toast;
 import androidx.core.content.FileProvider;
 
 import com.aaron.justlike.common.bean.Image;
-import com.aaron.justlike.main.PreviewActivity;
+import com.aaron.justlike.main.preview.PreviewActivity;
 
 import java.io.File;
 import java.io.FileInputStream;

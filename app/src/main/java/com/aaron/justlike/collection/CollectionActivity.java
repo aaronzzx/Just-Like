@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.collection.element.ElementActivity;
 import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.bean.Album;
 import com.aaron.justlike.common.bean.Collection;
@@ -39,10 +40,10 @@ import com.aaron.justlike.common.util.SystemUtil;
 import com.aaron.justlike.common.widget.MyGridLayoutManager;
 import com.aaron.justlike.common.widget.imageSelector.ImageSelector;
 import com.aaron.justlike.main.MainActivity;
-import com.aaron.justlike.online.OnlineActivity;
-import com.aaron.justlike.settings.AboutActivity;
-import com.aaron.justlike.settings.DownloadManagerActivity;
-import com.aaron.justlike.settings.ThemeActivity;
+import com.aaron.justlike.online.home.OnlineActivity;
+import com.aaron.justlike.others.about.AboutActivity;
+import com.aaron.justlike.others.download.DownloadManagerActivity;
+import com.aaron.justlike.others.theme.ThemeActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.jaeger.library.StatusBarUtil;
 
@@ -83,8 +84,7 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
         setContentView(R.layout.activity_collection);
         EventBus.getDefault().register(this);
         initView();
-        mPresenter = new CollectionPresenter();
-        mPresenter.attachView(this);
+        mPresenter = new CollectionPresenter(this);
         mPresenter.requestCollection(mCollections);
     }
 

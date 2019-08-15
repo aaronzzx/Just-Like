@@ -17,7 +17,7 @@ import android.widget.ImageView;
 
 import com.aaron.justlike.R;
 import com.aaron.justlike.main.MainActivity;
-import com.aaron.justlike.online.OnlineActivity;
+import com.aaron.justlike.online.home.OnlineActivity;
 import com.jaeger.library.StatusBarUtil;
 
 public class SplashActivity extends CommonActivity {
