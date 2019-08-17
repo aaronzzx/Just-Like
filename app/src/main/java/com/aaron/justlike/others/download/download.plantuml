@@ -1,0 +1,194 @@
+@startuml
+
+title __DOWNLOAD's Class Diagram__\n
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      class com.aaron.justlike.others.download.DownloadManagerActivity {
+          {static} - PROGRESS_MESSAGE : String
+          {static} - PROGRESS_TITLE : String
+          {static} - SNACKBAR_ACTION_TEXT : String
+          {static} - SNACKBAR_TEXT : String
+          - mActionBar : ActionBar
+          - mDialog : ProgressDialog
+          - mEmptyView : View
+          - mIconBack : Drawable
+          - mImageList : List<Image>
+          - mToolbar : Toolbar
+          + attachPresenter()
+          + onBackPressed()
+          + onCreateOptionsMenu()
+          + onHideProgress()
+          + onOpenPreview()
+          + onOptionsItemSelected()
+          + onShowImage()
+          + onShowProgress()
+          + onShowSnackBar()
+          + onSupportNavigateUp()
+          + onTap()
+          + onWindowFocusChanged()
+          # onCreate()
+          # onDestroy()
+          - initIconColor()
+          - initRecyclerView()
+          - initToolbar()
+          - initView()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      class com.aaron.justlike.others.download.DownloadManagerAdapter {
+          - mContext : Context
+          - mList : List<Image>
+          + getItemCount()
+          + onBindViewHolder()
+          + onCreateViewHolder()
+          ~ DownloadManagerAdapter()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      class com.aaron.justlike.others.download.DownloadManagerAdapter.ViewHolder {
+          ~ imageId : TextView
+          ~ imageView : ImageView
+          ~ itemView : View
+          ~ search : ImageView
+          ~ ViewHolder()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      class com.aaron.justlike.others.download.DownloadModel {
+          {static} - PATH : String
+          {static} - TAG : String
+          + queryImage()
+          + searchImage()
+          ~ DownloadModel()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      class com.aaron.justlike.others.download.DownloadPresenter {
+          {static} ~ ASCENDING : boolean
+          {static} ~ DESCENDING : boolean
+          - mModel : M<Image>
+          - mView : V<Image>
+          + detachView()
+          + findImageByOnline()
+          + requestImage()
+          ~ DownloadPresenter()
+          - sortList()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      interface com.aaron.justlike.others.download.IDownloadCommunicable {
+          {abstract} + onTap()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      interface com.aaron.justlike.others.download.IDownloadContract {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      interface com.aaron.justlike.others.download.IDownloadContract.M {
+          {abstract} + queryImage()
+          {abstract} + searchImage()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      interface com.aaron.justlike.others.download.IDownloadContract.M.QueryCallback {
+          {abstract} + onResponse()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      interface com.aaron.justlike.others.download.IDownloadContract.M.SearchCallback {
+          {abstract} + onFailure()
+          {abstract} + onSuccess()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      interface com.aaron.justlike.others.download.IDownloadContract.P {
+          {abstract} + detachView()
+          {abstract} + findImageByOnline()
+          {abstract} + requestImage()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      interface com.aaron.justlike.others.download.IDownloadContract.V {
+          {abstract} + attachPresenter()
+          {abstract} + onHideProgress()
+          {abstract} + onOpenPreview()
+          {abstract} + onShowImage()
+          {abstract} + onShowProgress()
+          {abstract} + onShowSnackBar()
+      }
+    }
+  }
+  
+
+  com.aaron.justlike.others.download.DownloadManagerActivity .up.|> com.aaron.justlike.others.download.IDownloadCommunicable
+  com.aaron.justlike.others.download.DownloadManagerActivity .up.|> com.aaron.justlike.others.download.IDownloadContract.V
+  com.aaron.justlike.others.download.DownloadManagerActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.others.download.DownloadManagerActivity o-- com.aaron.justlike.others.download.DownloadManagerAdapter : mAdapter
+  com.aaron.justlike.others.download.DownloadManagerActivity o-- com.aaron.justlike.others.download.IDownloadContract.P : mPresenter
+  com.aaron.justlike.others.download.DownloadManagerAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.aaron.justlike.others.download.DownloadManagerAdapter +-down- com.aaron.justlike.others.download.DownloadManagerAdapter.ViewHolder
+  com.aaron.justlike.others.download.DownloadManagerAdapter.ViewHolder -up-|> androidx.recyclerview.widget.RecyclerView.ViewHolder
+  com.aaron.justlike.others.download.DownloadModel .up.|> com.aaron.justlike.others.download.IDownloadContract.M
+  com.aaron.justlike.others.download.DownloadModel o-- com.aaron.justlike.common.http.unsplash.Unsplash : mUnsplash
+  com.aaron.justlike.others.download.DownloadPresenter .up.|> com.aaron.justlike.others.download.IDownloadContract.P
+  com.aaron.justlike.others.download.IDownloadContract +-down- com.aaron.justlike.others.download.IDownloadContract.M
+  com.aaron.justlike.others.download.IDownloadContract +-down- com.aaron.justlike.others.download.IDownloadContract.P
+  com.aaron.justlike.others.download.IDownloadContract +-down- com.aaron.justlike.others.download.IDownloadContract.V
+  com.aaron.justlike.others.download.IDownloadContract.M +-down- com.aaron.justlike.others.download.IDownloadContract.M.QueryCallback
+  com.aaron.justlike.others.download.IDownloadContract.M +-down- com.aaron.justlike.others.download.IDownloadContract.M.SearchCallback
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

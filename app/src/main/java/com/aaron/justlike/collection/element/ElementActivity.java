@@ -175,7 +175,7 @@ public class ElementActivity extends CommonActivity implements IElementContract.
     }
 
     private void initView() {
-        // get title
+        // show title
         mTitle = getIntent().getStringExtra("title");
 
         // find id

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Black -->
+    <color name="base_black">#DE000000</color>
+    <color name="base_black_shallow">#8A000000</color>
+    <color name="base_black_hint">#42000000</color>
+    <color name="base_black_divider_deep">#2E000000</color>
+    <color name="base_black_divider">#1F000000</color>
+    <color name="base_black_divider_shallow">#0F000000</color>
+
+    <!-- White -->
+    <color name="base_white">#FFFFFFFF</color>
+    <color name="base_white_shallow">#B3FFFFFF</color>
+    <color name="base_white_hint">#80FFFFFF</color>
+    <color name="base_white_divider">#4DFFFFFF</color>
+
+    <color name="base_transparent">#00000000</color>
+</resources>

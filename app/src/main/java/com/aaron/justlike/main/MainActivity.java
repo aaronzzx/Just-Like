@@ -1,10 +1,12 @@
 package com.aaron.justlike.main;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -30,7 +32,6 @@ import com.aaron.justlike.collection.CollectionActivity;
 import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.bean.Image;
 import com.aaron.justlike.common.event.DeleteEvent;
-import com.aaron.justlike.common.http.glide.GlideEngine;
 import com.aaron.justlike.common.impl.SquareItemDecoration;
 import com.aaron.justlike.common.manager.ThemeManager;
 import com.aaron.justlike.common.manager.UiManager;
@@ -42,10 +43,12 @@ import com.aaron.justlike.others.download.DownloadManagerActivity;
 import com.aaron.justlike.others.theme.ThemeActivity;
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.engine.ImageEngine;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -562,9 +565,60 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
                 .gridExpectedSize(SystemUtil.dp2px(this, 120.0F))
                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                 .thumbnailScale(0.85f)
-                .imageEngine(new GlideEngine())
+                .imageEngine(new MatisseEngine())
                 .autoHideToolbarOnSingleTap(true)
                 .theme(mMatisseTheme)
                 .forResult(REQUEST_SELECT_IMAGE);
+    }
+
+    public static class MatisseEngine implements ImageEngine {
+        @Override
+        public void loadThumbnail(Context context, int resize, Drawable placeholder, ImageView imageView, Uri uri) {
+            Glide.with(context)
+                    .asBitmap()
+                    .load(uri)
+                    .placeholder(placeholder)
+                    .centerCrop()
+                    .override(resize, resize)
+                    .into(imageView);
+
+        }
+
+        @Override
+        public void loadGifThumbnail(Context context, int resize, Drawable placeholder, ImageView imageView, Uri uri) {
+            Glide.with(context)
+                    .asGif()
+                    .load(uri)
+                    .placeholder(placeholder)
+                    .centerCrop()
+                    .override(resize, resize)
+                    .into(imageView);
+        }
+
+
+        @Override
+        public void loadImage(Context context, int resizeX, int resizeY, ImageView imageView, Uri uri) {
+            Glide.with(context)
+                    .asBitmap()
+                    .load(uri)
+                    .centerCrop()
+                    .override(resizeX, resizeY)
+                    .into(imageView);
+        }
+
+        @Override
+        public void loadGifImage(Context context, int resizeX, int resizeY, ImageView imageView, Uri uri) {
+            Glide.with(context)
+                    .asGif()
+                    .load(uri)
+                    .centerCrop()
+                    .override(resizeX, resizeY)
+                    .into(imageView);
+        }
+
+        @Override
+        public boolean supportAnimatedGif() {
+            return true;
+        }
     }
 }

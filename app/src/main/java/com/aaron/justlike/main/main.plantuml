@@ -1,0 +1,230 @@
+@startuml
+
+title __MAIN's Class Diagram__\n
+
+  namespace com.aaron.justlike {
+    namespace main {
+      interface com.aaron.justlike.main.IMainCommunicable {
+          {abstract} + onDelete()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      interface com.aaron.justlike.main.IMainContract {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      interface com.aaron.justlike.main.IMainContract.M {
+          {abstract} + deleteImage()
+          {abstract} + insertSortInfo()
+          {abstract} + queryImage()
+          {abstract} + querySortInfo()
+          {abstract} + saveImage()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      interface com.aaron.justlike.main.IMainContract.M.AddImageCallback {
+          {abstract} + onSavedImage()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      interface com.aaron.justlike.main.IMainContract.M.OnQueryImageListener {
+          {abstract} + onFailure()
+          {abstract} + onSuccess()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      interface com.aaron.justlike.main.IMainContract.P {
+          {abstract} + addImage()
+          {abstract} + deleteImage()
+          {abstract} + detachView()
+          {abstract} + requestImage()
+          {abstract} + setSortType()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      interface com.aaron.justlike.main.IMainContract.V {
+          {abstract} + attachPresenter()
+          {abstract} + onHideEmptyView()
+          {abstract} + onHideRefresh()
+          {abstract} + onShowAddImage()
+          {abstract} + onShowEmptyView()
+          {abstract} + onShowImage()
+          {abstract} + onShowMessage()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      class com.aaron.justlike.main.MainActivity {
+          {static} - REQUEST_SELECT_IMAGE : int
+          - mActionBar : ActionBar
+          - mAdapter : Adapter
+          - mColorPrimary : int
+          - mEmptyView : View
+          - mFabButton : FloatingActionButton
+          - mIconAdd : Drawable
+          - mIconDrawer : Drawable
+          - mIconSort : Drawable
+          - mImageList : List<Image>
+          - mIsAscending : boolean
+          - mMatisseTheme : int
+          - mNavHeaderImage : ImageView
+          - mNavView : NavigationView
+          - mParentLayout : DrawerLayout
+          - mPresenter : P<Image>
+          - mRv : RecyclerView
+          - mSortByAscending : MenuItem
+          - mSortByDate : MenuItem
+          - mSortByName : MenuItem
+          - mSortBySize : MenuItem
+          - mSortType : int
+          - mSwipeRefresh : SwipeRefreshLayout
+          - mToolbar : Toolbar
+          + attachPresenter()
+          + onBackPressed()
+          + onCreateOptionsMenu()
+          + onDelete()
+          + onDeleteEvent()
+          + onHideEmptyView()
+          + onHideRefresh()
+          + onOptionsItemSelected()
+          + onShowAddImage()
+          + onShowEmptyView()
+          + onShowImage()
+          + onShowMessage()
+          + onSupportNavigateUp()
+          + onWindowFocusChanged()
+          # onActivityResult()
+          # onCreate()
+          # onDestroy()
+          - getColorStateListTest()
+          - initIconColor()
+          - initMenuItem()
+          - initTheme()
+          - initToolbar()
+          - initView()
+          - openImageSelector()
+          - requestPermission()
+          - setSort()
+          - setSortByAscending()
+          - startActivityByNav()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      class com.aaron.justlike.main.MainActivity.MatisseEngine {
+          + loadGifImage()
+          + loadGifThumbnail()
+          + loadImage()
+          + loadThumbnail()
+          + supportAnimatedGif()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      class com.aaron.justlike.main.MainAdapter {
+          # bindHolder()
+          # createHolder()
+          ~ MainAdapter()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      class com.aaron.justlike.main.MainModel {
+          {static} - PATH : String
+          {static} - TYPE : String[]
+          - mExecutorService : ExecutorService
+          + deleteImage()
+          + insertSortInfo()
+          + queryImage()
+          + querySortInfo()
+          + saveImage()
+          ~ MainModel()
+          - getImage()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      class com.aaron.justlike.main.MainPresenter {
+          {static} + ASCENDING_ORDER : boolean
+          {static} + SORT_BY_DATE : int
+          {static} + SORT_BY_NAME : int
+          {static} + SORT_BY_SIZE : int
+          {static} - NO_SORT_STATUS : int
+          - mAscendingOrder : boolean
+          - mModel : M<Image>
+          - mSortType : int
+          - mView : V<Image>
+          + addImage()
+          + deleteImage()
+          + detachView()
+          + requestImage()
+          + setSortType()
+          ~ MainPresenter()
+          - sortImageList()
+      }
+    }
+  }
+  
+
+  com.aaron.justlike.main.IMainContract +-down- com.aaron.justlike.main.IMainContract.M
+  com.aaron.justlike.main.IMainContract +-down- com.aaron.justlike.main.IMainContract.P
+  com.aaron.justlike.main.IMainContract +-down- com.aaron.justlike.main.IMainContract.V
+  com.aaron.justlike.main.IMainContract.M +-down- com.aaron.justlike.main.IMainContract.M.AddImageCallback
+  com.aaron.justlike.main.IMainContract.M +-down- com.aaron.justlike.main.IMainContract.M.OnQueryImageListener
+  com.aaron.justlike.main.MainActivity .up.|> com.aaron.justlike.main.IMainCommunicable
+  com.aaron.justlike.main.MainActivity .up.|> com.aaron.justlike.main.IMainContract.V
+  com.aaron.justlike.main.MainActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.main.MainActivity +-down- com.aaron.justlike.main.MainActivity.MatisseEngine
+  com.aaron.justlike.main.MainActivity.MatisseEngine .up.|> com.zhihu.matisse.engine.ImageEngine
+  com.aaron.justlike.main.MainAdapter -up-|> com.aaron.justlike.common.adapter.SquareAdapter
+  com.aaron.justlike.main.MainModel .up.|> com.aaron.justlike.main.IMainContract.M
+  com.aaron.justlike.main.MainPresenter .up.|> com.aaron.justlike.main.IMainContract.P
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

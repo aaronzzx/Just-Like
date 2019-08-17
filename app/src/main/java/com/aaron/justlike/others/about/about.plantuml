@@ -1,0 +1,170 @@
+@startuml
+
+title __ABOUT's Class Diagram__\n
+
+  namespace com.aaron.justlike {
+    namespace others.about {
+      class com.aaron.justlike.others.about.AboutActivity {
+          - mActionBar : ActionBar
+          - mIconBack : Drawable
+          - mRecycleLibrary : RecyclerView
+          - mRecycleMessage : RecyclerView
+          - mToolbar : Toolbar
+          + attachPresenter()
+          + onBackPressed()
+          + onShowLibrary()
+          + onShowMessage()
+          + onSupportNavigateUp()
+          + onWindowFocusChanged()
+          # onCreate()
+          # onDestroy()
+          - initIconColor()
+          - initLibrary()
+          - initMessage()
+          - initToolbar()
+          - initVersionStatus()
+          - initView()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.about {
+      class com.aaron.justlike.others.about.AboutLibraryAdapter {
+          - mContext : Context
+          - mList : List<T>
+          + getItemCount()
+          + onBindViewHolder()
+          + onCreateViewHolder()
+          ~ AboutLibraryAdapter()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.about {
+      class com.aaron.justlike.others.about.AboutLibraryAdapter.ViewHolder {
+          ~ author : TextView
+          ~ introduce : TextView
+          ~ itemView : View
+          ~ name : TextView
+          ~ ViewHolder()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.about {
+      class com.aaron.justlike.others.about.AboutMessageAdapter {
+          {static} - FEEDBACK : int
+          {static} - GIFT : int
+          {static} - GITHUB : int
+          {static} - INTRODUCE : int
+          {static} - SOURCE_CODE : int
+          - mActivity : Activity
+          - mList : List<T>
+          + getItemCount()
+          + onBindViewHolder()
+          + onCreateViewHolder()
+          ~ AboutMessageAdapter()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.about {
+      class com.aaron.justlike.others.about.AboutMessageAdapter.ViewHolder {
+          ~ icon : ImageView
+          ~ itemView : View
+          ~ title : TextView
+          ~ ViewHolder()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.about {
+      class com.aaron.justlike.others.about.AboutPresenter {
+          - mLibraryList : List<Library>
+          - mMessageList : List<Message>
+          - mView : V<Message, Library>
+          + detachView()
+          + requestLibrary()
+          + requestMessage()
+          ~ AboutPresenter()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.about {
+      class com.aaron.justlike.others.about.AboutPresenter.Element {
+          {static} + ICON_ID : int[]
+          {static} + LIBRARY_AUTHOR : String[]
+          {static} + LIBRARY_INTRODUCE : String[]
+          {static} + LIBRARY_NAME : String[]
+          {static} + TITLE : String[]
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.about {
+      interface com.aaron.justlike.others.about.IAboutContract {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.about {
+      interface com.aaron.justlike.others.about.IAboutContract.P {
+          {abstract} + detachView()
+          {abstract} + requestLibrary()
+          {abstract} + requestMessage()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.about {
+      interface com.aaron.justlike.others.about.IAboutContract.V {
+          {abstract} + attachPresenter()
+          {abstract} + onShowLibrary()
+          {abstract} + onShowMessage()
+      }
+    }
+  }
+  
+
+  com.aaron.justlike.others.about.AboutActivity .up.|> com.aaron.justlike.others.about.IAboutContract.V
+  com.aaron.justlike.others.about.AboutActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.others.about.AboutActivity o-- com.aaron.justlike.others.about.IAboutContract.P : mPresenter
+  com.aaron.justlike.others.about.AboutLibraryAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.aaron.justlike.others.about.AboutLibraryAdapter +-down- com.aaron.justlike.others.about.AboutLibraryAdapter.ViewHolder
+  com.aaron.justlike.others.about.AboutLibraryAdapter.ViewHolder -up-|> androidx.recyclerview.widget.RecyclerView.ViewHolder
+  com.aaron.justlike.others.about.AboutMessageAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.aaron.justlike.others.about.AboutMessageAdapter +-down- com.aaron.justlike.others.about.AboutMessageAdapter.ViewHolder
+  com.aaron.justlike.others.about.AboutMessageAdapter.ViewHolder -up-|> androidx.recyclerview.widget.RecyclerView.ViewHolder
+  com.aaron.justlike.others.about.AboutPresenter .up.|> com.aaron.justlike.others.about.IAboutContract.P
+  com.aaron.justlike.others.about.AboutPresenter +-down- com.aaron.justlike.others.about.AboutPresenter.Element
+  com.aaron.justlike.others.about.IAboutContract +-down- com.aaron.justlike.others.about.IAboutContract.P
+  com.aaron.justlike.others.about.IAboutContract +-down- com.aaron.justlike.others.about.IAboutContract.V
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

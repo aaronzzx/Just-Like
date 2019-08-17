@@ -2,13 +2,13 @@ package com.aaron.justlike.main;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.view.ViewGroup;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.aaron.base.image.ImageLoader;
+import com.aaron.base.image.test.DefaultOption;
+import com.aaron.base.image.test.ImageLoader;
+import com.aaron.base.image.test.ScaleType;
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.adapter.SquareAdapter;
 import com.aaron.justlike.common.bean.Image;
@@ -59,28 +59,12 @@ class MainAdapter extends SquareAdapter {
         Image image = mList.get(position); // 从集合中找到 Image 对象
         String path = image.getPath();
 
-//        GlideApp.getInstance()
-//                .with(mContext)
-//                .asDrawable()
-//                .load(path)
-//                .placeHolder(R.color.colorBlue)
-//                .transition(100)
-//                .into(((ViewHolder) holder).squareView);
-        Drawable placeholder = new ColorDrawable(mContext.getResources().getColor(R.color.colorBlue));
-        ImageLoader.loadWithPlaceholder(mContext, path, placeholder, holder.squareView);
+//        Drawable placeholder = new ColorDrawable(mContext.getResources().getColor(R.color.colorBlue));
+//        ImageLoader.loadWithPlaceholder(mContext, path, placeholder, holder.squareView);
+        ImageLoader.get()
+                .load(mContext, new DefaultOption.Builder(path)
+                .placeholder(R.color.colorBlue)
+                .scaleType(ScaleType.CIRCLE_CROP)
+                .into(holder.squareView));
     }
-//
-//    @Override
-//    public int getItemCount() {
-//        return mList.size();
-//    }
-
-//    private static class ViewHolder extends RecyclerView.ViewHolder {
-//        SquareView squareView;
-//
-//        ViewHolder(View view) {
-//            super(view);
-//            squareView = view.findViewById(R.id.square_view);
-//        }
-//    }
 }

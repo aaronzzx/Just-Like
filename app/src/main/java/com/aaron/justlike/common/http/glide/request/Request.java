@@ -33,7 +33,6 @@ public interface Request<T> {
     void into(ImageView target);
 
     interface Listener<T> {
-
         void onLoadFailed();
 
         void onResourceReady(T resource, boolean isFirstResource);

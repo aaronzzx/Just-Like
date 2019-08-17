@@ -41,7 +41,6 @@ public class GlideApp {
     }
 
     public class ResourceType {
-
         public Request<Drawable> asDrawable() {
             return new DrawableRequest(mRequestManager.asDrawable());
         }

@@ -1,0 +1,196 @@
+@startuml
+
+title __COLLECTION's Class Diagram__\n
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      class com.aaron.justlike.collection.CollectionActivity {
+          - mActionBar : ActionBar
+          - mCollections : List<Album>
+          - mColorPrimary : int
+          - mDialog : ProgressDialog
+          - mEmptyView : View
+          - mIconAdd : Drawable
+          - mIconDrawer : Drawable
+          - mNavHeaderImage : ImageView
+          - mNavView : NavigationView
+          - mParentLayout : DrawerLayout
+          - mRecyclerView : RecyclerView
+          - mStatusBar : View
+          - mToolbar : Toolbar
+          + onBackPressed()
+          + onCreateOptionsMenu()
+          + onLongTap()
+          + onOptionsItemSelected()
+          + onSelectEvent()
+          + onShowImage()
+          + onSupportNavigateUp()
+          + onTap()
+          + onUpdateEvent()
+          + onWindowFocusChanged()
+          # onCreate()
+          # onDestroy()
+          - hideProgress()
+          - initIconColor()
+          - initRecyclerView()
+          - initTheme()
+          - initToolbar()
+          - initView()
+          - showProgress()
+          - startActivityByNav()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      class com.aaron.justlike.collection.CollectionActivity.YItemDecoration {
+          + getItemOffsets()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      class com.aaron.justlike.collection.CollectionAdapter {
+          - mAlbums : List<Album>
+          - mContext : Context
+          + getItemCount()
+          + onBindViewHolder()
+          + onCreateViewHolder()
+          ~ CollectionAdapter()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      class com.aaron.justlike.collection.CollectionAdapter.ViewHolder {
+          ~ imageTitle : TextView
+          ~ imageTotal : TextView
+          ~ itemImage : ImageView
+          ~ itemView : View
+          ~ ViewHolder()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      class com.aaron.justlike.collection.CollectionModel {
+          - mService : ExecutorService
+          + deleteCollection()
+          + insertCollection()
+          + queryCollection()
+          ~ CollectionModel()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      class com.aaron.justlike.collection.CollectionPresenter {
+          - mModel : M<Album>
+          + deleteCollection()
+          + detachView()
+          + requestCollection()
+          + saveCollection()
+          ~ CollectionPresenter()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      interface com.aaron.justlike.collection.ICollectionCommunicable {
+          {abstract} + onLongTap()
+          {abstract} + onTap()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      interface com.aaron.justlike.collection.ICollectionContract {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      interface com.aaron.justlike.collection.ICollectionContract.M {
+          {abstract} + deleteCollection()
+          {abstract} + insertCollection()
+          {abstract} + queryCollection()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      interface com.aaron.justlike.collection.ICollectionContract.M.Callback {
+          + onFinish()
+          + onResponse()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      interface com.aaron.justlike.collection.ICollectionContract.P {
+          {abstract} + deleteCollection()
+          {abstract} + detachView()
+          {abstract} + requestCollection()
+          {abstract} + saveCollection()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      interface com.aaron.justlike.collection.ICollectionContract.V {
+          {abstract} + onShowImage()
+      }
+    }
+  }
+  
+
+  com.aaron.justlike.collection.CollectionActivity .up.|> com.aaron.justlike.collection.ICollectionCommunicable
+  com.aaron.justlike.collection.CollectionActivity .up.|> com.aaron.justlike.collection.ICollectionContract.V
+  com.aaron.justlike.collection.CollectionActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.collection.CollectionActivity o-- com.aaron.justlike.collection.CollectionAdapter : mAdapter
+  com.aaron.justlike.collection.CollectionActivity o-- com.aaron.justlike.common.widget.MyGridLayoutManager : mLayoutManager
+  com.aaron.justlike.collection.CollectionActivity o-- com.aaron.justlike.collection.ICollectionContract.P : mPresenter
+  com.aaron.justlike.collection.CollectionActivity +-down- com.aaron.justlike.collection.CollectionActivity.YItemDecoration
+  com.aaron.justlike.collection.CollectionActivity.YItemDecoration -up-|> androidx.recyclerview.widget.RecyclerView.ItemDecoration
+  com.aaron.justlike.collection.CollectionAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.aaron.justlike.collection.CollectionAdapter +-down- com.aaron.justlike.collection.CollectionAdapter.ViewHolder
+  com.aaron.justlike.collection.CollectionAdapter.ViewHolder -up-|> androidx.recyclerview.widget.RecyclerView.ViewHolder
+  com.aaron.justlike.collection.CollectionModel .up.|> com.aaron.justlike.collection.ICollectionContract.M
+  com.aaron.justlike.collection.CollectionPresenter .up.|> com.aaron.justlike.collection.ICollectionContract.P
+  com.aaron.justlike.collection.CollectionPresenter o-- com.aaron.justlike.collection.ICollectionContract.V : mView
+  com.aaron.justlike.collection.ICollectionContract +-down- com.aaron.justlike.collection.ICollectionContract.M
+  com.aaron.justlike.collection.ICollectionContract +-down- com.aaron.justlike.collection.ICollectionContract.P
+  com.aaron.justlike.collection.ICollectionContract +-down- com.aaron.justlike.collection.ICollectionContract.V
+  com.aaron.justlike.collection.ICollectionContract.M +-down- com.aaron.justlike.collection.ICollectionContract.M.Callback
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

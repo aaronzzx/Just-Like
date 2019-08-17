@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.aaron.base.image.ImageLoader;
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.bean.Album;
 import com.aaron.justlike.common.http.glide.GlideApp;
@@ -75,7 +76,6 @@ class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-
         View itemView;
         ImageView itemImage;
         TextView imageTotal;

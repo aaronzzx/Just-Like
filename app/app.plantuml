@@ -1,0 +1,1478 @@
+@startuml
+
+title __APP's Class Diagram__\n
+
+  namespace com.aaron.justlike {
+    class com.aaron.justlike.BuildConfig {
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    class com.aaron.justlike.R2 {
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      class com.aaron.justlike.collection.CollectionActivity {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      class com.aaron.justlike.collection.CollectionAdapter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      class com.aaron.justlike.collection.CollectionModel {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      class com.aaron.justlike.collection.CollectionPresenter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      interface com.aaron.justlike.collection.ICollectionCommunicable {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      interface com.aaron.justlike.collection.ICollectionContract {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      namespace element {
+        class com.aaron.justlike.collection.element.ElementActivity {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      namespace element {
+        class com.aaron.justlike.collection.element.ElementAdapter {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      namespace element {
+        class com.aaron.justlike.collection.element.ElementModel {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      namespace element {
+        class com.aaron.justlike.collection.element.ElementPresenter {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      namespace element {
+        interface com.aaron.justlike.collection.element.IElementCommunicable {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      namespace element {
+        interface com.aaron.justlike.collection.element.IElementContract {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      abstract class com.aaron.justlike.common.CommonActivity {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      class com.aaron.justlike.common.JustLike {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      class com.aaron.justlike.common.SplashActivity {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace adapter {
+        abstract class com.aaron.justlike.common.adapter.PhotoAdapter {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace adapter {
+        abstract class com.aaron.justlike.common.adapter.SquareAdapter {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace bean {
+        class com.aaron.justlike.common.bean.Album {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace bean {
+        class com.aaron.justlike.common.bean.Collection {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace bean {
+        class com.aaron.justlike.common.bean.Element {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace bean {
+        class com.aaron.justlike.common.bean.Image {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace bean {
+        class com.aaron.justlike.common.bean.ImageInfo {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace bean {
+        class com.aaron.justlike.common.bean.Library {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace bean {
+        class com.aaron.justlike.common.bean.Message {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace bean {
+        class com.aaron.justlike.common.bean.SortInfo {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace event {
+        class com.aaron.justlike.common.event.CollectionEvent {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace event {
+        class com.aaron.justlike.common.event.DeleteEvent {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace event {
+        class com.aaron.justlike.common.event.PhotoEvent {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace event {
+        class com.aaron.justlike.common.event.PreviewEvent {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace event {
+        class com.aaron.justlike.common.event.SelectEvent {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace event {
+        class com.aaron.justlike.common.event.UpdateEvent {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.download {
+        class com.aaron.justlike.common.http.download.AriaApp {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.download {
+        class com.aaron.justlike.common.http.download.DownloadIntentService {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.download {
+        class com.aaron.justlike.common.http.download.DownloadIntentService$$DownloadListenerProxy {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.download {
+        class com.aaron.justlike.common.http.download.DownloadService {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.download {
+        class com.aaron.justlike.common.http.download.DownloadTask {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.download {
+        interface com.aaron.justlike.common.http.download.IDownloadListener {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.glide {
+        class com.aaron.justlike.common.http.glide.GlideApp {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.glide {
+        namespace request {
+          class com.aaron.justlike.common.http.glide.request.BitmapRequest {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.glide {
+        namespace request {
+          class com.aaron.justlike.common.http.glide.request.DrawableRequest {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.glide {
+        namespace request {
+          class com.aaron.justlike.common.http.glide.request.FileRequest {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.glide {
+        namespace request {
+          class com.aaron.justlike.common.http.glide.request.GifDrawableRequest {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.glide {
+        namespace request {
+          interface com.aaron.justlike.common.http.glide.request.Request {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        class com.aaron.justlike.common.http.unsplash.HeaderInterceptor {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        enum Order {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        class com.aaron.justlike.common.http.unsplash.Unsplash {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.collection {
+          class com.aaron.justlike.common.http.unsplash.entity.collection.Collection {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.collection {
+          class com.aaron.justlike.common.http.unsplash.entity.collection.CoverPhoto {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.collection {
+          class com.aaron.justlike.common.http.unsplash.entity.collection.Links {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.collection {
+          class com.aaron.justlike.common.http.unsplash.entity.collection.ProfileImage {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.collection {
+          class com.aaron.justlike.common.http.unsplash.entity.collection.SearchCollection {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.collection {
+          class com.aaron.justlike.common.http.unsplash.entity.collection.SearchCollectionResult {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.collection {
+          class com.aaron.justlike.common.http.unsplash.entity.collection.Urls {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.collection {
+          class com.aaron.justlike.common.http.unsplash.entity.collection.User {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.photo {
+          class com.aaron.justlike.common.http.unsplash.entity.photo.Links {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.photo {
+          class com.aaron.justlike.common.http.unsplash.entity.photo.Photo {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.photo {
+          class com.aaron.justlike.common.http.unsplash.entity.photo.ProfileImage {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.photo {
+          class com.aaron.justlike.common.http.unsplash.entity.photo.SearchPhoto {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.photo {
+          class com.aaron.justlike.common.http.unsplash.entity.photo.SearchPhotoResult {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.photo {
+          class com.aaron.justlike.common.http.unsplash.entity.photo.Urls {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.photo {
+          class com.aaron.justlike.common.http.unsplash.entity.photo.User {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.photo {
+          class com.aaron.justlike.common.http.unsplash.entity.photo.UserLinks {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace interfaces {
+          interface com.aaron.justlike.common.http.unsplash.interfaces.UnsplashCallback {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace interfaces {
+          interface com.aaron.justlike.common.http.unsplash.interfaces.UnsplashService {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace impl {
+        abstract class com.aaron.justlike.common.impl.ObserverImpl {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace impl {
+        class com.aaron.justlike.common.impl.SquareItemDecoration {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace manager {
+        class com.aaron.justlike.common.manager.ThemeManager {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace manager {
+        class com.aaron.justlike.common.manager.UiManager {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace util {
+        class com.aaron.justlike.common.util.AlipayUtil {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace util {
+        class com.aaron.justlike.common.util.AnimationUtil {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace util {
+        class com.aaron.justlike.common.util.EmptyViewUtil {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace util {
+        class com.aaron.justlike.common.util.FileUtil {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace util {
+        class com.aaron.justlike.common.util.LogUtil {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace util {
+        class com.aaron.justlike.common.util.NotificationUtil {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace util {
+        class com.aaron.justlike.common.util.SystemUtil {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace widget {
+        class com.aaron.justlike.common.widget.MyGridLayoutManager {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace widget {
+        class com.aaron.justlike.common.widget.SquareView {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace widget {
+        class com.aaron.justlike.common.widget.ViewWrapper {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace widget {
+        namespace imageSelector {
+          class com.aaron.justlike.common.widget.imageSelector.ImageSelector {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace widget {
+        namespace imageSelector {
+          class com.aaron.justlike.common.widget.imageSelector.SelectorActivity {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace widget {
+        namespace imageSelector {
+          class com.aaron.justlike.common.widget.imageSelector.SelectorAdapter {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      interface com.aaron.justlike.main.IMainCommunicable {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      interface com.aaron.justlike.main.IMainContract {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      class com.aaron.justlike.main.MainActivity {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      class com.aaron.justlike.main.MainAdapter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      class com.aaron.justlike.main.MainModel {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      class com.aaron.justlike.main.MainPresenter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      namespace preview {
+        interface com.aaron.justlike.main.preview.IPreviewCommunicable {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      namespace preview {
+        interface com.aaron.justlike.main.preview.IPreviewContract {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      namespace preview {
+        class com.aaron.justlike.main.preview.PreviewActivity {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      namespace preview {
+        class com.aaron.justlike.main.preview.PreviewAdapter {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace main {
+      namespace preview {
+        class com.aaron.justlike.main.preview.PreviewPresenter {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      class com.aaron.justlike.online.home.CuratedFragment {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      interface com.aaron.justlike.online.home.IOnlineContract {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      class com.aaron.justlike.online.home.OnlineActivity {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      class com.aaron.justlike.online.home.OnlineAdapter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      abstract class com.aaron.justlike.online.home.OnlineFragment {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      class com.aaron.justlike.online.home.OnlineModel {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      class com.aaron.justlike.online.home.OnlinePagerAdapter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      class com.aaron.justlike.online.home.OnlinePresenter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      class com.aaron.justlike.online.home.RandomFragment {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      class com.aaron.justlike.online.home.RecommendFragment {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.preview {
+      interface com.aaron.justlike.online.preview.IPreviewContract {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.preview {
+      interface com.aaron.justlike.online.preview.IPreviewInterface {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.preview {
+      class com.aaron.justlike.online.preview.PreviewActivity {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.preview {
+      class com.aaron.justlike.online.preview.PreviewModel {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.preview {
+      class com.aaron.justlike.online.preview.PreviewPresenter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.CollectionAdapter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.CollectionFragment {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.CollectionPresenter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.ElementPresenter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.ElementsActivity {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      interface com.aaron.justlike.online.search.IElementContract {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      interface com.aaron.justlike.online.search.IFragment {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      interface com.aaron.justlike.online.search.ISerachContract {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.PhotoAdapterImpl {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.PhotoFragment {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.PhotoPresenter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.SearchActivity {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.SearchModel {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.SearchPagerAdapter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.about {
+      class com.aaron.justlike.others.about.AboutActivity {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.about {
+      class com.aaron.justlike.others.about.AboutLibraryAdapter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.about {
+      class com.aaron.justlike.others.about.AboutMessageAdapter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.about {
+      class com.aaron.justlike.others.about.AboutPresenter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.about {
+      interface com.aaron.justlike.others.about.IAboutContract {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      class com.aaron.justlike.others.download.DownloadManagerActivity {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      class com.aaron.justlike.others.download.DownloadManagerAdapter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      class com.aaron.justlike.others.download.DownloadModel {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      class com.aaron.justlike.others.download.DownloadPresenter {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      interface com.aaron.justlike.others.download.IDownloadCommunicable {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.download {
+      interface com.aaron.justlike.others.download.IDownloadContract {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.theme {
+      interface com.aaron.justlike.others.theme.IThemeCommunicable {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.theme {
+      class com.aaron.justlike.others.theme.ThemeActivity {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace others.theme {
+      class com.aaron.justlike.others.theme.ThemeAdapter {
+      }
+    }
+  }
+  
+
+  com.aaron.justlike.collection.CollectionActivity .up.|> com.aaron.justlike.collection.ICollectionCommunicable
+  com.aaron.justlike.collection.CollectionActivity .up.|> com.aaron.justlike.collection.ICollectionContract.V
+  com.aaron.justlike.collection.CollectionActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.collection.CollectionActivity o-- com.aaron.justlike.collection.CollectionAdapter : mAdapter
+  com.aaron.justlike.collection.CollectionActivity o-- com.aaron.justlike.common.widget.MyGridLayoutManager : mLayoutManager
+  com.aaron.justlike.collection.CollectionActivity o-- com.aaron.justlike.collection.ICollectionContract.P : mPresenter
+  com.aaron.justlike.collection.CollectionAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.aaron.justlike.collection.CollectionModel .up.|> com.aaron.justlike.collection.ICollectionContract.M
+  com.aaron.justlike.collection.CollectionPresenter .up.|> com.aaron.justlike.collection.ICollectionContract.P
+  com.aaron.justlike.collection.CollectionPresenter o-- com.aaron.justlike.collection.ICollectionContract.V : mView
+  com.aaron.justlike.collection.element.ElementActivity .up.|> com.aaron.justlike.collection.element.IElementCommunicable
+  com.aaron.justlike.collection.element.ElementActivity .up.|> com.aaron.justlike.collection.element.IElementContract.V
+  com.aaron.justlike.collection.element.ElementActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.collection.element.ElementAdapter -up-|> com.aaron.justlike.common.adapter.SquareAdapter
+  com.aaron.justlike.collection.element.ElementModel .up.|> com.aaron.justlike.collection.element.IElementContract.M
+  com.aaron.justlike.collection.element.ElementPresenter .up.|> com.aaron.justlike.collection.element.IElementContract.P
+  com.aaron.justlike.common.CommonActivity -up-|> com.aaron.base.base.BaseActivity
+  com.aaron.justlike.common.JustLike -up-|> android.app.Application
+  com.aaron.justlike.common.SplashActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.common.SplashActivity o-- com.aaron.justlike.common.SplashActivity.NetworkReceiver : mReceiver
+  com.aaron.justlike.common.adapter.PhotoAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.aaron.justlike.common.adapter.SquareAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.aaron.justlike.common.bean.Collection -up-|> org.litepal.crud.LitePalSupport
+  com.aaron.justlike.common.bean.Element -up-|> org.litepal.crud.LitePalSupport
+  com.aaron.justlike.common.bean.Image .up.|> android.os.Parcelable
+  com.aaron.justlike.common.bean.SortInfo -up-|> org.litepal.crud.LitePalSupport
+  com.aaron.justlike.common.event.PhotoEvent o-- com.aaron.justlike.common.http.unsplash.entity.photo.Photo : photo
+  com.aaron.justlike.common.event.SelectEvent o-- com.aaron.justlike.common.bean.Collection : collection
+  com.aaron.justlike.common.http.download.DownloadIntentService -up-|> android.app.IntentService
+  com.aaron.justlike.common.http.download.DownloadIntentService$$DownloadListenerProxy -up-|> com.arialyy.aria.core.scheduler.AbsSchedulerListener
+  com.aaron.justlike.common.http.download.DownloadIntentService$$DownloadListenerProxy o-- com.aaron.justlike.common.http.download.DownloadIntentService : obj
+  com.aaron.justlike.common.http.download.DownloadService -up-|> android.app.Service
+  com.aaron.justlike.common.http.download.DownloadService o-- com.aaron.justlike.common.http.download.DownloadService.DownloadBinder : mBinder
+  com.aaron.justlike.common.http.download.DownloadService o-- com.aaron.justlike.common.http.download.DownloadTask : mDownloadTask
+  com.aaron.justlike.common.http.download.DownloadService o-- com.aaron.justlike.common.http.download.IDownloadListener : mListener
+  com.aaron.justlike.common.http.download.DownloadTask -up-|> android.os.AsyncTask
+  com.aaron.justlike.common.http.download.DownloadTask o-- com.aaron.justlike.common.http.download.IDownloadListener : mListener
+  com.aaron.justlike.common.http.glide.request.BitmapRequest .up.|> com.aaron.justlike.common.http.glide.request.Request
+  com.aaron.justlike.common.http.glide.request.DrawableRequest .up.|> com.aaron.justlike.common.http.glide.request.Request
+  com.aaron.justlike.common.http.glide.request.FileRequest .up.|> com.aaron.justlike.common.http.glide.request.Request
+  com.aaron.justlike.common.http.glide.request.GifDrawableRequest .up.|> com.aaron.justlike.common.http.glide.request.Request
+  com.aaron.justlike.common.http.unsplash.HeaderInterceptor .up.|> okhttp3.Interceptor
+  com.aaron.justlike.common.http.unsplash.Unsplash o-- com.aaron.justlike.common.http.unsplash.interfaces.UnsplashService : mUnsplashService
+  com.aaron.justlike.common.http.unsplash.entity.collection.Collection .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.collection.Collection o-- com.aaron.justlike.common.http.unsplash.entity.collection.CoverPhoto : coverPhoto
+  com.aaron.justlike.common.http.unsplash.entity.collection.Collection o-- com.aaron.justlike.common.http.unsplash.entity.collection.User : user
+  com.aaron.justlike.common.http.unsplash.entity.collection.CoverPhoto .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.collection.CoverPhoto o-- com.aaron.justlike.common.http.unsplash.entity.collection.Links : links
+  com.aaron.justlike.common.http.unsplash.entity.collection.CoverPhoto o-- com.aaron.justlike.common.http.unsplash.entity.collection.Urls : urls
+  com.aaron.justlike.common.http.unsplash.entity.collection.CoverPhoto o-- com.aaron.justlike.common.http.unsplash.entity.collection.User : user
+  com.aaron.justlike.common.http.unsplash.entity.collection.Links .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.collection.ProfileImage .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.collection.SearchCollection .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.collection.SearchCollectionResult .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.collection.Urls .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.collection.User .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.collection.User o-- com.aaron.justlike.common.http.unsplash.entity.collection.ProfileImage : profileImage
+  com.aaron.justlike.common.http.unsplash.entity.photo.Links .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.photo.Photo .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.photo.Photo o-- com.aaron.justlike.common.http.unsplash.entity.photo.UserLinks : links
+  com.aaron.justlike.common.http.unsplash.entity.photo.Photo o-- com.aaron.justlike.common.http.unsplash.entity.photo.Urls : urls
+  com.aaron.justlike.common.http.unsplash.entity.photo.Photo o-- com.aaron.justlike.common.http.unsplash.entity.photo.User : user
+  com.aaron.justlike.common.http.unsplash.entity.photo.ProfileImage .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.photo.SearchPhotoResult .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.photo.Urls .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.photo.User .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.photo.User o-- com.aaron.justlike.common.http.unsplash.entity.photo.Links : links
+  com.aaron.justlike.common.http.unsplash.entity.photo.User o-- com.aaron.justlike.common.http.unsplash.entity.photo.ProfileImage : profileImage
+  com.aaron.justlike.common.http.unsplash.entity.photo.UserLinks .up.|> android.os.Parcelable
+  com.aaron.justlike.common.impl.ObserverImpl .up.|> io.reactivex.Observer
+  com.aaron.justlike.common.manager.ThemeManager o-- com.aaron.justlike.common.manager.ThemeManager.Theme : mCurrentTheme
+  com.aaron.justlike.common.widget.MyGridLayoutManager -up-|> androidx.recyclerview.widget.GridLayoutManager
+  com.aaron.justlike.common.widget.SquareView -up-|> com.bm.library.PhotoView
+  com.aaron.justlike.common.widget.imageSelector.ImageSelector o-- com.aaron.justlike.common.widget.imageSelector.ImageSelector.ImageCallback : mCallback
+  com.aaron.justlike.common.widget.imageSelector.SelectorActivity .up.|> com.aaron.justlike.common.widget.imageSelector.SelectorAdapter.Callback
+  com.aaron.justlike.common.widget.imageSelector.SelectorActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.aaron.justlike.common.widget.imageSelector.SelectorActivity o-- com.aaron.justlike.common.widget.imageSelector.ImageSelector.ImageCallback : mCallback
+  com.aaron.justlike.common.widget.imageSelector.SelectorActivity o-- com.aaron.justlike.common.widget.imageSelector.ImageSelector : mImageSelector
+  com.aaron.justlike.common.widget.imageSelector.SelectorActivity o-- com.aaron.justlike.common.widget.imageSelector.SelectorActivity.Worker : mWorker
+  com.aaron.justlike.common.widget.imageSelector.SelectorAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.aaron.justlike.common.widget.imageSelector.SelectorAdapter o-- com.aaron.justlike.common.widget.imageSelector.SelectorAdapter.Callback : mCallback
+  com.aaron.justlike.common.widget.imageSelector.SelectorAdapter o-- com.aaron.justlike.common.manager.ThemeManager.Theme : mTheme
+  com.aaron.justlike.main.MainActivity .up.|> com.aaron.justlike.main.IMainCommunicable
+  com.aaron.justlike.main.MainActivity .up.|> com.aaron.justlike.main.IMainContract.V
+  com.aaron.justlike.main.MainActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.main.MainAdapter -up-|> com.aaron.justlike.common.adapter.SquareAdapter
+  com.aaron.justlike.main.MainModel .up.|> com.aaron.justlike.main.IMainContract.M
+  com.aaron.justlike.main.MainPresenter .up.|> com.aaron.justlike.main.IMainContract.P
+  com.aaron.justlike.main.preview.PreviewActivity .up.|> com.aaron.justlike.main.preview.IPreviewCommunicable
+  com.aaron.justlike.main.preview.PreviewActivity .up.|> com.aaron.justlike.main.preview.IPreviewContract.V
+  com.aaron.justlike.main.preview.PreviewActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.main.preview.PreviewActivity o-- com.aaron.justlike.main.preview.IPreviewContract.P : mPresenter
+  com.aaron.justlike.main.preview.PreviewAdapter -up-|> androidx.viewpager.widget.PagerAdapter
+  com.aaron.justlike.main.preview.PreviewPresenter .up.|> com.aaron.justlike.main.preview.IPreviewContract.P
+  com.aaron.justlike.main.preview.PreviewPresenter o-- com.aaron.justlike.main.preview.IPreviewContract.V : mView
+  com.aaron.justlike.online.home.CuratedFragment -up-|> com.aaron.justlike.online.home.OnlineFragment
+  com.aaron.justlike.online.home.OnlineActivity .up.|> android.view.View.OnClickListener
+  com.aaron.justlike.online.home.OnlineActivity .up.|> com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
+  com.aaron.justlike.online.home.OnlineActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.online.home.OnlineAdapter -up-|> com.aaron.justlike.common.adapter.PhotoAdapter
+  com.aaron.justlike.online.home.OnlineFragment .up.|> android.view.View.OnClickListener
+  com.aaron.justlike.online.home.OnlineFragment .up.|> androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+  com.aaron.justlike.online.home.OnlineFragment .up.|> com.aaron.justlike.online.home.IOnlineContract.V
+  com.aaron.justlike.online.home.OnlineFragment -up-|> androidx.fragment.app.Fragment
+  com.aaron.justlike.online.home.OnlineFragment o-- com.aaron.justlike.common.adapter.PhotoAdapter : mAdapter
+  com.aaron.justlike.online.home.OnlineFragment o-- com.aaron.justlike.common.http.unsplash.Order : mOrder
+  com.aaron.justlike.online.home.OnlineModel .up.|> com.aaron.justlike.online.home.IOnlineContract.M
+  com.aaron.justlike.online.home.OnlineModel o-- com.aaron.justlike.common.http.unsplash.Unsplash : mUnsplash
+  com.aaron.justlike.online.home.OnlinePagerAdapter -up-|> androidx.fragment.app.FragmentPagerAdapter
+  com.aaron.justlike.online.home.OnlinePresenter .up.|> com.aaron.justlike.online.home.IOnlineContract.P
+  com.aaron.justlike.online.home.RandomFragment -up-|> com.aaron.justlike.online.home.OnlineFragment
+  com.aaron.justlike.online.home.RecommendFragment -up-|> com.aaron.justlike.online.home.OnlineFragment
+  com.aaron.justlike.online.preview.PreviewActivity .up.|> android.view.View.OnClickListener
+  com.aaron.justlike.online.preview.PreviewActivity .up.|> com.aaron.justlike.online.preview.IPreviewContract.V
+  com.aaron.justlike.online.preview.PreviewActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.online.preview.PreviewActivity o-- com.aaron.justlike.common.http.unsplash.entity.photo.Photo : mPhoto
+  com.aaron.justlike.online.preview.PreviewActivity o-- com.aaron.justlike.online.preview.IPreviewContract.P : mPresenter
+  com.aaron.justlike.online.preview.PreviewModel .up.|> com.aaron.justlike.online.preview.IPreviewContract.M
+  com.aaron.justlike.online.preview.PreviewPresenter .up.|> com.aaron.justlike.online.preview.IPreviewContract.P
+  com.aaron.justlike.online.preview.PreviewPresenter o-- com.aaron.justlike.online.preview.IPreviewContract.M : mModel
+  com.aaron.justlike.online.preview.PreviewPresenter o-- com.aaron.justlike.online.preview.IPreviewContract.V : mView
+  com.aaron.justlike.online.search.CollectionAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.aaron.justlike.online.search.CollectionFragment .up.|> com.aaron.justlike.online.search.IFragment
+  com.aaron.justlike.online.search.CollectionFragment .up.|> com.aaron.justlike.online.search.ISerachContract.V
+  com.aaron.justlike.online.search.CollectionFragment -up-|> androidx.fragment.app.Fragment
+  com.aaron.justlike.online.search.CollectionFragment o-- com.aaron.justlike.online.search.CollectionAdapter : mAdapter
+  com.aaron.justlike.online.search.CollectionPresenter .up.|> com.aaron.justlike.online.search.ISerachContract.P
+  com.aaron.justlike.online.search.CollectionPresenter o-- com.aaron.justlike.online.search.ISerachContract.M : mModel
+  com.aaron.justlike.online.search.ElementPresenter .up.|> com.aaron.justlike.online.search.IElementContract.P
+  com.aaron.justlike.online.search.ElementPresenter o-- com.aaron.justlike.online.search.ISerachContract.M : mModel
+  com.aaron.justlike.online.search.ElementsActivity .up.|> android.view.View.OnClickListener
+  com.aaron.justlike.online.search.ElementsActivity .up.|> com.aaron.justlike.online.search.IElementContract.V
+  com.aaron.justlike.online.search.ElementsActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.online.search.ElementsActivity o-- com.aaron.justlike.common.adapter.PhotoAdapter : mAdapter
+  com.aaron.justlike.online.search.ElementsActivity o-- com.aaron.justlike.online.search.IElementContract.P : mPresenter
+  com.aaron.justlike.online.search.PhotoAdapterImpl -up-|> com.aaron.justlike.common.adapter.PhotoAdapter
+  com.aaron.justlike.online.search.PhotoFragment .up.|> com.aaron.justlike.online.search.IFragment
+  com.aaron.justlike.online.search.PhotoFragment .up.|> com.aaron.justlike.online.search.ISerachContract.V
+  com.aaron.justlike.online.search.PhotoFragment -up-|> androidx.fragment.app.Fragment
+  com.aaron.justlike.online.search.PhotoFragment o-- com.aaron.justlike.common.adapter.PhotoAdapter : mAdapter
+  com.aaron.justlike.online.search.PhotoPresenter .up.|> com.aaron.justlike.online.search.ISerachContract.P
+  com.aaron.justlike.online.search.PhotoPresenter o-- com.aaron.justlike.online.search.ISerachContract.M : mModel
+  com.aaron.justlike.online.search.SearchActivity .up.|> android.view.View.OnClickListener
+  com.aaron.justlike.online.search.SearchActivity .up.|> android.widget.TextView.OnEditorActionListener
+  com.aaron.justlike.online.search.SearchActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.online.search.SearchModel .up.|> com.aaron.justlike.online.search.ISerachContract.M
+  com.aaron.justlike.online.search.SearchModel o-- com.aaron.justlike.common.http.unsplash.Unsplash : mUnsplash
+  com.aaron.justlike.online.search.SearchPagerAdapter -up-|> androidx.fragment.app.FragmentPagerAdapter
+  com.aaron.justlike.others.about.AboutActivity .up.|> com.aaron.justlike.others.about.IAboutContract.V
+  com.aaron.justlike.others.about.AboutActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.others.about.AboutActivity o-- com.aaron.justlike.others.about.IAboutContract.P : mPresenter
+  com.aaron.justlike.others.about.AboutLibraryAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.aaron.justlike.others.about.AboutMessageAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.aaron.justlike.others.about.AboutPresenter .up.|> com.aaron.justlike.others.about.IAboutContract.P
+  com.aaron.justlike.others.download.DownloadManagerActivity .up.|> com.aaron.justlike.others.download.IDownloadCommunicable
+  com.aaron.justlike.others.download.DownloadManagerActivity .up.|> com.aaron.justlike.others.download.IDownloadContract.V
+  com.aaron.justlike.others.download.DownloadManagerActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.others.download.DownloadManagerActivity o-- com.aaron.justlike.others.download.DownloadManagerAdapter : mAdapter
+  com.aaron.justlike.others.download.DownloadManagerActivity o-- com.aaron.justlike.others.download.IDownloadContract.P : mPresenter
+  com.aaron.justlike.others.download.DownloadManagerAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.aaron.justlike.others.download.DownloadModel .up.|> com.aaron.justlike.others.download.IDownloadContract.M
+  com.aaron.justlike.others.download.DownloadModel o-- com.aaron.justlike.common.http.unsplash.Unsplash : mUnsplash
+  com.aaron.justlike.others.download.DownloadPresenter .up.|> com.aaron.justlike.others.download.IDownloadContract.P
+  com.aaron.justlike.others.theme.ThemeActivity .up.|> com.aaron.justlike.others.theme.IThemeCommunicable
+  com.aaron.justlike.others.theme.ThemeActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.others.theme.ThemeAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

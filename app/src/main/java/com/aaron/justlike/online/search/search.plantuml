@@ -1,0 +1,463 @@
+@startuml
+
+title __SEARCH's Class Diagram__\n
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.CollectionAdapter {
+          {static} - TYPE_FOOTER : int
+          {static} - TYPE_NORMAL : int
+          - mAnimatedFlag : SparseBooleanArray
+          - mCollectionList : List<Collection>
+          - mContext : Context
+          + getItemCount()
+          + getItemViewType()
+          + onBindViewHolder()
+          + onCreateViewHolder()
+          ~ CollectionAdapter()
+          ~ clearAnimatedFlag()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.CollectionAdapter.FooterViewHolder {
+          ~ FooterViewHolder()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.CollectionAdapter.ViewHolder {
+          ~ authorImage : ImageView
+          ~ authorName : TextView
+          ~ imageTitle : TextView
+          ~ imageTotal : TextView
+          ~ itemImage : ImageView
+          ~ itemView : View
+          ~ ViewHolder()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.CollectionFragment {
+          {static} - TAG : String
+          - mCollectionList : List<Collection>
+          - mContext : Context
+          - mFooterProgress : View
+          - mKeyWord : String
+          - mParentLayout : View
+          - mPresenter : P<Collection>
+          - mProgressBar : ProgressBar
+          - mRecyclerView : RecyclerView
+          - mRefresh : View
+          - mSearchLogo : View
+          - mSearchLogoHint : TextView
+          + CollectionFragment()
+          + attachPresenter()
+          + backToTop()
+          + onCreateView()
+          + onHideLoading()
+          + onHideProgress()
+          + onHideRefresh()
+          + onHideSearchLogo()
+          + onShow()
+          + onShowLoading()
+          + onShowMessage()
+          + onShowMore()
+          + onShowProgress()
+          + onShowRefresh()
+          + onShowSearchLogo()
+          + search()
+          - initRecyclerView()
+          - initView()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.CollectionFragment.YItemDecoration {
+          + getItemOffsets()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.CollectionPresenter {
+          - mCollectionsTotal : int
+          - mCollectionsTotalPages : int
+          - mKeyWord : String
+          - mRequestCount : int
+          - mView : V<Collection>
+          + detachView()
+          + requestCollections()
+          + requestPhotos()
+          ~ CollectionPresenter()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.ElementPresenter {
+          - currentPage : int
+          - mView : V<List<Photo>>
+          + detachView()
+          + requestPhotos()
+          ~ ElementPresenter()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.ElementsActivity {
+          - mActionBar : ActionBar
+          - mCollectionTitle : String
+          - mErrorView : View
+          - mFooterProgress : View
+          - mIconBack : Drawable
+          - mPhotoList : List<Photo>
+          - mPhotosId : int
+          - mProgressBar : ProgressBar
+          - mRecyclerView : RecyclerView
+          - mToolbar : Toolbar
+          + backToTop()
+          + onBackPressed()
+          + onClick()
+          + onHideErrorView()
+          + onHideLoading()
+          + onHideProgress()
+          + onShowErrorView()
+          + onShowLoading()
+          + onShowMessage()
+          + onShowMore()
+          + onShowPhotos()
+          + onShowProgress()
+          + onSupportNavigateUp()
+          + onWindowFocusChanged()
+          # onCreate()
+          - initIconColor()
+          - initRecyclerView()
+          - initToolbar()
+          - initView()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.ElementsActivity.XItemDecoration {
+          + getItemOffsets()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      interface com.aaron.justlike.online.search.IElementContract {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      interface com.aaron.justlike.online.search.IElementContract.P {
+          {abstract} + detachView()
+          {abstract} + requestPhotos()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      interface com.aaron.justlike.online.search.IElementContract.V {
+          {abstract} + onHideErrorView()
+          {abstract} + onHideLoading()
+          {abstract} + onHideProgress()
+          {abstract} + onShowErrorView()
+          {abstract} + onShowLoading()
+          {abstract} + onShowMessage()
+          {abstract} + onShowMore()
+          {abstract} + onShowPhotos()
+          {abstract} + onShowProgress()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      interface com.aaron.justlike.online.search.IFragment {
+          {abstract} + search()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      interface com.aaron.justlike.online.search.ISerachContract {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      interface com.aaron.justlike.online.search.ISerachContract.M {
+          {abstract} + findCollections()
+          {abstract} + findPhotos()
+          {abstract} + findPhotosFromCollection()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      interface com.aaron.justlike.online.search.ISerachContract.M.Callback {
+          {abstract} + onFailure()
+          {abstract} + onSuccess()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      interface com.aaron.justlike.online.search.ISerachContract.P {
+          {static} + FIRST_REQUEST : int
+          {static} + LOAD_MORE : int
+          {abstract} + detachView()
+          {abstract} + requestCollections()
+          {abstract} + requestPhotos()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      interface com.aaron.justlike.online.search.ISerachContract.V {
+          {abstract} + attachPresenter()
+          {abstract} + onHideLoading()
+          {abstract} + onHideProgress()
+          {abstract} + onHideRefresh()
+          {abstract} + onHideSearchLogo()
+          {abstract} + onShow()
+          {abstract} + onShowLoading()
+          {abstract} + onShowMessage()
+          {abstract} + onShowMore()
+          {abstract} + onShowProgress()
+          {abstract} + onShowRefresh()
+          {abstract} + onShowSearchLogo()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.PhotoAdapterImpl {
+          # bindHolder()
+          # createHolder()
+          ~ PhotoAdapterImpl()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.PhotoFragment {
+          {static} - TAG : String
+          - mContext : Context
+          - mFooterProgress : View
+          - mKeyWord : String
+          - mParentLayout : View
+          - mPhotoList : List<Photo>
+          - mPresenter : P<Photo>
+          - mProgressBar : ProgressBar
+          - mRecyclerView : RecyclerView
+          - mRefresh : View
+          - mSearchLogo : View
+          - mSearchLogoHint : TextView
+          + PhotoFragment()
+          + attachPresenter()
+          + backToTop()
+          + onCreateView()
+          + onHideLoading()
+          + onHideProgress()
+          + onHideRefresh()
+          + onHideSearchLogo()
+          + onShow()
+          + onShowLoading()
+          + onShowMessage()
+          + onShowMore()
+          + onShowProgress()
+          + onShowRefresh()
+          + onShowSearchLogo()
+          + search()
+          + setElementList()
+          - initRecyclerView()
+          - initView()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.PhotoFragment.XItemDecoration {
+          + getItemOffsets()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.PhotoPresenter {
+          - mKeyWord : String
+          - mPhotosTotal : int
+          - mPhotosTotalPages : int
+          - mRequestCount : int
+          - mView : V<Photo>
+          + detachView()
+          + requestCollections()
+          + requestPhotos()
+          ~ PhotoPresenter()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.SearchActivity {
+          - mActionBar : ActionBar
+          - mEditText : EditText
+          - mFragmentManager : FragmentManager
+          - mIconBack : Drawable
+          - mIconSearch : Drawable
+          - mImgSearch : ImageView
+          - mTabLayout : TabLayout
+          - mToolbar : Toolbar
+          - mViewPager : ViewPager
+          + onBackPressed()
+          + onClick()
+          + onEditorAction()
+          + onSupportNavigateUp()
+          + onWindowFocusChanged()
+          # onCreate()
+          # onStop()
+          - hideKeyboard()
+          - hideSoftKeyboard()
+          - initIconColor()
+          - initTabLayout()
+          - initToolbar()
+          - initView()
+          - showSoftKeyboard()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.SearchModel {
+          - mCollections : int
+          - mPhotos : int
+          + findCollections()
+          + findPhotos()
+          + findPhotosFromCollection()
+          ~ SearchModel()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.search {
+      class com.aaron.justlike.online.search.SearchPagerAdapter {
+          {static} - TITLES : String[]
+          + getCount()
+          + getItem()
+          + getPageTitle()
+          ~ SearchPagerAdapter()
+      }
+    }
+  }
+  
+
+  com.aaron.justlike.online.search.CollectionAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.aaron.justlike.online.search.CollectionAdapter +-down- com.aaron.justlike.online.search.CollectionAdapter.FooterViewHolder
+  com.aaron.justlike.online.search.CollectionAdapter +-down- com.aaron.justlike.online.search.CollectionAdapter.ViewHolder
+  com.aaron.justlike.online.search.CollectionAdapter.FooterViewHolder -up-|> androidx.recyclerview.widget.RecyclerView.ViewHolder
+  com.aaron.justlike.online.search.CollectionAdapter.ViewHolder -up-|> androidx.recyclerview.widget.RecyclerView.ViewHolder
+  com.aaron.justlike.online.search.CollectionFragment .up.|> com.aaron.justlike.online.search.IFragment
+  com.aaron.justlike.online.search.CollectionFragment .up.|> com.aaron.justlike.online.search.ISerachContract.V
+  com.aaron.justlike.online.search.CollectionFragment -up-|> androidx.fragment.app.Fragment
+  com.aaron.justlike.online.search.CollectionFragment o-- com.aaron.justlike.online.search.CollectionAdapter : mAdapter
+  com.aaron.justlike.online.search.CollectionFragment +-down- com.aaron.justlike.online.search.CollectionFragment.YItemDecoration
+  com.aaron.justlike.online.search.CollectionFragment.YItemDecoration -up-|> androidx.recyclerview.widget.RecyclerView.ItemDecoration
+  com.aaron.justlike.online.search.CollectionPresenter .up.|> com.aaron.justlike.online.search.ISerachContract.P
+  com.aaron.justlike.online.search.CollectionPresenter o-- com.aaron.justlike.online.search.ISerachContract.M : mModel
+  com.aaron.justlike.online.search.ElementPresenter .up.|> com.aaron.justlike.online.search.IElementContract.P
+  com.aaron.justlike.online.search.ElementPresenter o-- com.aaron.justlike.online.search.ISerachContract.M : mModel
+  com.aaron.justlike.online.search.ElementsActivity .up.|> android.view.View.OnClickListener
+  com.aaron.justlike.online.search.ElementsActivity .up.|> com.aaron.justlike.online.search.IElementContract.V
+  com.aaron.justlike.online.search.ElementsActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.online.search.ElementsActivity o-- com.aaron.justlike.common.adapter.PhotoAdapter : mAdapter
+  com.aaron.justlike.online.search.ElementsActivity o-- com.aaron.justlike.online.search.IElementContract.P : mPresenter
+  com.aaron.justlike.online.search.ElementsActivity +-down- com.aaron.justlike.online.search.ElementsActivity.XItemDecoration
+  com.aaron.justlike.online.search.ElementsActivity.XItemDecoration -up-|> androidx.recyclerview.widget.RecyclerView.ItemDecoration
+  com.aaron.justlike.online.search.IElementContract +-down- com.aaron.justlike.online.search.IElementContract.P
+  com.aaron.justlike.online.search.IElementContract +-down- com.aaron.justlike.online.search.IElementContract.V
+  com.aaron.justlike.online.search.ISerachContract +-down- com.aaron.justlike.online.search.ISerachContract.M
+  com.aaron.justlike.online.search.ISerachContract +-down- com.aaron.justlike.online.search.ISerachContract.P
+  com.aaron.justlike.online.search.ISerachContract +-down- com.aaron.justlike.online.search.ISerachContract.V
+  com.aaron.justlike.online.search.ISerachContract.M +-down- com.aaron.justlike.online.search.ISerachContract.M.Callback
+  com.aaron.justlike.online.search.PhotoAdapterImpl -up-|> com.aaron.justlike.common.adapter.PhotoAdapter
+  com.aaron.justlike.online.search.PhotoFragment .up.|> com.aaron.justlike.online.search.IFragment
+  com.aaron.justlike.online.search.PhotoFragment .up.|> com.aaron.justlike.online.search.ISerachContract.V
+  com.aaron.justlike.online.search.PhotoFragment -up-|> androidx.fragment.app.Fragment
+  com.aaron.justlike.online.search.PhotoFragment o-- com.aaron.justlike.common.adapter.PhotoAdapter : mAdapter
+  com.aaron.justlike.online.search.PhotoFragment +-down- com.aaron.justlike.online.search.PhotoFragment.XItemDecoration
+  com.aaron.justlike.online.search.PhotoFragment.XItemDecoration -up-|> androidx.recyclerview.widget.RecyclerView.ItemDecoration
+  com.aaron.justlike.online.search.PhotoPresenter .up.|> com.aaron.justlike.online.search.ISerachContract.P
+  com.aaron.justlike.online.search.PhotoPresenter o-- com.aaron.justlike.online.search.ISerachContract.M : mModel
+  com.aaron.justlike.online.search.SearchActivity .up.|> android.view.View.OnClickListener
+  com.aaron.justlike.online.search.SearchActivity .up.|> android.widget.TextView.OnEditorActionListener
+  com.aaron.justlike.online.search.SearchActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.online.search.SearchModel .up.|> com.aaron.justlike.online.search.ISerachContract.M
+  com.aaron.justlike.online.search.SearchModel o-- com.aaron.justlike.common.http.unsplash.Unsplash : mUnsplash
+  com.aaron.justlike.online.search.SearchPagerAdapter -up-|> androidx.fragment.app.FragmentPagerAdapter
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

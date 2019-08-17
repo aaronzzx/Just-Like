@@ -1,0 +1,289 @@
+@startuml
+
+title __PHOTO's Class Diagram__\n
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.photo {
+          class com.aaron.justlike.common.http.unsplash.entity.photo.Links {
+              {static} + CREATOR : Creator<Links>
+              - html : String
+              - likes : String
+              - photos : String
+              - portfolio : String
+              - self : String
+              + Links()
+              + describeContents()
+              + getHtml()
+              + getLikes()
+              + getPhotos()
+              + getPortfolio()
+              + getSelf()
+              + setHtml()
+              + setLikes()
+              + setPhotos()
+              + setPortfolio()
+              + setSelf()
+              + writeToParcel()
+              # Links()
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.photo {
+          class com.aaron.justlike.common.http.unsplash.entity.photo.Photo {
+              {static} + CREATOR : Creator<Photo>
+              - color : String
+              - createdAt : String
+              - description : String
+              - height : int
+              - id : String
+              - likedByUser : boolean
+              - likes : int
+              - updatedAt : String
+              - width : int
+              + Photo()
+              + describeContents()
+              + equals()
+              + getColor()
+              + getCreatedAt()
+              + getDescription()
+              + getHeight()
+              + getId()
+              + getLikes()
+              + getLinks()
+              + getUpdatedAt()
+              + getUrls()
+              + getUser()
+              + getWidth()
+              + hashCode()
+              + isLikedByUser()
+              + setColor()
+              + setCreatedAt()
+              + setDescription()
+              + setHeight()
+              + setId()
+              + setLikedByUser()
+              + setLikes()
+              + setLinks()
+              + setUpdatedAt()
+              + setUrls()
+              + setUser()
+              + setWidth()
+              + writeToParcel()
+              # Photo()
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.photo {
+          class com.aaron.justlike.common.http.unsplash.entity.photo.ProfileImage {
+              {static} + CREATOR : Creator<ProfileImage>
+              - large : String
+              - medium : String
+              - small : String
+              + ProfileImage()
+              + describeContents()
+              + getLarge()
+              + getMedium()
+              + getSmall()
+              + setLarge()
+              + setMedium()
+              + setSmall()
+              + writeToParcel()
+              # ProfileImage()
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.photo {
+          class com.aaron.justlike.common.http.unsplash.entity.photo.SearchPhoto {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.photo {
+          class com.aaron.justlike.common.http.unsplash.entity.photo.SearchPhotoResult {
+              {static} + CREATOR : Creator<SearchPhotoResult>
+              - results : List<Photo>
+              - total : int
+              - totalPages : int
+              + SearchPhotoResult()
+              + describeContents()
+              + getResults()
+              + getTotal()
+              + getTotalPages()
+              + setResults()
+              + setTotal()
+              + setTotalPages()
+              + writeToParcel()
+              # SearchPhotoResult()
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.photo {
+          class com.aaron.justlike.common.http.unsplash.entity.photo.Urls {
+              {static} + CREATOR : Creator<Urls>
+              - full : String
+              - raw : String
+              - regular : String
+              - small : String
+              - thumb : String
+              + Urls()
+              + describeContents()
+              + getFull()
+              + getRaw()
+              + getRegular()
+              + getSmall()
+              + getThumb()
+              + setFull()
+              + setRaw()
+              + setRegular()
+              + setSmall()
+              + setThumb()
+              + writeToParcel()
+              # Urls()
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.photo {
+          class com.aaron.justlike.common.http.unsplash.entity.photo.User {
+              {static} + CREATOR : Creator<User>
+              - bio : String
+              - id : String
+              - instagramUsername : String
+              - location : String
+              - name : String
+              - portfolioUrl : String
+              - totalCollections : int
+              - totalLikes : int
+              - totalPhotos : int
+              - twitterUsername : String
+              - username : String
+              + User()
+              + describeContents()
+              + getBio()
+              + getId()
+              + getInstagramUsername()
+              + getLinks()
+              + getLocation()
+              + getName()
+              + getPortfolioUrl()
+              + getProfileImage()
+              + getTotalCollections()
+              + getTotalLikes()
+              + getTotalPhotos()
+              + getTwitterUsername()
+              + getUsername()
+              + setBio()
+              + setId()
+              + setInstagramUsername()
+              + setLinks()
+              + setLocation()
+              + setName()
+              + setPortfolioUrl()
+              + setProfileImage()
+              + setTotalCollections()
+              + setTotalLikes()
+              + setTotalPhotos()
+              + setTwitterUsername()
+              + setUsername()
+              + writeToParcel()
+              # User()
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace http.unsplash {
+        namespace entity.photo {
+          class com.aaron.justlike.common.http.unsplash.entity.photo.UserLinks {
+              {static} + CREATOR : Creator<UserLinks>
+              - download : String
+              - downloadLocation : String
+              - html : String
+              - self : String
+              + UserLinks()
+              + describeContents()
+              + getDownload()
+              + getDownloadLocation()
+              + getHtml()
+              + getSelf()
+              + setDownload()
+              + setDownloadLocation()
+              + setHtml()
+              + setSelf()
+              + writeToParcel()
+              # UserLinks()
+          }
+        }
+      }
+    }
+  }
+  
+
+  com.aaron.justlike.common.http.unsplash.entity.photo.Links .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.photo.Photo .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.photo.Photo o-- com.aaron.justlike.common.http.unsplash.entity.photo.UserLinks : links
+  com.aaron.justlike.common.http.unsplash.entity.photo.Photo o-- com.aaron.justlike.common.http.unsplash.entity.photo.Urls : urls
+  com.aaron.justlike.common.http.unsplash.entity.photo.Photo o-- com.aaron.justlike.common.http.unsplash.entity.photo.User : user
+  com.aaron.justlike.common.http.unsplash.entity.photo.ProfileImage .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.photo.SearchPhotoResult .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.photo.Urls .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.photo.User .up.|> android.os.Parcelable
+  com.aaron.justlike.common.http.unsplash.entity.photo.User o-- com.aaron.justlike.common.http.unsplash.entity.photo.Links : links
+  com.aaron.justlike.common.http.unsplash.entity.photo.User o-- com.aaron.justlike.common.http.unsplash.entity.photo.ProfileImage : profileImage
+  com.aaron.justlike.common.http.unsplash.entity.photo.UserLinks .up.|> android.os.Parcelable
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

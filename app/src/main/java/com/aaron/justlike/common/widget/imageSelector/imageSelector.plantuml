@@ -1,0 +1,221 @@
+@startuml
+
+title __IMAGESELECTOR's Class Diagram__\n
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace widget {
+        namespace imageSelector {
+          class com.aaron.justlike.common.widget.imageSelector.ImageSelector {
+              - mFilePath : String
+              - mSelectedList : List<String>
+              - mTitle : String
+              {static} - mWeakReference : WeakReference<Context>
+              + clear()
+              + getCallback()
+              + getFilePath()
+              {static} + getInstance()
+              {static} + getInstance()
+              + getSelectedImage()
+              + getTitle()
+              + setCallback()
+              + setFilePath()
+              + setSelectedImage()
+              + setTitle()
+              + start()
+              - ImageSelector()
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace widget {
+        namespace imageSelector {
+          class com.aaron.justlike.common.widget.imageSelector.ImageSelector.Holder {
+              {static} - INSTANCE : ImageSelector
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace widget {
+        namespace imageSelector {
+          interface com.aaron.justlike.common.widget.imageSelector.ImageSelector.ImageCallback {
+              + onResponse()
+              + onResponse()
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace widget {
+        namespace imageSelector {
+          class com.aaron.justlike.common.widget.imageSelector.SelectorActivity {
+              {static} - TYPE : String[]
+              - mActionBar : ActionBar
+              - mEmptyView : View
+              - mIconBack : Drawable
+              - mIconDone : Drawable
+              - mRecyclerView : RecyclerView
+              - mToolbar : Toolbar
+              + onCreateOptionsMenu()
+              + onOptionsItemSelected()
+              + onPress()
+              + onWindowFocusChanged()
+              # onCreate()
+              - initIconColor()
+              - initRecyclerView()
+              - initToolbar()
+              - initView()
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace widget {
+        namespace imageSelector {
+          class com.aaron.justlike.common.widget.imageSelector.SelectorActivity.Worker {
+              - imageList : List<Image>
+              - loadPath : String
+              - response : List<String>
+              - title : String
+              - Worker()
+              - getImageList()
+              - setImageList()
+              - setLoadPath()
+              - setTitle()
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace widget {
+        namespace imageSelector {
+          class com.aaron.justlike.common.widget.imageSelector.SelectorActivity.XItemDecoration {
+              + getItemOffsets()
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace widget {
+        namespace imageSelector {
+          class com.aaron.justlike.common.widget.imageSelector.SelectorActivity.YItemDecoration {
+              + getItemOffsets()
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace widget {
+        namespace imageSelector {
+          class com.aaron.justlike.common.widget.imageSelector.SelectorAdapter {
+              - mCheckStates : SparseBooleanArray
+              - mContext : Context
+              - mEnableStates : SparseBooleanArray
+              - mImages : List<Image>
+              - mResponse : List<String>
+              - mSelectedList : List<String>
+              + SelectorAdapter()
+              + getItemCount()
+              + onBindViewHolder()
+              + onCreateViewHolder()
+              + setSelectedImage()
+              - handleImageClick()
+              - selectBefore()
+              - selectRightNow()
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace widget {
+        namespace imageSelector {
+          interface com.aaron.justlike.common.widget.imageSelector.SelectorAdapter.Callback {
+              {abstract} + onPress()
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace common {
+      namespace widget {
+        namespace imageSelector {
+          class com.aaron.justlike.common.widget.imageSelector.SelectorAdapter.ViewHolder {
+              ~ checkBox : CheckBox
+              ~ itemView : View
+              ~ ViewHolder()
+              - getSelector()
+              - setCheckBox()
+          }
+        }
+      }
+    }
+  }
+  
+
+  com.aaron.justlike.common.widget.imageSelector.ImageSelector o-- com.aaron.justlike.common.widget.imageSelector.ImageSelector.ImageCallback : mCallback
+  com.aaron.justlike.common.widget.imageSelector.ImageSelector +-down- com.aaron.justlike.common.widget.imageSelector.ImageSelector.Holder
+  com.aaron.justlike.common.widget.imageSelector.ImageSelector +-down- com.aaron.justlike.common.widget.imageSelector.ImageSelector.ImageCallback
+  com.aaron.justlike.common.widget.imageSelector.SelectorActivity .up.|> com.aaron.justlike.common.widget.imageSelector.SelectorAdapter.Callback
+  com.aaron.justlike.common.widget.imageSelector.SelectorActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.aaron.justlike.common.widget.imageSelector.SelectorActivity o-- com.aaron.justlike.common.widget.imageSelector.ImageSelector.ImageCallback : mCallback
+  com.aaron.justlike.common.widget.imageSelector.SelectorActivity o-- com.aaron.justlike.common.widget.imageSelector.ImageSelector : mImageSelector
+  com.aaron.justlike.common.widget.imageSelector.SelectorActivity o-- com.aaron.justlike.common.widget.imageSelector.SelectorActivity.Worker : mWorker
+  com.aaron.justlike.common.widget.imageSelector.SelectorActivity +-down- com.aaron.justlike.common.widget.imageSelector.SelectorActivity.Worker
+  com.aaron.justlike.common.widget.imageSelector.SelectorActivity +-down- com.aaron.justlike.common.widget.imageSelector.SelectorActivity.XItemDecoration
+  com.aaron.justlike.common.widget.imageSelector.SelectorActivity +-down- com.aaron.justlike.common.widget.imageSelector.SelectorActivity.YItemDecoration
+  com.aaron.justlike.common.widget.imageSelector.SelectorActivity.XItemDecoration -up-|> androidx.recyclerview.widget.RecyclerView.ItemDecoration
+  com.aaron.justlike.common.widget.imageSelector.SelectorActivity.YItemDecoration -up-|> androidx.recyclerview.widget.RecyclerView.ItemDecoration
+  com.aaron.justlike.common.widget.imageSelector.SelectorAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.aaron.justlike.common.widget.imageSelector.SelectorAdapter o-- com.aaron.justlike.common.widget.imageSelector.SelectorAdapter.Callback : mCallback
+  com.aaron.justlike.common.widget.imageSelector.SelectorAdapter o-- com.aaron.justlike.common.manager.ThemeManager.Theme : mTheme
+  com.aaron.justlike.common.widget.imageSelector.SelectorAdapter +-down- com.aaron.justlike.common.widget.imageSelector.SelectorAdapter.Callback
+  com.aaron.justlike.common.widget.imageSelector.SelectorAdapter +-down- com.aaron.justlike.common.widget.imageSelector.SelectorAdapter.ViewHolder
+  com.aaron.justlike.common.widget.imageSelector.SelectorAdapter.ViewHolder -up-|> androidx.recyclerview.widget.RecyclerView.ViewHolder
+  com.aaron.justlike.common.widget.imageSelector.SelectorAdapter.ViewHolder o-- com.aaron.justlike.common.widget.SquareView : squareView
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

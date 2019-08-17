@@ -1,0 +1,173 @@
+@startuml
+
+title __ELEMENT's Class Diagram__\n
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      namespace element {
+        class com.aaron.justlike.collection.element.ElementActivity {
+            - mActionBar : ActionBar
+            - mAdapter : Adapter
+            - mIconAdd : Drawable
+            - mIconBack : Drawable
+            - mImageList : List<Image>
+            - mPresenter : P<Image>
+            - mRv : RecyclerView
+            - mTitle : String
+            - mToolbar : Toolbar
+            + onBackPressed()
+            + onCreateOptionsMenu()
+            + onDelete()
+            + onDeleteEvent()
+            + onOptionsItemSelected()
+            + onShowAddImage()
+            + onShowImage()
+            + onSupportNavigateUp()
+            + onWindowFocusChanged()
+            # onCreate()
+            # onDestroy()
+            - initIconColor()
+            - initToolbar()
+            - initView()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      namespace element {
+        class com.aaron.justlike.collection.element.ElementAdapter {
+            # bindHolder()
+            # createHolder()
+            ~ ElementAdapter()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      namespace element {
+        class com.aaron.justlike.collection.element.ElementModel {
+            - mExecutorService : ExecutorService
+            + deleteImage()
+            + insertImage()
+            + queryImage()
+            ~ ElementModel()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      namespace element {
+        class com.aaron.justlike.collection.element.ElementPresenter {
+            - mModel : M<Image>
+            - mView : V<Image>
+            + deleteImage()
+            + detachView()
+            + requestImage()
+            + saveImage()
+            ~ ElementPresenter()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      namespace element {
+        interface com.aaron.justlike.collection.element.IElementCommunicable {
+            {abstract} + onDelete()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      namespace element {
+        interface com.aaron.justlike.collection.element.IElementContract {
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      namespace element {
+        interface com.aaron.justlike.collection.element.IElementContract.M {
+            {abstract} + deleteImage()
+            {abstract} + insertImage()
+            {abstract} + queryImage()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      namespace element {
+        interface com.aaron.justlike.collection.element.IElementContract.M.Callback {
+            {abstract} + onResponse()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      namespace element {
+        interface com.aaron.justlike.collection.element.IElementContract.P {
+            {abstract} + deleteImage()
+            {abstract} + detachView()
+            {abstract} + requestImage()
+            {abstract} + saveImage()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace collection {
+      namespace element {
+        interface com.aaron.justlike.collection.element.IElementContract.V {
+            {abstract} + onShowAddImage()
+            {abstract} + onShowImage()
+        }
+      }
+    }
+  }
+  
+
+  com.aaron.justlike.collection.element.ElementActivity .up.|> com.aaron.justlike.collection.element.IElementCommunicable
+  com.aaron.justlike.collection.element.ElementActivity .up.|> com.aaron.justlike.collection.element.IElementContract.V
+  com.aaron.justlike.collection.element.ElementActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.collection.element.ElementAdapter -up-|> com.aaron.justlike.common.adapter.SquareAdapter
+  com.aaron.justlike.collection.element.ElementModel .up.|> com.aaron.justlike.collection.element.IElementContract.M
+  com.aaron.justlike.collection.element.ElementPresenter .up.|> com.aaron.justlike.collection.element.IElementContract.P
+  com.aaron.justlike.collection.element.IElementContract +-down- com.aaron.justlike.collection.element.IElementContract.M
+  com.aaron.justlike.collection.element.IElementContract +-down- com.aaron.justlike.collection.element.IElementContract.P
+  com.aaron.justlike.collection.element.IElementContract +-down- com.aaron.justlike.collection.element.IElementContract.V
+  com.aaron.justlike.collection.element.IElementContract.M +-down- com.aaron.justlike.collection.element.IElementContract.M.Callback
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

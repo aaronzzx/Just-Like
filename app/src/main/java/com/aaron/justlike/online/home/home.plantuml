@@ -1,0 +1,295 @@
+@startuml
+
+title __HOME's Class Diagram__\n
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      class com.aaron.justlike.online.home.CuratedFragment {
+          - mPresenter : P<Photo>
+          + CuratedFragment()
+          + attachPresenter()
+          + onDestroyView()
+          + requestLoadMore()
+          + requestPhotos()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      interface com.aaron.justlike.online.home.IOnlineContract {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      interface com.aaron.justlike.online.home.IOnlineContract.M {
+          {abstract} + findCuratedPhotos()
+          {abstract} + findPhotos()
+          {abstract} + findRandomPhotos()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      interface com.aaron.justlike.online.home.IOnlineContract.M.Callback {
+          {abstract} + onFailure()
+          {abstract} + onSuccess()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      interface com.aaron.justlike.online.home.IOnlineContract.P {
+          {abstract} + detachView()
+          {abstract} + requestCuratedPhotos()
+          {abstract} + requestLoadMore()
+          {abstract} + requestLoadMoreCurated()
+          {abstract} + requestLoadMoreRandom()
+          {abstract} + requestPhotos()
+          {abstract} + requestRandomPhotos()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      interface com.aaron.justlike.online.home.IOnlineContract.V {
+          {abstract} + attachPresenter()
+          {abstract} + onHideErrorView()
+          {abstract} + onHideLoading()
+          {abstract} + onHideProgress()
+          {abstract} + onHideRefresh()
+          {abstract} + onShowErrorView()
+          {abstract} + onShowLoading()
+          {abstract} + onShowMessage()
+          {abstract} + onShowMore()
+          {abstract} + onShowPhoto()
+          {abstract} + onShowProgress()
+          {abstract} + onShowRefresh()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      class com.aaron.justlike.online.home.OnlineActivity {
+          {static} - REQUEST_PERMISSION : int
+          - mActionBar : ActionBar
+          - mColorPrimary : int
+          - mFragmentManager : FragmentManager
+          - mIconDrawer : Drawable
+          - mIconFilter : Drawable
+          - mIconSearch : Drawable
+          - mNavHeaderImage : ImageView
+          - mNavView : NavigationView
+          - mParentLayout : DrawerLayout
+          - mStatusBar : View
+          - mTabLayout : TabLayout
+          - mToolbar : Toolbar
+          - mViewPager : ViewPager
+          + getColorPrimary()
+          + onBackPressed()
+          + onClick()
+          + onNavigationItemSelected()
+          + onRequestPermissionsResult()
+          + onSupportNavigateUp()
+          + onWindowFocusChanged()
+          # onCreate()
+          - initIconColor()
+          - initTabLayout()
+          - initTheme()
+          - initToolbar()
+          - initView()
+          - requestPermission()
+          - setIconFilterColor()
+          - startActivityByNav()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      class com.aaron.justlike.online.home.OnlineAdapter {
+          # bindHolder()
+          # createHolder()
+          ~ OnlineAdapter()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      abstract class com.aaron.justlike.online.home.OnlineFragment {
+          # mPhotoList : List<Photo>
+          - mClickRefresh : Button
+          - mColorPrimary : int
+          - mContext : Context
+          - mErrorView : View
+          - mFooterProgress : View
+          - mMenuItemId : int
+          - mParentLayout : View
+          - mProgressBar : ProgressBar
+          - mRecyclerView : RecyclerView
+          - mSwipeRefresh : SwipeRefreshLayout
+          + OnlineFragment()
+          {abstract} + attachPresenter()
+          + backToTop()
+          + onActivityCreated()
+          + onClick()
+          + onCreate()
+          + onCreateOptionsMenu()
+          + onCreateView()
+          + onHideErrorView()
+          + onHideLoading()
+          + onHideProgress()
+          + onHideRefresh()
+          + onOptionsItemSelected()
+          + onRefresh()
+          + onShowErrorView()
+          + onShowLoading()
+          + onShowMessage()
+          + onShowMore()
+          + onShowPhoto()
+          + onShowProgress()
+          + onShowRefresh()
+          {abstract} + requestLoadMore()
+          {abstract} + requestPhotos()
+          + setUserVisibleHint()
+          - initRecyclerView()
+          - initSwipeRefresh()
+          - initView()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      class com.aaron.justlike.online.home.OnlineFragment.XItemDecoration {
+          + getItemOffsets()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      class com.aaron.justlike.online.home.OnlineModel {
+          - mCurated : int
+          - mRecommend : int
+          + findCuratedPhotos()
+          + findPhotos()
+          + findRandomPhotos()
+          ~ OnlineModel()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      class com.aaron.justlike.online.home.OnlinePagerAdapter {
+          {static} - TITLES : String[]
+          + getCount()
+          + getItem()
+          + getPageTitle()
+          ~ OnlinePagerAdapter()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      class com.aaron.justlike.online.home.OnlinePresenter {
+          {static} - LOAD_MORE : int
+          {static} - REQUEST_PHOTOS : int
+          - mModel : M<Photo>
+          - mView : V<Photo>
+          + detachView()
+          + requestCuratedPhotos()
+          + requestLoadMore()
+          + requestLoadMoreCurated()
+          + requestLoadMoreRandom()
+          + requestPhotos()
+          + requestRandomPhotos()
+          ~ OnlinePresenter()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      class com.aaron.justlike.online.home.RandomFragment {
+          - mPresenter : P<Photo>
+          + RandomFragment()
+          + attachPresenter()
+          + onDestroyView()
+          + onPrepareOptionsMenu()
+          + requestLoadMore()
+          + requestPhotos()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.home {
+      class com.aaron.justlike.online.home.RecommendFragment {
+          - mPresenter : P<Photo>
+          + RecommendFragment()
+          + attachPresenter()
+          + onDestroyView()
+          + requestLoadMore()
+          + requestPhotos()
+      }
+    }
+  }
+  
+
+  com.aaron.justlike.online.home.CuratedFragment -up-|> com.aaron.justlike.online.home.OnlineFragment
+  com.aaron.justlike.online.home.IOnlineContract +-down- com.aaron.justlike.online.home.IOnlineContract.M
+  com.aaron.justlike.online.home.IOnlineContract +-down- com.aaron.justlike.online.home.IOnlineContract.P
+  com.aaron.justlike.online.home.IOnlineContract +-down- com.aaron.justlike.online.home.IOnlineContract.V
+  com.aaron.justlike.online.home.IOnlineContract.M +-down- com.aaron.justlike.online.home.IOnlineContract.M.Callback
+  com.aaron.justlike.online.home.OnlineActivity .up.|> android.view.View.OnClickListener
+  com.aaron.justlike.online.home.OnlineActivity .up.|> com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
+  com.aaron.justlike.online.home.OnlineActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.online.home.OnlineAdapter -up-|> com.aaron.justlike.common.adapter.PhotoAdapter
+  com.aaron.justlike.online.home.OnlineFragment .up.|> android.view.View.OnClickListener
+  com.aaron.justlike.online.home.OnlineFragment .up.|> androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+  com.aaron.justlike.online.home.OnlineFragment .up.|> com.aaron.justlike.online.home.IOnlineContract.V
+  com.aaron.justlike.online.home.OnlineFragment -up-|> androidx.fragment.app.Fragment
+  com.aaron.justlike.online.home.OnlineFragment o-- com.aaron.justlike.common.adapter.PhotoAdapter : mAdapter
+  com.aaron.justlike.online.home.OnlineFragment o-- com.aaron.justlike.common.http.unsplash.Order : mOrder
+  com.aaron.justlike.online.home.OnlineFragment +-down- com.aaron.justlike.online.home.OnlineFragment.XItemDecoration
+  com.aaron.justlike.online.home.OnlineFragment.XItemDecoration -up-|> androidx.recyclerview.widget.RecyclerView.ItemDecoration
+  com.aaron.justlike.online.home.OnlineModel .up.|> com.aaron.justlike.online.home.IOnlineContract.M
+  com.aaron.justlike.online.home.OnlineModel o-- com.aaron.justlike.common.http.unsplash.Unsplash : mUnsplash
+  com.aaron.justlike.online.home.OnlinePagerAdapter -up-|> androidx.fragment.app.FragmentPagerAdapter
+  com.aaron.justlike.online.home.OnlinePresenter .up.|> com.aaron.justlike.online.home.IOnlineContract.P
+  com.aaron.justlike.online.home.RandomFragment -up-|> com.aaron.justlike.online.home.OnlineFragment
+  com.aaron.justlike.online.home.RecommendFragment -up-|> com.aaron.justlike.online.home.OnlineFragment
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

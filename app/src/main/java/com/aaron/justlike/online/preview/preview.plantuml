@@ -1,0 +1,159 @@
+@startuml
+
+title __PREVIEW's Class Diagram__\n
+
+  namespace com.aaron.justlike {
+    namespace online.preview {
+      interface com.aaron.justlike.online.preview.IPreviewContract {
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.preview {
+      interface com.aaron.justlike.online.preview.IPreviewContract.M {
+          {abstract} + startDownload()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.preview {
+      interface com.aaron.justlike.online.preview.IPreviewContract.M.Callback {
+          {abstract} + onResponse()
+          {abstract} + onWallpaper()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.preview {
+      interface com.aaron.justlike.online.preview.IPreviewContract.P {
+          {abstract} + detachView()
+          {abstract} + requestImage()
+          {abstract} + requestMode()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.preview {
+      interface com.aaron.justlike.online.preview.IPreviewContract.V {
+          {abstract} + onHideProgressStatus()
+          {abstract} + onSetWallpaper()
+          {abstract} + onShowAuthorAvatar()
+          {abstract} + onShowAuthorName()
+          {abstract} + onShowImage()
+          {abstract} + onShowImageDate()
+          {abstract} + onShowImageLikes()
+          {abstract} + onShowMessage()
+          {abstract} + onShowProgress()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.preview {
+      interface com.aaron.justlike.online.preview.IPreviewInterface {
+          {static} + NORMAL : int
+          {static} + SET_WALLPAPER : int
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.preview {
+      class com.aaron.justlike.online.preview.PreviewActivity {
+          - mAuthorImage : CircleImageView
+          - mAuthorName : TextView
+          - mBottomBar : FrameLayout
+          - mFloatingActionMenu : FloatingActionMenu
+          - mImageDate : TextView
+          - mImageLikes : TextView
+          - mPhotoView : PhotoView
+          - mPressTime : long
+          - mProgressBar : ProgressBar
+          - mProgressImage : ImageView
+          - mToolbar : Toolbar
+          + onBackPressed()
+          + onClick()
+          + onCreateOptionsMenu()
+          + onHideProgressStatus()
+          + onOptionsItemSelected()
+          + onPhotoEvent()
+          + onSetWallpaper()
+          + onShowAuthorAvatar()
+          + onShowAuthorName()
+          + onShowImage()
+          + onShowImageDate()
+          + onShowImageLikes()
+          + onShowMessage()
+          + onShowProgress()
+          + onSupportNavigateUp()
+          + onWindowFocusChanged()
+          # onCreate()
+          # onDestroy()
+          - animIn()
+          - animOut()
+          - initToolbar()
+          - initView()
+          - openAuthor()
+          - openShare()
+          - openUnsplash()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.preview {
+      class com.aaron.justlike.online.preview.PreviewModel {
+          {static} - PATH : String
+          + startDownload()
+          ~ PreviewModel()
+      }
+    }
+  }
+  
+
+  namespace com.aaron.justlike {
+    namespace online.preview {
+      class com.aaron.justlike.online.preview.PreviewPresenter {
+          + detachView()
+          + requestImage()
+          + requestMode()
+          ~ PreviewPresenter()
+      }
+    }
+  }
+  
+
+  com.aaron.justlike.online.preview.IPreviewContract +-down- com.aaron.justlike.online.preview.IPreviewContract.M
+  com.aaron.justlike.online.preview.IPreviewContract +-down- com.aaron.justlike.online.preview.IPreviewContract.P
+  com.aaron.justlike.online.preview.IPreviewContract +-down- com.aaron.justlike.online.preview.IPreviewContract.V
+  com.aaron.justlike.online.preview.IPreviewContract.M +-down- com.aaron.justlike.online.preview.IPreviewContract.M.Callback
+  com.aaron.justlike.online.preview.PreviewActivity .up.|> android.view.View.OnClickListener
+  com.aaron.justlike.online.preview.PreviewActivity .up.|> com.aaron.justlike.online.preview.IPreviewContract.V
+  com.aaron.justlike.online.preview.PreviewActivity -up-|> com.aaron.justlike.common.CommonActivity
+  com.aaron.justlike.online.preview.PreviewActivity o-- com.aaron.justlike.common.http.unsplash.entity.photo.Photo : mPhoto
+  com.aaron.justlike.online.preview.PreviewActivity o-- com.aaron.justlike.online.preview.IPreviewContract.P : mPresenter
+  com.aaron.justlike.online.preview.PreviewModel .up.|> com.aaron.justlike.online.preview.IPreviewContract.M
+  com.aaron.justlike.online.preview.PreviewPresenter .up.|> com.aaron.justlike.online.preview.IPreviewContract.P
+  com.aaron.justlike.online.preview.PreviewPresenter o-- com.aaron.justlike.online.preview.IPreviewContract.M : mModel
+  com.aaron.justlike.online.preview.PreviewPresenter o-- com.aaron.justlike.online.preview.IPreviewContract.V : mView
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml
