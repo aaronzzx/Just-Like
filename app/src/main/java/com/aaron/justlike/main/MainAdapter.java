@@ -6,9 +6,9 @@ import android.view.ViewGroup;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.aaron.base.image.test.DefaultOption;
-import com.aaron.base.image.test.ImageLoader;
-import com.aaron.base.image.test.ScaleType;
+import com.aaron.base.image.DefaultOption;
+import com.aaron.base.image.ImageLoader;
+import com.aaron.base.image.ScaleType;
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.adapter.SquareAdapter;
 import com.aaron.justlike.common.bean.Image;
@@ -59,12 +59,9 @@ class MainAdapter extends SquareAdapter {
         Image image = mList.get(position); // 从集合中找到 Image 对象
         String path = image.getPath();
 
-//        Drawable placeholder = new ColorDrawable(mContext.getResources().getColor(R.color.colorBlue));
-//        ImageLoader.loadWithPlaceholder(mContext, path, placeholder, holder.squareView);
-        ImageLoader.get()
-                .load(mContext, new DefaultOption.Builder(path)
+        ImageLoader.load(mContext, new DefaultOption.Builder(path)
                 .placeholder(R.color.colorBlue)
-                .scaleType(ScaleType.CIRCLE_CROP)
+                .scaleType(ScaleType.CENTER_CROP)
                 .into(holder.squareView));
     }
 }

@@ -20,11 +20,12 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 
+import com.aaron.base.image.DefaultOption;
+import com.aaron.base.image.ImageLoader;
+import com.aaron.base.image.LoadListener;
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.event.PhotoEvent;
-import com.aaron.justlike.common.http.glide.GlideApp;
-import com.aaron.justlike.common.http.glide.request.Request;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.common.impl.ObserverImpl;
 import com.aaron.justlike.common.util.AnimationUtil;
@@ -33,6 +34,8 @@ import com.aaron.justlike.common.util.SystemUtil;
 import com.bm.library.PhotoView;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.uber.autodispose.AutoDispose;
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -172,31 +175,30 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
 
     @Override
     public void onShowImage(String urls, String thumbnail) {
-        GlideApp.getInstance()
-                .with(this)
-                .asDrawable()
-                .load(urls)
+        ImageLoader.load(this, new DefaultOption.Builder(urls)
                 .thumbnail(thumbnail)
-                .transition(200)
-                .listener(new Request.Listener<Drawable>() {
+                .crossFade(200)
+                .addListener(new LoadListener() {
                     @Override
-                    public void onLoadFailed() {
-                        mProgressBar.setVisibility(View.GONE);
-                        mProgressImage.setVisibility(View.VISIBLE);
-                        mProgressImage.setImageResource(R.drawable.ic_error_circle);
-                        Toast.makeText(PreviewActivity.this, "网络开小差了", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onResourceReady(Drawable resource, boolean isFirstResource) {
+                    public boolean onSuccess(Object resource) {
                         mProgressBar.setVisibility(View.GONE);
                         mProgressImage.setVisibility(View.VISIBLE);
                         mProgressImage.setImageResource(R.drawable.ic_done_circle);
                         AnimationUtil.showProgressImage(mProgressImage);
                         mPhotoView.enable();
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onFailure(Throwable e) {
+                        mProgressBar.setVisibility(View.GONE);
+                        mProgressImage.setVisibility(View.VISIBLE);
+                        mProgressImage.setImageResource(R.drawable.ic_error_circle);
+                        Toast.makeText(PreviewActivity.this, "网络开小差了", Toast.LENGTH_SHORT).show();
+                        return false;
                     }
                 })
-                .into(mPhotoView);
+                .into(mPhotoView));
     }
 
     @Override
@@ -206,12 +208,9 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
 
     @Override
     public void onShowAuthorAvatar(String urls) {
-        GlideApp.getInstance()
-                .with(this)
-                .asDrawable()
-                .load(urls)
-                .placeHolder(R.drawable.ic_place_holder)
-                .into(mAuthorImage);
+        ImageLoader.load(this, new DefaultOption.Builder(urls)
+                .placeholder(R.drawable.ic_place_holder)
+                .into(mAuthorImage));
     }
 
     @Override
@@ -243,6 +242,7 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(this)))
                 .subscribe(new ObserverImpl<Integer>() {
                     @Override
                     public void onNext(Integer flag) {

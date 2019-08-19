@@ -59,8 +59,8 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-//    implementation 'com.aaron:base:1.1.2-beta1'
-    implementation project(':base')
+    implementation 'com.aaron:base:1.1.5-beta7'
+//    implementation project(':base')
 
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -71,7 +71,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 //    implementation 'com.jaeger.statusbarutil:library:1.5.1'
     implementation 'com.bm.photoview:library:1.4.1'
-//    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'com.zhihu.android:matisse:0.5.2-beta4'
     implementation 'com.github.yalantis:ucrop:2.2.2'

@@ -19,9 +19,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.aaron.base.image.DefaultOption;
+import com.aaron.base.image.ImageLoader;
+import com.aaron.base.image.LoadListener;
 import com.aaron.justlike.R;
-import com.aaron.justlike.common.http.glide.GlideApp;
-import com.aaron.justlike.common.http.glide.request.Request;
 import com.aaron.justlike.common.http.unsplash.entity.collection.Collection;
 import com.aaron.justlike.common.widget.ViewWrapper;
 
@@ -98,20 +99,12 @@ class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ((ViewHolder) holder).authorName.setText(authorName);
 
             // 加载集合的封面图
-            GlideApp.getInstance()
-                    .with(mContext)
-                    .asDrawable()
-                    .load(photo)
-                    .placeHolder(placeHolder)
-                    .transition(300)
-                    .listener(new Request.Listener<Drawable>() {
+            ImageLoader.load(mContext, new DefaultOption.Builder(photo)
+                    .placeholder(placeHolder)
+                    .crossFade(300)
+                    .addListener(new LoadListener() {
                         @Override
-                        public void onLoadFailed() {
-
-                        }
-
-                        @Override
-                        public void onResourceReady(Drawable resource, boolean isFirstResource) {
+                        public boolean onSuccess(Object resource) {
                             // 仅对初次加载的图片做饱和度动画，意味着刷新
                             if (!mAnimatedFlag.get(position, false)) {
                                 Animator animator = ObjectAnimator.ofFloat(new ViewWrapper(((ViewHolder) holder).itemImage), "saturation", 0, 1);
@@ -119,15 +112,18 @@ class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 animator.start();
                                 mAnimatedFlag.put(position, true);
                             }
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onFailure(Throwable e) {
+                            return false;
                         }
                     })
-                    .into(((ViewHolder) holder).itemImage);
+                    .into(((ViewHolder) holder).itemImage));
 
-            GlideApp.getInstance()
-                    .with(mContext)
-                    .asDrawable()
-                    .load(authorImage)
-                    .into(((ViewHolder) holder).authorImage);
+            ImageLoader.load(mContext, new DefaultOption.Builder(authorImage)
+                    .into(((ViewHolder) holder).authorImage));
         }
     }
 

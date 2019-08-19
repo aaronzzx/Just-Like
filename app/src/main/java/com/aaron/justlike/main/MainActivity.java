@@ -25,6 +25,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.aaron.base.image.DefaultOption;
+import com.aaron.base.image.ImageLoader;
+import com.aaron.base.image.ScaleType;
 import com.aaron.base.impl.OnClickListenerImpl;
 import com.aaron.base.util.StatusBarUtils;
 import com.aaron.justlike.R;
@@ -43,7 +46,6 @@ import com.aaron.justlike.others.download.DownloadManagerActivity;
 import com.aaron.justlike.others.theme.ThemeActivity;
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
-import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.zhihu.matisse.Matisse;
@@ -56,7 +58,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends CommonActivity implements IMainContract.V<Image>, IMainCommunicable{
+public class MainActivity extends CommonActivity implements IMainContract.V<Image>, IMainCommunicable {
 
     private static final int REQUEST_SELECT_IMAGE = 1;
 
@@ -574,46 +576,41 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
     public static class MatisseEngine implements ImageEngine {
         @Override
         public void loadThumbnail(Context context, int resize, Drawable placeholder, ImageView imageView, Uri uri) {
-            Glide.with(context)
+            ImageLoader.load(context, new DefaultOption.Builder(uri)
                     .asBitmap()
-                    .load(uri)
                     .placeholder(placeholder)
-                    .centerCrop()
-                    .override(resize, resize)
-                    .into(imageView);
-
+                    .scaleType(ScaleType.CENTER_CROP)
+                    .override(resize)
+                    .into(imageView));
         }
 
         @Override
         public void loadGifThumbnail(Context context, int resize, Drawable placeholder, ImageView imageView, Uri uri) {
-            Glide.with(context)
+            ImageLoader.load(context, new DefaultOption.Builder(uri)
                     .asGif()
-                    .load(uri)
                     .placeholder(placeholder)
-                    .centerCrop()
-                    .override(resize, resize)
-                    .into(imageView);
+                    .scaleType(ScaleType.CENTER_CROP)
+                    .override(resize)
+                    .into(imageView));
         }
 
 
         @Override
         public void loadImage(Context context, int resizeX, int resizeY, ImageView imageView, Uri uri) {
-            Glide.with(context)
+            ImageLoader.load(context, new DefaultOption.Builder(uri)
                     .asBitmap()
-                    .load(uri)
-                    .centerCrop()
+                    .scaleType(ScaleType.CENTER_CROP)
                     .override(resizeX, resizeY)
-                    .into(imageView);
+                    .into(imageView));
         }
 
         @Override
         public void loadGifImage(Context context, int resizeX, int resizeY, ImageView imageView, Uri uri) {
-            Glide.with(context)
+            ImageLoader.load(context, new DefaultOption.Builder(uri)
                     .asGif()
-                    .load(uri)
-                    .centerCrop()
+                    .scaleType(ScaleType.CENTER_CROP)
                     .override(resizeX, resizeY)
-                    .into(imageView);
+                    .into(imageView));
         }
 
         @Override

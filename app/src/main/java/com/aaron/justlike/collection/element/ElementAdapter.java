@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.aaron.base.image.DefaultOption;
 import com.aaron.base.image.ImageLoader;
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.adapter.SquareAdapter;
@@ -60,14 +61,9 @@ class ElementAdapter extends SquareAdapter {
         Image image = mList.get(position); // 从集合中找到 Image 对象
         String path = image.getPath();
 
-//        GlideApp.getInstance()
-//                .with(mContext)
-//                .asDrawable()
-//                .load(path)
-//                .placeHolder(R.color.colorBlue)
-//                .transition(100)
-//                .into(((ViewHolder) holder).squareView);
         Drawable placeholder = new ColorDrawable(mContext.getResources().getColor(R.color.colorBlue));
-        ImageLoader.loadWithPlaceholder(mContext, path, placeholder, holder.squareView);
+        ImageLoader.load(mContext, new DefaultOption.Builder(path)
+                .placeholder(placeholder)
+                .into(holder.squareView));
     }
 }

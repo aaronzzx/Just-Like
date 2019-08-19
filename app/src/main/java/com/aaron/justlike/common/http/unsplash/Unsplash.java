@@ -1,5 +1,6 @@
 package com.aaron.justlike.common.http.unsplash;
 
+import com.aaron.base.http.HttpUtil;
 import com.aaron.justlike.common.http.unsplash.entity.collection.SearchCollectionResult;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.common.http.unsplash.entity.photo.SearchPhotoResult;
@@ -12,9 +13,6 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Unsplash 网络请求库
@@ -31,13 +29,7 @@ public class Unsplash {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new HeaderInterceptor(NEW_CLIENT_ID))
                 .build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(client)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        mUnsplashService = retrofit.create(UnsplashService.class);
+        mUnsplashService = HttpUtil.createService(BASE_URL, client, UnsplashService.class);
     }
 
     public void getPhotos(int page, int perPage, Order order, UnsplashCallback<List<Photo>> callback) {

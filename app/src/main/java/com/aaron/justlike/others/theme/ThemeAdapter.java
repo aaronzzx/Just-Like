@@ -12,8 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.aaron.base.image.DefaultOption;
+import com.aaron.base.image.ImageLoader;
 import com.aaron.justlike.R;
-import com.aaron.justlike.common.http.glide.GlideApp;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<Integer> mList;
-//    private Callback mCallback;
+    //    private Callback mCallback;
     private int mCurrentCheck;
 
     ThemeAdapter(List<Integer> list,/* Callback callback,*/ int currentCheck) {
@@ -69,13 +70,10 @@ class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         initThemeColor((ViewHolder) holder, position);
 
-        GlideApp.getInstance()
-                .with(mContext)
-                .asDrawable()
-                .load(mList.get(position))
-                .placeHolder(R.color.colorBlue)
-                .transition(50)
-                .into(((ViewHolder) holder).imageView);
+        ImageLoader.load(mContext, new DefaultOption.Builder(mList.get(position))
+                .placeholder(R.color.colorBlue)
+                .crossFade(50)
+                .into(((ViewHolder) holder).imageView));
     }
 
     @Override

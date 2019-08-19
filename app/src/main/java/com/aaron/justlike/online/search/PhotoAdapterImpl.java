@@ -10,11 +10,12 @@ import android.graphics.drawable.Drawable;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
+import com.aaron.base.image.DefaultOption;
+import com.aaron.base.image.ImageLoader;
+import com.aaron.base.image.LoadListener;
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.adapter.PhotoAdapter;
 import com.aaron.justlike.common.event.PhotoEvent;
-import com.aaron.justlike.common.http.glide.GlideApp;
-import com.aaron.justlike.common.http.glide.request.Request;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.common.widget.ViewWrapper;
 import com.aaron.justlike.online.preview.PreviewActivity;
@@ -57,27 +58,16 @@ class PhotoAdapterImpl extends PhotoAdapter {
             // set author name
             holder.authorName.setText(authorName);
             // load author image
-            GlideApp.getInstance()
-                    .with(mContext)
-                    .asDrawable()
-                    .load(authorImage)
-                    .placeHolder(R.drawable.ic_author_image)
-                    .into(holder.authorImage);
+            ImageLoader.load(mContext, new DefaultOption.Builder(authorImage)
+                    .placeholder(R.drawable.ic_author_image)
+                    .into(holder.authorImage));
             // load image
-            GlideApp.getInstance()
-                    .with(mContext)
-                    .asDrawable()
-                    .load(regular)
-                    .placeHolder(placeHolder)
-                    .transition(300)
-                    .listener(new Request.Listener<Drawable>() {
+            ImageLoader.load(mContext, new DefaultOption.Builder(regular)
+                    .placeholder(placeHolder)
+                    .crossFade(300)
+                    .addListener(new LoadListener() {
                         @Override
-                        public void onLoadFailed() {
-
-                        }
-
-                        @Override
-                        public void onResourceReady(Drawable resource, boolean isFirstResource) {
+                        public boolean onSuccess(Object resource) {
                             // 仅对初次加载的图片做饱和度动画，意味着刷新
                             if (!mAnimatedFlag.get(position, false)) {
                                 Animator animator = ObjectAnimator.ofFloat(new ViewWrapper(holder.imageView), "saturation", 0, 1);
@@ -85,9 +75,15 @@ class PhotoAdapterImpl extends PhotoAdapter {
                                 animator.start();
                                 mAnimatedFlag.put(position, true);
                             }
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onFailure(Throwable e) {
+                            return false;
                         }
                     })
-                    .into(holder.imageView);
+                    .into(holder.imageView));
         }
     }
 }

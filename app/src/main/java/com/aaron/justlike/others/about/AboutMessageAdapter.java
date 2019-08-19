@@ -14,12 +14,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.aaron.base.image.DefaultOption;
+import com.aaron.base.image.ImageLoader;
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.JustLike;
 import com.aaron.justlike.common.bean.Message;
 import com.aaron.justlike.common.util.AlipayUtil;
 import com.aaron.justlike.common.util.SystemUtil;
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 import java.util.Locale;
@@ -95,9 +96,8 @@ class AboutMessageAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Message message = (Message) mList.get(position);
-        Glide.with(mActivity)
-                .load(message.getIconId())
-                .into(((ViewHolder) holder).icon);
+        ImageLoader.load(mActivity, new DefaultOption.Builder(message.getIconId())
+                .into(((ViewHolder) holder).icon));
         ((ViewHolder) holder).title.setText(message.getTitle());
     }
 

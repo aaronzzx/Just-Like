@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.aaron.base.image.DefaultOption;
 import com.aaron.base.image.ImageLoader;
 import com.aaron.justlike.common.bean.Image;
 import com.bm.library.PhotoView;
@@ -49,13 +50,8 @@ class PreviewAdapter extends PagerAdapter {
             parent.removeView(photoView);
         }
 
-//        GlideApp.getInstance()
-//                .with(context)
-//                .asDrawable()
-//                .load(path)
-//                .transition(200)
-//                .into(photoView);
-        ImageLoader.loadWithAnim(context, path, photoView);
+        ImageLoader.load(context, new DefaultOption.Builder(path)
+                .into(photoView));
         photoView.setOnClickListener(((IPreviewCommunicable) context)::onTap);
         container.addView(photoView);
         return photoView;
