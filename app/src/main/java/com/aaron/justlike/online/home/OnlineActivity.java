@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -36,6 +35,7 @@ import com.aaron.justlike.main.MainActivity;
 import com.aaron.justlike.others.about.AboutActivity;
 import com.aaron.justlike.others.download.DownloadManagerActivity;
 import com.aaron.justlike.others.theme.ThemeActivity;
+import com.aaron.ui.widget.TopBar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.jaeger.library.StatusBarUtil;
@@ -50,7 +50,8 @@ public class OnlineActivity extends CommonActivity implements View.OnClickListen
     private DrawerLayout mParentLayout;
     private NavigationView mNavView;
     private View mStatusBar;
-    private Toolbar mToolbar;
+//    private Toolbar mToolbar;
+    private TopBar mTopBar;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private ImageView mNavHeaderImage;
@@ -89,20 +90,18 @@ public class OnlineActivity extends CommonActivity implements View.OnClickListen
                     window.setStatusBarColor(getResources().getColor(R.color.status_bar_background));
                 }
                 setIconFilterColor(theme);
-                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
-//                mActionBar.setHomeAsUpIndicator(mIconDrawer);
+//                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
+                mTopBar.setTextColor(getResources().getColor(R.color.colorAccentWhite));
             }
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_PERMISSION:
-                if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(JustLike.getContext(), "不开启权限将无法使用壁纸缓存功能", Toast.LENGTH_SHORT).show();
-                }
-                break;
+        if (requestCode == REQUEST_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(JustLike.getContext(), "不开启权限将无法使用壁纸缓存功能", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -124,16 +123,14 @@ public class OnlineActivity extends CommonActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.activity_online_toolbar:
-                List<Fragment> fragments = mFragmentManager.getFragments();
-                for (Fragment fragment : fragments) {
-                    if (fragment.getUserVisibleHint()) {
-                        ((OnlineFragment) fragment).backToTop();
-                        return;
-                    }
+        if (v.getId() == R.id.activity_online_toolbar) {
+            List<Fragment> fragments = mFragmentManager.getFragments();
+            for (Fragment fragment : fragments) {
+                if (fragment.getUserVisibleHint()) {
+                    ((OnlineFragment) fragment).backToTop();
+                    return;
                 }
-                break;
+            }
         }
     }
 
@@ -177,13 +174,13 @@ public class OnlineActivity extends CommonActivity implements View.OnClickListen
         mParentLayout = findViewById(R.id.drawer_layout);
         mStatusBar = findViewById(R.id.status_bar);
         mNavView = findViewById(R.id.navigation_view);
-        mToolbar = findViewById(R.id.activity_online_toolbar);
+        mTopBar = findViewById(R.id.activity_online_toolbar);
         mTabLayout = findViewById(R.id.tab_online);
         mViewPager = findViewById(R.id.view_pager);
         View headerView = mNavView.getHeaderView(0);
         mNavHeaderImage = headerView.findViewById(R.id.nav_head_image);
 
-        mToolbar.setOnClickListener(this);
+        mTopBar.setOnClickListener(this);
         mNavView.setNavigationItemSelectedListener(this);
 
         initTheme();
@@ -194,7 +191,7 @@ public class OnlineActivity extends CommonActivity implements View.OnClickListen
 
     private void initToolbar() {
         StatusBarUtil.setTransparentForDrawerLayout(this, mParentLayout);
-        setSupportActionBar(mToolbar);
+//        setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
@@ -208,13 +205,13 @@ public class OnlineActivity extends CommonActivity implements View.OnClickListen
         mIconFilter = getResources().getDrawable(R.drawable.ic_filter);
         ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
         if (theme == null || theme == ThemeManager.Theme.WHITE) {
-            mTabLayout.setTabTextColors(getResources().getColor(R.color.blackText), getResources().getColor(R.color.colorAccentWhite));
+            mTabLayout.setTabTextColors(getResources().getColor(R.color.base_black_hint), getResources().getColor(R.color.colorAccentWhite));
             mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccentWhite));
             DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorAccentWhite));
             DrawableCompat.setTint(mIconSearch, getResources().getColor(R.color.colorAccentWhite));
             DrawableCompat.setTint(mIconFilter, getResources().getColor(R.color.colorAccentWhite));
         } else {
-            mTabLayout.setTabTextColors(getResources().getColor(R.color.whiteText), getResources().getColor(R.color.colorPrimaryWhite));
+            mTabLayout.setTabTextColors(getResources().getColor(R.color.base_white_hint), getResources().getColor(R.color.colorPrimaryWhite));
             mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(mIconSearch, getResources().getColor(R.color.colorPrimaryWhite));
@@ -235,22 +232,26 @@ public class OnlineActivity extends CommonActivity implements View.OnClickListen
     private void initTheme() {
         Resources resources = getResources();
         ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
-        if (theme == null) {
-            mColorPrimary = resources.getColor(R.color.colorAccentWhite);
-            mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
-            mStatusBar.setBackground(new ColorDrawable(getResources().getColor(R.color.colorPrimaryWhite)));
-            mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
-            return;
-        }
+//        if (theme == null || theme == ThemeManager.Theme.WHITE) {
+//            mColorPrimary = resources.getColor(R.color.colorAccentWhite);
+//            mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
+//            mStatusBar.setBackground(new ColorDrawable(getResources().getColor(R.color.colorPrimaryWhite)));
+////            mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
+//            mTopBar.setTextColor(getResources().getColor(R.color.colorAccentWhite));
+//            return;
+//        }
+        mTopBar.setTextColor(getResources().getColor(R.color.base_white));
         switch (theme) {
             case JUST_LIKE:
                 mColorPrimary = resources.getColor(R.color.colorPrimary);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_just_like));
                 break;
             case WHITE:
+            default:
                 mColorPrimary = resources.getColor(R.color.colorAccentWhite);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
                 mStatusBar.setBackground(new ColorDrawable(getResources().getColor(R.color.colorPrimaryWhite)));
+                mTopBar.setTextColor(getResources().getColor(R.color.colorAccentWhite));
                 return;
             case BLACK:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryBlack);

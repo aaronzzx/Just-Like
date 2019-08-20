@@ -9,7 +9,6 @@ import android.view.Window;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +19,7 @@ import com.aaron.justlike.common.bean.Library;
 import com.aaron.justlike.common.bean.Message;
 import com.aaron.justlike.common.manager.ThemeManager;
 import com.aaron.justlike.common.util.SystemUtil;
+import com.aaron.ui.widget.TopBar;
 
 import java.util.List;
 
@@ -29,7 +29,8 @@ public class AboutActivity extends CommonActivity implements IAboutContract.V<Me
 
     private Drawable mIconBack;
 
-    private Toolbar mToolbar;
+//    private Toolbar mToolbar;
+    private TopBar mTopBar;
     private ActionBar mActionBar;
     private RecyclerView mRecycleMessage;
     private RecyclerView mRecycleLibrary;
@@ -60,6 +61,7 @@ public class AboutActivity extends CommonActivity implements IAboutContract.V<Me
         View decorView = window.getDecorView();
         if (hasFocus) {
             ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+            mTopBar.setTextColor(getResources().getColor(R.color.base_white));
             if (theme == null || theme == ThemeManager.Theme.WHITE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -68,7 +70,8 @@ public class AboutActivity extends CommonActivity implements IAboutContract.V<Me
                 } else {
                     window.setStatusBarColor(getResources().getColor(R.color.status_bar_background));
                 }
-                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
+//                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
+                mTopBar.setTextColor(getResources().getColor(R.color.colorAccentWhite));
                 mActionBar.setHomeAsUpIndicator(mIconBack);
             }
         }
@@ -107,7 +110,7 @@ public class AboutActivity extends CommonActivity implements IAboutContract.V<Me
 
     @SuppressLint("SetTextI18n")
     private void initView() {
-        mToolbar = findViewById(R.id.activity_about_toolbar);
+        mTopBar = findViewById(R.id.activity_about_toolbar);
         mRecycleMessage = findViewById(R.id.activity_about_message_recycler);
         mRecycleLibrary = findViewById(R.id.activity_about_library_recycler);
 
@@ -131,7 +134,7 @@ public class AboutActivity extends CommonActivity implements IAboutContract.V<Me
         View decorView = window.getDecorView();
         decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        setSupportActionBar(mToolbar);
+//        setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);

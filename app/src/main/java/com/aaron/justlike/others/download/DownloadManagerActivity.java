@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.Window;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +24,7 @@ import com.aaron.justlike.common.manager.ThemeManager;
 import com.aaron.justlike.common.util.EmptyViewUtil;
 import com.aaron.justlike.common.util.SystemUtil;
 import com.aaron.justlike.online.preview.PreviewActivity;
+import com.aaron.ui.widget.TopBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,7 +45,8 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
     private IDownloadContract.P mPresenter;
 
     private ProgressDialog mDialog;
-    private Toolbar mToolbar;
+//    private Toolbar mToolbar;
+    private TopBar mTopBar;
     private ActionBar mActionBar;
     private Drawable mIconBack;
     private View mEmptyView;
@@ -74,6 +75,7 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
         View decorView = window.getDecorView();
         if (hasFocus) {
             ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+            mTopBar.setTextColor(getResources().getColor(R.color.base_white));
             if (theme == null || theme == ThemeManager.Theme.WHITE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -82,7 +84,8 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
                 } else {
                     window.setStatusBarColor(getResources().getColor(R.color.status_bar_background));
                 }
-                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
+//                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
+                mTopBar.setTextColor(getResources().getColor(R.color.colorAccentWhite));
                 mActionBar.setHomeAsUpIndicator(mIconBack);
             }
         }
@@ -165,7 +168,7 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
      */
     @Override
     public void onShowSnackBar(String path) {
-        Snackbar.make(mToolbar, SNACKBAR_TEXT, Snackbar.LENGTH_LONG)
+        Snackbar.make(mTopBar, SNACKBAR_TEXT, Snackbar.LENGTH_LONG)
                 .setAction(SNACKBAR_ACTION_TEXT, v -> mPresenter.findImageByOnline(path))
                 .show();
     }
@@ -187,12 +190,12 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
     }
 
     private void initView() {
-        mToolbar = findViewById(R.id.activity_download_manager_toolbar);
+        mTopBar = findViewById(R.id.activity_download_manager_toolbar);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         mEmptyView = findViewById(R.id.empty_view);
 
         initIconColor();
-        initToolbar(mToolbar);
+        initToolbar();
         initRecyclerView(recyclerView);
     }
 
@@ -206,12 +209,12 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
         }
     }
 
-    private void initToolbar(Toolbar toolbar) {
+    private void initToolbar() {
         Window window = getWindow();
         View decorView = window.getDecorView();
         decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);

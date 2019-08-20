@@ -28,13 +28,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <androidx.appcompat.widget.Toolbar
+                <!--<androidx.appcompat.widget.Toolbar-->
+                    <!--android:id="@+id/activity_online_toolbar"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
+                    <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"-->
+                    <!--app:titleTextAppearance="@style/ToolbarTitleStyle"-->
+                    <!--app:layout_scrollFlags="scroll|enterAlways|snap" />-->
+
+                <com.aaron.ui.widget.TopBar
                     android:id="@+id/activity_online_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    app:layout_scrollFlags="scroll|enterAlways|snap" />
+                    app:string="Just Like"
+                    app:backVisibility="gone"
+                    app:layout_scrollFlags="scroll|enterAlways|snap"/>
 
                 <include layout="@layout/include_tab_online" />
 

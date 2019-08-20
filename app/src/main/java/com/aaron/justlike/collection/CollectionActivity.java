@@ -20,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -44,6 +43,7 @@ import com.aaron.justlike.online.home.OnlineActivity;
 import com.aaron.justlike.others.about.AboutActivity;
 import com.aaron.justlike.others.download.DownloadManagerActivity;
 import com.aaron.justlike.others.theme.ThemeActivity;
+import com.aaron.ui.widget.TopBar;
 import com.google.android.material.navigation.NavigationView;
 import com.jaeger.library.StatusBarUtil;
 
@@ -61,7 +61,8 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
 
     private DrawerLayout mParentLayout;
     private NavigationView mNavView;
-    private Toolbar mToolbar;
+//    private Toolbar mToolbar;
+    private TopBar mTopBar;
     private View mStatusBar;
     private ImageView mNavHeaderImage;
 
@@ -105,13 +106,15 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
         if (hasFocus) {
             mNavView.setCheckedItem(R.id.nav_collection);
             ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+            mTopBar.setTextColor(getResources().getColor(R.color.base_white));
             if (theme == null || theme == ThemeManager.Theme.WHITE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                 } else {
                     window.setStatusBarColor(getResources().getColor(R.color.status_bar_background));
                 }
-                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
+//                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
+                mTopBar.setTextColor(getResources().getColor(R.color.colorAccentWhite));
                 mActionBar.setHomeAsUpIndicator(mIconDrawer);
             }
         }
@@ -128,39 +131,38 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.add_collection: // 添加集合
-                View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_create_collection, null);
-                EditText editText = dialogView.findViewById(R.id.input_collection_name);
-                AlertDialog alertDialog = new AlertDialog.Builder(this)
-                        .setView(dialogView)
-                        .setTitle("创建集合")
-                        .setPositiveButton("确定", (dialog, which) -> {
-                            // 打开图片选择器让用户选择图片添加到集合
-                            String title = editText.getText().toString();
-                            ImageSelector.getInstance(CollectionActivity.this)
-                                    .setTitle(title)
-                                    .setFilePath("/storage/emulated/0/Pictures/JustLike")
-                                    .setSelectedImage(null)
-                                    .setCallback(new ImageSelector.ImageCallback() {
-                                        @Override
-                                        public void onResponse(List<String> response, String title) {
-                                            showProgress();
-                                            int i = mPresenter.saveCollection(response, title);
-                                            if (i == 1) {
-                                                mPresenter.requestCollection(mCollections);
-                                            }
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // 添加集合
+        if (item.getItemId() == R.id.add_collection) {
+            View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_create_collection, null);
+            EditText editText = dialogView.findViewById(R.id.input_collection_name);
+            AlertDialog alertDialog = new AlertDialog.Builder(this)
+                    .setView(dialogView)
+                    .setTitle("创建集合")
+                    .setPositiveButton("确定", (dialog, which) -> {
+                        // 打开图片选择器让用户选择图片添加到集合
+                        String title = editText.getText().toString();
+                        ImageSelector.getInstance(CollectionActivity.this)
+                                .setTitle(title)
+                                .setFilePath("/storage/emulated/0/Pictures/JustLike")
+                                .setSelectedImage(null)
+                                .setCallback(new ImageSelector.ImageCallback() {
+                                    @Override
+                                    public void onResponse(List<String> response, String title) {
+                                        showProgress();
+                                        int i = mPresenter.saveCollection(response, title);
+                                        if (i == 1) {
+                                            mPresenter.requestCollection(mCollections);
                                         }
-                                    })
-                                    .start();
-                        })
-                        .setNegativeButton("取消", (dialog, which) -> {
-                        })
-                        .create();
-                alertDialog.setOnShowListener(dialog -> SystemUtil.showKeyboard(editText));
-                alertDialog.show();
-                break;
+                                    }
+                                })
+                                .start();
+                    })
+                    .setNegativeButton("取消", (dialog, which) -> {
+                    })
+                    .create();
+            alertDialog.setOnShowListener(dialog -> SystemUtil.showKeyboard(editText));
+            alertDialog.show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -250,7 +252,7 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
     private void initView() {
         mParentLayout = findViewById(R.id.drawer_layout);
         mNavView = findViewById(R.id.navigation_view);
-        mToolbar = findViewById(R.id.activity_collection_toolbar);
+        mTopBar = findViewById(R.id.activity_collection_toolbar);
         mStatusBar = findViewById(R.id.status_bar);
         mRecyclerView = findViewById(R.id.recycler_view);
         mEmptyView = findViewById(R.id.empty_view);
@@ -303,8 +305,8 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
         mIconAdd = getResources().getDrawable(R.drawable.ic_add);
         if (ThemeManager.getInstance().getCurrentTheme() == null
                 || ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
-            DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorGreyText));
-            DrawableCompat.setTint(mIconAdd, getResources().getColor(R.color.colorGreyText));
+            DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorAccentWhite));
+            DrawableCompat.setTint(mIconAdd, getResources().getColor(R.color.colorAccentWhite));
         } else {
             DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(mIconAdd, getResources().getColor(R.color.colorPrimaryWhite));
@@ -316,7 +318,8 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
         if (theme == null) {
             mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
             // 初次安装时由于有权限申请，此时没有获取到焦点，所以会有一刹那没变色，这里设置一下就好了
-            mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
+//            mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
+            mTopBar.setTextColor(getResources().getColor(R.color.colorAccentWhite));
             mStatusBar.setBackground(new ColorDrawable(getResources().getColor(R.color.colorPrimaryWhite)));
             return;
         }
@@ -367,7 +370,7 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
 
     private void initToolbar() {
         StatusBarUtil.setTransparentForDrawerLayout(this, mParentLayout);
-        setSupportActionBar(mToolbar);
+//        setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);

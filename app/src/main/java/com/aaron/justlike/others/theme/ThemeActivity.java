@@ -13,7 +13,6 @@ import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +21,7 @@ import com.aaron.base.base.ActivityCollector;
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.manager.ThemeManager;
+import com.aaron.ui.widget.TopBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,8 @@ public class ThemeActivity extends CommonActivity implements IThemeCommunicable 
     private ExecutorService mExecutorService;
     private LinearLayoutManager mLayoutManager;
 
-    private Toolbar mToolbar;
+//    private Toolbar mToolbar;
+    private TopBar mTopBar;
     private ActionBar mActionBar;
     private Drawable mIconBack;
 
@@ -57,6 +58,7 @@ public class ThemeActivity extends CommonActivity implements IThemeCommunicable 
         View decorView = window.getDecorView();
         if (hasFocus) {
             ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+            mTopBar.setTextColor(getResources().getColor(R.color.base_white));
             if (theme == null || theme == ThemeManager.Theme.WHITE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -65,7 +67,8 @@ public class ThemeActivity extends CommonActivity implements IThemeCommunicable 
                 } else {
                     window.setStatusBarColor(getResources().getColor(R.color.status_bar_background));
                 }
-                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
+//                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
+                mTopBar.setTextColor(getResources().getColor(R.color.colorAccentWhite));
                 mActionBar.setHomeAsUpIndicator(mIconBack);
             }
         }
@@ -109,7 +112,7 @@ public class ThemeActivity extends CommonActivity implements IThemeCommunicable 
     private void initView() {
         mExecutorService = Executors.newSingleThreadExecutor();
 
-        mToolbar = findViewById(R.id.toolbar);
+        mTopBar = findViewById(R.id.toolbar);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
         initIconColor();
@@ -132,7 +135,7 @@ public class ThemeActivity extends CommonActivity implements IThemeCommunicable 
         View decorView = window.getDecorView();
         decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        setSupportActionBar(mToolbar);
+//        setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);

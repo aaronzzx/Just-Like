@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:ignore="ContentDescription,UseCompoundDrawables">
+
+    <LinearLayout
+        android:id="@+id/ui_ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:clipToPadding="false"
+        android:padding="16dp">
+
+        <com.aaron.ui.widget.ImageTextView
+            android:id="@+id/ui_tv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:drawablePadding="4dp"
+            android:textColor="@color/base_black" />
+
+        <ImageView
+            android:id="@+id/ui_iv_expand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="#FFAAAAAA"
+            app:srcCompat="@drawable/ui_ic_expand_more_grey_24dp" />
+
+    </LinearLayout>
+
+    <net.cachapa.expandablelayout.ExpandableLayout
+        android:id="@+id/ui_expandable_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:el_duration="300"
+        app:el_expanded="false" />
+
+</LinearLayout>

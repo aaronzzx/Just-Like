@@ -28,12 +28,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <androidx.appcompat.widget.Toolbar
+                <!--<androidx.appcompat.widget.Toolbar-->
+                    <!--android:id="@+id/activity_collection_toolbar"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
+                    <!--app:titleTextAppearance="@style/ToolbarTitleStyle"-->
+                    <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />-->
+                <com.aaron.ui.widget.TopBar
                     android:id="@+id/activity_collection_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+                    app:string="集合"
+                    app:backVisibility="gone"/>
 
             </com.google.android.material.appbar.AppBarLayout>
 

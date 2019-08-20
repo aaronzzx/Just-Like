@@ -1,5 +1,10 @@
 <resources>
 
+    <style name="ToolbarTitleStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/base_text_hlarge</item>
+    </style>
+
     <!-- Customize splash image here. -->
     <style name="JustLikeTheme.Splash">
         <item name="android:windowTranslucentNavigation">true</item>

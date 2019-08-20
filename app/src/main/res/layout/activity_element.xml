@@ -10,13 +10,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
+        <!--<androidx.appcompat.widget.Toolbar-->
+            <!--android:id="@+id/toolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:paddingTop="27.5dp"-->
+            <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"-->
+            <!--app:titleTextAppearance="@style/ToolbarTitleStyle"-->
+            <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />-->
+
+        <com.aaron.ui.widget.TopBar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="25dp"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+            android:paddingTop="27.5dp"
+            app:string="元素"
+            app:backVisibility="gone"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

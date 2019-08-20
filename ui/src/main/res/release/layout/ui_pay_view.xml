@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="448dp"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- 关闭按钮，标题 -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+
+        <ImageButton
+            android:id="@+id/ui_ibtn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            app:srcCompat="@drawable/ui_ic_close_black_24dp"
+            android:tint="#A8A8A8"/>
+
+        <TextView
+            android:id="@+id/ui_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/ui_type_pay_pwd"
+            android:textSize="@dimen/base_text_hlarge"
+            android:textColor="@color/base_black"/>
+
+    </RelativeLayout>
+
+    <!-- 分割线 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/base_black_divider"
+        tools:ignore="PxUsage" />
+
+    <!-- 输入框 -->
+    <!--<com.gztenghu.ui.widget.SecurityEditText-->
+        <!--android:id="@+id/ui_security_et"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"/>-->
+    <include layout="@layout/ui_security_edit_text"/>
+
+    <TextView
+        android:id="@+id/ui_tv_notice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_gravity="center"
+        android:text="@string/ui_pay_pwd_wrong"
+        android:visibility="invisible"
+        tools:text="密码错误，请重新输入"/>
+
+    <!-- 键盘 -->
+    <com.aaron.ui.widget.NumKeyboard
+        android:id="@+id/ui_num_keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"/>
+
+</LinearLayout>

@@ -15,6 +15,7 @@
         android:paddingBottom="20dp"
         android:background="@drawable/toolbar_bg"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:titleTextAppearance="@style/ToolbarTitleStyle"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
 </FrameLayout>

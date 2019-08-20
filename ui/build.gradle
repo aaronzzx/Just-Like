@@ -1,0 +1,91 @@
+if (rootProject.ext.buildMode["isComponentApk"]) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
+}
+apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+    resourcePrefix "ui_"
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
+        vectorDrawables.useSupportLibrary = rootProject.ext.android["vectorDrawables_useSupportLibrary"]
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.compileOptions["sourceCompatibility"]
+        targetCompatibility rootProject.ext.compileOptions["targetCompatibility"]
+    }
+
+    buildTypes {
+        release {
+            buildConfigField("boolean", "DEBUG_MODE", "false")
+            minifyEnabled rootProject.ext.buildTypes["minifyEnabled"]
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            buildConfigField("boolean", "DEBUG_MODE", "true")
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            if (rootProject.ext.buildMode["isComponentApk"]) {
+                manifest.srcFile 'src/main/debug/AndroidManifest.xml'
+                res.srcDirs = [
+                        'src/main/res/release',
+                        'src/main/res/debug',
+                        'src/main/res'
+                ]
+            } else {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+                res.srcDirs = [
+                        'src/main/res/release',
+                        'src/main/res'
+                ]
+                java {
+                    exclude 'ui/debug/**'
+                }
+            }
+        }
+    }
+}
+
+repositories {
+    google()
+    jcenter()
+    flatDir { dirs 'libs' }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    implementation        rootProject.ext.dependencies["appcompat"]
+    implementation        rootProject.ext.dependencies["multidex"]
+    implementation        rootProject.ext.dependencies["vectordrawable"]
+    debugImplementation   rootProject.ext.dependencies["leakcanary_debug"]
+    releaseImplementation rootProject.ext.dependencies["leakcanary_release"]
+    implementation        rootProject.ext.dependencies["expandablelayout"]
+    implementation        rootProject.ext.dependencies["material"]
+    implementation        rootProject.ext.dependencies["pwdinput"]
+    implementation        rootProject.ext.dependencies["butterknife"]
+    annotationProcessor   rootProject.ext.dependencies["butterknife_compiler"]
+    implementation        rootProject.ext.dependencies["base"]
+//    compile "androidx.core:core-ktx:+"
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}

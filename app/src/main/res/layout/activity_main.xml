@@ -18,22 +18,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.Toolbar
+            <!--<androidx.appcompat.widget.Toolbar-->
+                <!--android:id="@+id/toolbar_home_activity_main"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingTop="27.5dp"-->
+                <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
+                <!--app:titleTextAppearance="@style/ToolbarTitleStyle"-->
+                <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />-->
+
+            <com.aaron.ui.widget.TopBar
                 android:id="@+id/toolbar_home_activity_main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="27.5dp"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-            <!--<LinearLayout-->
-                <!--android:id="@+id/activity_main_linear_layout"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content">-->
-
-                <!---->
-
-            <!--</LinearLayout>-->
+                app:string="收藏"
+                app:backVisibility="gone"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_add_fab" />
+            android:src="@drawable/ic_add" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

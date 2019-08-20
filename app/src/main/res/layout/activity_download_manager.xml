@@ -11,13 +11,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
+        <!--<androidx.appcompat.widget.Toolbar-->
+            <!--android:id="@+id/activity_download_manager_toolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:paddingTop="27.5dp"-->
+            <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
+            <!--app:titleTextAppearance="@style/ToolbarTitleStyle"-->
+            <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>-->
+
+        <com.aaron.ui.widget.TopBar
             android:id="@+id/activity_download_manager_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="27.5dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+            app:string="下载管理"
+            app:backVisibility="gone"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

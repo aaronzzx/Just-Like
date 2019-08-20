@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/ui_ic_back_black_24dp" />
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/base_white_shallow" />
+        </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 弹出菜单，弹出后菜单在按钮的下方 -->
+    <style name="UIOverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="overlapAnchor">false</item>
+        <item name="android:popupBackground">#FFFFFF</item>
+        <item name="android:textColor">@color/base_black</item>
+    </style>
+
+    <!-- 标题栏文字主题 -->
+    <style name="UITopbarText" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/base_text_hlarge</item>
+        <item name="android:textColor">@color/base_black</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="UIBottomDialogAnim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/ui_dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/ui_dialog_exit</item>
+    </style>
+
+    <!--<style name="CommonTabLayout" parent="Widget.Design.TabLayout">-->
+    <!--<item name="tabIndicatorFullWidth">false</item>-->
+    <!--<item name="tabRippleColor">@android:color/transparent</item>-->
+    <!--<item name="tabIndicatorColor">@color/common_accent</item>-->
+    <!--<item name="tabIndicatorHeight">3dp</item>-->
+    <!--<item name="tabSelectedTextColor">@color/common_accent</item>-->
+    <!--</style>-->
+
+</resources>

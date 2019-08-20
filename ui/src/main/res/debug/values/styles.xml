@@ -1,0 +1,13 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="UIAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/ui_color_primary</item>
+        <item name="colorPrimaryDark">@color/ui_color_primary_dark</item>
+        <item name="colorAccent">@color/ui_color_accent</item>
+    </style>
+
+    <style name="UIDialogTheme" parent="Theme.AppCompat.Light.Dialog"/>
+
+</resources>

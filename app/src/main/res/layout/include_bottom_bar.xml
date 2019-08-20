@@ -25,7 +25,7 @@
             android:layout_weight="1"
             android:paddingTop="10dp"
             android:paddingBottom="15dp"
-            android:src="@drawable/ic_bottom_share" />
+            android:src="@drawable/ic_share" />
 
         <ImageView
             android:id="@+id/action_set_wallpaper"
@@ -58,7 +58,7 @@
             android:layout_weight="1"
             android:paddingTop="10dp"
             android:paddingBottom="15dp"
-            android:src="@drawable/ic_bottom_delete" />
+            android:src="@drawable/ic_delete" />
 
     </LinearLayout>
 

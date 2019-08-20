@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +26,7 @@ import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.common.manager.ThemeManager;
 import com.aaron.justlike.common.util.SystemUtil;
 import com.aaron.justlike.common.widget.MyGridLayoutManager;
+import com.aaron.ui.widget.TopBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,8 @@ public class ElementsActivity extends CommonActivity implements IElementContract
 
     private IElementContract.P mPresenter;
 
-    private Toolbar mToolbar;
+//    private Toolbar mToolbar;
+    private TopBar mTopBar;
     private RecyclerView mRecyclerView;
     private PhotoAdapter mAdapter;
     private View mErrorView;
@@ -69,6 +70,7 @@ public class ElementsActivity extends CommonActivity implements IElementContract
         View decorView = window.getDecorView();
         if (hasFocus) {
             ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+            mTopBar.setTextColor(getResources().getColor(R.color.base_white));
             if (theme == null || theme == ThemeManager.Theme.WHITE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -77,7 +79,8 @@ public class ElementsActivity extends CommonActivity implements IElementContract
                 } else {
                     window.setStatusBarColor(getResources().getColor(R.color.status_bar_background));
                 }
-                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorGreyText));
+//                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
+                mTopBar.setTextColor(getResources().getColor(R.color.colorAccentWhite));
                 mActionBar.setHomeAsUpIndicator(mIconBack);
             }
         }
@@ -186,7 +189,7 @@ public class ElementsActivity extends CommonActivity implements IElementContract
     }
 
     private void initView() {
-        mToolbar = findViewById(R.id.toolbar);
+        mTopBar = findViewById(R.id.toolbar);
         mRecyclerView = findViewById(R.id.recycler_view);
         mErrorView = findViewById(R.id.error_view);
         Button clickRefresh = findViewById(R.id.btn_click_refresh);
@@ -194,7 +197,7 @@ public class ElementsActivity extends CommonActivity implements IElementContract
         mFooterProgress = findViewById(R.id.footer_progress);
 
         clickRefresh.setOnClickListener(this);
-        mToolbar.setOnClickListener(this);
+        mTopBar.setOnClickListener(this);
 
         initIconColor();
         initToolbar();
@@ -216,8 +219,9 @@ public class ElementsActivity extends CommonActivity implements IElementContract
         View decorView = window.getDecorView();
         decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        mToolbar.setTitle(mCollectionTitle);
-        setSupportActionBar(mToolbar);
+//        mToolbar.setTitle(mCollectionTitle);
+        mTopBar.setText(mCollectionTitle);
+//        setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);

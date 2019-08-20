@@ -8,9 +8,7 @@
     <!-- White Theme -->
     <color name="colorPrimaryWhite">#FFFFFF</color>
     <color name="colorPrimaryDarkWhite">#FFFFFF</color>
-    <color name="colorAccentWhite">#494949</color>
-    <color name="blackText">#A0A0A0</color>
-    <color name="whiteText">#B3FFFFFF</color>
+    <color name="colorAccentWhite">@color/base_black</color>
 
     <!-- Black Theme -->
     <color name="colorPrimaryBlack">#FF000000</color>
@@ -55,18 +53,12 @@
     <color name="snackBar">#628fff</color>
     <color name="status_bar_background">#33000000</color>
     <color name="alphaBlack">#00000000</color>
-    <color name="colorBlack">#000000</color>
+    <color name="colorBlack">@color/base_black</color>
     <color name="colorRed">#b71c1c</color>
     <color name="colorGreen">#388e3c</color>
     <color name="colorBlue">#E6ECFC</color>
     <color name="navigationViewIcon">#696969</color>
     <color name="colorGrey">#EEEEEE</color>
-    <color name="colorHint">#BBBBBB</color>
-    <color name="colorText">#B8B8B8</color>
-    <color name="colorGreyText">#494949</color>
-    <color name="colorGreyDark">#494949</color>
-    <color name="transparent">#00ffffff</color>
-    <color name="navigationBar">#56000000</color>
     <color name="toolbarTop">#96000000</color>
     <color name="toolbarBottom">#00000000</color>
     <color name="authorImageNameTop">#00000000</color>

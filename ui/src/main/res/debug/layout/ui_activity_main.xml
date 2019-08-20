@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ui_ll"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/ui_test"/>
+
+    <Button
+        android:id="@+id/ui_btn_launch_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="启动Dialog"
+        android:layout_margin="8dp"/>
+
+    <Button
+        android:id="@+id/ui_btn_launch_dialog_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="启动Dialog Activity"
+        android:layout_margin="8dp"/>
+
+    <Button
+        android:id="@+id/ui_btn_launch_normal_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="启动普通Activity"
+        android:layout_margin="8dp"/>
+
+    <Button
+        android:id="@+id/ui_btn_show_pay_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="24dp"
+        android:text="@string/ui_show_pay_dialog"/>
+
+    <ui.debug.ScrollView
+        android:id="@+id/ui_sv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/holo_red_light"/>
+
+</LinearLayout>

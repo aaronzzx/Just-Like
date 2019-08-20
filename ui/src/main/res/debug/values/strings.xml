@@ -1,0 +1,4 @@
+<resources>
+    <string name="ui_app_name">UI Component</string>
+    <string name="ui_show_pay_dialog">显示支付输入框</string>
+</resources>

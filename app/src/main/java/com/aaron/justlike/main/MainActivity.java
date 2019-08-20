@@ -17,7 +17,6 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -44,6 +43,7 @@ import com.aaron.justlike.online.home.OnlineActivity;
 import com.aaron.justlike.others.about.AboutActivity;
 import com.aaron.justlike.others.download.DownloadManagerActivity;
 import com.aaron.justlike.others.theme.ThemeActivity;
+import com.aaron.ui.widget.TopBar;
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -73,7 +73,8 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
 
     private DrawerLayout mParentLayout;
     private NavigationView mNavView;
-    private Toolbar mToolbar;
+//    private Toolbar mToolbar;
+    private TopBar mTopBar;
     private SwipeRefreshLayout mSwipeRefresh;
     private RecyclerView mRv;
     private FloatingActionButton mFabButton;
@@ -135,11 +136,13 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
 //                    StatusBarUtil.setTranslucentForDrawerLayout(this, mParentLayout, 70);
                     StatusBarUtils.setTranslucent(this);
                 }
-                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
+//                mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
+                mTopBar.setTextColor(getResources().getColor(R.color.colorAccentWhite));
                 mActionBar.setHomeAsUpIndicator(mIconDrawer);
             } else {
                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                mTopBar.setTextColor(getResources().getColor(R.color.base_white));
             }
         }
     }
@@ -194,6 +197,7 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_SELECT_IMAGE) {
             if (resultCode == Activity.RESULT_OK) {
                 List<String> selectedList = Matisse.obtainPathResult(data);
@@ -276,14 +280,14 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
         mNavView = findViewById(R.id.navigation_view);
         View headerView = mNavView.getHeaderView(0);
         mNavHeaderImage = headerView.findViewById(R.id.nav_head_image);
-        mToolbar = findViewById(R.id.toolbar_home_activity_main);
+        mTopBar = findViewById(R.id.toolbar_home_activity_main);
         mSwipeRefresh = findViewById(R.id.swipe_refresh_home_activity_main);
         mRv = findViewById(R.id.rv);
         mFabButton = findViewById(R.id.fab_home_activity_main);
         mEmptyView = findViewById(R.id.empty_view);
 
         // Part 2
-        mToolbar.setOnClickListener(new OnClickListenerImpl() {
+        mTopBar.setOnClickListener(new OnClickListenerImpl() {
             @Override
             public void onViewClick(View v, long interval) {
                 // 查找当前屏幕内第一个可见的 View
@@ -359,12 +363,12 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
     private void initIconColor() {
         mIconDrawer = getResources().getDrawable(R.drawable.ic_drawer_menu);
         mIconSort = getResources().getDrawable(R.drawable.ic_sort);
-        mIconAdd = getResources().getDrawable(R.drawable.ic_add_fab);
+        mIconAdd = getResources().getDrawable(R.drawable.ic_add);
         if (ThemeManager.getInstance().getCurrentTheme() == null
                 || ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
-            DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorGreyText));
-            DrawableCompat.setTint(mIconSort, getResources().getColor(R.color.colorGreyText));
-            DrawableCompat.setTint(mIconAdd, getResources().getColor(R.color.colorGreyText));
+            DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorAccentWhite));
+            DrawableCompat.setTint(mIconSort, getResources().getColor(R.color.colorAccentWhite));
+            DrawableCompat.setTint(mIconAdd, getResources().getColor(R.color.colorAccentWhite));
             mFabButton.setBackgroundTintList(getColorStateListTest());
         } else {
             DrawableCompat.setTint(mIconDrawer, getResources().getColor(R.color.colorPrimaryWhite));
@@ -381,7 +385,8 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
             mMatisseTheme = R.style.MatisseBlackTheme;
             mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
             // 初次安装时由于有权限申请，此时没有获取到焦点，所以会有一刹那没变色，这里设置一下就好了
-            mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
+//            mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
+            mTopBar.setTextColor(getResources().getColor(R.color.colorAccentWhite));
             return;
         }
         switch (theme) {
@@ -440,7 +445,7 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
 
     private void initToolbar() {
         StatusBarUtils.setTransparent(this);
-        setSupportActionBar(mToolbar);
+//        setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);

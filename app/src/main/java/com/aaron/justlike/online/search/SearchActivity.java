@@ -147,12 +147,12 @@ public class SearchActivity extends CommonActivity implements View.OnClickListen
         mIconSearch = getResources().getDrawable(R.drawable.ic_search);
         ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
         if (theme == null || theme == ThemeManager.Theme.WHITE) {
-            mTabLayout.setTabTextColors(getResources().getColor(R.color.blackText), getResources().getColor(R.color.colorAccentWhite));
+            mTabLayout.setTabTextColors(getResources().getColor(R.color.base_black_hint), getResources().getColor(R.color.colorAccentWhite));
             mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccentWhite));
             DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorAccentWhite));
             DrawableCompat.setTint(mIconSearch, getResources().getColor(R.color.colorAccentWhite));
         } else {
-            mTabLayout.setTabTextColors(getResources().getColor(R.color.whiteText), getResources().getColor(R.color.colorPrimaryWhite));
+            mTabLayout.setTabTextColors(getResources().getColor(R.color.base_white_hint), getResources().getColor(R.color.colorPrimaryWhite));
             mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorPrimaryWhite));
             DrawableCompat.setTint(mIconSearch, getResources().getColor(R.color.colorPrimaryWhite));
