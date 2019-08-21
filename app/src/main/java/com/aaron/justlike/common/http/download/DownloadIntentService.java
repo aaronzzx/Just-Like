@@ -3,9 +3,9 @@ package com.aaron.justlike.common.http.download;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.aaron.justlike.common.impl.ObserverImpl;
+import com.aaron.justlike.common.manager.UiManager;
 import com.aaron.justlike.common.util.FileUtil;
 import com.aaron.justlike.common.util.NotificationUtil;
 import com.aaron.justlike.common.util.SystemUtil;
@@ -13,6 +13,7 @@ import com.aaron.justlike.online.preview.IPreviewInterface;
 import com.arialyy.annotations.Download;
 import com.arialyy.aria.core.Aria;
 import com.arialyy.aria.core.download.DownloadTask;
+import com.blankj.utilcode.util.LogUtils;
 
 import java.io.File;
 import java.util.Map;
@@ -47,7 +48,7 @@ public class DownloadIntentService extends IntentService {
                 .subscribe(new ObserverImpl<String>() {
                     @Override
                     public void onNext(String s) {
-                        Toast.makeText(DownloadIntentService.this, s, Toast.LENGTH_SHORT).show();
+                        UiManager.showShort(s);
                     }
                 });
     }
@@ -71,7 +72,7 @@ public class DownloadIntentService extends IntentService {
         stopForeground(true);
         NotificationUtil.createNotification(this, mNotificationId, mPhotoName, "下载完成", -1);
         File oldFile = new File(mPath + ".TEMP");
-        Log.i("DownloadIntentService", "onDownloadComplete: " + oldFile.renameTo(new File(mPath)));
+        LogUtils.i("onDownloadComplete: " + oldFile.renameTo(new File(mPath)));
         Map.Entry<String, Integer> entry = AriaApp.getInstance().getMode();
         if (entry != null) {
             if (entry.getValue() == IPreviewInterface.SET_WALLPAPER) {
@@ -85,11 +86,11 @@ public class DownloadIntentService extends IntentService {
                             @Override
                             public void onNext(Integer flag) {
                                 if (flag == 0) {
-                                    Toast.makeText(DownloadIntentService.this, "稍等片刻", Toast.LENGTH_SHORT).show();
+                                    UiManager.showShort("稍等片刻");
                                 } else if (flag == 1) {
-                                    Toast.makeText(DownloadIntentService.this, "设置成功", Toast.LENGTH_SHORT).show();
+                                    UiManager.showShort("设置成功");
                                 } else {
-                                    Toast.makeText(DownloadIntentService.this, "设置失败", Toast.LENGTH_SHORT).show();
+                                    UiManager.showShort("设置失败");
                                 }
                             }
                         });

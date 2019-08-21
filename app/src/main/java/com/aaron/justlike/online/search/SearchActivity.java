@@ -1,5 +1,6 @@
 package com.aaron.justlike.online.search;
 
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,13 +22,17 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.aaron.base.impl.OnClickListenerImpl;
+import com.aaron.base.impl.TextWatcherImpl;
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.manager.ThemeManager;
+import com.github.anzewei.parallaxbacklayout.ParallaxBack;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
 
+@ParallaxBack
 public class SearchActivity extends CommonActivity implements View.OnClickListener,
         EditText.OnEditorActionListener {
 
@@ -35,12 +41,15 @@ public class SearchActivity extends CommonActivity implements View.OnClickListen
     private ViewPager mViewPager;
 
     private EditText mEditText;
+    private ImageButton mIbtnClear;
     private ImageView mImgSearch;
 
     private FragmentManager mFragmentManager;
     private ActionBar mActionBar;
     private Drawable mIconBack;
     private Drawable mIconSearch;
+
+    private int mColorAccent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,14 +88,14 @@ public class SearchActivity extends CommonActivity implements View.OnClickListen
     @Override
     public boolean onSupportNavigateUp() {
         finish();
-        overridePendingTransition(0, R.anim.activity_slide_out);
+//        overridePendingTransition(0, R.anim.activity_slide_out);
         return super.onSupportNavigateUp();
     }
 
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(0, R.anim.activity_slide_out);
+//        overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
     @Override
@@ -130,16 +139,77 @@ public class SearchActivity extends CommonActivity implements View.OnClickListen
         mTabLayout = findViewById(R.id.tab_search);
         mViewPager = findViewById(R.id.view_pager);
         mEditText = findViewById(R.id.edit_text);
+        mIbtnClear = findViewById(R.id.app_ibtn_clear);
         mImgSearch = findViewById(R.id.tv_search);
 
         mToolbar.setOnClickListener(this);
         mEditText.setOnEditorActionListener(this);
         mImgSearch.setOnClickListener(this);
+        mIbtnClear.setOnClickListener(new OnClickListenerImpl() {
+            @Override
+            public void onViewClick(View v, long interval) {
+                mEditText.setText("");
+            }
+        });
+        mEditText.addTextChangedListener(new TextWatcherImpl() {
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+                if (s.length() != 0) {
+                    mIbtnClear.setVisibility(View.VISIBLE);
+                } else {
+                    mIbtnClear.setVisibility(View.GONE);
+                }
+            }
+        });
 
+        initTheme();
         initIconColor();
         initToolbar();
         initTabLayout();
         showSoftKeyboard();
+    }
+
+    public int getColorAccent() {
+        return mColorAccent;
+    }
+
+    private void initTheme() {
+        Resources resources = getResources();
+        ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+        switch (theme) {
+            case JUST_LIKE:
+                mColorAccent = resources.getColor(R.color.colorPrimary);
+                break;
+            case WHITE:
+            default:
+                mColorAccent = resources.getColor(R.color.colorAccentWhite);
+                return;
+            case BLACK:
+                mColorAccent = resources.getColor(R.color.colorPrimaryBlack);
+                break;
+            case GREY:
+                mColorAccent = resources.getColor(R.color.colorPrimaryGrey);
+                break;
+            case GREEN:
+                mColorAccent = resources.getColor(R.color.colorPrimaryGreen);
+                break;
+            case RED:
+                mColorAccent = resources.getColor(R.color.colorPrimaryRed);
+                break;
+            case PINK:
+                mColorAccent = resources.getColor(R.color.colorPrimaryPink);
+                break;
+            case BLUE:
+                mColorAccent = resources.getColor(R.color.colorPrimaryBlue);
+                break;
+            case PURPLE:
+                mColorAccent = resources.getColor(R.color.colorPrimaryPurple);
+                break;
+            case ORANGE:
+                mColorAccent = resources.getColor(R.color.colorPrimaryOrange);
+                break;
+        }
+        mEditText.setTextColor(mColorAccent);
     }
 
     private void initIconColor() {

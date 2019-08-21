@@ -20,9 +20,11 @@ import com.aaron.justlike.common.bean.Message;
 import com.aaron.justlike.common.manager.ThemeManager;
 import com.aaron.justlike.common.util.SystemUtil;
 import com.aaron.ui.widget.TopBar;
+import com.github.anzewei.parallaxbacklayout.ParallaxBack;
 
 import java.util.List;
 
+@ParallaxBack
 public class AboutActivity extends CommonActivity implements IAboutContract.V<Message, Library> {
 
     private IAboutContract.P mPresenter;
@@ -83,14 +85,14 @@ public class AboutActivity extends CommonActivity implements IAboutContract.V<Me
     @Override
     public boolean onSupportNavigateUp() {
         finish();
-        overridePendingTransition(0, R.anim.activity_slide_out);
+//        overridePendingTransition(0, R.anim.activity_slide_out);
         return super.onSupportNavigateUp();
     }
 
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(0, R.anim.activity_slide_out);
+//        overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
     @Override

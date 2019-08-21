@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -22,7 +24,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.aaron.base.image.DefaultOption;
 import com.aaron.base.image.ImageLoader;
@@ -37,6 +38,7 @@ import com.aaron.justlike.common.event.DeleteEvent;
 import com.aaron.justlike.common.impl.SquareItemDecoration;
 import com.aaron.justlike.common.manager.ThemeManager;
 import com.aaron.justlike.common.manager.UiManager;
+import com.aaron.justlike.common.util.SelectorUtils;
 import com.aaron.justlike.common.util.SystemUtil;
 import com.aaron.justlike.common.widget.MyGridLayoutManager;
 import com.aaron.justlike.online.home.OnlineActivity;
@@ -48,6 +50,8 @@ import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.ImageEngine;
@@ -63,7 +67,7 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
     private static final int REQUEST_SELECT_IMAGE = 1;
 
     private int mMatisseTheme;
-    private int mColorPrimary;
+    private int mColorAccent;
     private int mSortType;
     private boolean mIsAscending;
     private List<Image> mImageList = new ArrayList<>();
@@ -75,7 +79,9 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
     private NavigationView mNavView;
 //    private Toolbar mToolbar;
     private TopBar mTopBar;
-    private SwipeRefreshLayout mSwipeRefresh;
+//    private SwipeRefreshLayout mSwipeRefresh;
+    private SmartRefreshLayout mRefreshLayout;
+    private BezierRadarHeader mRefreshHeader;
     private RecyclerView mRv;
     private FloatingActionButton mFabButton;
     private ImageView mNavHeaderImage;
@@ -101,6 +107,12 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
         attachPresenter();
         initView();
         mPresenter.requestImage(mImageList, false);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mRefreshLayout.finishRefresh(false);
     }
 
     @Override
@@ -206,6 +218,10 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
         }
     }
 
+    public int getColorAccent() {
+        return mColorAccent;
+    }
+
     /**
      * 接收 PreviewActivity 传过来的关于被删除图片的信息，并更新 UI
      */
@@ -271,7 +287,7 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
 
     @Override
     public void onHideRefresh() {
-        runOnUiThread(() -> mSwipeRefresh.setRefreshing(false));
+        runOnUiThread(() -> mRefreshLayout.finishRefresh(500));
     }
 
     private void initView() {
@@ -281,24 +297,22 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
         View headerView = mNavView.getHeaderView(0);
         mNavHeaderImage = headerView.findViewById(R.id.nav_head_image);
         mTopBar = findViewById(R.id.toolbar_home_activity_main);
-        mSwipeRefresh = findViewById(R.id.swipe_refresh_home_activity_main);
+        mRefreshLayout = findViewById(R.id.swipe_refresh_home_activity_main);
+        mRefreshHeader = findViewById(R.id.app_refresh_header);
         mRv = findViewById(R.id.rv);
         mFabButton = findViewById(R.id.fab_home_activity_main);
         mEmptyView = findViewById(R.id.empty_view);
 
         // Part 2
-        mTopBar.setOnClickListener(new OnClickListenerImpl() {
-            @Override
-            public void onViewClick(View v, long interval) {
-                // 查找当前屏幕内第一个可见的 View
-                View firstVisibleItem = mRv.getChildAt(0);
-                // 查找当前 View 在 RecyclerView 中处于哪个位置
-                int itemPosition = mRv.getChildLayoutPosition(firstVisibleItem);
-                if (itemPosition >= 48) {
-                    mRv.scrollToPosition(36);
-                }
-                mRv.smoothScrollToPosition(0);
+        mTopBar.setOnTapListener(v -> {
+            // 查找当前屏幕内第一个可见的 View
+            View firstVisibleItem = mRv.getChildAt(0);
+            // 查找当前 View 在 RecyclerView 中处于哪个位置
+            int itemPosition = mRv.getChildLayoutPosition(firstVisibleItem);
+            if (itemPosition >= 48) {
+                mRv.scrollToPosition(36);
             }
+            mRv.smoothScrollToPosition(0);
         });
         mFabButton.setOnClickListener(new OnClickListenerImpl() {
             @Override
@@ -333,7 +347,7 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
             }
             return true;
         });
-        mSwipeRefresh.setOnRefreshListener(() -> mPresenter.requestImage(mImageList, true));
+        mRefreshLayout.setOnRefreshListener(refreshLayout -> mPresenter.requestImage(mImageList, true));
         ((DefaultItemAnimator) mRv.getItemAnimator()).setSupportsChangeAnimations(false);
         MyGridLayoutManager layoutManager = new MyGridLayoutManager(this, 3);
         mRv.setLayoutManager(layoutManager);
@@ -357,7 +371,8 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
         initIconColor();
         initTheme();
         initToolbar();
-        mSwipeRefresh.setColorSchemeResources(mColorPrimary);
+        mRefreshHeader.setPrimaryColor(Color.WHITE);
+        mRefreshHeader.setAccentColorId(mColorAccent);
     }
 
     private void initIconColor() {
@@ -381,7 +396,7 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
     private void initTheme() {
         ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
         if (theme == null) {
-            mColorPrimary = R.color.colorPrimaryBlack;
+            mColorAccent = R.color.colorAccentWhite;
             mMatisseTheme = R.style.MatisseBlackTheme;
             mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
             // 初次安装时由于有权限申请，此时没有获取到焦点，所以会有一刹那没变色，这里设置一下就好了
@@ -389,58 +404,66 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
             mTopBar.setTextColor(getResources().getColor(R.color.colorAccentWhite));
             return;
         }
+        Drawable normal = new ColorDrawable(Color.WHITE);
+        Drawable checked = getDrawable(R.drawable.app_bg_nav_checked);
         switch (theme) {
             case JUST_LIKE:
-                mColorPrimary = R.color.colorPrimary;
+                mColorAccent = R.color.colorPrimary;
                 mMatisseTheme = R.style.MatisseJustLikeTheme;
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_just_like));
                 break;
             case WHITE:
-                mColorPrimary = R.color.colorPrimaryBlack;
+            default:
+                mColorAccent = R.color.colorAccentWhite;
                 mMatisseTheme = R.style.MatisseBlackTheme;
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
+                checked.setTint(Color.BLACK);
                 break;
             case BLACK:
-                mColorPrimary = R.color.colorPrimaryBlack;
+                mColorAccent = R.color.colorPrimaryBlack;
                 mMatisseTheme = R.style.MatisseBlackTheme;
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_black));
                 break;
             case GREY:
-                mColorPrimary = R.color.colorPrimaryGrey;
+                mColorAccent = R.color.colorPrimaryGrey;
                 mMatisseTheme = R.style.MatisseGreyTheme;
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_grey));
                 break;
             case GREEN:
-                mColorPrimary = R.color.colorPrimaryGreen;
+                mColorAccent = R.color.colorPrimaryGreen;
                 mMatisseTheme = R.style.MatisseGreenTheme;
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_green));
                 break;
             case RED:
-                mColorPrimary = R.color.colorPrimaryRed;
+                mColorAccent = R.color.colorPrimaryRed;
                 mMatisseTheme = R.style.MatisseRedTheme;
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_red));
                 break;
             case PINK:
-                mColorPrimary = R.color.colorPrimaryPink;
+                mColorAccent = R.color.colorPrimaryPink;
                 mMatisseTheme = R.style.MatissePinkTheme;
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_pink));
                 break;
             case BLUE:
-                mColorPrimary = R.color.colorPrimaryBlue;
+                mColorAccent = R.color.colorPrimaryBlue;
                 mMatisseTheme = R.style.MatisseBlueTheme;
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_blue));
                 break;
             case PURPLE:
-                mColorPrimary = R.color.colorPrimaryPurple;
+                mColorAccent = R.color.colorPrimaryPurple;
                 mMatisseTheme = R.style.MatissePurpleTheme;
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_purple));
                 break;
             case ORANGE:
-                mColorPrimary = R.color.colorPrimaryOrange;
+                mColorAccent = R.color.colorPrimaryOrange;
                 mMatisseTheme = R.style.MatisseBrownTheme;
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_orange));
                 break;
         }
+        checked.setTint(mColorAccent);
+        checked.setAlpha(20);
+        Drawable selector = SelectorUtils.createCheckedSelector(this, normal, checked);
+        mNavView.setItemBackground(selector);
     }
 
     private void initToolbar() {

@@ -12,20 +12,41 @@
         app:cardElevation="0dp"
         app:cardBackgroundColor="@color/colorGrey">
 
-        <EditText
-            android:id="@+id/edit_text"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@android:color/transparent"
-            android:hint="建议使用英文搜索"
-            android:textColorHint="@color/base_black_hint"
-            android:textColorHighlight="@color/base_black_hint"
-            android:textSize="16sp"
-            android:textColor="@color/colorAccentWhite"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:maxLines="1" />
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/edit_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:background="@android:color/transparent"
+                android:hint="建议使用英文搜索"
+                android:textColorHint="@color/base_black_hint"
+                android:textColorHighlight="@color/base_black_hint"
+                android:textSize="16sp"
+                android:textColor="@color/colorAccentWhite"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1" />
+
+            <ImageButton
+                android:id="@+id/app_ibtn_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
+                android:visibility="gone"
+                android:tint="@color/base_black_divider_deep"
+                android:tintMode="src_in"
+                android:src="@drawable/app_ic_clear" />
+
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 

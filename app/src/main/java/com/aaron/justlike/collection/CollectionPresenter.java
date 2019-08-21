@@ -22,6 +22,11 @@ class CollectionPresenter implements ICollectionContract.P {
     }
 
     @Override
+    public boolean isCollectionExists(String name) {
+        return mModel.isCollectionExists(name);
+    }
+
+    @Override
     public void requestCollection(List<Album> albums) {
         mModel.queryCollection(new ICollectionContract.M.Callback<Album>() {
             @Override

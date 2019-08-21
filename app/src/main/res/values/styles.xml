@@ -6,10 +6,10 @@
     </style>
 
     <!-- Customize splash image here. -->
-    <style name="JustLikeTheme.Splash">
-        <item name="android:windowTranslucentNavigation">true</item>
+    <style name="JustLikeTheme.Splash" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowBackground">@color/colorPrimaryWhite</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowBackground">@drawable/app_bg_launch</item>
     </style>
 
     <!-- Base application theme. -->

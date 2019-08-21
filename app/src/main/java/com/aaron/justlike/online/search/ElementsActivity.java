@@ -1,16 +1,14 @@
 package com.aaron.justlike.online.search;
 
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -24,13 +22,18 @@ import com.aaron.justlike.common.JustLike;
 import com.aaron.justlike.common.adapter.PhotoAdapter;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.common.manager.ThemeManager;
+import com.aaron.justlike.common.manager.UiManager;
 import com.aaron.justlike.common.util.SystemUtil;
 import com.aaron.justlike.common.widget.MyGridLayoutManager;
 import com.aaron.ui.widget.TopBar;
+import com.github.anzewei.parallaxbacklayout.ParallaxBack;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ParallaxBack
 public class ElementsActivity extends CommonActivity implements IElementContract.V<List<Photo>>,
         View.OnClickListener {
 
@@ -38,16 +41,19 @@ public class ElementsActivity extends CommonActivity implements IElementContract
 
 //    private Toolbar mToolbar;
     private TopBar mTopBar;
+    private SmartRefreshLayout mRefreshLayout;
+    private BallPulseFooter mLoadMoreFooter;
     private RecyclerView mRecyclerView;
     private PhotoAdapter mAdapter;
     private View mErrorView;
     private ProgressBar mProgressBar;
-    private View mFooterProgress;
+//    private View mFooterProgress;
 
     private ActionBar mActionBar;
     private Drawable mIconBack;
 
     private int mPhotosId;
+    private int mColorAccent;
     private String mCollectionTitle;
     private List<Photo> mPhotoList = new ArrayList<>();
 
@@ -89,14 +95,14 @@ public class ElementsActivity extends CommonActivity implements IElementContract
     @Override
     public boolean onSupportNavigateUp() {
         finish();
-        overridePendingTransition(0, R.anim.activity_slide_out);
+//        overridePendingTransition(0, R.anim.activity_slide_out);
         return super.onSupportNavigateUp();
     }
 
     @Override
     public void onBackPressed() {
-        finish();
-        overridePendingTransition(0, R.anim.activity_slide_out);
+        super.onBackPressed();
+//        overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
     @Override
@@ -120,37 +126,39 @@ public class ElementsActivity extends CommonActivity implements IElementContract
 
     @Override
     public void onShowLoading() {
-        mFooterProgress.setVisibility(View.VISIBLE);
-        ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-        animation.setFillAfter(true);
-        animation.setDuration(250);
-        mFooterProgress.startAnimation(animation);
+//        mFooterProgress.setVisibility(View.VISIBLE);
+//        ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+//        animation.setFillAfter(true);
+//        animation.setDuration(250);
+//        mFooterProgress.startAnimation(animation);mRmR
+        mRefreshLayout.autoLoadMore();
     }
 
     @Override
     public void onHideLoading() {
-        mFooterProgress.postDelayed(() -> {
-            ScaleAnimation animation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-            animation.setFillAfter(true);
-            animation.setDuration(250);
-            animation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    mFooterProgress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-            mFooterProgress.startAnimation(animation);
-        }, 500);
+//        mFooterProgress.postDelayed(() -> {
+//            ScaleAnimation animation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+//            animation.setFillAfter(true);
+//            animation.setDuration(250);
+//            animation.setAnimationListener(new Animation.AnimationListener() {
+//                @Override
+//                public void onAnimationStart(Animation animation) {
+//
+//                }
+//
+//                @Override
+//                public void onAnimationEnd(Animation animation) {
+//                    mFooterProgress.setVisibility(View.GONE);
+//                }
+//
+//                @Override
+//                public void onAnimationRepeat(Animation animation) {
+//
+//                }
+//            });
+//            mFooterProgress.startAnimation(animation);
+//        }, 500);
+        mRefreshLayout.finishLoadMore();
     }
 
     @Override
@@ -165,11 +173,12 @@ public class ElementsActivity extends CommonActivity implements IElementContract
 
     @Override
     public void onShowMessage(String msg) {
-        Toast.makeText(JustLike.getContext(), msg, Toast.LENGTH_SHORT).show();
+        UiManager.showShort(msg);
     }
 
     @Override
     public void onShowPhotos(List<Photo> list) {
+        mRefreshLayout.setEnableLoadMore(true);
         mPhotoList.addAll(list);
         mAdapter.notifyItemRangeChanged(0, mPhotoList.size());
     }
@@ -194,14 +203,61 @@ public class ElementsActivity extends CommonActivity implements IElementContract
         mErrorView = findViewById(R.id.error_view);
         Button clickRefresh = findViewById(R.id.btn_click_refresh);
         mProgressBar = findViewById(R.id.progress_bar);
-        mFooterProgress = findViewById(R.id.footer_progress);
+        mRefreshLayout = findViewById(R.id.app_refresh_layout);
+        mLoadMoreFooter = findViewById(R.id.app_refresh_footer);
+        //        mFooterProgress = findViewById(R.id.footer_progress);
 
         clickRefresh.setOnClickListener(this);
         mTopBar.setOnClickListener(this);
 
+        initTheme();
         initIconColor();
         initToolbar();
         initRecyclerView();
+        mRefreshLayout.setEnableLoadMore(false);
+        mLoadMoreFooter.setAnimatingColor(mColorAccent);
+        mRefreshLayout.setEnableRefresh(false);
+        mRefreshLayout.setOnLoadMoreListener(refreshLayout -> {
+            mPresenter.requestPhotos(mPhotosId, mPhotoList, true);
+        });
+    }
+
+    private void initTheme() {
+        Resources resources = getResources();
+        ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+        switch (theme) {
+            case JUST_LIKE:
+                mColorAccent = resources.getColor(R.color.colorPrimary);
+                break;
+            case WHITE:
+            default:
+                mColorAccent = resources.getColor(R.color.colorAccentWhite);
+                return;
+            case BLACK:
+                mColorAccent = resources.getColor(R.color.colorPrimaryBlack);
+                break;
+            case GREY:
+                mColorAccent = resources.getColor(R.color.colorPrimaryGrey);
+                break;
+            case GREEN:
+                mColorAccent = resources.getColor(R.color.colorPrimaryGreen);
+                break;
+            case RED:
+                mColorAccent = resources.getColor(R.color.colorPrimaryRed);
+                break;
+            case PINK:
+                mColorAccent = resources.getColor(R.color.colorPrimaryPink);
+                break;
+            case BLUE:
+                mColorAccent = resources.getColor(R.color.colorPrimaryBlue);
+                break;
+            case PURPLE:
+                mColorAccent = resources.getColor(R.color.colorPrimaryPurple);
+                break;
+            case ORANGE:
+                mColorAccent = resources.getColor(R.color.colorPrimaryOrange);
+                break;
+        }
     }
 
     private void initIconColor() {
@@ -242,18 +298,18 @@ public class ElementsActivity extends CommonActivity implements IElementContract
         mAdapter = new PhotoAdapterImpl(mPhotoList);
         mRecyclerView.setAdapter(mAdapter);
         // 监听是否滑到底部
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && mPhotoList.size() != 0) {
-                    boolean canScrollVertical = mRecyclerView.canScrollVertically(1);
-                    if (!canScrollVertical && mFooterProgress.getVisibility() == View.GONE) {
-                        mPresenter.requestPhotos(mPhotosId, mPhotoList, true);
-                    }
-                }
-            }
-        });
+//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE && mPhotoList.size() != 0) {
+//                    boolean canScrollVertical = mRecyclerView.canScrollVertically(1);
+//                    if (!canScrollVertical && mFooterProgress.getVisibility() == View.GONE) {
+//                        mPresenter.requestPhotos(mPhotosId, mPhotoList, true);
+//                    }
+//                }
+//            }
+//        });
     }
 
     private class XItemDecoration extends RecyclerView.ItemDecoration {

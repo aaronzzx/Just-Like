@@ -27,7 +27,7 @@ class OnlinePresenter implements IOnlineContract.P<Photo> {
     @Override
     public void requestPhotos(Order order, boolean isRefresh, boolean isFilter, List<Photo> oldList) {
         if (isFilter) {
-            mView.onShowRefresh();
+            mView.onShowRefreshOnlyAnim();
         } else if (oldList.isEmpty() && isRefresh) {
             mView.onHideErrorView();
             mView.onShowProgress();
@@ -59,7 +59,7 @@ class OnlinePresenter implements IOnlineContract.P<Photo> {
     @Override
     public void requestCuratedPhotos(Order order, boolean isRefresh, boolean isFilter, List<Photo> oldList) {
         if (isFilter) {
-            mView.onShowRefresh();
+            mView.onShowRefreshOnlyAnim();
         } else if (oldList.isEmpty() && isRefresh) {
             mView.onHideErrorView();
             mView.onShowProgress();

@@ -13,11 +13,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <View
-            android:id="@+id/status_bar"
-            android:layout_width="match_parent"
-            android:layout_height="27.5dp"
-            android:background="@color/colorPrimaryWhite" />
+        <!--<View-->
+            <!--android:id="@+id/status_bar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="27.5dp"-->
+            <!--android:background="@color/colorPrimaryWhite" />-->
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -70,14 +70,6 @@
 
     </LinearLayout>
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigation_view"
-        android:layout_width="300dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/include_nav_header"
-        app:itemIconTint="@color/navigationViewIcon"
-        app:itemTextColor="@color/colorAccentWhite"
-        app:menu="@menu/nav_menu" />
+    <include layout="@layout/app_include_nav"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -153,7 +153,6 @@ public class SelectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     private static class ViewHolder extends RecyclerView.ViewHolder {
-
         View itemView;
         SquareView squareView;
         CheckBox checkBox;

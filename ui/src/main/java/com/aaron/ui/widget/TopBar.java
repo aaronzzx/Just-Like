@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
 public class TopBar extends FrameLayout {
 
     private static final float DEFAULT_TITLE_SIZE = 18;
-    private static final int DEFAULT_TITLE_STYLE = 1;
+    private static final int DEFAULT_TITLE_STYLE = Typeface.BOLD;
     private static final int DEFAULT_TITLE_COLOR = Color.parseColor("#DE000000"); // black
     private static final int DEFAULT_BACK_VISIBILITY = View.GONE;
     private static final int DEFAULT_CLOSE_VISIBILITY = View.GONE;
@@ -52,6 +52,7 @@ public class TopBar extends FrameLayout {
     private int mCloseVisibility;
     private OnBackTapListener mOnBackTapListener;
     private OnCloseTapListener mOnCloseTapListener;
+    private OnTapListener mOnTapListener;
 
     public TopBar(@NonNull Context context) {
         this(context, null);
@@ -117,6 +118,10 @@ public class TopBar extends FrameLayout {
         mOnCloseTapListener = listener;
     }
 
+    public void setOnTapListener(OnTapListener listener) {
+        mOnTapListener = listener;
+    }
+
     public void setOnMenuTapListener(@MenuRes int resId, Toolbar.OnMenuItemClickListener listener) {
         mToolbar.inflateMenu(resId);
         mToolbar.setOnMenuItemClickListener(listener);
@@ -161,6 +166,11 @@ public class TopBar extends FrameLayout {
                 mOnCloseTapListener.onCloseClick(view);
             }
         });
+        mToolbar.setOnClickListener(v -> {
+            if (mOnTapListener != null) {
+                mOnTapListener.onTap(v);
+            }
+        });
     }
 
     public interface OnBackTapListener {
@@ -169,5 +179,9 @@ public class TopBar extends FrameLayout {
 
     public interface OnCloseTapListener {
         void onCloseClick(View view);
+    }
+
+    public interface OnTapListener {
+        void onTap(View v);
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ImageSelector {
 
-    private static WeakReference<Context> mWeakReference;
+    private static WeakReference<Context> sWeakReference;
     private String mTitle;
     private String mFilePath;
     private List<String> mSelectedList;
@@ -23,7 +23,7 @@ public class ImageSelector {
     }
 
     public static ImageSelector getInstance(Context context) {
-        mWeakReference = new WeakReference<>(context);
+        sWeakReference = new WeakReference<>(context);
         return Holder.INSTANCE;
     }
 
@@ -68,19 +68,17 @@ public class ImageSelector {
     }
 
     public void start() {
-        if (mWeakReference.get() != null) {
-            Context context = mWeakReference.get();
+        if (sWeakReference.get() != null) {
+            Context context = sWeakReference.get();
             context.startActivity(new Intent(context, SelectorActivity.class));
         }
     }
 
     private static class Holder {
-
         private static final ImageSelector INSTANCE = new ImageSelector();
     }
 
     public interface ImageCallback {
-
         default void onResponse(List<String> response) {
         }
 

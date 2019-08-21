@@ -7,11 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -22,7 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.JustLike;
 import com.aaron.justlike.common.http.unsplash.entity.collection.Collection;
+import com.aaron.justlike.common.manager.UiManager;
 import com.aaron.justlike.common.util.SystemUtil;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +38,10 @@ public class CollectionFragment extends Fragment implements ISerachContract.V<Co
     private View mSearchLogo;
     private TextView mSearchLogoHint;
     private ProgressBar mProgressBar;
-    private View mRefresh;
-    private View mFooterProgress;
+    private SmartRefreshLayout mRefreshLayout;
+    private BallPulseFooter mLoadMoreFooter;
+//    private View mRefresh;
+//    private View mFooterProgress;
     private RecyclerView mRecyclerView;
     private CollectionAdapter mAdapter;
 
@@ -67,6 +69,7 @@ public class CollectionFragment extends Fragment implements ISerachContract.V<Co
 
     @Override
     public void onShow(List<Collection> list) {
+        mRefreshLayout.setEnableLoadMore(true);
         if (mCollectionList.size() > 30) {
             mCollectionList.clear();
             mAdapter.notifyDataSetChanged();
@@ -85,7 +88,7 @@ public class CollectionFragment extends Fragment implements ISerachContract.V<Co
 
     @Override
     public void onShowMessage(String msg) {
-        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+        UiManager.showShort(msg);
     }
 
     @Override
@@ -113,80 +116,82 @@ public class CollectionFragment extends Fragment implements ISerachContract.V<Co
 
     @Override
     public void onShowLoading() {
-        if (mFooterProgress.getVisibility() == View.GONE) {
-            mFooterProgress.setVisibility(View.VISIBLE);
-            ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-            animation.setFillAfter(true);
-            animation.setDuration(250);
-            mFooterProgress.startAnimation(animation);
-        }
+//        if (mFooterProgress.getVisibility() == View.GONE) {
+//            mFooterProgress.setVisibility(View.VISIBLE);
+//            ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+//            animation.setFillAfter(true);
+//            animation.setDuration(250);
+//            mFooterProgress.startAnimation(animation);
+//        }
+        mRefreshLayout.autoLoadMore();
     }
 
     @Override
     public void onHideLoading() {
-        if (mFooterProgress.getVisibility() == View.VISIBLE) {
-            mFooterProgress.postDelayed(() -> {
-                ScaleAnimation animation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-                animation.setFillAfter(true);
-                animation.setDuration(250);
-                animation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        mFooterProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                mFooterProgress.startAnimation(animation);
-            }, 500);
-        }
+//        if (mFooterProgress.getVisibility() == View.VISIBLE) {
+//            mFooterProgress.postDelayed(() -> {
+//                ScaleAnimation animation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+//                animation.setFillAfter(true);
+//                animation.setDuration(250);
+//                animation.setAnimationListener(new Animation.AnimationListener() {
+//                    @Override
+//                    public void onAnimationStart(Animation animation) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onAnimationEnd(Animation animation) {
+//                        mFooterProgress.setVisibility(View.GONE);
+//                    }
+//
+//                    @Override
+//                    public void onAnimationRepeat(Animation animation) {
+//
+//                    }
+//                });
+//                mFooterProgress.startAnimation(animation);
+//            }, 500);
+//        }
+        mRefreshLayout.finishLoadMore();
     }
 
     @Override
     public void onShowRefresh() {
-        if (mRefresh.getVisibility() == View.GONE) {
-            mRefresh.setVisibility(View.VISIBLE);
-            ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-            animation.setFillAfter(true);
-            animation.setDuration(250);
-            mRefresh.startAnimation(animation);
-        }
+//        if (mRefresh.getVisibility() == View.GONE) {
+//            mRefresh.setVisibility(View.VISIBLE);
+//            ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+//            animation.setFillAfter(true);
+//            animation.setDuration(250);
+//            mRefresh.startAnimation(animation);
+//        }
     }
 
     @Override
     public void onHideRefresh() {
-        if (mRefresh.getVisibility() == View.VISIBLE) {
-            mRefresh.postDelayed(() -> {
-                ScaleAnimation animation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-                animation.setFillAfter(true);
-                animation.setDuration(250);
-                animation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        mRefresh.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                mRefresh.startAnimation(animation);
-            }, 500);
-        }
+//        if (mRefresh.getVisibility() == View.VISIBLE) {
+//            mRefresh.postDelayed(() -> {
+//                ScaleAnimation animation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+//                animation.setFillAfter(true);
+//                animation.setDuration(250);
+//                animation.setAnimationListener(new Animation.AnimationListener() {
+//                    @Override
+//                    public void onAnimationStart(Animation animation) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onAnimationEnd(Animation animation) {
+//                        mRefresh.setVisibility(View.GONE);
+//                    }
+//
+//                    @Override
+//                    public void onAnimationRepeat(Animation animation) {
+//
+//                    }
+//                });
+//                mRefresh.startAnimation(animation);
+//            }, 500);
+//        }
     }
 
     /**
@@ -212,11 +217,19 @@ public class CollectionFragment extends Fragment implements ISerachContract.V<Co
         mSearchLogo = mParentLayout.findViewById(R.id.search_logo);
         mSearchLogoHint = mParentLayout.findViewById(R.id.search_logo_hint);
         mProgressBar = mParentLayout.findViewById(R.id.progress_bar);
-        mRefresh = mParentLayout.findViewById(R.id.refresh);
-        mFooterProgress = mParentLayout.findViewById(R.id.footer_progress);
+        mRefreshLayout = mParentLayout.findViewById(R.id.app_refresh_layout);
+        mLoadMoreFooter = mParentLayout.findViewById(R.id.app_refresh_footer);
+//        mRefresh = mParentLayout.findViewById(R.id.refresh);
+//        mFooterProgress = mParentLayout.findViewById(R.id.footer_progress);
 
         mSearchLogoHint.setText("搜索集合");
         initRecyclerView();
+        mRefreshLayout.setEnableLoadMore(false);
+        mLoadMoreFooter.setAnimatingColor(((SearchActivity) mContext).getColorAccent());
+        mRefreshLayout.setEnableRefresh(false);
+        mRefreshLayout.setOnLoadMoreListener(refreshLayout -> {
+            mPresenter.requestCollections(ISerachContract.P.LOAD_MORE, mKeyWord, mCollectionList);
+        });
     }
 
     private void initRecyclerView() {
@@ -234,18 +247,18 @@ public class CollectionFragment extends Fragment implements ISerachContract.V<Co
         mAdapter = new CollectionAdapter(mCollectionList);
         mRecyclerView.setAdapter(mAdapter);
         // 监听是否滑到底部
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && mCollectionList.size() != 0) {
-                    boolean canScrollVertical = mRecyclerView.canScrollVertically(1);
-                    if (!canScrollVertical && mFooterProgress.getVisibility() == View.GONE) {
-                        mPresenter.requestCollections(ISerachContract.P.LOAD_MORE, mKeyWord, mCollectionList);
-                    }
-                }
-            }
-        });
+//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE && mCollectionList.size() != 0) {
+//                    boolean canScrollVertical = mRecyclerView.canScrollVertically(1);
+//                    if (!canScrollVertical && mFooterProgress.getVisibility() == View.GONE) {
+//                        mPresenter.requestCollections(ISerachContract.P.LOAD_MORE, mKeyWord, mCollectionList);
+//                    }
+//                }
+//            }
+//        });
     }
 
     private class YItemDecoration extends RecyclerView.ItemDecoration {

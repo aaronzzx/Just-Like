@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/swipe_refresh_home_activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <com.scwang.smartrefresh.layout.header.BezierRadarHeader
+        android:id="@+id/app_refresh_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -13,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
+            android:overScrollMode="never"
             android:padding="5dp" />
 
         <include
@@ -28,16 +34,21 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
 
-        <include
-            android:id="@+id/footer_progress"
-            layout="@layout/include_refresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="55dp"
-            android:visibility="gone" />
+        <!--<include-->
+            <!--android:id="@+id/footer_progress"-->
+            <!--layout="@layout/include_refresh"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_marginBottom="55dp"-->
+            <!--android:visibility="gone" />-->
 
     </RelativeLayout>
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    <com.scwang.smartrefresh.layout.footer.BallPulseFooter
+        android:id="@+id/app_refresh_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</com.scwang.smartrefresh.layout.SmartRefreshLayout>

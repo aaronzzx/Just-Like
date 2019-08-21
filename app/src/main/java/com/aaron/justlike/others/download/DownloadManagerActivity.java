@@ -1,6 +1,6 @@
 package com.aaron.justlike.others.download;
 
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,7 +25,9 @@ import com.aaron.justlike.common.manager.ThemeManager;
 import com.aaron.justlike.common.util.EmptyViewUtil;
 import com.aaron.justlike.common.util.SystemUtil;
 import com.aaron.justlike.online.preview.PreviewActivity;
+import com.aaron.ui.util.DialogUtil;
 import com.aaron.ui.widget.TopBar;
+import com.github.anzewei.parallaxbacklayout.ParallaxBack;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,6 +35,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
+@ParallaxBack
 public class DownloadManagerActivity extends CommonActivity implements IDownloadContract.V<Image>,
         IDownloadCommunicable {
 
@@ -44,7 +48,7 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
 
     private IDownloadContract.P mPresenter;
 
-    private ProgressDialog mDialog;
+    private Dialog mDialog;
 //    private Toolbar mToolbar;
     private TopBar mTopBar;
     private ActionBar mActionBar;
@@ -94,14 +98,14 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
     @Override
     public boolean onSupportNavigateUp() {
         finish();
-        overridePendingTransition(0, R.anim.activity_slide_out);
+//        overridePendingTransition(0, R.anim.activity_slide_out);
         return super.onSupportNavigateUp();
     }
 
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(0, R.anim.activity_slide_out);
+//        overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
     @Override
@@ -109,12 +113,18 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
         getMenuInflater().inflate(R.menu.activity_download_manager_menu, menu);
         // 打开 Popup 菜单的图标
         SystemUtil.setIconEnable(menu, true);
+//        ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+//        if (theme == null || theme == ThemeManager.Theme.WHITE) {
+//            Drawable iconSort = getDrawable(R.drawable.ic_sort);
+//            DrawableCompat.setTint(iconSort, getResources().getColor(R.color.colorAccentWhite));
+//            menu.findItem(R.id.sort).setIcon(iconSort);
+//        }
         menu.findItem(R.id.sort_latest).setChecked(true);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         item.setChecked(true);
         switch (item.getItemId()) {
             case R.id.sort_latest:
@@ -175,12 +185,6 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
 
     @Override
     public void onShowProgress() {
-        mDialog = new ProgressDialog(this);
-        mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mDialog.setCancelable(false);
-        mDialog.setCanceledOnTouchOutside(false);
-        mDialog.setTitle(PROGRESS_TITLE);
-        mDialog.setMessage(PROGRESS_MESSAGE);
         mDialog.show();
     }
 
@@ -190,6 +194,7 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
     }
 
     private void initView() {
+        mDialog = DialogUtil.createDialog(this, R.layout.app_dialog_loading);
         mTopBar = findViewById(R.id.activity_download_manager_toolbar);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         mEmptyView = findViewById(R.id.empty_view);

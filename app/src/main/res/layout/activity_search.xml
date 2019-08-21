@@ -20,7 +20,8 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:titleTextAppearance="@style/ToolbarTitleStyle"
-                app:layout_scrollFlags="scroll|enterAlways|snap">
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:contentInsetStartWithNavigation="0dp">
 
                 <include layout="@layout/include_search_view" />
 

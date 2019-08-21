@@ -37,7 +37,6 @@
             android:layout_margin="3dp"
             android:clipToPadding="false"
             android:padding="5dp">
-            <!--android:background="@drawable/author_image_name"-->
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/author_image"

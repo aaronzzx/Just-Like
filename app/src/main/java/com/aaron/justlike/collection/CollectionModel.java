@@ -20,6 +20,22 @@ class CollectionModel implements ICollectionContract.M<Album> {
     }
 
     @Override
+    public boolean isCollectionExists(String name) {
+        // 取出集合的名称和元素的数量和封面图
+        List<Collection> collections = LitePal.findAll(Collection.class);
+        if (collections == null) return false;
+        for (Collection info : collections) {
+            if (info.getTotal() == 0) {
+                deleteCollection(info.getTitle());
+                continue;
+            }
+            String title = info.getTitle();
+            if (title.equals(name)) return true;
+        }
+        return false;
+    }
+
+    @Override
     public void queryCollection(Callback<Album> callback) {
         mService.execute(() -> {
             List<Album> albumList = new ArrayList<>();

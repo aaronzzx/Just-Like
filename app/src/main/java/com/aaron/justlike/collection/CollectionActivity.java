@@ -1,31 +1,34 @@
 package com.aaron.justlike.collection;
 
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.aaron.base.impl.OnClickListenerImpl;
+import com.aaron.base.util.StatusBarUtils;
 import com.aaron.justlike.R;
 import com.aaron.justlike.collection.element.ElementActivity;
 import com.aaron.justlike.common.CommonActivity;
@@ -34,7 +37,9 @@ import com.aaron.justlike.common.bean.Collection;
 import com.aaron.justlike.common.event.SelectEvent;
 import com.aaron.justlike.common.event.UpdateEvent;
 import com.aaron.justlike.common.manager.ThemeManager;
+import com.aaron.justlike.common.manager.UiManager;
 import com.aaron.justlike.common.util.EmptyViewUtil;
+import com.aaron.justlike.common.util.SelectorUtils;
 import com.aaron.justlike.common.util.SystemUtil;
 import com.aaron.justlike.common.widget.MyGridLayoutManager;
 import com.aaron.justlike.common.widget.imageSelector.ImageSelector;
@@ -43,9 +48,10 @@ import com.aaron.justlike.online.home.OnlineActivity;
 import com.aaron.justlike.others.about.AboutActivity;
 import com.aaron.justlike.others.download.DownloadManagerActivity;
 import com.aaron.justlike.others.theme.ThemeActivity;
+import com.aaron.ui.util.DialogUtil;
 import com.aaron.ui.widget.TopBar;
+import com.blankj.utilcode.util.StringUtils;
 import com.google.android.material.navigation.NavigationView;
-import com.jaeger.library.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -63,19 +69,19 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
     private NavigationView mNavView;
 //    private Toolbar mToolbar;
     private TopBar mTopBar;
-    private View mStatusBar;
+//    private View mStatusBar;
     private ImageView mNavHeaderImage;
 
     private ActionBar mActionBar;
     private Drawable mIconDrawer;
     private Drawable mIconAdd;
-    private ProgressDialog mDialog;
+    private Dialog mDialog;
     private RecyclerView mRecyclerView;
     private View mEmptyView;
     private MyGridLayoutManager mLayoutManager;
     private CollectionAdapter mAdapter;
 
-    private int mColorPrimary;
+    private int mColorAccent;
     private List<Album> mCollections = new ArrayList<>();
 
     @Override
@@ -94,8 +100,7 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         mPresenter.detachView();
-        ImageSelector.getInstance()
-                .setCallback(null);
+        ImageSelector.getInstance().setCallback(null);
     }
 
     @Override
@@ -134,14 +139,32 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // 添加集合
         if (item.getItemId() == R.id.add_collection) {
-            View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_create_collection, null);
-            EditText editText = dialogView.findViewById(R.id.input_collection_name);
-            AlertDialog alertDialog = new AlertDialog.Builder(this)
-                    .setView(dialogView)
-                    .setTitle("创建集合")
-                    .setPositiveButton("确定", (dialog, which) -> {
+            View dialogView = LayoutInflater.from(this).inflate(R.layout.app_dialog_input, null);
+            EditText etContent = dialogView.findViewById(R.id.app_et_content);
+            Button btnLeft = dialogView.findViewById(R.id.app_btn_left);
+            Button btnRight = dialogView.findViewById(R.id.app_btn_right);
+            btnLeft.setText(R.string.app_cancel);
+            btnRight.setText(R.string.app_confirm);
+            btnRight.setTextColor(mColorAccent);
+            Dialog dialog = DialogUtil.createDialog(this, dialogView);
+            btnLeft.setOnClickListener(new OnClickListenerImpl() {
+                @Override
+                public void onViewClick(View v, long interval) {
+                    dialog.dismiss();
+                }
+            });
+            btnRight.setOnClickListener(new OnClickListenerImpl() {
+                @Override
+                public void onViewClick(View v, long interval) {
+                    String name = etContent.getText().toString();
+                    if (StringUtils.isEmpty(name)) {
+                        UiManager.showShortCenter(R.string.app_type_collection_name_first);
+                    } else if (mPresenter.isCollectionExists(name)) {
+                        UiManager.showShortCenter(R.string.app_collection_exists);
+                    } else {
+                        dialog.dismiss();
                         // 打开图片选择器让用户选择图片添加到集合
-                        String title = editText.getText().toString();
+                        String title = etContent.getText().toString();
                         ImageSelector.getInstance(CollectionActivity.this)
                                 .setTitle(title)
                                 .setFilePath("/storage/emulated/0/Pictures/JustLike")
@@ -157,12 +180,10 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
                                     }
                                 })
                                 .start();
-                    })
-                    .setNegativeButton("取消", (dialog, which) -> {
-                    })
-                    .create();
-            alertDialog.setOnShowListener(dialog -> SystemUtil.showKeyboard(editText));
-            alertDialog.show();
+                    }
+                }
+            });
+            dialog.show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -180,7 +201,7 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
             return;
         }
         finish();
-        overridePendingTransition(0, R.anim.activity_slide_out);
+//        overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, sticky = true)
@@ -207,28 +228,45 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
         Intent intent = new Intent(this, ElementActivity.class);
         intent.putExtra("title", mCollections.get(pos).getCollectionTitle());
         startActivity(intent);
-        overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
+//        overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
     }
 
     @Override
     public void onLongTap(View v, int pos) {
-        new AlertDialog.Builder(this)
-                .setTitle("删除集合")
-                .setMessage("请慎重！集合的所有信息将被清除")
-                .setPositiveButton("确定", (dialog, which) -> {
-                    Log.d("CollectionActivity", "which: " + which);
-                    String title = mCollections.get(pos).getCollectionTitle();
-                    mPresenter.deleteCollection(title);
-                    mCollections.remove(pos);
-                    mAdapter.notifyDataSetChanged();
-                    if (mCollections.size() == 0) {
-                        EmptyViewUtil.showEmptyView(mEmptyView);
-                    } else {
-                        EmptyViewUtil.hideEmptyView(mEmptyView);
-                    }
-                })
-                .setNegativeButton("取消", (dialog, which) -> {
-                }).show();
+        View dialogView = LayoutInflater.from(this)
+                .inflate(R.layout.app_dialog_normal_alert, null);
+        TextView tvTitle = dialogView.findViewById(R.id.app_tv_title);
+        TextView tvContent = dialogView.findViewById(R.id.app_tv_content);
+        Button btnLeft = dialogView.findViewById(R.id.app_btn_left);
+        Button btnRight = dialogView.findViewById(R.id.app_btn_right);
+        tvTitle.setText(R.string.app_notice);
+        tvContent.setText(R.string.app_delete_collection_forever);
+        btnLeft.setText(R.string.app_cancel);
+        btnRight.setText(R.string.app_confirm);
+        btnRight.setTextColor(mColorAccent);
+        Dialog dialog = DialogUtil.createDialog(this, dialogView);
+        btnLeft.setOnClickListener(new OnClickListenerImpl() {
+            @Override
+            public void onViewClick(View v, long interval) {
+                dialog.dismiss();
+            }
+        });
+        btnRight.setOnClickListener(new OnClickListenerImpl() {
+            @Override
+            public void onViewClick(View v, long interval) {
+                dialog.dismiss();
+                String title = mCollections.get(pos).getCollectionTitle();
+                mPresenter.deleteCollection(title);
+                mCollections.remove(pos);
+                mAdapter.notifyDataSetChanged();
+                if (mCollections.size() == 0) {
+                    EmptyViewUtil.showEmptyView(mEmptyView);
+                } else {
+                    EmptyViewUtil.hideEmptyView(mEmptyView);
+                }
+            }
+        });
+        dialog.show();
     }
 
     @Override
@@ -253,7 +291,7 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
         mParentLayout = findViewById(R.id.drawer_layout);
         mNavView = findViewById(R.id.navigation_view);
         mTopBar = findViewById(R.id.activity_collection_toolbar);
-        mStatusBar = findViewById(R.id.status_bar);
+//        mStatusBar = findViewById(R.id.status_bar);
         mRecyclerView = findViewById(R.id.recycler_view);
         mEmptyView = findViewById(R.id.empty_view);
         View headerView = mNavView.getHeaderView(0);
@@ -287,12 +325,7 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
             return true;
         });
 
-        mDialog = new ProgressDialog(this);
-        mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mDialog.setCancelable(false);
-        mDialog.setCanceledOnTouchOutside(false);
-        mDialog.setTitle("创建集合");
-        mDialog.setMessage("Loading...");
+        mDialog = DialogUtil.createDialog(this, R.layout.app_dialog_loading);
 
         initIconColor();
         initTheme();
@@ -320,56 +353,63 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
             // 初次安装时由于有权限申请，此时没有获取到焦点，所以会有一刹那没变色，这里设置一下就好了
 //            mToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccentWhite));
             mTopBar.setTextColor(getResources().getColor(R.color.colorAccentWhite));
-            mStatusBar.setBackground(new ColorDrawable(getResources().getColor(R.color.colorPrimaryWhite)));
+//            mStatusBar.setBackground(new ColorDrawable(getResources().getColor(R.color.colorPrimaryWhite)));
             return;
         }
+        Drawable normal = new ColorDrawable(Color.WHITE);
+        Drawable checked = getDrawable(R.drawable.app_bg_nav_checked);
         switch (theme) {
             case JUST_LIKE:
-                mColorPrimary = getResources().getColor(R.color.colorPrimary);
+                mColorAccent = getResources().getColor(R.color.colorAccent);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_just_like));
                 break;
             case WHITE:
-                mColorPrimary = getResources().getColor(R.color.colorPrimaryWhite);
+            default:
+                mColorAccent = getResources().getColor(R.color.colorAccentWhite);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
+                checked.setTint(Color.BLACK);
                 break;
             case BLACK:
-                mColorPrimary = getResources().getColor(R.color.colorPrimaryBlack);
+                mColorAccent = getResources().getColor(R.color.colorAccentBlack);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_black));
                 break;
             case GREY:
-                mColorPrimary = getResources().getColor(R.color.colorPrimaryGrey);
+                mColorAccent = getResources().getColor(R.color.colorAccentGrey);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_grey));
                 break;
             case GREEN:
-                mColorPrimary = getResources().getColor(R.color.colorPrimaryGreen);
+                mColorAccent = getResources().getColor(R.color.colorAccentGreen);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_green));
                 break;
             case RED:
-                mColorPrimary = getResources().getColor(R.color.colorPrimaryRed);
+                mColorAccent = getResources().getColor(R.color.colorAccentRed);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_red));
                 break;
             case PINK:
-                mColorPrimary = getResources().getColor(R.color.colorPrimaryPink);
+                mColorAccent = getResources().getColor(R.color.colorAccentPink);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_pink));
                 break;
             case BLUE:
-                mColorPrimary = getResources().getColor(R.color.colorPrimaryBlue);
+                mColorAccent = getResources().getColor(R.color.colorAccentBlue);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_blue));
                 break;
             case PURPLE:
-                mColorPrimary = getResources().getColor(R.color.colorPrimaryPurple);
+                mColorAccent = getResources().getColor(R.color.colorAccentPurple);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_purple));
                 break;
             case ORANGE:
-                mColorPrimary = getResources().getColor(R.color.colorPrimaryOrange);
+                mColorAccent = getResources().getColor(R.color.colorAccentOrange);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_orange));
                 break;
         }
-        mStatusBar.setBackground(new ColorDrawable(mColorPrimary));
+        checked.setTint(mColorAccent);
+        checked.setAlpha(20);
+        Drawable selector = SelectorUtils.createCheckedSelector(this, normal, checked);
+        mNavView.setItemBackground(selector);
     }
 
     private void initToolbar() {
-        StatusBarUtil.setTransparentForDrawerLayout(this, mParentLayout);
+        StatusBarUtils.setTransparent(this);
 //        setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         if (mActionBar != null) {
@@ -402,7 +442,7 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
             public void onDrawerClosed(View drawerView) {
                 Intent intent = new Intent(CollectionActivity.this, whichActivity);
                 startActivity(intent);
-                overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
+//                overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
                 mParentLayout.removeDrawerListener(this);
             }
         });

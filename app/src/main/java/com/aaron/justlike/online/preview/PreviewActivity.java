@@ -14,12 +14,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 
+import com.aaron.base.base.ActivityCollector;
 import com.aaron.base.image.DefaultOption;
 import com.aaron.base.image.ImageLoader;
 import com.aaron.base.image.LoadListener;
@@ -28,9 +28,11 @@ import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.event.PhotoEvent;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.common.impl.ObserverImpl;
+import com.aaron.justlike.common.manager.UiManager;
 import com.aaron.justlike.common.util.AnimationUtil;
 import com.aaron.justlike.common.util.FileUtil;
 import com.aaron.justlike.common.util.SystemUtil;
+import com.aaron.justlike.online.home.OnlineActivity;
 import com.bm.library.PhotoView;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -129,6 +131,10 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
 
     @Override
     public void onBackPressed() {
+        if (ActivityCollector.getCount() == 1) {
+            Intent intent = new Intent(this, OnlineActivity.class);
+            startActivity(intent);
+        }
         super.onBackPressed();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
@@ -194,7 +200,7 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
                         mProgressBar.setVisibility(View.GONE);
                         mProgressImage.setVisibility(View.VISIBLE);
                         mProgressImage.setImageResource(R.drawable.ic_error_circle);
-                        Toast.makeText(PreviewActivity.this, "网络开小差了", Toast.LENGTH_SHORT).show();
+                        UiManager.showShort("网络开小差了");
                         return false;
                     }
                 })
@@ -259,7 +265,7 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
 
     @Override
     public void onShowMessage(String args) {
-        Toast.makeText(this, args, Toast.LENGTH_SHORT).show();
+        UiManager.showShort(args);
     }
 
     private void initView() {

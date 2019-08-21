@@ -2,6 +2,7 @@ package com.aaron.justlike.online.home;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -66,6 +67,7 @@ class OnlineAdapter extends PhotoAdapter {
                         public boolean onSuccess(Object resource) {
                             // 仅对初次加载的图片做饱和度动画，意味着刷新
                             if (!mAnimatedFlag.get(position, false)) {
+                                @SuppressLint("AnimatorKeep")
                                 Animator animator = ObjectAnimator.ofFloat(new ViewWrapper(holder.imageView), "saturation", 0, 1);
                                 animator.setDuration(2000).setInterpolator(new AccelerateDecelerateInterpolator());
                                 animator.start();

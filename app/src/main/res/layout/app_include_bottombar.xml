@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.chaychan.library.BottomBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:background="@color/base_white"
+    android:elevation="4dp">
+
+    <com.chaychan.library.BottomBarItem
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        app:iconNormal="@drawable/ic_home_page"
+        app:iconSelected="@drawable/ic_download"
+        app:itemText="首页"
+        app:textColorNormal="@color/base_black_hint"
+        app:textColorSelected="@color/base_black"
+        app:itemTextSize="@dimen/base_text_small"
+        app:itemMarginTop="0dp" />
+
+    <com.chaychan.library.BottomBarItem
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        app:iconNormal="@drawable/ic_home_page"
+        app:iconSelected="@drawable/ic_download"
+        app:itemText="收藏"
+        app:textColorNormal="@color/base_black_hint"
+        app:textColorSelected="@color/base_black"
+        app:itemTextSize="@dimen/base_text_small"
+        app:itemMarginTop="0dp" />
+
+    <com.chaychan.library.BottomBarItem
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        app:iconNormal="@drawable/ic_home_page"
+        app:iconSelected="@drawable/ic_download"
+        app:itemText="集合"
+        app:textColorNormal="@color/base_black_hint"
+        app:textColorSelected="@color/base_black"
+        app:itemTextSize="@dimen/base_text_small"
+        app:itemMarginTop="0dp"
+        android:visibility="invisible"/>
+
+    <com.chaychan.library.BottomBarItem
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        app:iconNormal="@drawable/ic_home_page"
+        app:iconSelected="@drawable/ic_download"
+        app:itemText="集合"
+        app:textColorNormal="@color/base_black_hint"
+        app:textColorSelected="@color/base_black"
+        app:itemTextSize="@dimen/base_text_small"
+        app:itemMarginTop="0dp"/>
+
+    <com.chaychan.library.BottomBarItem
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        app:iconNormal="@drawable/ic_home_page"
+        app:iconSelected="@drawable/ic_download"
+        app:itemText="设置"
+        app:textColorNormal="@color/base_black_hint"
+        app:textColorSelected="@color/base_black"
+        app:itemTextSize="@dimen/base_text_small"
+        app:itemMarginTop="0dp" />
+
+</com.chaychan.library.BottomBarLayout>

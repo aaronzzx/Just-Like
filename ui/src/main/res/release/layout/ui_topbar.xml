@@ -42,6 +42,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         style="@style/UITopbarText"
-        tools:text="腾狐支付"/>
+        tools:text="Just Like"/>
 
 </androidx.appcompat.widget.Toolbar>

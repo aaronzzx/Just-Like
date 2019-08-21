@@ -4,8 +4,8 @@ import java.util.List;
 
 public class PreviewEvent<T> {
 
-    public static final int FROM_MAIN_ACTIVITY = 0;
-    public static final int FROM_ELEMENT_ACTIVITY = 1;
+    public static final int FROM_MAIN_ACTIVITY = 1;
+    public static final int FROM_ELEMENT_ACTIVITY = 2;
 
     private int eventType;
     private int position;

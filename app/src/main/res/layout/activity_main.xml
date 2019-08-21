@@ -37,11 +37,16 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:id="@+id/swipe_refresh_home_activity_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <com.scwang.smartrefresh.layout.header.BezierRadarHeader
+                android:id="@+id/app_refresh_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -62,7 +67,7 @@
 
             </RelativeLayout>
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_home_activity_main"
@@ -76,15 +81,6 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigation_view"
-        android:layout_width="300dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:itemTextColor="@color/colorAccentWhite"
-        app:itemIconTint="@color/navigationViewIcon"
-        app:headerLayout="@layout/include_nav_header"
-        app:insetForeground="@null"
-        app:menu="@menu/nav_menu" />
+    <include layout="@layout/app_include_nav"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

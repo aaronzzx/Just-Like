@@ -8,7 +8,7 @@
     <!-- White Theme -->
     <color name="colorPrimaryWhite">#FFFFFF</color>
     <color name="colorPrimaryDarkWhite">#FFFFFF</color>
-    <color name="colorAccentWhite">@color/base_black</color>
+    <color name="colorAccentWhite">#4b6fca</color>
 
     <!-- Black Theme -->
     <color name="colorPrimaryBlack">#FF000000</color>
@@ -57,7 +57,7 @@
     <color name="colorRed">#b71c1c</color>
     <color name="colorGreen">#388e3c</color>
     <color name="colorBlue">#E6ECFC</color>
-    <color name="navigationViewIcon">#696969</color>
+    <color name="navigationViewIcon">#646464</color>
     <color name="colorGrey">#EEEEEE</color>
     <color name="toolbarTop">#96000000</color>
     <color name="toolbarBottom">#00000000</color>

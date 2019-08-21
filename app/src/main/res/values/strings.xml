@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">Just Like</string>
+    <string name="app_name_en">Just Like</string>
+    <string name="app_notice">提示</string>
+    <string name="app_delete_image_forever">图片将从设备中删除</string>
+    <string name="app_delete_collection_forever">集合将从设备中删除</string>
+    <string name="app_delete_from_collection">图片将从集合中删除</string>
+    <string name="app_cancel">取消</string>
+    <string name="app_confirm">确定</string>
+    <string name="app_create_collection">创建集合</string>
+    <string name="app_collection_need_name">集合需要一个名字</string>
+    <string name="app_collection_exists">集合已存在，换个名字吧</string>
+    <string name="app_type_collection_name_first">请先输入集合名字</string>
 </resources>

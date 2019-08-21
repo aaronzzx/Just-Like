@@ -56,6 +56,13 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImageSelector.getInstance(this).clear();
+        mCallback = null;
+    }
+
+    @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         Window window = getWindow();

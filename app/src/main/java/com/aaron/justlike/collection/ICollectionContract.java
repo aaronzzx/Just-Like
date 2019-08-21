@@ -10,6 +10,8 @@ import java.util.List;
 interface ICollectionContract {
 
     interface M<T> {
+        boolean isCollectionExists(String name);
+
         void queryCollection(Callback<T> callback);
 
         void insertCollection(List<String> list, String title, Callback<T> callback);
@@ -31,6 +33,8 @@ interface ICollectionContract {
 
     interface P {
         void detachView();
+
+        boolean isCollectionExists(String name);
 
         void requestCollection(List<Album> list);
 

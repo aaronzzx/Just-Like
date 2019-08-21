@@ -12,12 +12,12 @@
         android:name=".common.JustLike"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/app_name_en"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/WhiteTheme"
         tools:ignore="GoogleAppIndexingWarning"
-        tools:replace="android:allowBackup">
+        tools:replace="name, icon, label, roundIcon, theme, android:allowBackup">
 
         <activity
             android:name=".common.SplashActivity"

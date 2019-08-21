@@ -21,8 +21,8 @@ import java.util.List;
  */
 public abstract class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int TYPE_NORMAL = 0;
-    private static final int TYPE_FOOTER = 1;
+//    private static final int TYPE_NORMAL = 0;
+//    private static final int TYPE_FOOTER = 1;
 
     protected Context mContext;
 
@@ -37,27 +37,27 @@ public abstract class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         mAnimatedFlag.clear();
     }
 
-    public boolean isFooterView(int position) {
-        return position == getItemCount() - 1;
-    }
+//    public boolean isFooterView(int position) {
+//        return position == getItemCount() - 1;
+//    }
 
-    @Override
-    public int getItemViewType(int position) {
-        if (position == getItemCount() - 1) {
-            return TYPE_FOOTER;
-        } else {
-            return TYPE_NORMAL;
-        }
-    }
+//    @Override
+//    public int getItemViewType(int position) {
+//        if (position == getItemCount() - 1) {
+//            return TYPE_FOOTER;
+//        } else {
+//            return TYPE_NORMAL;
+//        }
+//    }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         mContext = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-        if (viewType == TYPE_FOOTER) {
-            return new FooterViewHolder(layoutInflater.inflate(R.layout.activity_online_footer, parent, false));
-        }
+//        if (viewType == TYPE_FOOTER) {
+//            return new FooterViewHolder(layoutInflater.inflate(R.layout.activity_online_footer, parent, false));
+//        }
         View view = layoutInflater.inflate(R.layout.activity_online_recycler_item, parent, false);
         // 为子项设置点击监听
         final ViewHolder holder = new ViewHolder(view);
@@ -78,14 +78,14 @@ public abstract class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemCount() {
-        return mPhotoList.size() + 1;
+        return mPhotoList.size();
     }
 
-    protected static class FooterViewHolder extends RecyclerView.ViewHolder {
-        public FooterViewHolder(View itemView) {
-            super(itemView);
-        }
-    }
+//    protected static class FooterViewHolder extends RecyclerView.ViewHolder {
+//        public FooterViewHolder(View itemView) {
+//            super(itemView);
+//        }
+//    }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         public View itemView;

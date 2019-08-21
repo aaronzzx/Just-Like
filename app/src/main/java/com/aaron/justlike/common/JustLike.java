@@ -19,7 +19,7 @@ public class JustLike extends Application {
     public void onCreate() {
         super.onCreate();
         sContext = getApplicationContext();
-
+//        registerActivityLifecycleCallbacks(ParallaxHelper.getInstance()); // 侧滑返回
         litepal();
         leakCanary();
     }

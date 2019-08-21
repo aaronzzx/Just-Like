@@ -34,6 +34,8 @@ interface IOnlineContract {
 
         void onShowRefresh();
 
+        void onShowRefreshOnlyAnim();
+
         void onHideRefresh();
 
         void onShowProgress();

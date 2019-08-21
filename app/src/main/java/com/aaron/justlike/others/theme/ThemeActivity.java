@@ -22,12 +22,14 @@ import com.aaron.justlike.R;
 import com.aaron.justlike.common.CommonActivity;
 import com.aaron.justlike.common.manager.ThemeManager;
 import com.aaron.ui.widget.TopBar;
+import com.github.anzewei.parallaxbacklayout.ParallaxBack;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@ParallaxBack
 public class ThemeActivity extends CommonActivity implements IThemeCommunicable {
 
     private static final String PREFERENCES_THEME = "justlike_theme";
@@ -78,7 +80,7 @@ public class ThemeActivity extends CommonActivity implements IThemeCommunicable 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
-            overridePendingTransition(0, R.anim.activity_slide_out);
+//            overridePendingTransition(0, R.anim.activity_slide_out);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -86,7 +88,7 @@ public class ThemeActivity extends CommonActivity implements IThemeCommunicable 
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(0, R.anim.activity_slide_out);
+//        overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
     @Override

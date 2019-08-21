@@ -101,7 +101,10 @@
         <attr name="stringSize" format="dimension" />
         <attr name="stringColor" format="color" />
         <attr name="stringStyle">
+            <enum name="normal" value="0"/>
             <enum name="bold" value="1" />
+            <enum name="italic" value="2" />
+            <enum name="bold_italic" value="3" />
         </attr>
         <attr name="backIcon" format="reference" />
         <attr name="backVisibility">

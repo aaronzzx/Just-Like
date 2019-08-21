@@ -9,12 +9,12 @@ import android.graphics.BitmapFactory;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.aaron.justlike.R;
+import com.aaron.justlike.common.manager.UiManager;
 import com.aaron.justlike.online.preview.PreviewActivity;
 
 public class DownloadService extends Service {
@@ -38,7 +38,7 @@ public class DownloadService extends Service {
             mDownloadTask = null;
             stopForeground(true);
             getNotificationManager().notify(1, getNotification("Download Success", -1));
-            Toast.makeText(DownloadService.this, "Download Success", Toast.LENGTH_SHORT).show();
+            UiManager.showShort("Download Success");
         }
 
         @Override
@@ -46,13 +46,13 @@ public class DownloadService extends Service {
             mDownloadTask = null;
             stopForeground(true);
             getNotificationManager().notify(1, getNotification("Download Failure", -1));
-            Toast.makeText(DownloadService.this, "Download Failure", Toast.LENGTH_SHORT).show();
+            UiManager.showShort("Download Failure");
         }
 
         @Override
         public void onPause() {
             mDownloadTask = null;
-            Toast.makeText(DownloadService.this, "Paused", Toast.LENGTH_SHORT).show();
+            UiManager.showShort("Paused");
         }
     };
 
@@ -98,7 +98,7 @@ public class DownloadService extends Service {
                 mDownloadTask = new DownloadTask(mListener);
                 mDownloadTask.execute(mDownloadUrl);
                 startForeground(1, getNotification("Downloading...", 0));
-                Toast.makeText(DownloadService.this, "Downloading...", Toast.LENGTH_SHORT).show();
+                UiManager.showShort("Downloading...");
             }
         }
     }

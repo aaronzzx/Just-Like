@@ -1,19 +1,24 @@
 package com.aaron.justlike.main;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-
-import androidx.appcompat.app.AlertDialog;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.aaron.base.image.DefaultOption;
 import com.aaron.base.image.ImageLoader;
 import com.aaron.base.image.ScaleType;
+import com.aaron.base.impl.OnClickListenerImpl;
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.adapter.SquareAdapter;
 import com.aaron.justlike.common.bean.Image;
 import com.aaron.justlike.common.event.PreviewEvent;
 import com.aaron.justlike.main.preview.PreviewActivity;
+import com.aaron.ui.util.DialogUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -38,18 +43,36 @@ class MainAdapter extends SquareAdapter {
         // for Image onLongClick()
         holder.itemView.setOnLongClickListener(v -> {
             int position = holder.getAdapterPosition();
-            new AlertDialog.Builder(mContext)
-                    .setTitle("删除图片")
-                    .setMessage("图片将从设备中删除")
-                    .setPositiveButton("确定", (dialog, which) -> {
-                        String path = mList.get(position).getPath();
-                        mList.remove(position);
-                        notifyDataSetChanged();
-                        ((IMainCommunicable) mContext).onDelete(path, mList.size() == 0);
-                    })
-                    .setNegativeButton("取消", (dialog, which) -> {
-                    })
-                    .show();
+            View dialogView = LayoutInflater.from(mContext)
+                    .inflate(R.layout.app_dialog_normal_alert, null);
+            TextView tvTitle = dialogView.findViewById(R.id.app_tv_title);
+            TextView tvContent = dialogView.findViewById(R.id.app_tv_content);
+            Button btnLeft = dialogView.findViewById(R.id.app_btn_left);
+            Button btnRight = dialogView.findViewById(R.id.app_btn_right);
+            tvTitle.setText(R.string.app_notice);
+            tvContent.setText(R.string.app_delete_image_forever);
+            btnLeft.setText(R.string.app_cancel);
+            btnRight.setText(R.string.app_confirm);
+            int colorAccent = ((MainActivity) mContext).getColorAccent();
+            btnRight.setTextColor(mContext.getResources().getColor(colorAccent));
+            Dialog dialog = DialogUtil.createDialog(mContext, dialogView);
+            btnLeft.setOnClickListener(new OnClickListenerImpl() {
+                @Override
+                public void onViewClick(View v, long interval) {
+                    dialog.dismiss();
+                }
+            });
+            btnRight.setOnClickListener(new OnClickListenerImpl() {
+                @Override
+                public void onViewClick(View v, long interval) {
+                    dialog.dismiss();
+                    String path = mList.get(position).getPath();
+                    mList.remove(position);
+                    notifyDataSetChanged();
+                    ((IMainCommunicable) mContext).onDelete(path, mList.size() == 0);
+                }
+            });
+            dialog.show();
             return true;
         });
     }

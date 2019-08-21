@@ -25,6 +25,7 @@ import com.aaron.justlike.common.util.FileUtil;
 import com.aaron.justlike.common.widget.MyGridLayoutManager;
 import com.aaron.justlike.common.widget.imageSelector.ImageSelector;
 import com.aaron.ui.widget.TopBar;
+import com.github.anzewei.parallaxbacklayout.ParallaxBack;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,10 +33,13 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+@ParallaxBack
 public class ElementActivity extends CommonActivity implements IElementContract.V<Image>, IElementCommunicable {
 
     private IElementContract.P<Image> mPresenter;
     private RecyclerView.Adapter mAdapter;
+
+    private int mColorAccent;
 
     private RecyclerView mRv;
 //    private Toolbar mToolbar;
@@ -124,13 +128,13 @@ public class ElementActivity extends CommonActivity implements IElementContract.
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(0, R.anim.activity_slide_out);
+//        overridePendingTransition(0, R.anim.activity_slide_out);
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         finish();
-        overridePendingTransition(0, R.anim.activity_slide_out);
+//        overridePendingTransition(0, R.anim.activity_slide_out);
         return super.onSupportNavigateUp();
     }
 
@@ -146,6 +150,10 @@ public class ElementActivity extends CommonActivity implements IElementContract.
             mAdapter.notifyDataSetChanged();
             mPresenter.deleteImage(mTitle, path);
         }
+    }
+
+    public int getColorAccent() {
+        return mColorAccent;
     }
 
     @Override
@@ -201,8 +209,45 @@ public class ElementActivity extends CommonActivity implements IElementContract.
         });
 
         // init status
+        initTheme();
         initIconColor();
         initToolbar();
+    }
+
+    private void initTheme() {
+        ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+        switch (theme) {
+            case JUST_LIKE:
+                mColorAccent = getResources().getColor(R.color.colorAccent);
+                break;
+            case WHITE:
+                mColorAccent = getResources().getColor(R.color.colorAccentWhite);
+                break;
+            case BLACK:
+                mColorAccent = getResources().getColor(R.color.colorAccentBlack);
+                break;
+            case GREY:
+                mColorAccent = getResources().getColor(R.color.colorAccentGrey);
+                break;
+            case GREEN:
+                mColorAccent = getResources().getColor(R.color.colorAccentGreen);
+                break;
+            case RED:
+                mColorAccent = getResources().getColor(R.color.colorAccentRed);
+                break;
+            case PINK:
+                mColorAccent = getResources().getColor(R.color.colorAccentPink);
+                break;
+            case BLUE:
+                mColorAccent = getResources().getColor(R.color.colorAccentBlue);
+                break;
+            case PURPLE:
+                mColorAccent = getResources().getColor(R.color.colorAccentPurple);
+                break;
+            case ORANGE:
+                mColorAccent = getResources().getColor(R.color.colorAccentOrange);
+                break;
+        }
     }
 
     private void initIconColor() {

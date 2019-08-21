@@ -1,8 +1,8 @@
 package com.aaron.justlike.online.home;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,8 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
@@ -21,8 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.aaron.base.impl.OnClickListenerImpl;
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.adapter.PhotoAdapter;
 import com.aaron.justlike.common.http.unsplash.Order;
@@ -31,26 +29,35 @@ import com.aaron.justlike.common.util.SystemUtil;
 import com.aaron.justlike.common.widget.MyGridLayoutManager;
 import com.aaron.justlike.online.search.SearchActivity;
 import com.google.android.material.snackbar.Snackbar;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.constant.RefreshState;
+import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
+import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class OnlineFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, IOnlineContract.V<Photo>, View.OnClickListener {
+public abstract class OnlineFragment extends Fragment implements IOnlineContract.V<Photo> {
 
     private Context mContext;
     private Order mOrder;
 
     private View mParentLayout;
-    private SwipeRefreshLayout mSwipeRefresh;
+//    private SwipeRefreshLayout mSwipeRefresh;
+    private SmartRefreshLayout mRefreshLayout;
+    private BezierRadarHeader mRefreshHeader;
+    private BallPulseFooter mLoadMoreFooter;
     private RecyclerView mRecyclerView;
     private View mErrorView;
     private Button mClickRefresh;
     private ProgressBar mProgressBar;
-    private View mFooterProgress;
+//    private View mFooterProgress;
     protected PhotoAdapter mAdapter;
 
     private int mMenuItemId;
-    private int mColorPrimary;
+    private int mColorAccent;
     protected List<Photo> mPhotoList = new ArrayList<>();
 
     public OnlineFragment() {
@@ -88,7 +95,7 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
         super.onActivityCreated(savedInstanceState);
         mContext = getActivity();
         mOrder = Order.LATEST;
-        mColorPrimary = mContext != null ? ((OnlineActivity) mContext).getColorPrimary() : 0;
+        mColorAccent = mContext != null ? ((OnlineActivity) mContext).getColorAccent() : 0;
         initView();
         attachPresenter();
         // 实现 RecommendFragment 的加载
@@ -98,7 +105,14 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onStop() {
+        super.onStop();
+        mRefreshLayout.finishRefresh(false);
+        mRefreshLayout.finishLoadMore(false);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.activity_online_menu, menu);
         SystemUtil.setIconEnable(menu, true);
@@ -123,7 +137,7 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
         switch (item.getItemId()) {
             case R.id.action_search:
                 startActivity(new Intent(getContext(), SearchActivity.class));
-                ((Activity) mContext).overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
+//                ((Activity) mContext).overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
                 break;
             case R.id.filter_latest:
                 if (item.isChecked()) break;
@@ -148,24 +162,6 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * 当 EmptyView 出现时，即网络连接不可用或者其他情况导致加载不出图片时，
-     * 此按钮用于用户点击重试加载图片
-     */
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.btn_click_refresh) {
-            requestPhotos(mOrder, true, false);
-        }
-    }
-
-    @Override
-    public void onRefresh() {
-        if (mProgressBar.getVisibility() == View.GONE) {
-            requestPhotos(mOrder, true, false);
-        }
-    }
-
     public abstract void requestPhotos(Order order, boolean isRefresh, boolean isFilter);
 
     public abstract void requestLoadMore(Order order);
@@ -175,6 +171,7 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
 
     @Override
     public void onShowPhoto(List<Photo> list, boolean isDifference) {
+        mRefreshLayout.setEnableLoadMore(true);
         if (isDifference) {
             mPhotoList.clear();
             mPhotoList.addAll(list);
@@ -205,16 +202,23 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
 
     @Override
     public void onShowRefresh() {
-        if (!mSwipeRefresh.isRefreshing()) {
-            mSwipeRefresh.setRefreshing(true);
-        }
+//        if (!mSwipeRefresh.isRefreshing()) {
+//            mSwipeRefresh.setRefreshing(true);
+//        }
+        mRefreshLayout.autoRefresh();
+    }
+
+    @Override
+    public void onShowRefreshOnlyAnim() {
+        mRefreshLayout.autoRefreshAnimationOnly();
     }
 
     @Override
     public void onHideRefresh() {
-        if (!mSwipeRefresh.isEnabled()) mSwipeRefresh.setEnabled(true);
-        if (mSwipeRefresh.isRefreshing())
-            mSwipeRefresh.postDelayed(() -> mSwipeRefresh.setRefreshing(false), 500);
+//        if (!mSwipeRefresh.isEnabled()) mSwipeRefresh.setEnabled(true);
+//        if (mSwipeRefresh.isRefreshing())
+//            mSwipeRefresh.postDelayed(() -> mSwipeRefresh.setRefreshing(false), 500);
+        mRefreshLayout.finishRefresh(500);
     }
 
     @Override
@@ -239,37 +243,39 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
 
     @Override
     public void onShowLoading() {
-        mFooterProgress.setVisibility(View.VISIBLE);
-        ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-        animation.setFillAfter(true);
-        animation.setDuration(250);
-        mFooterProgress.startAnimation(animation);
+//        mFooterProgress.setVisibility(View.VISIBLE);
+//        ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+//        animation.setFillAfter(true);
+//        animation.setDuration(250);
+//        mFooterProgress.startAnimation(animation);
+        mRefreshLayout.autoLoadMore();
     }
 
     @Override
     public void onHideLoading() {
-        mFooterProgress.postDelayed(() -> {
-            ScaleAnimation animation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-            animation.setFillAfter(true);
-            animation.setDuration(250);
-            animation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    mFooterProgress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-            mFooterProgress.startAnimation(animation);
-        }, 500);
+//        mFooterProgress.postDelayed(() -> {
+//            ScaleAnimation animation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+//            animation.setFillAfter(true);
+//            animation.setDuration(250);
+//            animation.setAnimationListener(new Animation.AnimationListener() {
+//                @Override
+//                public void onAnimationStart(Animation animation) {
+//
+//                }
+//
+//                @Override
+//                public void onAnimationEnd(Animation animation) {
+//                    mFooterProgress.setVisibility(View.GONE);
+//                }
+//
+//                @Override
+//                public void onAnimationRepeat(Animation animation) {
+//
+//                }
+//            });
+//            mFooterProgress.startAnimation(animation);
+//        }, 500);
+        mRefreshLayout.finishLoadMore();
     }
 
     /**
@@ -284,14 +290,40 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
     }
 
     private void initView() {
-        mSwipeRefresh = mParentLayout.findViewById(R.id.swipe_refresh_home_activity_main);
+        mRefreshLayout = mParentLayout.findViewById(R.id.swipe_refresh_home_activity_main);
+        mRefreshHeader = mParentLayout.findViewById(R.id.app_refresh_header);
+        mLoadMoreFooter = mParentLayout.findViewById(R.id.app_refresh_footer);
+//        mSwipeRefresh = mParentLayout.findViewById(R.id.swipe_refresh_home_activity_main);
         mRecyclerView = mParentLayout.findViewById(R.id.recycler_view);
         mErrorView = mParentLayout.findViewById(R.id.search_logo);
         mClickRefresh = mParentLayout.findViewById(R.id.btn_click_refresh);
         mProgressBar = mParentLayout.findViewById(R.id.progress_bar);
-        mFooterProgress = mParentLayout.findViewById(R.id.footer_progress);
+//        mFooterProgress = mParentLayout.findViewById(R.id.footer_progress);
 
-        mClickRefresh.setOnClickListener(this);
+        mClickRefresh.setOnClickListener(new OnClickListenerImpl() {
+            @Override
+            public void onViewClick(View v, long interval) {
+                if (v.getId() == R.id.btn_click_refresh) {
+                    requestPhotos(mOrder, true, false);
+                }
+            }
+        });
+        mRefreshLayout.setEnableLoadMore(false);
+        mRefreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                if (mRefreshLayout.getState() != RefreshState.Refreshing) {
+                    requestLoadMore(mOrder);
+                }
+            }
+
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                if (mProgressBar.getVisibility() == View.GONE) {
+                    requestPhotos(mOrder, true, false);
+                }
+            }
+        });
 
         initRecyclerView();
         initSwipeRefresh();
@@ -311,24 +343,28 @@ public abstract class OnlineFragment extends Fragment implements SwipeRefreshLay
         mAdapter = new OnlineAdapter(mPhotoList);
         mRecyclerView.setAdapter(mAdapter);
         // 监听是否滑到底部
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && mPhotoList.size() != 0) {
-                    boolean canScrollVertical = mRecyclerView.canScrollVertically(1);
-                    if (!canScrollVertical && mFooterProgress.getVisibility() == View.GONE) {
-                        if (!mSwipeRefresh.isRefreshing()) requestLoadMore(mOrder);
-                    }
-                }
-            }
-        });
+//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE && mPhotoList.size() != 0) {
+//                    boolean canScrollVertical = mRecyclerView.canScrollVertically(1);
+//                    if (!canScrollVertical && mFooterProgress.getVisibility() == View.GONE) {
+//                        if (!mSwipeRefresh.isRefreshing()) requestLoadMore(mOrder);
+//                    }
+//                }
+//            }
+//        });
     }
 
     private void initSwipeRefresh() {
-        mSwipeRefresh.setOnRefreshListener(this);
-        mSwipeRefresh.setColorSchemeColors(mColorPrimary);
-        mSwipeRefresh.setEnabled(false);
+//        mSwipeRefresh.setOnRefreshListener(this);
+//        mSwipeRefresh.setColorSchemeColors(mColorAccent);
+//        mSwipeRefresh.setEnabled(false);
+//        mRefreshHeader.setAccentColor(mColorAccent);
+        mRefreshHeader.setPrimaryColor(Color.WHITE);
+        mRefreshHeader.setAccentColor(mColorAccent);
+        mLoadMoreFooter.setAnimatingColor(mColorAccent);
     }
 
     private class XItemDecoration extends RecyclerView.ItemDecoration {

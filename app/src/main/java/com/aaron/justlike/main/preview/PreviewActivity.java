@@ -1,6 +1,7 @@
 package com.aaron.justlike.main.preview;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,6 +39,8 @@ import com.aaron.justlike.common.manager.UiManager;
 import com.aaron.justlike.common.util.AnimationUtil;
 import com.aaron.justlike.common.util.FileUtil;
 import com.aaron.justlike.common.util.SystemUtil;
+import com.aaron.ui.util.DialogUtil;
+import com.github.anzewei.parallaxbacklayout.ParallaxBack;
 import com.yalantis.ucrop.UCrop;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,6 +49,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.File;
 import java.util.List;
 
+@ParallaxBack
 public class PreviewActivity extends CommonActivity implements IPreviewContract.V, IPreviewCommunicable {
 
     public static final int DELETE_EVENT = 1;
@@ -55,6 +60,7 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
     private static final String[] CROP_TYPE = {FIT_SCREEN, FREE_CROP};
 
     private int mColorPrimary;
+    private int mColorAccent;
     private int mPosition;
     private int mEventType;
     private List<Image> mImageList;
@@ -155,6 +161,7 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
 //    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case UCrop.REQUEST_CROP:
                 if (resultCode == Activity.RESULT_OK) {
@@ -246,18 +253,43 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
         deleteBtn.setOnClickListener(new OnClickListenerImpl() {
             @Override
             public void onViewClick(View v, long interval) {
-                new AlertDialog.Builder(PreviewActivity.this)
-                        .setTitle("删除图片")
-                        .setMessage("图片将会被删除，无法撤销")
-                        .setPositiveButton("确定", (dialog, which) -> {
-                            EventBus.getDefault().post(new DeleteEvent(mEventType,
-                                    mPosition, mImageList.get(mPosition).getPath()));
-                            finish();
-                            overridePendingTransition(android.R.anim.fade_in,
-                                    android.R.anim.fade_out);
-                        })
-                        .setNegativeButton("取消", (dialog, which) -> {
-                        }).show();
+                View dialogView = LayoutInflater.from(PreviewActivity.this)
+                        .inflate(R.layout.app_dialog_normal_alert, null);
+                TextView tvTitle = dialogView.findViewById(R.id.app_tv_title);
+                TextView tvContent = dialogView.findViewById(R.id.app_tv_content);
+                Button btnLeft = dialogView.findViewById(R.id.app_btn_left);
+                Button btnRight = dialogView.findViewById(R.id.app_btn_right);
+                tvTitle.setText(R.string.app_notice);
+                switch (mEventType) {
+                    case PreviewEvent.FROM_MAIN_ACTIVITY:
+                        tvContent.setText(R.string.app_delete_image_forever);
+                        break;
+                    case PreviewEvent.FROM_ELEMENT_ACTIVITY:
+                        tvContent.setText(R.string.app_delete_from_collection);
+                        break;
+                }
+                btnLeft.setText(R.string.app_cancel);
+                btnRight.setText(R.string.app_confirm);
+                btnRight.setTextColor(mColorAccent);
+                Dialog dialog = DialogUtil.createDialog(PreviewActivity.this, dialogView);
+                btnLeft.setOnClickListener(new OnClickListenerImpl() {
+                    @Override
+                    public void onViewClick(View v, long interval) {
+                        dialog.dismiss();
+                    }
+                });
+                btnRight.setOnClickListener(new OnClickListenerImpl() {
+                    @Override
+                    public void onViewClick(View v, long interval) {
+                        dialog.dismiss();
+                        EventBus.getDefault().post(new DeleteEvent(mEventType,
+                                mPosition, mImageList.get(mPosition).getPath()));
+                        finish();
+                        overridePendingTransition(android.R.anim.fade_in,
+                                android.R.anim.fade_out);
+                    }
+                });
+                dialog.show();
             }
         });
         mViewPager.addOnPageChangeListener(new OnPageChangeListenerImpl() {
@@ -278,38 +310,49 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
         ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
         if (theme == null) {
             mColorPrimary = resources.getColor(R.color.colorPrimary);
+            mColorAccent = resources.getColor(R.color.colorAccentWhite);
             return;
         }
         switch (theme) {
             case JUST_LIKE:
                 mColorPrimary = resources.getColor(R.color.colorPrimary);
+                mColorAccent = resources.getColor(R.color.colorAccent);
                 break;
             case WHITE:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryBlack);
+                mColorAccent = resources.getColor(R.color.colorAccentWhite);
                 break;
             case BLACK:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryBlack);
+                mColorAccent = resources.getColor(R.color.colorAccentBlack);
                 break;
             case GREY:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryGrey);
+                mColorAccent = resources.getColor(R.color.colorAccentGrey);
                 break;
             case GREEN:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryGreen);
+                mColorAccent = resources.getColor(R.color.colorAccentGreen);
                 break;
             case RED:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryRed);
+                mColorAccent = resources.getColor(R.color.colorAccentRed);
                 break;
             case PINK:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryPink);
+                mColorAccent = resources.getColor(R.color.colorAccentPink);
                 break;
             case BLUE:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryBlue);
+                mColorAccent = resources.getColor(R.color.colorAccentBlue);
                 break;
             case PURPLE:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryPurple);
+                mColorAccent = resources.getColor(R.color.colorAccentPurple);
                 break;
             case ORANGE:
                 mColorPrimary = resources.getColor(R.color.colorPrimaryOrange);
+                mColorAccent = resources.getColor(R.color.colorAccentOrange);
                 break;
         }
     }

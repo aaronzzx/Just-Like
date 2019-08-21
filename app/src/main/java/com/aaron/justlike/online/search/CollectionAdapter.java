@@ -2,7 +2,6 @@ package com.aaron.justlike.online.search;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -73,7 +72,7 @@ class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 intent.putExtra("id", collection.getId());
                 intent.putExtra("title", collection.getTitle());
                 mContext.startActivity(intent);
-                ((Activity) mContext).overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
+//                ((Activity) mContext).overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
             });
             return holder;
         }

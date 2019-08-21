@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.aaron.base.image.DefaultOption;
 import com.aaron.base.image.ImageLoader;
 import com.aaron.justlike.R;
-import com.aaron.justlike.common.JustLike;
 import com.aaron.justlike.common.bean.Message;
+import com.aaron.justlike.common.manager.UiManager;
 import com.aaron.justlike.common.util.AlipayUtil;
 import com.aaron.justlike.common.util.SystemUtil;
 
@@ -85,7 +84,7 @@ class AboutMessageAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     if (isInstall) {
                         AlipayUtil.startAlipayClient(mActivity, "a7x09336v9f1fjutignso50");
                     } else {
-                        Toast.makeText(JustLike.getContext(), "需要安装支付宝客户端", Toast.LENGTH_SHORT).show();
+                        UiManager.showShort("需要安装支付宝客户端");
                     }
                     break;
             }

@@ -3,6 +3,7 @@ package com.aaron.justlike.online.search;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.common.http.unsplash.entity.photo.SearchPhotoResult;
 import com.aaron.justlike.common.impl.ObserverImpl;
+import com.blankj.utilcode.util.StringUtils;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ class PhotoPresenter implements ISerachContract.P<Photo> {
             if (oldList.size() != 0) return;
         } else if (mRequestCount >= mPhotosTotalPages && requestMode == ISerachContract.P.LOAD_MORE) {
             return;
-        } else if (keyWord.equals("")) {
+        } else if (StringUtils.isEmpty(keyWord)) {
             return;
         } else if (!mKeyWord.equals(keyWord)) {
             mRequestCount = 0;

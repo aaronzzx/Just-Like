@@ -91,4 +91,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'com.jakewharton:butterknife:10.1.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-andx-16'
+    implementation 'com.github.anzewei:parallaxbacklayout:1.1.9'
+    implementation 'com.github.chaychan:BottomBarLayout:1.2.0'
 }
