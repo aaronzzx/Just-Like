@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="#E6FFFFFF"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/base_text_large"
+            android:textColor="@color/base_black"
+            android:textStyle="bold"
+            android:text="最新"
+            android:drawablePadding="16dp"
+            android:drawableStart="@drawable/ic_latest"
+            tools:text="最新"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:textSize="@dimen/base_text_large"
+            android:textColor="@color/base_black"
+            android:textStyle="bold"
+            android:text="最久远"
+            android:drawablePadding="16dp"
+            android:drawableStart="@drawable/ic_oldest"
+            tools:text="最久远"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:textSize="@dimen/base_text_large"
+            android:textColor="@color/base_black"
+            android:textStyle="bold"
+            android:text="最流行"
+            android:drawablePadding="16dp"
+            android:drawableStart="@drawable/ic_popular"
+            tools:text="最流行"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

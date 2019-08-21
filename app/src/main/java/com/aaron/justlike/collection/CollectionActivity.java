@@ -367,7 +367,6 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
             default:
                 mColorAccent = getResources().getColor(R.color.colorAccentWhite);
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
-                checked.setTint(Color.BLACK);
                 break;
             case BLACK:
                 mColorAccent = getResources().getColor(R.color.colorAccentBlack);
@@ -402,7 +401,11 @@ public class CollectionActivity extends CommonActivity implements ICollectionCom
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_orange));
                 break;
         }
-        checked.setTint(mColorAccent);
+        if (theme == ThemeManager.Theme.WHITE) {
+            checked.setTint(Color.BLACK);
+        } else {
+            checked.setTint(mColorAccent);
+        }
         checked.setAlpha(20);
         Drawable selector = SelectorUtils.createCheckedSelector(this, normal, checked);
         mNavView.setItemBackground(selector);

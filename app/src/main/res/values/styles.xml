@@ -1,5 +1,10 @@
 <resources>
 
+    <style name="AppPopupWindow" parent="Widget.AppCompat.PopupWindow">
+        <item name="android:windowEnterAnimation">@anim/app_pw_fade_in</item>
+        <item name="android:windowExitAnimation">@anim/app_pw_fade_out</item>
+    </style>
+
     <style name="ToolbarTitleStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/base_text_hlarge</item>

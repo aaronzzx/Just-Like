@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="#E6FFFFFF"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/app_tv_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"
+            android:textSize="@dimen/base_text_large"
+            android:textColor="@drawable/app_sel_tv_menu"
+            android:textStyle="bold"
+            android:text="日期"
+            android:drawablePadding="16dp"
+            android:drawableStart="@drawable/ic_sort_date"
+            android:background="?android:attr/selectableItemBackground"
+            tools:text="日期"/>
+
+        <TextView
+            android:id="@+id/app_tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"
+            android:textSize="@dimen/base_text_large"
+            android:textColor="@drawable/app_sel_tv_menu"
+            android:textStyle="bold"
+            android:drawablePadding="16dp"
+            android:drawableStart="@drawable/ic_sort_name"
+            android:text="名称"
+            android:background="?android:attr/selectableItemBackground"
+            tools:text="名称"/>
+
+        <TextView
+            android:id="@+id/app_tv_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"
+            android:textSize="@dimen/base_text_large"
+            android:textColor="@drawable/app_sel_tv_menu"
+            android:textStyle="bold"
+            android:drawablePadding="16dp"
+            android:drawableStart="@drawable/ic_sort_size"
+            android:text="大小"
+            android:background="?android:attr/selectableItemBackground"
+            tools:text="大小"/>
+
+        <LinearLayout
+            android:id="@+id/app_ll_ascending"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:background="?android:attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:textSize="@dimen/base_text_large"
+                android:textColor="@color/base_black"
+                android:textStyle="bold"
+                android:drawablePadding="16dp"
+                android:drawableStart="@drawable/ic_sort_ascend"
+                android:text="升序"
+                tools:text="升序"/>
+
+            <CheckBox
+                android:id="@+id/app_cb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_gravity="center"
+                android:clickable="false"
+                android:buttonTint="@color/base_black"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

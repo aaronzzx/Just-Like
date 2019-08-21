@@ -11,11 +11,18 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -38,6 +45,7 @@ import com.aaron.justlike.common.event.DeleteEvent;
 import com.aaron.justlike.common.impl.SquareItemDecoration;
 import com.aaron.justlike.common.manager.ThemeManager;
 import com.aaron.justlike.common.manager.UiManager;
+import com.aaron.justlike.common.util.PopupWindowUtils;
 import com.aaron.justlike.common.util.SelectorUtils;
 import com.aaron.justlike.common.util.SystemUtil;
 import com.aaron.justlike.common.widget.MyGridLayoutManager;
@@ -88,14 +96,21 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
     private View mEmptyView;
 
     private ActionBar mActionBar;
-    private MenuItem mSortByDate;
-    private MenuItem mSortByName;
-    private MenuItem mSortBySize;
-    private MenuItem mSortByAscending;
+//    private MenuItem mSortByDate;
+//    private MenuItem mSortByName;
+//    private MenuItem mSortBySize;
+//    private MenuItem mSortByAscending;
 
     private Drawable mIconDrawer;
     private Drawable mIconSort;
     private Drawable mIconAdd;
+
+    private PopupWindow mPwMenu;
+    private TextView mTvDate;
+    private TextView mTvName;
+    private TextView mTvSize;
+    private LinearLayout mLlAscending;
+    private CheckBox mCbAscending;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,39 +182,42 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_mine_menu, menu);
-        SystemUtil.setIconEnable(menu, true);
-        ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
-        if (theme == null || theme == ThemeManager.Theme.WHITE) {
-            menu.findItem(R.id.sort).setIcon(mIconSort);
-        }
-        // 实例化 Popup 子菜单
-        mSortByDate = menu.findItem(R.id.sort_date);
-        mSortByName = menu.findItem(R.id.sort_name);
-        mSortBySize = menu.findItem(R.id.sort_size);
-        mSortByAscending = menu.findItem(R.id.ascending_order);
-        // 初始化 Popup 记忆状态
-        initMenuItem(mSortType, mIsAscending);
+        getMenuInflater().inflate(R.menu.activity_main_menu, menu);
+//        SystemUtil.setIconEnable(menu, true);
+//        ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
+//        if (theme == null || theme == ThemeManager.Theme.WHITE) {
+//            menu.findItem(R.id.sort).setIcon(mIconSort);
+//        }
+//        // 实例化 Popup 子菜单
+//        mSortByDate = menu.findItem(R.id.sort_date);
+//        mSortByName = menu.findItem(R.id.sort_name);
+//        mSortBySize = menu.findItem(R.id.sort_size);
+//        mSortByAscending = menu.findItem(R.id.ascending_order);
+//        // 初始化 Popup 记忆状态
+//        initMenuItem(mSortType, mIsAscending);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // 这里判断升序排列选项是否被选中
-        boolean ascendingOrder = mSortByAscending.isChecked();
+//        boolean ascendingOrder = mSortByAscending.isChecked();
         switch (item.getItemId()) {
-            case R.id.sort_date:
-                setSort(MainPresenter.SORT_BY_DATE, ascendingOrder);
+            case R.id.sort:
+                mPwMenu.showAsDropDown(mTopBar, 0, 0, Gravity.BOTTOM|Gravity.END);
                 break;
-            case R.id.sort_name:
-                setSort(MainPresenter.SORT_BY_NAME, ascendingOrder);
-                break;
-            case R.id.sort_size:
-                setSort(MainPresenter.SORT_BY_SIZE, ascendingOrder);
-                break;
-            case R.id.ascending_order:
-                setSortByAscending(!ascendingOrder);
-                break;
+//            case R.id.sort_date:
+//                setSort(MainPresenter.SORT_BY_DATE, ascendingOrder);
+//                break;
+//            case R.id.sort_name:
+//                setSort(MainPresenter.SORT_BY_NAME, ascendingOrder);
+//                break;
+//            case R.id.sort_size:
+//                setSort(MainPresenter.SORT_BY_SIZE, ascendingOrder);
+//                break;
+//            case R.id.ascending_order:
+//                setSortByAscending(!ascendingOrder);
+//                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -256,6 +274,7 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
         });
         mSortType = sortType;
         mIsAscending = ascendingOrder;
+        initMenuItem();
     }
 
     @Override
@@ -287,7 +306,7 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
 
     @Override
     public void onHideRefresh() {
-        runOnUiThread(() -> mRefreshLayout.finishRefresh(500));
+        runOnUiThread(() -> mRefreshLayout.finishRefresh(1000));
     }
 
     private void initView() {
@@ -368,11 +387,43 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
         });
 
         // Part 3, init status
+        initPwMenu();
         initIconColor();
         initTheme();
         initToolbar();
         mRefreshHeader.setPrimaryColor(Color.WHITE);
         mRefreshHeader.setAccentColorId(mColorAccent);
+    }
+
+    private void initPwMenu() {
+        View content = LayoutInflater.from(this).inflate(R.layout.app_pw_main_menu, null);
+        mTvDate = content.findViewById(R.id.app_tv_date);
+        mTvName = content.findViewById(R.id.app_tv_name);
+        mTvSize = content.findViewById(R.id.app_tv_size);
+        mLlAscending = content.findViewById(R.id.app_ll_ascending);
+        mCbAscending = content.findViewById(R.id.app_cb);
+        mPwMenu = PopupWindowUtils.create(this, content);
+        mPwMenu.setAnimationStyle(R.style.AppPopupWindow);
+        mTvDate.setOnClickListener(v -> {
+            setSort(MainPresenter.SORT_BY_DATE, mIsAscending);
+            mPwMenu.dismiss();
+        });
+        mTvName.setOnClickListener(v -> {
+            setSort(MainPresenter.SORT_BY_NAME, mIsAscending);
+            mPwMenu.dismiss();
+        });
+        mTvSize.setOnClickListener(v -> {
+            setSort(MainPresenter.SORT_BY_SIZE, mIsAscending);
+            mPwMenu.dismiss();
+        });
+        mLlAscending.setOnClickListener(v -> {
+            setSortByAscending(!mIsAscending);
+            mPwMenu.dismiss();
+        });
+        mPwMenu.setFocusable(true);
+        mPwMenu.setOutsideTouchable(true);
+        mPwMenu.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPwMenu.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
     private void initIconColor() {
@@ -417,7 +468,6 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
                 mColorAccent = R.color.colorAccentWhite;
                 mMatisseTheme = R.style.MatisseBlackTheme;
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_white));
-                checked.setTint(Color.BLACK);
                 break;
             case BLACK:
                 mColorAccent = R.color.colorPrimaryBlack;
@@ -460,7 +510,11 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
                 mNavHeaderImage.setImageDrawable(getResources().getDrawable(R.drawable.theme_orange));
                 break;
         }
-        checked.setTint(mColorAccent);
+        if (theme == ThemeManager.Theme.WHITE) {
+            checked.setTint(Color.BLACK);
+        } else {
+            checked.setTint(getResources().getColor(mColorAccent));
+        }
         checked.setAlpha(20);
         Drawable selector = SelectorUtils.createCheckedSelector(this, normal, checked);
         mNavView.setItemBackground(selector);
@@ -488,41 +542,62 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
         return new ColorStateList(states, colors);
     }
 
+    private void initMenuItem() {
+        mTvDate.setSelected(false);
+        mTvName.setSelected(false);
+        mTvSize.setSelected(false);
+        switch (mSortType) {
+            case MainPresenter.SORT_BY_DATE:
+                mTvDate.setSelected(true);
+                break;
+            case MainPresenter.SORT_BY_NAME:
+                mTvName.setSelected(true);
+                break;
+            case MainPresenter.SORT_BY_SIZE:
+                mTvSize.setSelected(true);
+                break;
+        }
+        mCbAscending.setChecked(mIsAscending);
+    }
+
     /**
      * 用于程序启动时初始化 Popup 菜单状态
      */
     private void initMenuItem(int sortType, boolean ascendingOrder) {
-        switch (sortType) {
-            case MainPresenter.SORT_BY_DATE:
-                mSortByDate.setChecked(true);
-                break;
-            case MainPresenter.SORT_BY_NAME:
-                mSortByName.setChecked(true);
-                break;
-            case MainPresenter.SORT_BY_SIZE:
-                mSortBySize.setChecked(true);
-                break;
-            default:
-                mSortByDate.setChecked(true);
-                break;
-        }
-        mSortByAscending.setChecked(ascendingOrder);
+//        switch (sortType) {
+//            case MainPresenter.SORT_BY_DATE:
+//                mSortByDate.setChecked(true);
+//                break;
+//            case MainPresenter.SORT_BY_NAME:
+//                mSortByName.setChecked(true);
+//                break;
+//            case MainPresenter.SORT_BY_SIZE:
+//                mSortBySize.setChecked(true);
+//                break;
+//            default:
+//                mSortByDate.setChecked(true);
+//                break;
+//        }
+//        mSortByAscending.setChecked(ascendingOrder);
     }
 
     /**
      * 设置 Popup 菜单排序类型状态
      */
-    private void setSort(int sortType, boolean ascendingOrder) {
-        mPresenter.setSortType(sortType, ascendingOrder);
+    private void setSort(int sortType, boolean isAscending) {
+        mPresenter.setSortType(sortType, isAscending);
+        mTvDate.setSelected(false);
+        mTvName.setSelected(false);
+        mTvSize.setSelected(false);
         switch (sortType) {
             case MainPresenter.SORT_BY_DATE:
-                mSortByDate.setChecked(true);
+                mTvDate.setSelected(true);
                 break;
             case MainPresenter.SORT_BY_NAME:
-                mSortByName.setChecked(true);
+                mTvName.setSelected(true);
                 break;
             case MainPresenter.SORT_BY_SIZE:
-                mSortBySize.setChecked(true);
+                mTvSize.setSelected(true);
                 break;
         }
         mPresenter.requestImage(mImageList, false);
@@ -532,17 +607,17 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
      * 设置 Popup 菜单是否升序状态
      */
     private void setSortByAscending(boolean sortByAscending) {
-        if (mSortByDate.isChecked()) {
+        if (mTvDate.isSelected()) {
             mPresenter.setSortType(MainPresenter.SORT_BY_DATE, sortByAscending);
-            mSortByAscending.setChecked(sortByAscending);
+            mCbAscending.setChecked(sortByAscending);
 
-        } else if (mSortByName.isChecked()) {
+        } else if (mTvName.isSelected()) {
             mPresenter.setSortType(MainPresenter.SORT_BY_NAME, sortByAscending);
-            mSortByAscending.setChecked(sortByAscending);
+            mCbAscending.setChecked(sortByAscending);
 
         } else {
             mPresenter.setSortType(MainPresenter.SORT_BY_SIZE, sortByAscending);
-            mSortByAscending.setChecked(sortByAscending);
+            mCbAscending.setChecked(sortByAscending);
         }
         mPresenter.requestImage(mImageList, false);
     }

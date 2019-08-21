@@ -1,7 +1,6 @@
 package com.aaron.justlike.others.theme;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -144,7 +143,8 @@ class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case WHITE:
                 holder.background
                         .setImageDrawable(new ColorDrawable(mContext.getResources().getColor(R.color.colorPrimaryWhite)));
-                holder.check.setColorFilter(Color.BLACK);
+                Context context = holder.itemView.getContext();
+                holder.check.setColorFilter(context.getResources().getColor(R.color.colorAccentWhite));
                 break;
             case BLACK:
                 holder.background
@@ -184,9 +184,4 @@ class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 break;
         }
     }
-
-//    public interface Callback {
-//
-//        void onPress(int newCheck, int oldCheck);
-//    }
 }

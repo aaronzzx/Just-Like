@@ -32,8 +32,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SplashActivity extends CommonActivity {
 
-    private static final int PROGRESS_COUNT_DOWN = 5000;
-    private static final int DEFAULT_COUNT_DOWN  = 6000;
+    private static final int PROGRESS_COUNT_DOWN = 4000;
+    private static final int DEFAULT_COUNT_DOWN  = 3000;
 
     private ImageView mIvRandom;
     private CircleImageView mCircleIvAvatar;
