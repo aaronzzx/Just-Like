@@ -21,6 +21,9 @@ public class ThemeManager {
     }
 
     public Theme getCurrentTheme() {
+        if (mCurrentTheme == null) {
+            mCurrentTheme = Theme.WHITE;
+        }
         return mCurrentTheme;
     }
 
