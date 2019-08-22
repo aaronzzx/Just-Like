@@ -3,15 +3,16 @@
 
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/colorAccentWhite" />
+            <solid android:color="@color/colorPrimaryWhite" />
             <size
                 android:height="20dp"
                 android:width="20dp" />
         </shape>
     </item>
 
-    <item
-        android:drawable="@drawable/ic_check_white_18dp"
-        android:gravity="center" />
+    <item android:gravity="center" >
+        <bitmap android:src="@drawable/ic_check_white_18dp"
+            android:tint="@color/colorAccent"/>
+    </item>
 
 </layer-list>

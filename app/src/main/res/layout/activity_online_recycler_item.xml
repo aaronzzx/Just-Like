@@ -6,7 +6,8 @@
     android:layout_height="270dp"
     app:cardCornerRadius="5dp"
     android:layout_marginBottom="5dp"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <RelativeLayout
         android:layout_width="match_parent"

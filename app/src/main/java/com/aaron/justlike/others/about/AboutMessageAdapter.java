@@ -71,12 +71,12 @@ class AboutMessageAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     break;
                 case SOURCE_CODE:
                     Intent sourceCode = new Intent(Intent.ACTION_VIEW);
-                    sourceCode.setData(Uri.parse("https://github.com/AaronZheng9603/Just-Like"));
+                    sourceCode.setData(Uri.parse("https://github.com/Aaronzzx/Just-Like"));
                     mActivity.startActivity(sourceCode);
                     break;
                 case GITHUB:
                     Intent github = new Intent(Intent.ACTION_VIEW);
-                    github.setData(Uri.parse("https://github.com/AaronZheng9603"));
+                    github.setData(Uri.parse("https://github.com/Aaronzzx"));
                     mActivity.startActivity(github);
                     break;
                 case GIFT:
@@ -106,7 +106,6 @@ class AboutMessageAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     private static class ViewHolder extends RecyclerView.ViewHolder {
-
         View itemView;
         ImageView icon;
         TextView title;

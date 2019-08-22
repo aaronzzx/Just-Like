@@ -104,7 +104,7 @@ class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         // 初始化主题名称
         switch (position) {
             case WHITE:
-                themeName = "WHITE";
+                themeName = "JUST LIKE";
                 break;
             case BLACK:
                 themeName = "BLACK";
@@ -131,7 +131,7 @@ class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 themeName = "ORANGE";
                 break;
             case JUST_LIKE:
-                themeName = "JUST LIKE";
+                themeName = "CLASSIC";
                 break;
         }
         holder.themeName.setText(themeName);

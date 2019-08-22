@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,7 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,9 +28,11 @@ import com.aaron.justlike.R;
 import com.aaron.justlike.common.adapter.PhotoAdapter;
 import com.aaron.justlike.common.http.unsplash.Order;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
+import com.aaron.justlike.common.util.PopupWindowUtils;
 import com.aaron.justlike.common.util.SystemUtil;
 import com.aaron.justlike.common.widget.MyGridLayoutManager;
 import com.aaron.justlike.online.search.SearchActivity;
+import com.blankj.utilcode.util.ConvertUtils;
 import com.google.android.material.snackbar.Snackbar;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -59,6 +64,11 @@ public abstract class OnlineFragment extends Fragment implements IOnlineContract
     private int mMenuItemId;
     private int mColorAccent;
     protected List<Photo> mPhotoList = new ArrayList<>();
+
+    private PopupWindow mPwMenu;
+    private TextView mTvLatest;
+    private TextView mTvOldest;
+    private TextView mTvPopular;
 
     public OnlineFragment() {
         // Required empty public constructor
@@ -115,50 +125,20 @@ public abstract class OnlineFragment extends Fragment implements IOnlineContract
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.activity_online_menu, menu);
-        SystemUtil.setIconEnable(menu, true);
-        switch (mMenuItemId) {
-            case R.id.filter_latest:
-                menu.findItem(R.id.filter_latest).setChecked(true);
-                break;
-            case R.id.filter_oldest:
-                menu.findItem(R.id.filter_oldest).setChecked(true);
-                break;
-            case R.id.filter_popular:
-                menu.findItem(R.id.filter_popular).setChecked(true);
-                break;
-            default:
-                menu.findItem(R.id.filter_latest).setChecked(true);
-                break;
-        }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
                 startActivity(new Intent(getContext(), SearchActivity.class));
 //                ((Activity) mContext).overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
                 break;
-            case R.id.filter_latest:
-                if (item.isChecked()) break;
-                mMenuItemId = R.id.filter_latest;
-                mOrder = Order.LATEST;
-                requestPhotos(mOrder, false, true);
-                break;
-            case R.id.filter_oldest:
-                if (item.isChecked()) break;
-                mMenuItemId = R.id.filter_oldest;
-                mOrder = Order.OLDEST;
-                requestPhotos(mOrder, false, true);
-                break;
-            case R.id.filter_popular:
-                if (item.isChecked()) break;
-                mMenuItemId = R.id.filter_popular;
-                mOrder = Order.POPULAR;
-                requestPhotos(mOrder, false, true);
+            case R.id.action_filter:
+                mPwMenu.showAsDropDown(((OnlineActivity) mContext).getTopBar(), 0,
+                        -ConvertUtils.dp2px(4), Gravity.BOTTOM|Gravity.END);
                 break;
         }
-        item.setChecked(true);
         return super.onOptionsItemSelected(item);
     }
 
@@ -215,9 +195,6 @@ public abstract class OnlineFragment extends Fragment implements IOnlineContract
 
     @Override
     public void onHideRefresh() {
-//        if (!mSwipeRefresh.isEnabled()) mSwipeRefresh.setEnabled(true);
-//        if (mSwipeRefresh.isRefreshing())
-//            mSwipeRefresh.postDelayed(() -> mSwipeRefresh.setRefreshing(false), 500);
         mRefreshLayout.finishRefresh(500);
     }
 
@@ -243,45 +220,18 @@ public abstract class OnlineFragment extends Fragment implements IOnlineContract
 
     @Override
     public void onShowLoading() {
-//        mFooterProgress.setVisibility(View.VISIBLE);
-//        ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-//        animation.setFillAfter(true);
-//        animation.setDuration(250);
-//        mFooterProgress.startAnimation(animation);
         mRefreshLayout.autoLoadMore();
     }
 
     @Override
     public void onHideLoading() {
-//        mFooterProgress.postDelayed(() -> {
-//            ScaleAnimation animation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-//            animation.setFillAfter(true);
-//            animation.setDuration(250);
-//            animation.setAnimationListener(new Animation.AnimationListener() {
-//                @Override
-//                public void onAnimationStart(Animation animation) {
-//
-//                }
-//
-//                @Override
-//                public void onAnimationEnd(Animation animation) {
-//                    mFooterProgress.setVisibility(View.GONE);
-//                }
-//
-//                @Override
-//                public void onAnimationRepeat(Animation animation) {
-//
-//                }
-//            });
-//            mFooterProgress.startAnimation(animation);
-//        }, 500);
         mRefreshLayout.finishLoadMore();
     }
 
     /**
      * Called by activity or self.
      */
-    public void backToTop() {
+    void backToTop() {
         int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
         if (firstItem >= 24) {
             mRecyclerView.scrollToPosition(16);
@@ -293,12 +243,10 @@ public abstract class OnlineFragment extends Fragment implements IOnlineContract
         mRefreshLayout = mParentLayout.findViewById(R.id.swipe_refresh_home_activity_main);
         mRefreshHeader = mParentLayout.findViewById(R.id.app_refresh_header);
         mLoadMoreFooter = mParentLayout.findViewById(R.id.app_refresh_footer);
-//        mSwipeRefresh = mParentLayout.findViewById(R.id.swipe_refresh_home_activity_main);
         mRecyclerView = mParentLayout.findViewById(R.id.recycler_view);
         mErrorView = mParentLayout.findViewById(R.id.search_logo);
         mClickRefresh = mParentLayout.findViewById(R.id.btn_click_refresh);
         mProgressBar = mParentLayout.findViewById(R.id.progress_bar);
-//        mFooterProgress = mParentLayout.findViewById(R.id.footer_progress);
 
         mClickRefresh.setOnClickListener(new OnClickListenerImpl() {
             @Override
@@ -325,8 +273,47 @@ public abstract class OnlineFragment extends Fragment implements IOnlineContract
             }
         });
 
+        initPwMenu();
         initRecyclerView();
         initSwipeRefresh();
+    }
+
+    private void initPwMenu() {
+        View content = LayoutInflater.from(mContext).inflate(R.layout.app_pw_online_menu, null);
+        mTvLatest = content.findViewById(R.id.app_tv_latest);
+        mTvLatest.setSelected(true);
+        mTvOldest = content.findViewById(R.id.app_tv_oldest);
+        mTvPopular = content.findViewById(R.id.app_tv_popular);
+        mPwMenu = PopupWindowUtils.create(mContext, content);
+        mTvLatest.setOnClickListener(v -> {
+            mTvOldest.setSelected(false);
+            mTvPopular.setSelected(false);
+            mTvLatest.setSelected(true);
+            mOrder = Order.LATEST;
+            requestPhotos(mOrder, false, true);
+            mPwMenu.dismiss();
+        });
+        mTvOldest.setOnClickListener(v -> {
+            mTvLatest.setSelected(false);
+            mTvPopular.setSelected(false);
+            mTvOldest.setSelected(true);
+            mOrder = Order.OLDEST;
+            requestPhotos(mOrder, false, true);
+            mPwMenu.dismiss();
+        });
+        mTvPopular.setOnClickListener(v -> {
+            mTvLatest.setSelected(false);
+            mTvOldest.setSelected(false);
+            mTvPopular.setSelected(true);
+            mOrder = Order.POPULAR;
+            requestPhotos(mOrder, false, true);
+            mPwMenu.dismiss();
+        });
+        mPwMenu.setAnimationStyle(R.style.AppPopupWindow);
+        mPwMenu.setFocusable(true);
+        mPwMenu.setOutsideTouchable(true);
+        mPwMenu.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPwMenu.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
     private void initRecyclerView() {
@@ -342,26 +329,9 @@ public abstract class OnlineFragment extends Fragment implements IOnlineContract
         mRecyclerView.addItemDecoration(new XItemDecoration());
         mAdapter = new OnlineAdapter(mPhotoList);
         mRecyclerView.setAdapter(mAdapter);
-        // 监听是否滑到底部
-//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                if (newState == RecyclerView.SCROLL_STATE_IDLE && mPhotoList.size() != 0) {
-//                    boolean canScrollVertical = mRecyclerView.canScrollVertically(1);
-//                    if (!canScrollVertical && mFooterProgress.getVisibility() == View.GONE) {
-//                        if (!mSwipeRefresh.isRefreshing()) requestLoadMore(mOrder);
-//                    }
-//                }
-//            }
-//        });
     }
 
     private void initSwipeRefresh() {
-//        mSwipeRefresh.setOnRefreshListener(this);
-//        mSwipeRefresh.setColorSchemeColors(mColorAccent);
-//        mSwipeRefresh.setEnabled(false);
-//        mRefreshHeader.setAccentColor(mColorAccent);
         mRefreshHeader.setPrimaryColor(Color.WHITE);
         mRefreshHeader.setAccentColor(mColorAccent);
         mLoadMoreFooter.setAnimatingColor(mColorAccent);

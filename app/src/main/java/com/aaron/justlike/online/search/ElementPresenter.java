@@ -1,5 +1,7 @@
 package com.aaron.justlike.online.search;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
 
 import java.util.List;
@@ -30,7 +32,7 @@ class ElementPresenter implements IElementContract.P {
             mView.onShowLoading();
         }
         mView.onHideErrorView();
-        mModel.findPhotosFromCollection(id, currentPage, 30, new ISerachContract.M.Callback<List<Photo>>() {
+        mModel.findPhotosFromCollection((LifecycleOwner) mView, id, currentPage, 30, new ISerachContract.M.Callback<List<Photo>>() {
             @Override
             public void onSuccess(List<Photo> list) {
                 mView.onHideProgress();

@@ -4,7 +4,8 @@
     android:id="@+id/item"
     android:layout_width="match_parent"
     android:layout_height="180dp"
-    app:cardCornerRadius="10dp">
+    app:cardCornerRadius="10dp"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -41,14 +41,14 @@ class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         mCollectionList = collectionList;
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if (position == getItemCount() - 1) {
-            return TYPE_FOOTER;
-        } else {
-            return TYPE_NORMAL;
-        }
-    }
+//    @Override
+//    public int getItemViewType(int position) {
+//        if (position == getItemCount() - 1) {
+//            return TYPE_FOOTER;
+//        } else {
+//            return TYPE_NORMAL;
+//        }
+//    }
 
     void clearAnimatedFlag() {
         mAnimatedFlag.clear();
@@ -59,9 +59,9 @@ class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         mContext = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        if (viewType == TYPE_FOOTER) {
+        /*if (viewType == TYPE_FOOTER) {
             return new FooterViewHolder(inflater.inflate(R.layout.activity_online_footer, parent, false));
-        } else if (viewType == TYPE_NORMAL) {
+        } else */if (viewType == TYPE_NORMAL) {
             View view = inflater.inflate(R.layout.fragment_collection_recycler_item, parent, false);
             // 为子项设置点击监听
             ViewHolder holder = new ViewHolder(view);
@@ -128,18 +128,16 @@ class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mCollectionList.size() + 1;
+        return mCollectionList.size();
     }
 
     protected static class FooterViewHolder extends RecyclerView.ViewHolder {
-
         FooterViewHolder(View itemView) {
             super(itemView);
         }
     }
 
     private static class ViewHolder extends RecyclerView.ViewHolder {
-
         View itemView;
         ImageView itemImage;
         TextView imageTitle;

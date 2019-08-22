@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="30dp">
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:background="?android:attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/activity_about_recycler_item_image"
@@ -15,9 +18,9 @@
         android:id="@+id/activity_about_recycler_item_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="27dp"
-        android:textSize="15sp"
-        android:textColor="#737373"
+        android:layout_marginStart="20dp"
+        android:textSize="@dimen/base_text_large"
+        android:textColor="@color/base_black_shallow"
         android:layout_gravity="center_vertical"/>
 
 </LinearLayout>

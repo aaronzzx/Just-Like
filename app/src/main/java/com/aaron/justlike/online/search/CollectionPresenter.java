@@ -1,5 +1,7 @@
 package com.aaron.justlike.online.search;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.aaron.justlike.common.http.unsplash.entity.collection.Collection;
 import com.aaron.justlike.common.http.unsplash.entity.collection.SearchCollectionResult;
 import com.aaron.justlike.common.impl.ObserverImpl;
@@ -59,7 +61,7 @@ class CollectionPresenter implements ISerachContract.P<Collection> {
                 mView.onShowLoading();
                 break;
         }
-        mModel.findCollections(keyWord, mRequestCount, new ISerachContract.M.Callback<SearchCollectionResult>() {
+        mModel.findCollections((LifecycleOwner) mView, keyWord, mRequestCount, new ISerachContract.M.Callback<SearchCollectionResult>() {
             @Override
             public void onSuccess(SearchCollectionResult result) {
                 Observable.create((ObservableOnSubscribe<List<Collection>>) emitter -> {

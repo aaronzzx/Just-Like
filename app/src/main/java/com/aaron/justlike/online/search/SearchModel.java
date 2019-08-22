@@ -1,5 +1,7 @@
 package com.aaron.justlike.online.search;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.aaron.justlike.common.http.unsplash.Unsplash;
 import com.aaron.justlike.common.http.unsplash.entity.collection.SearchCollectionResult;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
@@ -20,8 +22,8 @@ class SearchModel implements ISerachContract.M {
     }
 
     @Override
-    public void findPhotos(String keyWord, int page, Callback<SearchPhotoResult> callback) {
-        mUnsplash.searchPhotos(keyWord, page, 30, new UnsplashCallback<SearchPhotoResult>() {
+    public void findPhotos(LifecycleOwner lifecycle, String keyWord, int page, Callback<SearchPhotoResult> callback) {
+        mUnsplash.searchPhotos(lifecycle, keyWord, page, 30, new UnsplashCallback<SearchPhotoResult>() {
             @Override
             public void onSuccess(SearchPhotoResult result) {
                 callback.onSuccess(result);
@@ -36,8 +38,8 @@ class SearchModel implements ISerachContract.M {
     }
 
     @Override
-    public void findCollections(String keyWord, int page, Callback<SearchCollectionResult> callback) {
-        mUnsplash.searchCollections(keyWord, page, 15, new UnsplashCallback<SearchCollectionResult>() {
+    public void findCollections(LifecycleOwner lifecycle, String keyWord, int page, Callback<SearchCollectionResult> callback) {
+        mUnsplash.searchCollections(lifecycle, keyWord, page, 15, new UnsplashCallback<SearchCollectionResult>() {
             @Override
             public void onSuccess(SearchCollectionResult result) {
                 callback.onSuccess(result);
@@ -51,8 +53,8 @@ class SearchModel implements ISerachContract.M {
     }
 
     @Override
-    public void findPhotosFromCollection(int id, int page, int perPage, Callback<List<Photo>> callback) {
-        mUnsplash.searchPhotosFromCollection(id, page, perPage, new UnsplashCallback<List<Photo>>() {
+    public void findPhotosFromCollection(LifecycleOwner lifecycle, int id, int page, int perPage, Callback<List<Photo>> callback) {
+        mUnsplash.searchPhotosFromCollection(lifecycle, id, page, perPage, new UnsplashCallback<List<Photo>>() {
             @Override
             public void onSuccess(List<Photo> list) {
                 callback.onSuccess(list);

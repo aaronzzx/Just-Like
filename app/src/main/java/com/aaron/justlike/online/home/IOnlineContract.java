@@ -1,5 +1,7 @@
 package com.aaron.justlike.online.home;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.aaron.justlike.common.http.unsplash.Order;
 
 import java.util.List;
@@ -10,11 +12,11 @@ import java.util.List;
 interface IOnlineContract {
 
     interface M<T> {
-        void findPhotos(Order order, boolean refreshMode, Callback<T> callback);
+        void findPhotos(LifecycleOwner lifecycle, Order order, boolean refreshMode, Callback<T> callback);
 
-        void findCuratedPhotos(Order order, boolean refreshMode, Callback<T> callback);
+        void findCuratedPhotos(LifecycleOwner lifecycle, Order order, boolean refreshMode, Callback<T> callback);
 
-        void findRandomPhotos(int count, Callback<T> callback);
+        void findRandomPhotos(LifecycleOwner lifecycle, int count, Callback<T> callback);
 
         interface Callback<T> {
             void onSuccess(List<T> list);

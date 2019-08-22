@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.viewpager.widget.PagerAdapter;
@@ -224,18 +223,34 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
         setWallpaperBtn.setOnClickListener(new OnClickListenerImpl() {
             @Override
             public void onViewClick(View v, long interval) {
-                new AlertDialog.Builder(PreviewActivity.this)
-                        .setTitle("设置壁纸")
-                        .setItems(CROP_TYPE, (dialog, which) -> {
-                            switch (CROP_TYPE[which]) {
-                                case FIT_SCREEN:
-                                    openImageCrop(FIT_SCREEN);
-                                    break;
-                                case FREE_CROP:
-                                    openImageCrop(FREE_CROP);
-                                    break;
-                            }
-                        }).show();
+                View dialogView = LayoutInflater.from(PreviewActivity.this)
+                        .inflate(R.layout.app_dialog_normal_alert, null);
+                TextView tvTitle = dialogView.findViewById(R.id.app_tv_title);
+                TextView tvContent = dialogView.findViewById(R.id.app_tv_content);
+                Button btnLeft = dialogView.findViewById(R.id.app_btn_left);
+                Button btnRight = dialogView.findViewById(R.id.app_btn_right);
+                tvTitle.setText(R.string.app_set_wallpaper);
+                tvContent.setVisibility(View.GONE);
+                btnLeft.setText(R.string.app_fit_screen);
+                btnRight.setText(R.string.app_free_crop);
+                btnLeft.setTextColor(mColorAccent);
+                btnRight.setTextColor(mColorAccent);
+                Dialog dialog = DialogUtil.createDialog(PreviewActivity.this, dialogView);
+                btnLeft.setOnClickListener(new OnClickListenerImpl() {
+                    @Override
+                    public void onViewClick(View v, long interval) {
+                        dialog.dismiss();
+                        openImageCrop(FIT_SCREEN);
+                    }
+                });
+                btnRight.setOnClickListener(new OnClickListenerImpl() {
+                    @Override
+                    public void onViewClick(View v, long interval) {
+                        dialog.dismiss();
+                        openImageCrop(FREE_CROP);
+                    }
+                });
+                dialog.show();
             }
         });
         imageInfoBtn.setOnClickListener(new OnClickListenerImpl() {
@@ -244,10 +259,11 @@ public class PreviewActivity extends CommonActivity implements IPreviewContract.
                 View dialogView = LayoutInflater.from(PreviewActivity.this).inflate(R.layout.dialog_image_info, null);
                 initImageInfo(dialogView);
                 // 显示对话框
-                new AlertDialog.Builder(PreviewActivity.this)
-                        .setTitle("详情")
-                        .setView(dialogView)
-                        .show();
+                DialogUtil.createDialog(PreviewActivity.this, dialogView).show();
+//                new AlertDialog.Builder(PreviewActivity.this)
+//                        .setTitle("详情")
+//                        .setView(dialogView)
+//                        .show();
             }
         });
         deleteBtn.setOnClickListener(new OnClickListenerImpl() {

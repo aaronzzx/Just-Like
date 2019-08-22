@@ -12,40 +12,40 @@
         android:id="@+id/action_filter"
         android:title="筛选"
         android:icon="@drawable/ic_filter"
-        app:showAsAction="always">
+        app:showAsAction="always"/>
 
-        <menu>
+        <!--<menu>-->
 
-            <group android:checkableBehavior="single">
-
-                <item
-                    android:id="@+id/filter_latest"
-                    android:title="最近"
-                    android:icon="@drawable/ic_latest"
-                    app:showAsAction="ifRoom" />
-
-                <item
-                    android:id="@+id/filter_oldest"
-                    android:title="最久远"
-                    android:icon="@drawable/ic_oldest"
-                    app:showAsAction="ifRoom" />
-
-                <item
-                    android:id="@+id/filter_popular"
-                    android:title="最流行"
-                    android:icon="@drawable/ic_popular"
-                    app:showAsAction="ifRoom" />
+            <!--<group android:checkableBehavior="single">-->
 
                 <!--<item-->
-                <!--android:id="@+id/filter_random"-->
-                <!--android:title="随机"-->
-                <!--android:icon="@drawable/ic_random"-->
-                <!--app:showAsAction="ifRoom" />-->
+                    <!--android:id="@+id/filter_latest"-->
+                    <!--android:title="最近"-->
+                    <!--android:icon="@drawable/ic_latest"-->
+                    <!--app:showAsAction="ifRoom" />-->
 
-            </group>
+                <!--<item-->
+                    <!--android:id="@+id/filter_oldest"-->
+                    <!--android:title="最久远"-->
+                    <!--android:icon="@drawable/ic_oldest"-->
+                    <!--app:showAsAction="ifRoom" />-->
 
-        </menu>
+                <!--<item-->
+                    <!--android:id="@+id/filter_popular"-->
+                    <!--android:title="最流行"-->
+                    <!--android:icon="@drawable/ic_popular"-->
+                    <!--app:showAsAction="ifRoom" />-->
 
-    </item>
+                <!--&lt;!&ndash;<item&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/filter_random"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:title="随机"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:icon="@drawable/ic_random"&ndash;&gt;-->
+                <!--&lt;!&ndash;app:showAsAction="ifRoom" />&ndash;&gt;-->
+
+            <!--</group>-->
+
+        <!--</menu>-->
+
+    <!--</item>-->
 
 </menu>

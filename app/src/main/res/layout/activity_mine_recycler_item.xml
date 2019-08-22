@@ -3,7 +3,8 @@
     android:id="@+id/item_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <com.aaron.justlike.common.widget.SquareView
         android:id="@+id/place_holder"

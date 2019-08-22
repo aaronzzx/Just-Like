@@ -21,10 +21,10 @@ android {
         InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream()
         properties.load(inputStream)
         release {
-            storeFile     file(properties.getProperty("STORE_FILE_NAME"))
+            storeFile file(properties.getProperty("STORE_FILE_NAME"))
             storePassword properties.getProperty("KEYSTORE_PASSWORD")
-            keyAlias      properties.getProperty("STORE_ALIAS")
-            keyPassword   properties.getProperty("KEY_PASSWORD")
+            keyAlias properties.getProperty("STORE_ALIAS")
+            keyPassword properties.getProperty("KEY_PASSWORD")
         }
     }
 
@@ -53,6 +53,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

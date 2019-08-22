@@ -1,5 +1,7 @@
 package com.aaron.justlike.online.search;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.common.http.unsplash.entity.photo.SearchPhotoResult;
 import com.aaron.justlike.common.impl.ObserverImpl;
@@ -59,7 +61,7 @@ class PhotoPresenter implements ISerachContract.P<Photo> {
                 mView.onShowLoading();
                 break;
         }
-        mModel.findPhotos(keyWord, mRequestCount, new ISerachContract.M.Callback<SearchPhotoResult>() {
+        mModel.findPhotos((LifecycleOwner) mView, keyWord, mRequestCount, new ISerachContract.M.Callback<SearchPhotoResult>() {
             @Override
             public void onSuccess(SearchPhotoResult result) {
                 Observable.create((ObservableOnSubscribe<List<Photo>>) emitter -> {

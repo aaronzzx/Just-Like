@@ -10,15 +10,21 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:layout_width="130dp"
+        android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/app_tv_latest"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
             android:textSize="@dimen/base_text_large"
-            android:textColor="@color/base_black"
+            android:textColor="@drawable/app_sel_tv_menu"
+            android:background="?android:attr/selectableItemBackground"
             android:textStyle="bold"
             android:text="最新"
             android:drawablePadding="16dp"
@@ -26,11 +32,17 @@
             tools:text="最新"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/app_tv_oldest"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
             android:textSize="@dimen/base_text_large"
-            android:textColor="@color/base_black"
+            android:textColor="@drawable/app_sel_tv_menu"
+            android:background="?android:attr/selectableItemBackground"
             android:textStyle="bold"
             android:text="最久远"
             android:drawablePadding="16dp"
@@ -38,11 +50,17 @@
             tools:text="最久远"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/app_tv_popular"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
             android:textSize="@dimen/base_text_large"
-            android:textColor="@color/base_black"
+            android:textColor="@drawable/app_sel_tv_menu"
+            android:background="?android:attr/selectableItemBackground"
             android:textStyle="bold"
             android:text="最流行"
             android:drawablePadding="16dp"

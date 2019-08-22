@@ -1,5 +1,7 @@
 package com.aaron.justlike.online.search;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.aaron.justlike.common.http.unsplash.entity.collection.SearchCollectionResult;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.common.http.unsplash.entity.photo.SearchPhotoResult;
@@ -12,11 +14,11 @@ import java.util.List;
 interface ISerachContract {
 
     interface M {
-        void findPhotos(String keyWord, int page, Callback<SearchPhotoResult> callback);
+        void findPhotos(LifecycleOwner lifecycle, String keyWord, int page, Callback<SearchPhotoResult> callback);
 
-        void findCollections(String keyWord, int page, Callback<SearchCollectionResult> callback);
+        void findCollections(LifecycleOwner lifecycle, String keyWord, int page, Callback<SearchCollectionResult> callback);
 
-        void findPhotosFromCollection(int id, int page, int perPage, Callback<List<Photo>> callback);
+        void findPhotosFromCollection(LifecycleOwner lifecycle, int id, int page, int perPage, Callback<List<Photo>> callback);
 
         interface Callback<T> {
             void onSuccess(T list);

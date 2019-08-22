@@ -1,5 +1,7 @@
 package com.aaron.justlike.others.download;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
 
 import java.util.List;
@@ -12,7 +14,7 @@ interface IDownloadContract {
     interface M<T> {
         void queryImage(QueryCallback<T> callback);
 
-        void searchImage(String imageId, SearchCallback callback);
+        void searchImage(LifecycleOwner lifecycle, String imageId, SearchCallback callback);
 
         interface QueryCallback<T> {
             void onResponse(List<T> list);

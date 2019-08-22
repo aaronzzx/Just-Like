@@ -55,7 +55,7 @@ class MainPresenter implements IMainContract.P<Image> {
                 mView.onHideRefresh();
                 if (refreshMode) {
                     if (imageList.containsAll(list) && imageList.size() == list.size()) {
-                        mView.onHideRefresh();
+//                        mView.onHideRefresh();
 //                        mView.onShowMessage("暂时没有新增的图片");
                         return;
                     }

@@ -33,7 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SplashActivity extends CommonActivity {
 
     private static final int PROGRESS_COUNT_DOWN = 4000;
-    private static final int DEFAULT_COUNT_DOWN  = 3000;
+    private static final int DEFAULT_COUNT_DOWN  = 2000;
 
     private ImageView mIvRandom;
     private CircleImageView mCircleIvAvatar;
@@ -71,44 +71,46 @@ public class SplashActivity extends CommonActivity {
     }
 
     private void requestRandomImage() {
-        Unsplash.getInstance().getRandomPhotos(1, new UnsplashCallback<List<Photo>>() {
+        Unsplash.getInstance().getRandomPhotos(this, 1, new UnsplashCallback<List<Photo>>() {
             @Override
             public void onSuccess(List<Photo> photos) {
                 Photo photo = photos.get(0);
                 String url = photo.getUrls().getRegular();
                 String name = photo.getUser().getName();
                 String avatar = photo.getUser().getProfileImage().getLarge();
-                ImageLoader.load(SplashActivity.this, new DefaultOption.Builder(url)
-                        .crossFade(300)
-                        .addListener(new LoadListener() {
-                            @Override
-                            public boolean onSuccess(Object resource) {
-                                mHandler.removeCallbacksAndMessages(null);
-                                mIvRandom.setOnClickListener(new OnClickListenerImpl() {
-                                    @Override
-                                    public void onViewClick(View v, long interval) {
-                                        EventBus.getDefault().postSticky(new PhotoEvent(photo));
-                                        Intent intent = new Intent(SplashActivity.this, PreviewActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                });
-                                mTvName.setText(name);
-                                ImageLoader.load(SplashActivity.this, new DefaultOption.Builder(avatar).into(mCircleIvAvatar));
-                                mRoundProgressBar.setVisibility(View.VISIBLE);
-                                mRoundProgressBar.startSlide(PROGRESS_COUNT_DOWN, (curProgress, maxProgress) -> {
-                                    if (curProgress == maxProgress) openActivity();
-                                });
-                                return false;
-                            }
+                if (!SplashActivity.this.isFinishing()) {
+                    ImageLoader.load(SplashActivity.this, new DefaultOption.Builder(url)
+                            .crossFade(300)
+                            .addListener(new LoadListener() {
+                                @Override
+                                public boolean onSuccess(Object resource) {
+                                    mHandler.removeCallbacksAndMessages(null);
+                                    mIvRandom.setOnClickListener(new OnClickListenerImpl() {
+                                        @Override
+                                        public void onViewClick(View v, long interval) {
+                                            EventBus.getDefault().postSticky(new PhotoEvent(photo));
+                                            Intent intent = new Intent(SplashActivity.this, PreviewActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    });
+                                    mTvName.setText(name);
+                                    ImageLoader.load(SplashActivity.this, new DefaultOption.Builder(avatar).into(mCircleIvAvatar));
+                                    mRoundProgressBar.setVisibility(View.VISIBLE);
+                                    mRoundProgressBar.startSlide(PROGRESS_COUNT_DOWN, (curProgress, maxProgress) -> {
+                                        if (curProgress == maxProgress) openActivity();
+                                    });
+                                    return false;
+                                }
 
-                            @Override
-                            public boolean onFailure(Throwable e) {
-                                LogUtils.d(e.getMessage());
-                                return false;
-                            }
-                        })
-                        .into(mIvRandom));
+                                @Override
+                                public boolean onFailure(Throwable e) {
+                                    LogUtils.d(e.getMessage());
+                                    return false;
+                                }
+                            })
+                            .into(mIvRandom));
+                }
             }
 
             @Override

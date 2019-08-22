@@ -1,5 +1,7 @@
 package com.aaron.justlike.common.http.unsplash;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.aaron.base.http.HttpUtil;
 import com.aaron.justlike.common.http.unsplash.entity.collection.SearchCollectionResult;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
@@ -7,6 +9,8 @@ import com.aaron.justlike.common.http.unsplash.entity.photo.SearchPhotoResult;
 import com.aaron.justlike.common.http.unsplash.interfaces.UnsplashCallback;
 import com.aaron.justlike.common.http.unsplash.interfaces.UnsplashService;
 import com.aaron.justlike.common.impl.ObserverImpl;
+import com.uber.autodispose.AutoDispose;
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 
 import java.util.List;
 
@@ -32,10 +36,11 @@ public class Unsplash {
         mUnsplashService = HttpUtil.createService(BASE_URL, client, UnsplashService.class);
     }
 
-    public void getPhotos(int page, int perPage, Order order, UnsplashCallback<List<Photo>> callback) {
+    public void getPhotos(LifecycleOwner lifecycle, int page, int perPage, Order order, UnsplashCallback<List<Photo>> callback) {
         mUnsplashService.getPhotos(page, perPage, order.getOrder())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(lifecycle)))
                 .subscribe(new ObserverImpl<List<Photo>>() {
                     @Override
                     public void onNext(List<Photo> photos) {
@@ -49,10 +54,11 @@ public class Unsplash {
                 });
     }
 
-    public void getCuratedPhotos(int page, int perPage, Order order, UnsplashCallback<List<Photo>> callback) {
+    public void getCuratedPhotos(LifecycleOwner lifecycle, int page, int perPage, Order order, UnsplashCallback<List<Photo>> callback) {
         mUnsplashService.getCuratedPhotos(page, perPage, order.getOrder())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(lifecycle)))
                 .subscribe(new ObserverImpl<List<Photo>>() {
                     @Override
                     public void onNext(List<Photo> photos) {
@@ -66,10 +72,11 @@ public class Unsplash {
                 });
     }
 
-    public void getRandomPhotos(int count, UnsplashCallback<List<Photo>> callback) {
+    public void getRandomPhotos(LifecycleOwner lifecycle, int count, UnsplashCallback<List<Photo>> callback) {
         mUnsplashService.getRandomPhotos(count)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(lifecycle)))
                 .subscribe(new ObserverImpl<List<Photo>>() {
                     @Override
                     public void onNext(List<Photo> photos) {
@@ -83,10 +90,11 @@ public class Unsplash {
                 });
     }
 
-    public void getPhoto(String id, UnsplashCallback<Photo> callback) {
+    public void getPhoto(LifecycleOwner lifecycle, String id, UnsplashCallback<Photo> callback) {
         mUnsplashService.getPhoto(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(lifecycle)))
                 .subscribe(new ObserverImpl<Photo>() {
                     @Override
                     public void onNext(Photo photo) {
@@ -100,11 +108,12 @@ public class Unsplash {
                 });
     }
 
-    public void searchPhotos(String keyWord, int page, int perPage, UnsplashCallback<SearchPhotoResult> callback) {
+    public void searchPhotos(LifecycleOwner lifecycle, String keyWord, int page, int perPage, UnsplashCallback<SearchPhotoResult> callback) {
         mUnsplashService.searchPhotos(keyWord, page, perPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 //                .map(searchPhotoResult -> searchPhotoResult.getResults())
+                .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(lifecycle)))
                 .subscribe(new ObserverImpl<SearchPhotoResult>() {
                     @Override
                     public void onNext(SearchPhotoResult result) {
@@ -118,11 +127,12 @@ public class Unsplash {
                 });
     }
 
-    public void searchCollections(String keyWord, int page, int perPage, UnsplashCallback<SearchCollectionResult> callback) {
+    public void searchCollections(LifecycleOwner lifecycle, String keyWord, int page, int perPage, UnsplashCallback<SearchCollectionResult> callback) {
         mUnsplashService.searchCollections(keyWord, page, perPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 //                .map(searchCollectionResult -> searchCollectionResult.getResults())
+                .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(lifecycle)))
                 .subscribe(new ObserverImpl<SearchCollectionResult>() {
                     @Override
                     public void onNext(SearchCollectionResult result) {
@@ -136,10 +146,11 @@ public class Unsplash {
                 });
     }
 
-    public void searchPhotosFromCollection(int id, int page, int perPage, UnsplashCallback<List<Photo>> callback) {
+    public void searchPhotosFromCollection(LifecycleOwner lifecycle, int id, int page, int perPage, UnsplashCallback<List<Photo>> callback) {
         mUnsplashService.searchPhotosFromCollection(id, page, perPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(lifecycle)))
                 .subscribe(new ObserverImpl<List<Photo>>() {
                     @Override
                     public void onNext(List<Photo> list) {

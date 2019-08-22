@@ -48,28 +48,29 @@
                 android:background="#FFFFFF">
 
                 <ImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:layout_marginBottom="10dp"
-                    android:src="@drawable/ic_for_splash" />
+                    android:src="@drawable/app_ic_launcher"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:gravity="center"
-                    android:text="为壁纸而生"
-                    android:textColor="#737373"
-                    android:textSize="16sp" />
+                    android:text="JUST LIKE"
+                    android:textStyle="bold|italic"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/base_text_xxxxhlarge" />
 
                 <TextView
                     android:id="@+id/activity_about_version"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="#737373"
-                    android:textSize="12sp" />
+                    android:textColor="@color/base_black_hint"
+                    android:textSize="@dimen/base_text_small" />
 
             </LinearLayout>
 
@@ -77,17 +78,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:padding="20dp"
-                android:clipToPadding="true"
+                android:clipToPadding="false"
                 android:orientation="vertical"
                 android:background="#FFFFFF">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
                     android:text="概览"
-                    android:textColor="#737373"
-                    android:textSize="16sp" />
+                    android:textColor="@color/base_black_shallow"
+                    android:textSize="@dimen/base_text_large" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/activity_about_message_recycler"
@@ -101,17 +105,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp"
-                android:padding="20dp"
-                android:clipToPadding="true"
                 android:orientation="vertical"
                 android:background="#FFFFFF">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
                     android:text="开源库"
-                    android:textColor="#737373"
-                    android:textSize="16sp" />
+                    android:textColor="@color/base_black_shallow"
+                    android:textSize="@dimen/base_text_large" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/activity_about_library_recycler"

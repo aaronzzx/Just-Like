@@ -18,7 +18,6 @@
         android:theme="@style/WhiteTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="name, icon, label, roundIcon, theme, android:allowBackup">
-
         <activity
             android:name=".common.SplashActivity"
             android:screenOrientation="portrait"

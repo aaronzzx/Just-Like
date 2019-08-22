@@ -1,5 +1,7 @@
 package com.aaron.justlike.online.home;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.aaron.justlike.common.http.unsplash.Order;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
 
@@ -32,7 +34,8 @@ class OnlinePresenter implements IOnlineContract.P<Photo> {
             mView.onHideErrorView();
             mView.onShowProgress();
         }
-        mModel.findPhotos(order, isRefresh, new IOnlineContract.M.Callback<Photo>() {
+        boolean flag = isRefresh || isFilter;
+        mModel.findPhotos((LifecycleOwner) mView, order, flag, new IOnlineContract.M.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
                 if (mView == null) return;
@@ -64,7 +67,8 @@ class OnlinePresenter implements IOnlineContract.P<Photo> {
             mView.onHideErrorView();
             mView.onShowProgress();
         }
-        mModel.findCuratedPhotos(order, isRefresh, new IOnlineContract.M.Callback<Photo>() {
+        boolean flag = isRefresh || isFilter;
+        mModel.findCuratedPhotos((LifecycleOwner) mView, order, flag, new IOnlineContract.M.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
                 if (mView == null) return;
@@ -94,7 +98,7 @@ class OnlinePresenter implements IOnlineContract.P<Photo> {
             mView.onHideErrorView();
             mView.onShowProgress();
         }
-        mModel.findRandomPhotos(count, new IOnlineContract.M.Callback<Photo>() {
+        mModel.findRandomPhotos((LifecycleOwner) mView, count, new IOnlineContract.M.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
                 if (mView == null) return;
@@ -121,7 +125,7 @@ class OnlinePresenter implements IOnlineContract.P<Photo> {
     @Override
     public void requestLoadMore(Order order) {
         mView.onShowLoading();
-        mModel.findPhotos(order, false, new IOnlineContract.M.Callback<Photo>() {
+        mModel.findPhotos((LifecycleOwner) mView, order, false, new IOnlineContract.M.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
                 if (mView == null) {
@@ -145,7 +149,7 @@ class OnlinePresenter implements IOnlineContract.P<Photo> {
     @Override
     public void requestLoadMoreCurated(Order order) {
         mView.onShowLoading();
-        mModel.findCuratedPhotos(order, false, new IOnlineContract.M.Callback<Photo>() {
+        mModel.findCuratedPhotos((LifecycleOwner) mView, order, false, new IOnlineContract.M.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
                 if (mView == null) {
@@ -169,7 +173,7 @@ class OnlinePresenter implements IOnlineContract.P<Photo> {
     @Override
     public void requestLoadMoreRandom(int count) {
         mView.onShowLoading();
-        mModel.findRandomPhotos(count, new IOnlineContract.M.Callback<Photo>() {
+        mModel.findRandomPhotos((LifecycleOwner) mView, count, new IOnlineContract.M.Callback<Photo>() {
             @Override
             public void onSuccess(List<Photo> list) {
                 if (mView == null) {

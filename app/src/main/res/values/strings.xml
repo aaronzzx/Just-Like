@@ -10,4 +10,7 @@
     <string name="app_collection_need_name">集合需要一个名字</string>
     <string name="app_collection_exists">集合已存在，换个名字吧</string>
     <string name="app_type_collection_name_first">请先输入集合名字</string>
+    <string name="app_set_wallpaper">设置壁纸</string>
+    <string name="app_fit_screen">适应屏幕</string>
+    <string name="app_free_crop">自由裁剪</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.aaron.justlike.online.home;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.aaron.justlike.common.http.unsplash.Order;
 import com.aaron.justlike.common.http.unsplash.Unsplash;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
@@ -19,11 +21,11 @@ class OnlineModel implements IOnlineContract.M<Photo> {
     }
 
     @Override
-    public void findPhotos(Order order, boolean refreshMode, Callback<Photo> callback) {
+    public void findPhotos(LifecycleOwner lifecycle, Order order, boolean refreshMode, Callback<Photo> callback) {
         if (refreshMode) {
             mRecommend = 1;
         }
-        mUnsplash.getPhotos(mRecommend, 30, order, new UnsplashCallback<List<Photo>>() {
+        mUnsplash.getPhotos(lifecycle, mRecommend, 30, order, new UnsplashCallback<List<Photo>>() {
             @Override
             public void onSuccess(List<Photo> photos) {
                 callback.onSuccess(photos);
@@ -38,11 +40,11 @@ class OnlineModel implements IOnlineContract.M<Photo> {
     }
 
     @Override
-    public void findCuratedPhotos(Order order, boolean refreshMode, Callback<Photo> callback) {
+    public void findCuratedPhotos(LifecycleOwner lifecycle, Order order, boolean refreshMode, Callback<Photo> callback) {
         if (refreshMode) {
             mCurated = 1;
         }
-        mUnsplash.getCuratedPhotos(mCurated, 30, order, new UnsplashCallback<List<Photo>>() {
+        mUnsplash.getCuratedPhotos(lifecycle, mCurated, 30, order, new UnsplashCallback<List<Photo>>() {
             @Override
             public void onSuccess(List<Photo> photos) {
                 callback.onSuccess(photos);
@@ -57,8 +59,8 @@ class OnlineModel implements IOnlineContract.M<Photo> {
     }
 
     @Override
-    public void findRandomPhotos(int count, Callback<Photo> callback) {
-        mUnsplash.getRandomPhotos(count, new UnsplashCallback<List<Photo>>() {
+    public void findRandomPhotos(LifecycleOwner lifecycle, int count, Callback<Photo> callback) {
+        mUnsplash.getRandomPhotos(lifecycle, count, new UnsplashCallback<List<Photo>>() {
             @Override
             public void onSuccess(List<Photo> photos) {
                 callback.onSuccess(photos);

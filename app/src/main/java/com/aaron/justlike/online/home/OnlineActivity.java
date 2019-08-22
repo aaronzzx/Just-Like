@@ -66,6 +66,10 @@ public class OnlineActivity extends CommonActivity implements View.OnClickListen
 
     private int mColorAccent;
 
+    public TopBar getTopBar() {
+        return mTopBar;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ThemeManager.getInstance().setTheme(this);

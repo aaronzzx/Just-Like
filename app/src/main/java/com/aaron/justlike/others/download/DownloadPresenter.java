@@ -1,5 +1,7 @@
 package com.aaron.justlike.others.download;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.aaron.justlike.common.bean.Image;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.common.util.FileUtil;
@@ -39,7 +41,7 @@ class DownloadPresenter implements IDownloadContract.P {
         String imageId = fileName.substring(0, fileName.indexOf("."));
         // 显示加载框
         mView.onShowProgress();
-        mModel.searchImage(imageId, new IDownloadContract.M.SearchCallback() {
+        mModel.searchImage((LifecycleOwner) mView, imageId, new IDownloadContract.M.SearchCallback() {
 
             @Override
             public void onSuccess(Photo photo) {

@@ -29,7 +29,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aaron.base.image.DefaultOption;
@@ -55,6 +54,7 @@ import com.aaron.justlike.others.download.DownloadManagerActivity;
 import com.aaron.justlike.others.theme.ThemeActivity;
 import com.aaron.ui.widget.TopBar;
 import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -96,10 +96,6 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
     private View mEmptyView;
 
     private ActionBar mActionBar;
-//    private MenuItem mSortByDate;
-//    private MenuItem mSortByName;
-//    private MenuItem mSortBySize;
-//    private MenuItem mSortByAscending;
 
     private Drawable mIconDrawer;
     private Drawable mIconSort;
@@ -183,41 +179,13 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
-//        SystemUtil.setIconEnable(menu, true);
-//        ThemeManager.Theme theme = ThemeManager.getInstance().getCurrentTheme();
-//        if (theme == null || theme == ThemeManager.Theme.WHITE) {
-//            menu.findItem(R.id.sort).setIcon(mIconSort);
-//        }
-//        // 实例化 Popup 子菜单
-//        mSortByDate = menu.findItem(R.id.sort_date);
-//        mSortByName = menu.findItem(R.id.sort_name);
-//        mSortBySize = menu.findItem(R.id.sort_size);
-//        mSortByAscending = menu.findItem(R.id.ascending_order);
-//        // 初始化 Popup 记忆状态
-//        initMenuItem(mSortType, mIsAscending);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        // 这里判断升序排列选项是否被选中
-//        boolean ascendingOrder = mSortByAscending.isChecked();
-        switch (item.getItemId()) {
-            case R.id.sort:
-                mPwMenu.showAsDropDown(mTopBar, 0, 0, Gravity.BOTTOM|Gravity.END);
-                break;
-//            case R.id.sort_date:
-//                setSort(MainPresenter.SORT_BY_DATE, ascendingOrder);
-//                break;
-//            case R.id.sort_name:
-//                setSort(MainPresenter.SORT_BY_NAME, ascendingOrder);
-//                break;
-//            case R.id.sort_size:
-//                setSort(MainPresenter.SORT_BY_SIZE, ascendingOrder);
-//                break;
-//            case R.id.ascending_order:
-//                setSortByAscending(!ascendingOrder);
-//                break;
+        if (item.getItemId() == R.id.sort) {
+            mPwMenu.showAsDropDown(mTopBar, 0, -ConvertUtils.dp2px(4), Gravity.BOTTOM | Gravity.END);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -269,7 +237,7 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
         mImageList.clear();
         mImageList.addAll(imageList);
         runOnUiThread(() -> {
-            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemRangeChanged(0, mImageList.size());
             mRv.scrollToPosition(0);
         });
         mSortType = sortType;
@@ -367,7 +335,7 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
             return true;
         });
         mRefreshLayout.setOnRefreshListener(refreshLayout -> mPresenter.requestImage(mImageList, true));
-        ((DefaultItemAnimator) mRv.getItemAnimator()).setSupportsChangeAnimations(false);
+//        ((DefaultItemAnimator) mRv.getItemAnimator()).setSupportsChangeAnimations(false);
         MyGridLayoutManager layoutManager = new MyGridLayoutManager(this, 3);
         mRv.setLayoutManager(layoutManager);
         mRv.addItemDecoration(new SquareItemDecoration.XItemDecoration());
@@ -403,7 +371,6 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
         mLlAscending = content.findViewById(R.id.app_ll_ascending);
         mCbAscending = content.findViewById(R.id.app_cb);
         mPwMenu = PopupWindowUtils.create(this, content);
-        mPwMenu.setAnimationStyle(R.style.AppPopupWindow);
         mTvDate.setOnClickListener(v -> {
             setSort(MainPresenter.SORT_BY_DATE, mIsAscending);
             mPwMenu.dismiss();
@@ -420,6 +387,7 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
             setSortByAscending(!mIsAscending);
             mPwMenu.dismiss();
         });
+        mPwMenu.setAnimationStyle(R.style.AppPopupWindow);
         mPwMenu.setFocusable(true);
         mPwMenu.setOutsideTouchable(true);
         mPwMenu.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -558,27 +526,6 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
                 break;
         }
         mCbAscending.setChecked(mIsAscending);
-    }
-
-    /**
-     * 用于程序启动时初始化 Popup 菜单状态
-     */
-    private void initMenuItem(int sortType, boolean ascendingOrder) {
-//        switch (sortType) {
-//            case MainPresenter.SORT_BY_DATE:
-//                mSortByDate.setChecked(true);
-//                break;
-//            case MainPresenter.SORT_BY_NAME:
-//                mSortByName.setChecked(true);
-//                break;
-//            case MainPresenter.SORT_BY_SIZE:
-//                mSortBySize.setChecked(true);
-//                break;
-//            default:
-//                mSortByDate.setChecked(true);
-//                break;
-//        }
-//        mSortByAscending.setChecked(ascendingOrder);
     }
 
     /**

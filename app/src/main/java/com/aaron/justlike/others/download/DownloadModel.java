@@ -2,6 +2,8 @@ package com.aaron.justlike.others.download;
 
 import android.util.Log;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.aaron.justlike.common.bean.Image;
 import com.aaron.justlike.common.http.unsplash.Unsplash;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
@@ -30,8 +32,8 @@ class DownloadModel implements IDownloadContract.M<Image> {
     }
 
     @Override
-    public void searchImage(String imageId, SearchCallback callback) {
-        mUnsplash.getPhoto(imageId, new UnsplashCallback<Photo>() {
+    public void searchImage(LifecycleOwner lifecycle, String imageId, SearchCallback callback) {
+        mUnsplash.getPhoto(lifecycle, imageId, new UnsplashCallback<Photo>() {
             @Override
             public void onSuccess(Photo photo) {
                 callback.onSuccess(photo);
