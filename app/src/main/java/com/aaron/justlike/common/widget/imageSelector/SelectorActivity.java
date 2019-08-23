@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -21,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.aaron.justlike.R;
 import com.aaron.justlike.common.bean.Image;
 import com.aaron.justlike.common.manager.ThemeManager;
+import com.aaron.justlike.common.manager.UiManager;
 import com.aaron.justlike.common.util.FileUtil;
 import com.aaron.justlike.common.util.SystemUtil;
 import com.aaron.ui.widget.TopBar;
@@ -96,14 +96,14 @@ public class SelectorActivity extends AppCompatActivity implements SelectorAdapt
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 break;
             case R.id.done:
                 if (mWorker.response.size() == 0) {
-                    Toast.makeText(this, "请先选择图片", Toast.LENGTH_SHORT).show();
+                    UiManager.showShort("请先选择图片");
                     break;
                 }
                 mCallback.onResponse(mWorker.response);

@@ -20,6 +20,15 @@ public class SearchPhotoResult implements Parcelable {
     @SerializedName("results")
     private List<Photo> results;
 
+    @Override
+    public String toString() {
+        return "SearchPhotoResult{" +
+                "total=" + total +
+                ", totalPages=" + totalPages +
+                ", results=" + results +
+                '}';
+    }
+
     public int getTotal() {
         return total;
     }

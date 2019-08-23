@@ -9,6 +9,7 @@ import com.aaron.justlike.common.http.unsplash.entity.photo.SearchPhotoResult;
 import com.aaron.justlike.common.http.unsplash.interfaces.UnsplashCallback;
 import com.aaron.justlike.common.http.unsplash.interfaces.UnsplashService;
 import com.aaron.justlike.common.impl.ObserverImpl;
+import com.blankj.utilcode.util.LogUtils;
 import com.uber.autodispose.AutoDispose;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 
@@ -117,6 +118,7 @@ public class Unsplash {
                 .subscribe(new ObserverImpl<SearchPhotoResult>() {
                     @Override
                     public void onNext(SearchPhotoResult result) {
+                        LogUtils.e(result);
                         callback.onSuccess(result);
                     }
 

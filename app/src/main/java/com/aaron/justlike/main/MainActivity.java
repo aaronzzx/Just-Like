@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,7 +53,6 @@ import com.aaron.justlike.others.download.DownloadManagerActivity;
 import com.aaron.justlike.others.theme.ThemeActivity;
 import com.aaron.ui.widget.TopBar;
 import com.blankj.utilcode.constant.PermissionConstants;
-import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -185,7 +183,7 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.sort) {
-            mPwMenu.showAsDropDown(mTopBar, 0, -ConvertUtils.dp2px(4), Gravity.BOTTOM | Gravity.END);
+            UiManager.showPopupWindow(mPwMenu, mTopBar);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -370,7 +368,7 @@ public class MainActivity extends CommonActivity implements IMainContract.V<Imag
         mTvSize = content.findViewById(R.id.app_tv_size);
         mLlAscending = content.findViewById(R.id.app_ll_ascending);
         mCbAscending = content.findViewById(R.id.app_cb);
-        mPwMenu = PopupWindowUtils.create(this, content);
+        mPwMenu = PopupWindowUtils.create(content);
         mTvDate.setOnClickListener(v -> {
             setSort(MainPresenter.SORT_BY_DATE, mIsAscending);
             mPwMenu.dismiss();

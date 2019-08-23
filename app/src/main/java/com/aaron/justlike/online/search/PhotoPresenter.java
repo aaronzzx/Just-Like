@@ -40,6 +40,7 @@ class PhotoPresenter implements ISerachContract.P<Photo> {
         if (requestMode == ISerachContract.P.FIRST_REQUEST && mKeyWord.equals(keyWord)) {
             if (oldList.size() != 0) return;
         } else if (mRequestCount >= mPhotosTotalPages && requestMode == ISerachContract.P.LOAD_MORE) {
+            mView.onNoMoreData();
             return;
         } else if (StringUtils.isEmpty(keyWord)) {
             return;
@@ -53,8 +54,6 @@ class PhotoPresenter implements ISerachContract.P<Photo> {
                 if (oldList.size() == 0) {
                     mView.onHideSearchLogo();
                     mView.onShowProgress();
-                } else {
-                    mView.onShowRefresh();
                 }
                 break;
             case ISerachContract.P.LOAD_MORE:
@@ -76,7 +75,6 @@ class PhotoPresenter implements ISerachContract.P<Photo> {
                             public void onNext(List<Photo> list) {
                                 if (requestMode == ISerachContract.P.FIRST_REQUEST) {
                                     mView.onHideProgress();
-                                    mView.onHideRefresh();
                                     if (list.size() == 0) {
                                         mView.onShowSearchLogo("无法获取资源");
                                         return;
@@ -94,7 +92,6 @@ class PhotoPresenter implements ISerachContract.P<Photo> {
             public void onFailure() {
                 mView.onHideProgress();
                 mView.onHideLoading();
-                mView.onHideRefresh();
                 if (oldList.isEmpty()) {
                     mView.onShowSearchLogo("搜索失败");
                 }

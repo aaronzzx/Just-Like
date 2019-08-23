@@ -60,7 +60,6 @@ public class PhotoFragment extends Fragment implements ISerachContract.V<Photo>,
         mContext = getActivity();
         initView();
         attachPresenter();
-        Log.i(TAG, "onCreateView: -------------------------------- ");
         return mParentLayout;
     }
 
@@ -118,89 +117,17 @@ public class PhotoFragment extends Fragment implements ISerachContract.V<Photo>,
 
     @Override
     public void onShowLoading() {
-//        if (mFooterProgress.getVisibility() == View.GONE) {
-//            mFooterProgress.setVisibility(View.VISIBLE);
-//            ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-//            animation.setFillAfter(true);
-//            animation.setDuration(250);
-//            mFooterProgress.startAnimation(animation);
-//        }
         mRefreshLayout.autoLoadMore();
     }
 
     @Override
     public void onHideLoading() {
-//        if (mFooterProgress.getVisibility() == View.VISIBLE) {
-//            mFooterProgress.postDelayed(() -> {
-//                ScaleAnimation animation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-//                animation.setFillAfter(true);
-//                animation.setDuration(250);
-//                animation.setAnimationListener(new Animation.AnimationListener() {
-//                    @Override
-//                    public void onAnimationStart(Animation animation) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onAnimationEnd(Animation animation) {
-//                        mFooterProgress.setVisibility(View.GONE);
-//                    }
-//
-//                    @Override
-//                    public void onAnimationRepeat(Animation animation) {
-//
-//                    }
-//                });
-//                mFooterProgress.startAnimation(animation);
-//            }, 500);
-//        }
         mRefreshLayout.finishLoadMore();
     }
 
     @Override
-    public void onShowRefresh() {
-//        if (mRefresh.getVisibility() == View.GONE) {
-//            mRefresh.setVisibility(View.VISIBLE);
-//            ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-//            animation.setFillAfter(true);
-//            animation.setDuration(250);
-//            mRefresh.startAnimation(animation);
-//        }
-    }
-
-    @Override
-    public void onHideRefresh() {
-//        if (mRefresh.getVisibility() == View.VISIBLE) {
-//            mRefresh.postDelayed(() -> {
-//                ScaleAnimation animation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-//                animation.setFillAfter(true);
-//                animation.setDuration(250);
-//                animation.setAnimationListener(new Animation.AnimationListener() {
-//                    @Override
-//                    public void onAnimationStart(Animation animation) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onAnimationEnd(Animation animation) {
-//                        mRefresh.setVisibility(View.GONE);
-//                    }
-//
-//                    @Override
-//                    public void onAnimationRepeat(Animation animation) {
-//
-//                    }
-//                });
-//                mRefresh.startAnimation(animation);
-//            }, 500);
-//        }
-    }
-
-    /**
-     * Called by ElementActivity
-     */
-    public void setElementList() {
-
+    public void onNoMoreData() {
+        mRefreshLayout.finishLoadMore(0, true, true);
     }
 
     /**

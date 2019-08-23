@@ -36,10 +36,6 @@ interface ISerachContract {
 
         void onShowMessage(String msg);
 
-        void onShowRefresh();
-
-        void onHideRefresh();
-
         void onShowProgress();
 
         void onHideProgress();
@@ -51,6 +47,8 @@ interface ISerachContract {
         void onShowLoading();
 
         void onHideLoading();
+
+        void onNoMoreData();
     }
 
     interface P<T> {

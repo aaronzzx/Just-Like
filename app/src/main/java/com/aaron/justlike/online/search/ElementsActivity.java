@@ -126,38 +126,11 @@ public class ElementsActivity extends CommonActivity implements IElementContract
 
     @Override
     public void onShowLoading() {
-//        mFooterProgress.setVisibility(View.VISIBLE);
-//        ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-//        animation.setFillAfter(true);
-//        animation.setDuration(250);
-//        mFooterProgress.startAnimation(animation);mRmR
         mRefreshLayout.autoLoadMore();
     }
 
     @Override
     public void onHideLoading() {
-//        mFooterProgress.postDelayed(() -> {
-//            ScaleAnimation animation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
-//            animation.setFillAfter(true);
-//            animation.setDuration(250);
-//            animation.setAnimationListener(new Animation.AnimationListener() {
-//                @Override
-//                public void onAnimationStart(Animation animation) {
-//
-//                }
-//
-//                @Override
-//                public void onAnimationEnd(Animation animation) {
-//                    mFooterProgress.setVisibility(View.GONE);
-//                }
-//
-//                @Override
-//                public void onAnimationRepeat(Animation animation) {
-//
-//                }
-//            });
-//            mFooterProgress.startAnimation(animation);
-//        }, 500);
         mRefreshLayout.finishLoadMore();
     }
 

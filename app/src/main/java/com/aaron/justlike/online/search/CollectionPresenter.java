@@ -40,6 +40,7 @@ class CollectionPresenter implements ISerachContract.P<Collection> {
         if (requestMode == ISerachContract.P.FIRST_REQUEST && mKeyWord.equals(keyWord)) {
             if (oldList.size() != 0) return;
         } else if (mRequestCount >= mCollectionsTotalPages && requestMode == ISerachContract.P.LOAD_MORE) {
+            mView.onNoMoreData();
             return;
         } else if (StringUtils.isEmpty(keyWord)) {
             return;
@@ -53,8 +54,6 @@ class CollectionPresenter implements ISerachContract.P<Collection> {
                 if (oldList.size() == 0) {
                     mView.onHideSearchLogo();
                     mView.onShowProgress();
-                } else {
-                    mView.onShowRefresh();
                 }
                 break;
             case ISerachContract.P.LOAD_MORE:
@@ -76,7 +75,6 @@ class CollectionPresenter implements ISerachContract.P<Collection> {
                             public void onNext(List<Collection> list) {
                                 if (requestMode == ISerachContract.P.FIRST_REQUEST) {
                                     mView.onHideProgress();
-                                    mView.onHideRefresh();
                                     if (list.size() == 0) {
                                         mView.onShowSearchLogo("无法获取资源");
                                         return;
@@ -94,7 +92,6 @@ class CollectionPresenter implements ISerachContract.P<Collection> {
             public void onFailure() {
                 mView.onHideProgress();
                 mView.onHideLoading();
-                mView.onHideRefresh();
                 if (oldList.isEmpty()) {
                     mView.onShowSearchLogo("搜索失败");
                 }

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,12 +26,12 @@ import com.aaron.justlike.common.bean.Image;
 import com.aaron.justlike.common.event.PhotoEvent;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.common.manager.ThemeManager;
+import com.aaron.justlike.common.manager.UiManager;
 import com.aaron.justlike.common.util.EmptyViewUtil;
 import com.aaron.justlike.common.util.PopupWindowUtils;
 import com.aaron.justlike.online.preview.PreviewActivity;
 import com.aaron.ui.util.DialogUtil;
 import com.aaron.ui.widget.TopBar;
-import com.blankj.utilcode.util.ConvertUtils;
 import com.github.anzewei.parallaxbacklayout.ParallaxBack;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -127,7 +126,7 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.app_sort) {
-            mPwMenu.showAsDropDown(mTopBar, 0, -ConvertUtils.dp2px(4), Gravity.BOTTOM|Gravity.END);
+            UiManager.showPopupWindow(mPwMenu, mTopBar);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -205,7 +204,7 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
         mTvLatest = content.findViewById(R.id.app_tv_latest);
         mTvLatest.setSelected(true);
         mTvOldest = content.findViewById(R.id.app_tv_oldest);
-        mPwMenu = PopupWindowUtils.create(this, content);
+        mPwMenu = PopupWindowUtils.create(content);
         mTvLatest.setOnClickListener(v -> {
             mTvOldest.setSelected(false);
             mTvLatest.setSelected(true);

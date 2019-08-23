@@ -100,19 +100,16 @@ public class SearchActivity extends CommonActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_search:
-                String text = mEditText.getText().toString();
-                if (text.equals("")) break;
-                hideKeyboard();
-                List<Fragment> fragments = mFragmentManager.getFragments();
-                for (Fragment fragment : fragments) {
-                    if (fragment.getUserVisibleHint()) {
-                        ((IFragment) fragment).search(text);
-                        break;
-                    }
+        if (v.getId() == R.id.tv_search) {
+            String text = mEditText.getText().toString();
+            if (text.equals("")) return;
+            hideKeyboard();
+            List<Fragment> fragments = mFragmentManager.getFragments();
+            for (Fragment fragment : fragments) {
+                if (/*fragment.getUserVisibleHint() && */fragment instanceof IFragment) {
+                    ((IFragment) fragment).search(text);
                 }
-                break;
+            }
         }
     }
 
@@ -126,9 +123,8 @@ public class SearchActivity extends CommonActivity implements View.OnClickListen
         hideKeyboard();
         List<Fragment> fragments = mFragmentManager.getFragments();
         for (Fragment fragment : fragments) {
-            if (fragment.getUserVisibleHint()) {
+            if (/*fragment.getUserVisibleHint() && */fragment instanceof IFragment) {
                 ((IFragment) fragment).search(text);
-                break;
             }
         }
         return true;

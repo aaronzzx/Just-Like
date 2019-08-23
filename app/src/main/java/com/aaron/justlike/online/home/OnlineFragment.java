@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,11 +27,12 @@ import com.aaron.justlike.R;
 import com.aaron.justlike.common.adapter.PhotoAdapter;
 import com.aaron.justlike.common.http.unsplash.Order;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
+import com.aaron.justlike.common.manager.UiManager;
 import com.aaron.justlike.common.util.PopupWindowUtils;
 import com.aaron.justlike.common.util.SystemUtil;
 import com.aaron.justlike.common.widget.MyGridLayoutManager;
 import com.aaron.justlike.online.search.SearchActivity;
-import com.blankj.utilcode.util.ConvertUtils;
+import com.aaron.ui.widget.TopBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -74,18 +74,18 @@ public abstract class OnlineFragment extends Fragment implements IOnlineContract
         // Required empty public constructor
     }
 
-    /**
-     * 实现 CuratedFragment 懒加载
-     */
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && isVisible()) {
-            if (mPhotoList.size() == 0) {
-                requestPhotos(mOrder, false, false);
-            }
-        }
-    }
+//    /**
+//     * 实现 CuratedFragment 懒加载
+//     */
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if (isVisibleToUser && isVisible()) {
+//            if (mPhotoList.size() == 0) {
+//                requestPhotos(mOrder, false, false);
+//            }
+//        }
+//    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -108,10 +108,10 @@ public abstract class OnlineFragment extends Fragment implements IOnlineContract
         mColorAccent = mContext != null ? ((OnlineActivity) mContext).getColorAccent() : 0;
         initView();
         attachPresenter();
-        // 实现 RecommendFragment 的加载
-        if (getUserVisibleHint()) {
-            requestPhotos(mOrder, false, false);
-        }
+//        // 实现 RecommendFragment 的加载
+//        if (getUserVisibleHint()) {
+//        }
+        requestPhotos(mOrder, false, false);
     }
 
     @Override
@@ -132,11 +132,10 @@ public abstract class OnlineFragment extends Fragment implements IOnlineContract
         switch (item.getItemId()) {
             case R.id.action_search:
                 startActivity(new Intent(getContext(), SearchActivity.class));
-//                ((Activity) mContext).overridePendingTransition(R.anim.activity_slide_in, android.R.anim.fade_out);
                 break;
             case R.id.action_filter:
-                mPwMenu.showAsDropDown(((OnlineActivity) mContext).getTopBar(), 0,
-                        -ConvertUtils.dp2px(4), Gravity.BOTTOM|Gravity.END);
+                TopBar topBar = ((OnlineActivity) mContext).getTopBar();
+                UiManager.showPopupWindow(mPwMenu, topBar);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -177,14 +176,13 @@ public abstract class OnlineFragment extends Fragment implements IOnlineContract
 
     @Override
     public void onShowMessage(int requestMode, String args) {
-        Snackbar.make(mRecyclerView, "网络开小差了，请检查网络连接", Snackbar.LENGTH_SHORT).show();
+        if (getUserVisibleHint()) {
+            Snackbar.make(mRecyclerView, "网络开小差了，请检查网络连接", Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onShowRefresh() {
-//        if (!mSwipeRefresh.isRefreshing()) {
-//            mSwipeRefresh.setRefreshing(true);
-//        }
         mRefreshLayout.autoRefresh();
     }
 
@@ -284,7 +282,7 @@ public abstract class OnlineFragment extends Fragment implements IOnlineContract
         mTvLatest.setSelected(true);
         mTvOldest = content.findViewById(R.id.app_tv_oldest);
         mTvPopular = content.findViewById(R.id.app_tv_popular);
-        mPwMenu = PopupWindowUtils.create(mContext, content);
+        mPwMenu = PopupWindowUtils.create(content);
         mTvLatest.setOnClickListener(v -> {
             mTvOldest.setSelected(false);
             mTvPopular.setSelected(false);
