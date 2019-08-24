@@ -18,7 +18,6 @@ import com.aaron.justlike.common.event.PhotoEvent;
 import com.aaron.justlike.common.http.unsplash.Unsplash;
 import com.aaron.justlike.common.http.unsplash.entity.photo.Photo;
 import com.aaron.justlike.common.http.unsplash.interfaces.UnsplashCallback;
-import com.aaron.justlike.main.MainActivity;
 import com.aaron.justlike.online.home.OnlineActivity;
 import com.aaron.justlike.online.preview.PreviewActivity;
 import com.aaron.ui.widget.RoundProgressBar;
@@ -134,11 +133,7 @@ public class SplashActivity extends CommonActivity {
 
     private void startActivityDelay() {
         mHandler = new Handler();
-        mHandler.postDelayed(() -> {
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
-            finish();
-            overridePendingTransition(R.anim.app_scale_in_delay, R.anim.app_scale_out_delay);
-        }, DEFAULT_COUNT_DOWN);
+        mHandler.postDelayed(this::openActivity, DEFAULT_COUNT_DOWN);
     }
 
     private void openActivity() {

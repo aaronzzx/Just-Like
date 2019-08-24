@@ -2,6 +2,7 @@ package com.aaron.justlike.online.home;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -10,10 +11,13 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -27,10 +31,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.aaron.base.impl.OnClickListenerImpl;
 import com.aaron.base.util.StatusBarUtils;
 import com.aaron.justlike.R;
 import com.aaron.justlike.collection.CollectionActivity;
 import com.aaron.justlike.common.CommonActivity;
+import com.aaron.justlike.common.event.HotfixEvent;
 import com.aaron.justlike.common.manager.ThemeManager;
 import com.aaron.justlike.common.manager.UiManager;
 import com.aaron.justlike.common.util.SelectorUtils;
@@ -38,9 +44,15 @@ import com.aaron.justlike.main.MainActivity;
 import com.aaron.justlike.others.about.AboutActivity;
 import com.aaron.justlike.others.download.DownloadManagerActivity;
 import com.aaron.justlike.others.theme.ThemeActivity;
+import com.aaron.ui.util.DialogUtil;
 import com.aaron.ui.widget.TopBar;
+import com.blankj.utilcode.util.AppUtils;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -70,13 +82,58 @@ public class OnlineActivity extends CommonActivity implements View.OnClickListen
         return mTopBar;
     }
 
+    /**
+     * 热修复完成，提示用户重启应用
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onHotfixSuccess(HotfixEvent event) {
+        hotfixRemind();
+    }
+
+    private void hotfixRemind() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View dialogView = inflater.inflate(R.layout.app_dialog_normal_alert, null);
+        Dialog hotfixDialog = DialogUtil.createDialog(this, dialogView);
+        hotfixDialog.setCanceledOnTouchOutside(false);
+        TextView tvTitle = dialogView.findViewById(R.id.app_tv_title);
+        TextView tvContent = dialogView.findViewById(R.id.app_tv_content);
+        Button btnLeft = dialogView.findViewById(R.id.app_btn_left);
+        Button btnRight = dialogView.findViewById(R.id.app_btn_right);
+        // TODO: 2019/8/10 待确定标题内容等
+        tvTitle.setText(R.string.app_find_update);
+        tvContent.setText(R.string.app_restart_to_update);
+        btnLeft.setText(R.string.app_later);
+        btnRight.setText(R.string.app_restart_right_now);
+        btnLeft.setOnClickListener(new OnClickListenerImpl() {
+            @Override
+            public void onViewClick(View v, long interval) {
+                hotfixDialog.dismiss();
+            }
+        });
+        btnRight.setOnClickListener(new OnClickListenerImpl() {
+            @Override
+            public void onViewClick(View v, long interval) {
+                AppUtils.relaunchApp(true);
+
+            }
+        });
+        hotfixDialog.show();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ThemeManager.getInstance().setTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online);
+        EventBus.getDefault().register(this);
         requestPermission();
         initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

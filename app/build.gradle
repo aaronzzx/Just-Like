@@ -1,7 +1,17 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+//apply plugin: 'bugly'
+//apply from: 'tinker-support.gradle'
+//
+//// 上传符号表插件
+//bugly {
+//    debug  = false
+//    appId  = 'a9a2564f76' // 注册时分配的App ID
+//    appKey = '9219a957-dcc9-4e8a-8f34-4fb7189ad93e' // 注册时分配的App Key
+//}
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -96,4 +106,8 @@ dependencies {
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-andx-16'
     implementation 'com.github.anzewei:parallaxbacklayout:1.1.9'
     implementation 'com.github.chaychan:BottomBarLayout:1.2.0'
+
+    implementation rootProject.ext.dependencies["bugly_sdk"]
+    implementation rootProject.ext.dependencies["bugly_ndk"]
+    implementation rootProject.ext.dependencies["bugly_tinker"]
 }

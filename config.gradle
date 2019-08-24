@@ -6,6 +6,11 @@ ext {
             isBaseApk      : false
     ]
 
+    bugly = [
+            baseApkDir : "app-0823-13-13-53",
+            tinkerId   : "base-2.1.1"
+    ]
+
     android = [
             applicationId                     : "com.aaron.justlike",
             compileSdkVersion                 : 29,

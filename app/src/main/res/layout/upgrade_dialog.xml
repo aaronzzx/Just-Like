@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/base_black_shallow">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:cardBackgroundColor="@color/base_transparent"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
+        tools:ignore="RtlHardcoded">
+
+        <LinearLayout
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
+
+            <ImageView
+                android:id="@+id/beta_upgrade_banner"
+                android:tag="@string/app_beta_upgrade_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="40dp"
+                android:src="@drawable/app_img_upgrade_rocket"
+                android:scaleType="centerCrop"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/base_white"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/beta_title"
+                    android:tag="@string/app_beta_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/base_text_large"
+                    android:textStyle="bold"
+                    android:textColor="@color/base_black"
+                    tools:text="是否升级到1.0.1版本？"/>
+
+                <TextView
+                    android:id="@+id/beta_upgrade_info"
+                    android:tag="@string/app_beta_upgrade_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    tools:text="版本：1.0.1"/>
+
+                <TextView
+                    android:id="@+id/beta_upgrade_feature"
+                    android:tag="@string/app_beta_upgrade_feature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    tools:text="功能说明："/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.6dp"
+                android:background="@color/app_upgrade_dialog_divider"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                tools:ignore="UselessLeaf">
+
+                <Button
+                    android:id="@+id/beta_cancel_button"
+                    android:tag="@string/app_beta_cancel_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/app_sel_btn_white"
+                    android:textSize="@dimen/base_text_large"
+                    android:textColor="@color/base_black_shallow"
+                    style="?borderlessButtonStyle"
+                    tools:text="下次再说" />
+
+                <View
+                    android:layout_width="0.6dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/app_upgrade_dialog_divider"/>
+
+                <Button
+                    android:id="@+id/beta_confirm_button"
+                    android:tag="@string/app_beta_confirm_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/app_sel_btn_white"
+                    android:textSize="@dimen/base_text_large"
+                    android:textColor="@color/colorAccent"
+                    style="?borderlessButtonStyle"
+                    tools:text="立即更新" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

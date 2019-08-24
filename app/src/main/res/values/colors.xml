@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="app_upgrade_dialog_divider">#FFEEEEEE</color>
+    <color name="app_upgrade_dialog_btn_pressed">#FFEEEEEE</color>
+    <color name="app_bg_btn_grey_normal">#F3F3F3</color>
+    <color name="app_bg_btn_grey_pressed">#E6E6E6</color>
+
     <!-- Main Theme -->
     <color name="colorPrimary">#4b6fca</color>
     <color name="colorPrimaryDark">#4b6fca</color>
