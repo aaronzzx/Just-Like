@@ -64,7 +64,7 @@ class AboutMessageAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             + "System Language: " + Locale.getDefault().getLanguage() + "(" + Locale.getDefault().getCountry() + ")" + "\n"
                             + "App Version: " + SystemUtil.getVersionName(mActivity);
                     Intent sendMail = new Intent(Intent.ACTION_SENDTO);
-                    sendMail.setData(Uri.parse("mailto:aaronzheng9603@gmail.com"));
+                    sendMail.setData(Uri.parse("mailto:aaronzzxup@gmail.com"));
                     sendMail.putExtra(Intent.EXTRA_SUBJECT, subject);
                     sendMail.putExtra(Intent.EXTRA_TEXT, text);
                     mActivity.startActivity(sendMail);

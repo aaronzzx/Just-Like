@@ -7,8 +7,8 @@ ext {
     ]
 
     bugly = [
-            baseApkDir : "app-0823-13-13-53",
-            tinkerId   : "base-2.1.1"
+            baseApkDir : "app-0824-10-41-41",
+            tinkerId   : "base-2.2.1"
     ]
 
     android = [

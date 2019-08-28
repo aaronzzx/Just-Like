@@ -34,3 +34,15 @@ file=E:\AndroidStudioProjects\Just-Like\app\build\outputs\mapping\release\mappin
 sha1=8fd8dd3c0df472da1d8576d746c5dbbc9b31e2e1
 appId=a9a2564f76
 
+file=E:\AndroidStudioProjects\Just-Like\app\build\outputs\mapping\release\mapping.txt
+sha1=27dbf8d19123503eea9463f209991d224807e664
+appId=a9a2564f76
+
+file=E:\AndroidStudioProjects\Just-Like\app\build\outputs\mapping\release\mapping.txt
+sha1=a990a4f4b3eacf21748754975a3336168699bb34
+appId=a9a2564f76
+
+file=E:\AndroidStudioProjects\Just-Like\app\build\outputs\mapping\release\mapping.txt
+sha1=a990a4f4b3eacf21748754975a3336168699bb34
+appId=a9a2564f76
+

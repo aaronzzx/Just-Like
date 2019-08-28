@@ -99,7 +99,6 @@ public class OnlineActivity extends CommonActivity implements View.OnClickListen
         TextView tvContent = dialogView.findViewById(R.id.app_tv_content);
         Button btnLeft = dialogView.findViewById(R.id.app_btn_left);
         Button btnRight = dialogView.findViewById(R.id.app_btn_right);
-        // TODO: 2019/8/10 待确定标题内容等
         tvTitle.setText(R.string.app_find_update);
         tvContent.setText(R.string.app_restart_to_update);
         btnLeft.setText(R.string.app_later);
@@ -114,7 +113,6 @@ public class OnlineActivity extends CommonActivity implements View.OnClickListen
             @Override
             public void onViewClick(View v, long interval) {
                 AppUtils.relaunchApp(true);
-
             }
         });
         hotfixDialog.show();

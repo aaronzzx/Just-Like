@@ -58,6 +58,7 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
     private TopBar mTopBar;
     private ActionBar mActionBar;
     private Drawable mIconBack;
+    private Drawable mIconSort;
     private View mEmptyView;
     private DownloadManagerAdapter mAdapter;
 
@@ -120,6 +121,10 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_download_manager_menu, menu);
+        if (ThemeManager.getInstance().getCurrentTheme() == null
+                || ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
+            menu.findItem(R.id.app_sort).setIcon(mIconSort);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -226,11 +231,14 @@ public class DownloadManagerActivity extends CommonActivity implements IDownload
 
     private void initIconColor() {
         mIconBack = getResources().getDrawable(R.drawable.ic_back);
+        mIconSort = getResources().getDrawable(R.drawable.ic_sort);
         if (ThemeManager.getInstance().getCurrentTheme() == null
                 || ThemeManager.getInstance().getCurrentTheme() == ThemeManager.Theme.WHITE) {
             DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorAccentWhite));
+            DrawableCompat.setTint(mIconSort, getResources().getColor(R.color.colorAccentWhite));
         } else {
             DrawableCompat.setTint(mIconBack, getResources().getColor(R.color.colorPrimaryWhite));
+            DrawableCompat.setTint(mIconSort, getResources().getColor(R.color.colorPrimaryWhite));
         }
     }
 
