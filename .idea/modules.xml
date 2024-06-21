@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Just-Like.iml" filepath="$PROJECT_DIR$/.idea/Just-Like.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ui/ui.iml" filepath="$PROJECT_DIR$/ui/ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Just-Like.iml" filepath="$PROJECT_DIR$/.idea/modules/Just-Like.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Just-Like.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Just-Like.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Just-Like.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Just-Like.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Just-Like.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Just-Like.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Just-Like.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Just-Like.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ui/Just-Like.ui.iml" filepath="$PROJECT_DIR$/.idea/modules/ui/Just-Like.ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ui/Just-Like.ui.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/ui/Just-Like.ui.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ui/Just-Like.ui.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ui/Just-Like.ui.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ui/Just-Like.ui.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/ui/Just-Like.ui.unitTest.iml" />
     </modules>
   </component>
 </project>

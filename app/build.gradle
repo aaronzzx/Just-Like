@@ -20,12 +20,12 @@ android {
         Properties properties = new Properties()
         InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream()
         properties.load(inputStream)
-        release {
-            storeFile file(properties.getProperty("STORE_FILE_NAME"))
-            storePassword properties.getProperty("KEYSTORE_PASSWORD")
-            keyAlias properties.getProperty("STORE_ALIAS")
-            keyPassword properties.getProperty("KEY_PASSWORD")
-        }
+//        release {
+//            storeFile file(properties.getProperty("STORE_FILE_NAME"))
+//            storePassword properties.getProperty("KEYSTORE_PASSWORD")
+//            keyAlias properties.getProperty("STORE_ALIAS")
+//            keyPassword properties.getProperty("KEY_PASSWORD")
+//        }
     }
 
     buildTypes {
@@ -34,14 +34,14 @@ android {
             minifyEnabled rootProject.ext.buildTypes["minifyEnabled"]
             shrinkResources rootProject.ext.buildTypes["shrinkResources"]
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
 
         debug {
             buildConfigField("boolean", "DEBUG_MODE", "true")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
     }
 
@@ -90,8 +90,8 @@ dependencies {
 
     implementation "androidx.core:core-ktx:1.0.2"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'com.jakewharton:butterknife:10.1.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+    implementation 'com.jakewharton:butterknife:10.2.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
 
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-andx-16'
     implementation 'com.github.anzewei:parallaxbacklayout:1.1.9'
